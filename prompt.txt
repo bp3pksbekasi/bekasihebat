@@ -1,0 +1,463 @@
+# Prompt Bertahap Trae — Modul Bedah Dapil (Tanpa Database, CSV Langsung)
+
+Jalankan prompt berurutan. Tunggu selesai per tahap.
+
+**ARSITEKTUR:** Tidak pakai database/migration/model untuk data pemilu. CSV di-serve sebagai static file, JavaScript parse & render langsung di browser. Hanya perlu route, blade view, dan JS.
+
+**DATA:** File CSV sudah ada di `storage/app/private/import/`:
+- `tps_dprd.csv` (~970rb baris, separator `;`)
+- `dpt_dapil1_rt_rw.csv`, `dpt_bekasi4_rt_rw.csv`, `dpt_dapil4_rt_rw.csv`, `dpt_dapil5_rt_rw.csv`
+- Gambar peta: `dapil1.png`, `dapil4.png`
+
+---
+
+## PROMPT 1: Setup Route, Symlink Data, Menu Sidebar
+
+```
+Saya mengembangkan modul "Bedah Dapil" di project Laravel 12 + Livewire. Modul ini TIDAK pakai database untuk data pemilu — data CSV dibaca langsung oleh JavaScript di browser.
+
+Langsung buat, jangan tanya, JANGAN buat test, JANGAN buat migration/model/seeder untuk data pemilu.
+
+TUGAS:
+
+1. COPY DATA ke public agar bisa di-fetch oleh browser:
+   Buat artisan command sederhana ATAU lakukan manual:
+   - Copy semua file CSV dari storage/app/private/import/ ke public/data/pemilu/
+   - Copy gambar peta dari storage/app/private/import/ ke public/images/peta/ (jika ada file .png)
+   - Atau buat symlink. Yang penting browser bisa akses via URL: /data/pemilu/tps_dprd.csv
+
+   Buat file artisan command app/Console/Commands/PublishPemiluData.php:
+   Signature: pemilu:publish
+   Logic: copy semua .csv dari storage/app/private/import/ ke public/data/pemilu/, copy semua .png ke public/images/peta/
+   Jalankan command ini setelah dibuat.
+
+2. TAMBAH ROUTE di routes/web.php:
+   Dalam middleware auth group, tambahkan:
+   Route::get('/bedah-dapil', function () {
+       return view('bedah-dapil.index');
+   })->name('bedah-dapil.index');
+
+   Route::get('/bedah-dapil/pemilu-dprd', function () {
+       return view('bedah-dapil.pemilu-dprd');
+   })->name('bedah-dapil.pemilu-dprd');
+
+3. TAMBAH MENU SIDEBAR:
+   Di file resources/views/components/layouts/app/sidebar.blade.php,
+   dalam <flux:navlist.group> heading "Platform", tambahkan setelah item Dashboard:
+
+   <flux:navlist.item icon="map" :href="route('bedah-dapil.index')" :current="request()->routeIs('bedah-dapil.*')" wire:navigate>Bedah Dapil</flux:navlist.item>
+
+4. BUAT HALAMAN INDEX sederhana:
+   File: resources/views/bedah-dapil/index.blade.php
+
+   Pakai layout sidebar: <x-layouts.app.sidebar>
+
+   Isi halaman:
+   - Heading "Bedah Dapil"
+   - Subheading "Modul Analisis & Strategi Pemenangan Pemilu"
+   - 2 Card menu:
+     Card 1: "Peta Interaktif Dapil" — deskripsi: "Mapping desa/kelurahan per dapil dengan hotspot interaktif" — link ke # (nanti)
+     Card 2: "Mapping Perolehan Suara DPRD" — deskripsi: "Analisis perolehan suara DPRD Kab. Bekasi berdasarkan data TPS Pemilu 2024" — link ke route bedah-dapil.pemilu-dprd
+
+   Style card: bg-white dark:bg-zinc-800 rounded-xl border p-6, hover effect, icon besar di atas.
+
+Langsung buat semua. Jangan test.
+```
+
+---
+
+## PROMPT 2: Halaman Pemilu DPRD — Full-Page dengan CSV Processing di JS
+
+```
+Lanjutan modul Bedah Dapil. Sekarang buat halaman utama analisis pemilu DPRD. Ini adalah halaman BESAR dengan logic JavaScript yang memproses CSV langsung di browser.
+
+PENTING: Saya punya file referensi yang sudah jadi sebagai HTML standalone. Saya akan jelaskan arsitekturnya, dan kamu buat versi Laravel Blade-nya yang terintegrasi dengan layout sidebar app.
+
+Langsung buat, JANGAN test. File: resources/views/bedah-dapil/pemilu-dprd.blade.php
+
+Layout: <x-layouts.app.sidebar>
+Jangan pakai wire:navigate pada link yang menuju halaman ini (karena JS berat perlu full page load).
+
+=== STRUKTUR HALAMAN ===
+
+SECTION 1: Header
+- Heading: "Mapping Perolehan Suara DPRD Kabupaten Bekasi"
+- Subheading: "Analisis posisi PKS di setiap desa berdasarkan data rekapitulasi TPS Pemilu 2024, dipadankan dengan data DPT untuk strategi wilayah."
+
+SECTION 2: Toolbar Filter (card, rounded, padding)
+- Field "Sumber Data TPS": file input accept=".csv" + status text (id="sourceStatus")
+- Field "Sumber Data DPT": file input accept=".csv" + status text (id="dptStatus")
+- Field "Dapil": select dropdown (id="dapilSelect"), opsi diisi otomatis dari data
+- Field "Kecamatan": select dropdown (id="kecamatanSelect"), opsi "Semua" + diisi dari data
+- Field "Status": select dropdown (id="statusSelect"), opsi: Semua, JAGA KUAT, AMANKAN, REBUT REALISTIS, GARAP INTENSIF, ZONA BERAT
+- Field "Cari": input text (id="searchInput")
+- Tombol "Reset Filter" (id="resetFilterBtn")
+
+SECTION 3: Summary Cards (grid 6 kolom, responsive)
+- Total DPT (id="summaryTotalDpt")
+- TPS Cocok (id="summaryMatchedTps")
+- Suara PKS (id="summaryPksVotes")
+- Jumlah Desa (id="summaryVillageCount")
+- Jumlah RW (id="summaryRwCount")
+- Jumlah RT (id="summaryRtCount")
+Setiap card: label kecil di atas, angka besar bold di bawah, deskripsi kecil.
+
+SECTION 4: Catatan Kualitas Data
+- Div card kecil (id="dataQualityNote"): "Menyiapkan ringkasan kualitas data wilayah..."
+
+SECTION 5: Dashboard Status Wilayah (card)
+- Heading: "Dashboard Status Wilayah"
+- Grid 5 kolom (id="statusDashboard") — diisi JS dengan card per status:
+  Setiap card: dot warna status, nama status, jumlah desa, total suara PKS, total DPT estimasi
+  Card clickable → filter ke status tersebut
+  Warna status:
+  - JAGA KUAT: #15803d
+  - AMANKAN: #65a30d
+  - REBUT REALISTIS: #2563eb
+  - GARAP INTENSIF: #d97706
+  - ZONA BERAT: #b91c1c
+
+SECTION 6: Layout 2 Kolom (grid, kolom kiri lebih besar)
+
+KOLOM KIRI:
+A) Peta Interaktif (card)
+   - Heading "Peta Interaktif" + subtext
+   - Frame gambar peta (div.map-frame, aspect-ratio 1024/768)
+     - <img id="mapImage"> untuk gambar peta dapil
+     - Overlay div (id="mapOverlay") untuk marker dots
+     - Placeholder div (id="mapPlaceholder") jika peta belum ada
+   - Marker = div bulat absolute positioned, warna sesuai status, ukuran proporsional suara PKS
+   - Hover marker: tooltip nama desa
+   - Klik marker: fokus ke desa tersebut
+
+B) Daftar Desa Panel (di bawah peta)
+   - Heading "Daftar Desa" + tombol "Reset Fokus Desa"
+   - Div (id="villagePanel"): grid kecil card per desa
+   - Setiap card: nama desa, kecamatan, badge status warna, suara PKS
+   - Klik → fokus ke desa itu
+
+KOLOM KANAN:
+A) Scope Title
+   - h2 (id="scopeTitle"): nama scope aktif
+   - p (id="scopeDescription"): deskripsi scope
+
+B) Tab Analysis: 4 tab button
+   - Status (id="tabStatusBtn") — DEFAULT aktif
+   - RW / RT (id="tabRwRtBtn")
+   - Demografi (id="tabDemographyBtn")
+   - Program (id="tabProgramBtn")
+
+C) Tab Pane: Status (id="statusTabPane")
+   - 6 stat cards: Total Suara PKS, Suara Partai, Suara Caleg, Peringkat PKS, TPS, Status Wilayah
+   - Panel "Status Prioritas PKS" (id="pksStatusWrap") — penjelasan + action
+   - Panel "Urutan Caleg PKS" (id="pksCandidateTableWrap") — tabel caleg
+   - Panel "Analisa Kecamatan" (id="districtTableWrap") — tabel kecamatan
+   - Panel "Analisa Desa" (id="villageTableWrap") — tabel per desa
+
+D) Tab Pane: RW/RT (id="rwrtTabPane")
+   - Tabel RW (id="rwTableWrap") — per RW: nama, DPT, laki, perempuan, generasi
+   - Tabel RT (id="rtTableWrap") — per RT detail
+   - Summary DPT (id="dptSummaryWrap")
+
+E) Tab Pane: Demografi (id="demographyTabPane")
+   - Gender breakdown: progress bar laki vs perempuan
+   - Generasi breakdown: bar chart Gen Z, Millennial, Gen X, Boomer
+
+F) Tab Pane: Program (id="programTabPane")
+   - Rekomendasi strategi berdasarkan status wilayah
+   - Estimasi target suara
+
+SECTION 7: Detail Drawer (slide-in panel dari kanan)
+- Div fixed overlay (id="detailDrawer", class="hidden")
+- Backdrop (id="detailDrawerBackdrop")
+- Isi: detail lengkap per desa yang diklik, semua data PKS, tabel TPS, DPT, RW/RT
+- Tombol close (id="detailDrawerClose")
+
+SECTION 8: Tabel TPS Detail (di bawah layout 2 kolom)
+- Heading "Detail per TPS"
+- Tabel (id="tpsTableWrap"): No TPS, Desa, Kecamatan, Partai-partai (kolom per partai), Total
+
+=== JAVASCRIPT ===
+
+Semua logic ada di <script> tag di bawah halaman (bukan file external, agar simple).
+
+KONFIGURASI PETA (hardcode):
+```javascript
+const mapConfigs = {
+    "BEKASI 1": {
+        title: "Peta Dapil 1 Kabupaten Bekasi",
+        image: "/images/peta/dapil1.png",
+        villages: [
+            { name: "CIJENGKOL", district: "SETU", label: "Cijengkol", x: 18.2, y: 18.6 },
+            { name: "LUBANGBUAYA", district: "SETU", label: "Lubangbuaya", x: 22.1, y: 9.2 },
+            { name: "CIBENING", district: "SETU", label: "Cibening", x: 29.8, y: 28.7 },
+            { name: "BURANGKENG", district: "SETU", label: "Burangkeng", x: 12.6, y: 26.7 },
+            { name: "TAMAN SARI", district: "SETU", label: "Taman Sari", x: 15.0, y: 39.0 },
+            { name: "TAMAN RAHAYU", district: "SETU", label: "Taman Rahayu", x: 4.5, y: 39.4 },
+            { name: "CIKARAGEMAN", district: "SETU", label: "Cikarageman", x: 14.6, y: 48.3 },
+            { name: "RAGEMANUNGGAL", district: "SETU", label: "Ragemanunggal", x: 9.8, y: 54.9 },
+            { name: "MUKTIJAYA", district: "SETU", label: "Muktijaya", x: 20.4, y: 56.1 },
+            { name: "CILEDUG", district: "SETU", label: "Ciledug", x: 22.4, y: 30.5 },
+            { name: "KERTARAHAYU", district: "SETU", label: "Kertarahayu", x: 27.0, y: 43.5 },
+            { name: "JAYAMULYA", district: "SERANG BARU", label: "Jayamulya", x: 32.8, y: 56.1 },
+            { name: "JAYASAMPURNA", district: "SERANG BARU", label: "Jayasampurna", x: 35.0, y: 44.7 },
+            { name: "SUKARAGAM", district: "SERANG BARU", label: "Sukaragam", x: 44.0, y: 53.3 },
+            { name: "SUKASARI", district: "SERANG BARU", label: "Sukasari", x: 46.5, y: 46.8 },
+            { name: "SIRNAJAYA", district: "SERANG BARU", label: "Sirnajaya", x: 40.9, y: 58.4 },
+            { name: "CILANGKARA", district: "SERANG BARU", label: "Cilangkara", x: 55.1, y: 44.6 },
+            { name: "NAGACIPTA", district: "SERANG BARU", label: "Nagacipta", x: 51.1, y: 60.2 },
+            { name: "NAGASARI", district: "SERANG BARU", label: "Nagasari", x: 51.9, y: 56.0 },
+            { name: "CICAU", district: "CIKARANG PUSAT", label: "Cicau", x: 61.6, y: 35.3 },
+            { name: "SUKAMAHI", district: "CIKARANG PUSAT", label: "Sukamahi", x: 70.8, y: 37.5 },
+            { name: "JAYAMUKTI", district: "CIKARANG PUSAT", label: "Jayamukti", x: 74.0, y: 15.8 },
+            { name: "HEGARMUKTI", district: "CIKARANG PUSAT", label: "Hegarmukti", x: 75.5, y: 23.7 },
+            { name: "PASIRANJI", district: "CIKARANG PUSAT", label: "Pasiranji", x: 82.2, y: 31.0 },
+            { name: "PASIRTANJUNG", district: "CIKARANG PUSAT", label: "Pasirtanjung", x: 86.9, y: 24.2 },
+            { name: "CIBATU", district: "CIKARANG SELATAN", label: "Cibatu", x: 74.1, y: 44.5 },
+            { name: "CIANTRA", district: "CIKARANG SELATAN", label: "Ciantra", x: 64.9, y: 44.3 },
+            { name: "SUKASEJATI", district: "CIKARANG SELATAN", label: "Sukasejati", x: 82.8, y: 58.8 },
+            { name: "SUKADAMI", district: "CIKARANG SELATAN", label: "Sukadami", x: 65.9, y: 61.0 },
+            { name: "SUKARESMI", district: "CIKARANG SELATAN", label: "Sukaresmi", x: 74.8, y: 67.0 },
+            { name: "SERANG", district: "CIKARANG SELATAN", label: "Serang", x: 74.0, y: 55.8 },
+            { name: "PASIRSARI", district: "CIKARANG SELATAN", label: "Pasirsari", x: 82.9, y: 44.4 },
+            { name: "CIBARUSAH JAYA", district: "CIBARUSAH", label: "Cibarusah Jaya", x: 31.3, y: 76.0 },
+            { name: "CIBARUSAH KOTA", district: "CIBARUSAH", label: "Cibarusah Kota", x: 40.2, y: 75.8 },
+            { name: "SINDANGMULYA", district: "CIBARUSAH", label: "Sindangmulya", x: 33.2, y: 67.8 },
+            { name: "WIBAWAMULYA", district: "CIBARUSAH", label: "Wibawamulya", x: 43.8, y: 68.4 },
+            { name: "RIDOGALIH", district: "CIBARUSAH", label: "Ridogalih", x: 47.9, y: 85.6 },
+            { name: "RIDOMANAH", district: "CIBARUSAH", label: "Ridomanah", x: 58.8, y: 77.0 },
+            { name: "SIRNAJATI", district: "CIBARUSAH", label: "Sirnajati", x: 37.9, y: 83.6 },
+            { name: "MEDALKRISNA", district: "BOJONGMANGU", label: "Medalkrisna", x: 64.8, y: 69.9 },
+            { name: "SUKAMUKTI", district: "BOJONGMANGU", label: "Sukamukti", x: 75.0, y: 71.1 },
+            { name: "SUKABUNGAH", district: "BOJONGMANGU", label: "Sukabungah", x: 84.1, y: 75.2 },
+            { name: "KARANGINDAH", district: "BOJONGMANGU", label: "Karangindah", x: 62.0, y: 86.1 },
+            { name: "BOJONGMANGU", district: "BOJONGMANGU", label: "Bojongmangu", x: 70.9, y: 80.2 },
+            { name: "KARANGMULYA", district: "BOJONGMANGU", label: "Karangmulya", x: 79.6, y: 91.7 }
+        ]
+    },
+    "BEKASI 4": {
+        title: "Peta Dapil 4 Kabupaten Bekasi",
+        image: "/images/peta/dapil4.png",
+        villages: [
+            { name: "SUKARINGIN", district: "SUKAWANGI", label: "Sukaringin", x: 34.0, y: 8.8 },
+            { name: "SUKATENANG", district: "SUKAWANGI", label: "Sukatenang", x: 22.2, y: 17.2 },
+            { name: "SUKAKERTA", district: "SUKAWANGI", label: "Sukakerta", x: 51.8, y: 18.0 },
+            { name: "SUKAWANGI", district: "SUKAWANGI", label: "Sukawangi", x: 60.3, y: 29.4 },
+            { name: "SUKABUDI", district: "SUKAWANGI", label: "Sukabudi", x: 47.2, y: 37.2 },
+            { name: "SUKADAYA", district: "SUKAWANGI", label: "Sukadaya", x: 41.8, y: 41.5 },
+            { name: "SUKAMEKAR", district: "SUKAWANGI", label: "Sukamekar", x: 27.5, y: 38.7 },
+            { name: "SUKABAKTI", district: "TAMBELANG", label: "Sukabakti", x: 56.2, y: 50.0 },
+            { name: "SUKAMAJU", district: "TAMBELANG", label: "Sukamaju", x: 66.2, y: 45.2 },
+            { name: "SUKAMANTRI", district: "TAMBELANG", label: "Sukamantri", x: 68.8, y: 41.6 },
+            { name: "SUKARAHAYU", district: "TAMBELANG", label: "Sukarahayu", x: 61.2, y: 44.7 },
+            { name: "SUKARAJA", district: "TAMBELANG", label: "Sukaraja", x: 62.8, y: 51.6 },
+            { name: "SUKARAPIH", district: "TAMBELANG", label: "Sukarapih", x: 66.7, y: 53.1 },
+            { name: "SUKAWIJAYA", district: "TAMBELANG", label: "Sukawijaya", x: 74.1, y: 47.8 },
+            { name: "SRIAMUR", district: "TAMBUN UTARA", label: "Sriamur", x: 13.7, y: 56.4 },
+            { name: "SRIJAYA", district: "TAMBUN UTARA", label: "Srijaya", x: 28.1, y: 53.2 },
+            { name: "SRIMAHI", district: "TAMBUN UTARA", label: "Srimahi", x: 21.7, y: 60.6 },
+            { name: "SRIMUKTI", district: "TAMBUN UTARA", label: "Srimukti", x: 20.4, y: 49.1 },
+            { name: "SATRIAMEKAR", district: "TAMBUN UTARA", label: "Satriamekar", x: 14.0, y: 70.3 },
+            { name: "JEJALENJAYA", district: "TAMBUN UTARA", label: "Jejalenjaya", x: 23.6, y: 69.1 },
+            { name: "SATRIAJAYA", district: "TAMBUN UTARA", label: "Satriajaya", x: 18.6, y: 84.8 },
+            { name: "KARANGSATRIA", district: "TAMBUN UTARA", label: "Karangsatria", x: 10.7, y: 96.2 },
+            { name: "BANJARSARI", district: "SUKATANI", label: "Banjarsari", x: 67.2, y: 78.2 },
+            { name: "SUKAASIH", district: "SUKATANI", label: "Sukaasih", x: 61.1, y: 89.7 },
+            { name: "SUKADARMA", district: "SUKATANI", label: "Sukadarma", x: 83.6, y: 62.2 },
+            { name: "SUKAHURIP", district: "SUKATANI", label: "Sukahurip", x: 73.5, y: 57.7 },
+            { name: "SUKAMANAH", district: "SUKATANI", label: "Sukamanah", x: 65.8, y: 60.8 },
+            { name: "SUKAMULYA", district: "SUKATANI", label: "Sukamulya", x: 79.4, y: 72.6 },
+            { name: "SUKARUKUN", district: "SUKATANI", label: "Sukarukun", x: 70.2, y: 97.4 }
+        ]
+    }
+};
+```
+
+KONFIGURASI STATUS (hardcode):
+```javascript
+const statusConfig = {
+    "JAGA KUAT": { color: "#15803d", description: "PKS unggul jelas. Fokus menjaga basis dan mengunci loyalitas." },
+    "AMANKAN": { color: "#65a30d", description: "PKS sudah unggul tapi margin tipis. Perlu pengamanan suara." },
+    "REBUT REALISTIS": { color: "#2563eb", description: "PKS belum unggul tapi jarak tipis, realistis direbut." },
+    "GARAP INTENSIF": { color: "#d97706", description: "Potensi ada tapi butuh kerja lapangan lebih rapat." },
+    "ZONA BERAT": { color: "#b91c1c", description: "PKS masih lemah, prioritas bangun fondasi dan jaringan." }
+};
+```
+
+KONSTANTA:
+```javascript
+const PKS_PARTY_ID = "12";
+const PKS_PARTY_NAME = "PKS";
+```
+
+CORE FUNCTIONS YANG HARUS DIBUAT (logic sama dengan referensi):
+
+1. parseSemicolonCsv(text) — parse teks CSV separator ; jadi array of objects (header row jadi key)
+2. normalizeKey(value) — uppercase, trim, collapse whitespace
+3. resolveLatestDapil(rawDapil, rawKecamatan) — fix mapping dapil: CIKARANG SELATAN → BEKASI 1
+4. buildDataset(rows) — dari CSV TPS, bangun struktur: Map<dapil, { kecamatanMap, desaMap }>
+   - Per desa: partyMap (partai → {partyVotes, candidateVotes, candidates})
+   - Per TPS: partyMap
+   - TPS 000 / nomor_urut=0 = suara partai, nomor_urut>0 = suara calon
+5. buildDptDataset(rows) — dari CSV DPT, bangun Map<villageKey, { rwMap, totalDpt, male, female, gen_z, millennial, gen_x, boomer }>
+6. analyzePks(partyMap, totalTps) — hitung ranking PKS, share, gap, lalu classifyPriority
+7. classifyPriority({pksVotes, share, rank, gapShare}):
+   - pksVotes <= 0 → ZONA BERAT
+   - rank==1 && share>=0.3 → JAGA KUAT
+   - rank==1 → AMANKAN
+   - rank==2 && gapShare<=0.05 → REBUT REALISTIS
+   - rank<=3 || share>=0.12 → GARAP INTENSIF
+   - else → ZONA BERAT
+8. buildScopeData(dapilObj) — filter villages by kecamatan/status/search, aggregate
+9. render() — fungsi utama yang memanggil semua render sub-fungsi
+
+RENDER FUNCTIONS:
+- renderSummaryCards(scopeData, dptScope)
+- renderStatusDashboard(statusRows) — 5 card status
+- renderMap(visibleVillages) — marker pada gambar peta
+- renderVillagePanel(visibleVillages) — grid card desa
+- renderScope(scopeData) — update title dan description
+- renderPksStatus(scopeData) — panel status PKS
+- renderCandidateRank(scopeData) — tabel caleg PKS
+- renderDistrictTable(districtRows) — tabel kecamatan
+- renderVillageTable(villageRows) — tabel desa
+- renderTpsTable(tpsRows) — tabel TPS
+- renderDptSummary(dptScope) — ringkasan DPT
+- renderRwTable(rwRows) — tabel RW
+- renderRtTable(rtRows) — tabel RT
+- renderDemographyTab(dptScope) — progress bar gender + generasi
+- renderProgramTab(scopeData, dptScope) — rekomendasi strategi
+- renderDetailDrawer(dptScope) — drawer detail desa
+
+EVENT HANDLERS:
+- dapilSelect.change → update state.currentDapil, reset filter, render()
+- kecamatanSelect.change → update state.currentKecamatan, render()
+- statusSelect.change → update state.currentStatus, render()
+- searchInput.input → update state.searchKeyword, render()
+- resetFilterBtn.click → reset semua filter, render()
+- Tab buttons → switch active tab
+- CSV file inputs → load file manual, parse, render()
+- Marker/village card click → set state.currentVillageKey, render()
+- Detail drawer close
+
+AUTO-LOAD saat page ready:
+1. fetch("/data/pemilu/tps_dprd.csv") → parse → buildDataset → render
+2. fetch DPT files:
+   - /data/pemilu/dpt_dapil1_rt_rw.csv → buildDptDataset, simpan di state.dptDatasets["BEKASI 1"]
+   - /data/pemilu/dpt_bekasi4_rt_rw.csv → buildDptDataset, simpan di state.dptDatasets["BEKASI 4"]
+   Jika fetch gagal (file tidak ada), tampilkan pesan agar user upload manual.
+
+STYLING:
+- Gunakan CSS variables untuk warna (sesuai dark mode app)
+- Tabel: border-collapse, striped rows, hover highlight
+- Cards: rounded-xl, border, shadow ringan
+- Responsive: grid kolom jadi stack di mobile
+- Badge status: rounded-full, padding kecil, warna sesuai statusConfig
+- Tab buttons: pill style, active = bg accent
+- Detail drawer: fixed right, slide in, z-index tinggi, backdrop blur
+
+PENTING:
+- File ini akan BESAR (2000-3500 baris), itu normal. Ini single-page app yang self-contained.
+- Semua logic di satu file blade, jangan pecah ke file JS external.
+- Pastikan auto-load CSV berjalan saat halaman dibuka.
+- Jika file CSV besar menyebabkan browser lambat, tampilkan loading indicator.
+- Jangan pakai framework JS tambahan (React, Vue dll). Vanilla JS saja.
+- Helper functions: formatNumber() pakai Intl.NumberFormat("id-ID"), toTitleCase(), escapeHtml()
+
+Langsung buat file lengkap. Jangan test. Pastikan halaman bisa dibuka dan data ter-load.
+```
+
+---
+
+## PROMPT 3: Fix & Polish — Pastikan Halaman Berjalan
+
+```
+Lanjutan modul Bedah Dapil. Cek halaman bedah-dapil/pemilu-dprd apakah sudah bisa dibuka dan data ter-load. Jika ada error, fix. Jika belum ada fungsi, lengkapi.
+
+Langsung fix, JANGAN test.
+
+CHECKLIST:
+1. Buka /bedah-dapil/pemilu-dprd — halaman harus load tanpa error console
+2. CSV /data/pemilu/tps_dprd.csv harus bisa di-fetch browser (cek CORS, cek file ada di public/)
+3. Setelah CSV terload, dropdown dapil harus terisi: BEKASI 1 sampai BEKASI 7
+4. Summary cards harus menampilkan angka (bukan 0 semua)
+5. Status dashboard harus menampilkan 5 card status dengan jumlah desa
+6. Peta harus muncul untuk BEKASI 1 dan BEKASI 4 (gambar + marker)
+7. Klik marker → panel kanan update
+8. Tab Status, RW/RT, Demografi, Program harus bisa diklik dan konten berganti
+9. Detail drawer muncul saat klik desa
+10. Filter dapil, kecamatan, status, search berfungsi
+
+JIKA ADA FUNGSI RENDER YANG BELUM DIBUAT, buat sekarang. Yang paling penting:
+- renderSummaryCards — angka summary harus muncul
+- renderStatusDashboard — 5 card status harus muncul
+- renderMap — marker di atas gambar peta
+- renderVillagePanel — grid desa
+- renderDistrictTable dan renderVillageTable — tabel data
+
+JIKA FILE CSV TERLALU BESAR untuk fetch sekaligus, buat loading indicator:
+- Tampilkan "Memuat data TPS (xx MB)..." dengan progress jika memungkinkan
+- Parse CSV secara streaming jika perlu
+
+JIKA STYLING KURANG, perbaiki agar konsisten dengan dark mode app (bg-zinc-800, text-zinc-100, border-zinc-700).
+
+Jangan test. Langsung fix semua yang perlu.
+```
+
+---
+
+## PROMPT 4 (OPSIONAL): Tambah Akses Kontrol Berdasarkan Role User
+
+```
+Lanjutan modul Bedah Dapil. Tambahkan akses kontrol sederhana berdasarkan role user.
+
+JANGAN buat migration baru. Cukup tambahkan field role di users table (jika belum ada dari modul lain).
+
+JIKA migration role belum ada, buat migration:
+- add_role_to_users_table: tambah kolom 'role' string default 'admin', dan 'assigned_dapil' string nullable
+- Update model User: tambah ke fillable
+
+LOGIC AKSES di halaman pemilu-dprd.blade.php:
+- Kirim role dan assigned_dapil user ke JavaScript via blade:
+  ```
+  <script>
+  const userRole = @json(auth()->user()->role ?? 'admin');
+  const userDapil = @json(auth()->user()->assigned_dapil ?? '');
+  </script>
+  ```
+
+- Di JavaScript, saat init:
+  - Jika role = 'admin' atau 'dpd': bisa pilih semua dapil
+  - Jika role = 'dapil': auto-select dapil user, disable dropdown dapil
+  - Jika role = 'kecamatan': auto-select dapil + kecamatan user, disable kedua dropdown
+
+- Buat seeder untuk user test:
+  admin@bekasihebat.id / password / role=admin
+  dpd@bekasihebat.id / password / role=dpd
+  dapil1@bekasihebat.id / password / role=dapil / assigned_dapil=BEKASI 1
+  kecamatan.setu@bekasihebat.id / password / role=kecamatan / assigned_dapil=BEKASI 1 (nanti tambah assigned_kecamatan juga)
+
+Langsung buat. Jangan test.
+```
+
+---
+
+## CATATAN UNTUK USER
+
+### Urutan Eksekusi:
+1. **Prompt 1** → Setup route, publish data CSV ke public, menu sidebar
+2. **Prompt 2** → Buat halaman pemilu-dprd (ini yang paling besar, ~2000+ baris)
+3. **Prompt 3** → Fix & polish, pastikan semua berjalan
+4. **Prompt 4** → (opsional) Akses kontrol per role
+
+### Keuntungan Pendekatan Ini:
+- **Tidak perlu** migration, model, seeder untuk data pemilu
+- **Tidak perlu** import command, tidak perlu tunggu import 970rb baris
+- **Langsung jadi** — buka halaman, data auto-load dari CSV
+- **Sama persis** seperti referensi BedahDapil yang sudah jalan
+- Nanti jika mau pindah ke database, tinggal buat API endpoint yang return JSON format sama
+
+### Jika Error:
+- CSV tidak ter-load → cek apakah file sudah di-copy ke public/data/pemilu/ (jalankan `php artisan pemilu:publish`)
+- Halaman kosong → buka console browser, lihat error JS
+- Data tidak muncul → pastikan format CSV benar (separator `;`, bukan `,`)

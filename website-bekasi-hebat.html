@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kabupaten Bekasi Hebat — DPD PKS Kabupaten Bekasi</title>
+<meta name="description" content="Website resmi DPD PKS Kabupaten Bekasi. Program, event, berita, dan pendaftaran anggota.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FE5000;--orange-dark:#D94000;--orange-light:#fff3ee;
+  --blue:#1a3a6b;--blue-mid:#2155a0;--blue-light:#e8f0fb;
+  --gray-50:#fafaf8;--gray-100:#f7f7f5;--gray-200:#ececea;--gray-300:#ddd;--gray-400:#9a9890;--gray-700:#3d3d3a;--gray-900:#1a1a18;
+  --white:#fff;--green:#16a34a;--red:#dc2626;
+  --font:'Plus Jakarta Sans',sans-serif;--serif:'Noto Serif',serif;
+  --radius:8px;--radius-lg:14px;
+  --shadow:0 2px 12px rgba(0,0,0,.08);--shadow-lg:0 6px 32px rgba(0,0,0,.13);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--gray-50);color:var(--gray-700);font-size:15px;line-height:1.65}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+ul{list-style:none}
+.container{max-width:1140px;margin:0 auto;padding:0 20px}
+
+/* ===== HEADER ===== */
+header{background:var(--white);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 0;gap:16px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:44px;height:44px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:22px}
+.brand-text span{display:block;font-size:9px;color:var(--gray-400);letter-spacing:.5px;text-transform:uppercase}
+.brand-text strong{display:block;font-size:14px;font-weight:700;color:var(--blue);line-height:1.2}
+.nav-links{display:flex;gap:2px;align-items:center}
+.nav-links a{padding:8px 14px;font-size:13px;font-weight:600;color:var(--gray-700);border-radius:var(--radius);transition:.2s}
+.nav-links a:hover,.nav-links a.active{background:var(--orange-light);color:var(--orange)}
+.nav-cta{padding:8px 20px !important;background:var(--orange) !important;color:white !important;border-radius:20px !important;font-weight:700 !important}
+.nav-cta:hover{background:var(--orange-dark) !important}
+.mobile-toggle{display:none;background:none;border:none;font-size:22px;color:var(--gray-700);cursor:pointer}
+.mobile-nav{display:none;background:var(--white);padding:12px 20px;border-top:1px solid var(--gray-200)}
+.mobile-nav a{display:block;padding:10px 0;font-size:14px;font-weight:600;color:var(--gray-700);border-bottom:1px solid var(--gray-200)}
+.mobile-nav a:last-child{border:none}
+
+/* ===== HERO ===== */
+.hero{position:relative;background:linear-gradient(135deg,var(--blue) 0%,#0d1f3c 100%);overflow:hidden;min-height:440px;display:flex;align-items:center}
+.hero-pattern{position:absolute;inset:0;opacity:.06;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/svg%3E")}
+.hero-content{position:relative;z-index:2;color:white;padding:60px 0}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:rgba(254,80,0,.2);border:1px solid rgba(254,80,0,.4);border-radius:20px;font-size:12px;font-weight:600;color:#ff9a66;margin-bottom:16px}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.1;margin-bottom:12px;letter-spacing:-.5px}
+.hero h1 span{color:var(--orange)}
+.hero p{font-size:16px;opacity:.8;max-width:500px;line-height:1.7;margin-bottom:24px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:.2s;font-family:var(--font)}
+.btn-orange{background:var(--orange);color:white}
+.btn-orange:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 16px rgba(254,80,0,.3)}
+.btn-outline{background:transparent;color:white;border:2px solid rgba(255,255,255,.3)}
+.btn-outline:hover{border-color:white;background:rgba(255,255,255,.1)}
+.hero-stats{display:flex;gap:32px;margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,.15)}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:28px;font-weight:800;color:var(--orange)}
+.hero-stat .label{font-size:11px;opacity:.6;margin-top:2px}
+
+/* ===== SECTION COMMON ===== */
+.section{padding:56px 0}
+.section-header{text-align:center;margin-bottom:36px}
+.section-header .tag{display:inline-block;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.section-header h2{font-size:28px;font-weight:800;color:var(--gray-900);line-height:1.2;letter-spacing:-.3px}
+.section-header p{font-size:15px;color:var(--gray-400);margin-top:6px;max-width:500px;margin-left:auto;margin-right:auto}
+
+/* ===== EVENT ===== */
+.event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.event-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);transition:.3s;border:1px solid var(--gray-200)}
+.event-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.event-img{height:160px;background:linear-gradient(135deg,var(--orange-light),var(--blue-light));display:flex;align-items:center;justify-content:center;position:relative}
+.event-img .date-badge{position:absolute;top:12px;left:12px;background:var(--orange);color:white;border-radius:8px;padding:6px 10px;text-align:center;line-height:1.1}
+.event-img .date-badge .day{font-size:20px;font-weight:800;display:block}
+.event-img .date-badge .month{font-size:9px;text-transform:uppercase;letter-spacing:.5px}
+.event-img .kategori{position:absolute;top:12px;right:12px;background:white;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:600;color:var(--blue)}
+.event-body{padding:16px}
+.event-body h3{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:6px;line-height:1.3}
+.event-body .meta{font-size:12px;color:var(--gray-400);display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
+.event-body .meta i{width:14px;color:var(--orange)}
+.event-btn{display:block;text-align:center;padding:10px;background:var(--orange);color:white;border-radius:var(--radius);font-size:13px;font-weight:700;transition:.2s}
+.event-btn:hover{background:var(--orange-dark)}
+
+/* ===== PROGRAM ===== */
+.program-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.program-card{background:var(--white);border-radius:var(--radius-lg);padding:24px 20px;border:1px solid var(--gray-200);transition:.3s;text-align:center}
+.program-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--orange)}
+.program-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px}
+.program-card h3{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:6px}
+.program-card p{font-size:12px;color:var(--gray-400);line-height:1.5}
+.program-card .stat{font-size:20px;font-weight:800;margin-top:10px}
+
+/* ===== BERITA ===== */
+.berita-layout{display:grid;grid-template-columns:7fr 5fr;gap:20px}
+.berita-featured{border-radius:var(--radius-lg);overflow:hidden;background:var(--white);border:1px solid var(--gray-200);box-shadow:var(--shadow)}
+.berita-featured-img{height:260px;background:linear-gradient(135deg,var(--blue),var(--blue-mid));display:flex;align-items:flex-end;padding:20px;position:relative}
+.berita-featured-img::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.7))}
+.berita-featured-img h3{position:relative;z-index:2;color:white;font-size:20px;font-weight:700;line-height:1.3}
+.berita-featured-body{padding:16px}
+.berita-featured-body p{font-size:13px;color:var(--gray-400);line-height:1.6}
+.berita-featured-body .date{font-size:11px;color:var(--orange);font-weight:600;margin-top:8px}
+.berita-list{display:flex;flex-direction:column;gap:0}
+.berita-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray-200)}
+.berita-item:last-child{border:none}
+.berita-thumb{width:90px;height:68px;border-radius:var(--radius);background:var(--gray-200);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gray-400);font-size:20px}
+.berita-item h4{font-size:13px;font-weight:600;color:var(--gray-900);line-height:1.4;margin-bottom:4px}
+.berita-item .date{font-size:11px;color:var(--gray-400)}
+
+/* ===== DPRD ===== */
+.dprd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.dprd-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--gray-200);text-align:center;transition:.3s}
+.dprd-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+.dprd-photo{height:180px;background:linear-gradient(135deg,var(--blue-light),var(--gray-200));display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--gray-300)}
+.dprd-info{padding:14px}
+.dprd-info h4{font-size:14px;font-weight:700;color:var(--gray-900)}
+.dprd-info .jabatan{font-size:11px;color:var(--gray-400);margin-top:2px}
+.dprd-info .dapil{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:12px;background:var(--orange-light);color:var(--orange);font-size:10px;font-weight:600}
+.dprd-socials{display:flex;justify-content:center;gap:8px;padding:10px;border-top:1px solid var(--gray-200)}
+.dprd-socials a{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--gray-400);background:var(--gray-100);transition:.2s}
+.dprd-socials a:hover{background:var(--orange);color:white}
+
+/* ===== STATS ===== */
+.stats-section{background:linear-gradient(135deg,var(--blue) 0%,#0d1f3c 100%);color:white;padding:48px 0;position:relative;overflow:hidden}
+.stats-section .pattern{position:absolute;inset:0;opacity:.04;background:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20z' fill='%23fff' fill-opacity='1'/%3E%3C/svg%3E")}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;position:relative;z-index:2;text-align:center}
+.stat-item .num{font-size:36px;font-weight:800;color:var(--orange)}
+.stat-item .label{font-size:12px;opacity:.7;margin-top:4px}
+
+/* ===== GALERI ===== */
+.galeri-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.galeri-item{aspect-ratio:1;border-radius:var(--radius);overflow:hidden;background:var(--gray-200);position:relative;cursor:pointer}
+.galeri-item:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+.galeri-item .overlay{position:absolute;inset:0;background:rgba(0,0,0,0);transition:.3s;display:flex;align-items:center;justify-content:center}
+.galeri-item:hover .overlay{background:rgba(254,80,0,.4)}
+.galeri-item .overlay i{color:white;font-size:24px;opacity:0;transition:.3s;transform:scale(.8)}
+.galeri-item:hover .overlay i{opacity:1;transform:scale(1)}
+.galeri-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gray-100),var(--gray-200));color:var(--gray-300);font-size:32px}
+
+/* ===== CTA ===== */
+.cta{background:var(--orange);padding:56px 0;text-align:center;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08)}
+.cta::after{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.06)}
+.cta h2{font-size:30px;font-weight:800;color:white;margin-bottom:8px;position:relative;z-index:2}
+.cta p{font-size:15px;color:rgba(255,255,255,.8);margin-bottom:24px;position:relative;z-index:2}
+.cta .btn{position:relative;z-index:2;background:white;color:var(--orange);font-weight:700;padding:14px 36px;border-radius:30px;font-size:15px}
+.cta .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+
+/* ===== FOOTER ===== */
+footer{background:var(--gray-900);color:rgba(255,255,255,.7)}
+.footer-main{padding:40px 0;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
+.footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.footer-brand .icon{width:36px;height:36px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:18px}
+.footer-brand strong{color:white;font-size:14px}
+footer p{font-size:12px;line-height:1.6}
+footer h4{color:white;font-size:13px;font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+footer ul li{margin-bottom:6px}
+footer ul li a{font-size:12px;color:rgba(255,255,255,.6);transition:.2s}
+footer ul li a:hover{color:var(--orange)}
+.footer-socials{display:flex;gap:8px;margin-top:12px}
+.footer-socials a{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);transition:.2s}
+.footer-socials a:hover{background:var(--orange);color:white}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding:16px 0;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.footer-bottom .orange-strip{height:3px;background:var(--orange);width:60px;border-radius:2px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .mobile-nav.show{display:block}
+  .hero-content{padding:40px 0}
+  .hero-stats{flex-wrap:wrap;gap:16px}
+  .event-grid{grid-template-columns:1fr}
+  .program-grid{grid-template-columns:1fr 1fr}
+  .berita-layout{grid-template-columns:1fr}
+  .dprd-grid{grid-template-columns:1fr 1fr}
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+  .galeri-grid{grid-template-columns:1fr 1fr}
+  .footer-main{grid-template-columns:1fr 1fr}
+}
+
+/* ===== ANIMATIONS ===== */
+.fade-up{opacity:0;transform:translateY(20px);transition:.6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="container">
+    <div class="nav-wrap">
+      <a href="#" class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-hexagon-check"></i></div>
+        <div class="brand-text">
+          <span>DPD PKS Kabupaten Bekasi</span>
+          <strong>Bekasi Hebat</strong>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#" class="active">Beranda</a>
+        <a href="#event">Event</a>
+        <a href="#program">Program</a>
+        <a href="#berita">Berita</a>
+        <a href="#dprd">DPRD Kami</a>
+        <a href="#galeri">Galeri</a>
+        <a href="#daftar" class="nav-cta"><i class="fa-solid fa-user-plus"></i> Daftar</a>
+      </nav>
+      <button class="mobile-toggle" onclick="document.getElementById('mobileNav').classList.toggle('show')">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#">Beranda</a>
+      <a href="#event">Event</a>
+      <a href="#program">Program</a>
+      <a href="#berita">Berita</a>
+      <a href="#dprd">DPRD Kami</a>
+      <a href="#galeri">Galeri</a>
+      <a href="#daftar">Daftar Anggota</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="container">
+    <div class="hero-content fade-up">
+      <div class="hero-badge"><i class="fa-solid fa-bullhorn"></i> Menuju Pemilu 2029</div>
+      <h1>Kabupaten <span>Bekasi Hebat</span></h1>
+      <p>Bersama membangun Kabupaten Bekasi yang lebih adil, sejahtera, dan bermartabat melalui pelayanan nyata di setiap RW.</p>
+      <div class="hero-actions">
+        <a href="#daftar" class="btn btn-orange"><i class="fa-solid fa-user-plus"></i> Bergabung Sekarang</a>
+        <a href="#program" class="btn btn-outline"><i class="fa-solid fa-play"></i> Lihat Program</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num" data-count="7">0</div><div class="label">Dapil</div></div>
+        <div class="hero-stat"><div class="num" data-count="23">0</div><div class="label">Kecamatan</div></div>
+        <div class="hero-stat"><div class="num" data-count="187">0</div><div class="label">Desa</div></div>
+        <div class="hero-stat"><div class="num" data-count="2231">0</div><div class="label">RW Terjangkau</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EVENT MENDATANG ===== -->
+<section class="section" id="event">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="tag" style="background:var(--orange-light);color:var(--orange);">Segera Hadir</div>
+      <h2>Event Mendatang</h2>
+      <p>Ikuti kegiatan kami dan jadilah bagian dari perubahan</p>
+    </div>
+    <div class="event-grid">
+
+      <div class="event-card fade-up">
+        <div class="event-img">
+          <div style="font-size:48px;color:var(--orange);opacity:.3;"><i class="fa-solid fa-heart-pulse"></i></div>
+          <div class="date-badge"><span class="day">15</span><span class="month">Jun</span></div>
+          <div class="kategori">Kesehatan</div>
+        </div>
+        <div class="event-body">
+          <h3>Baksos Kesehatan Gratis</h3>
+          <div class="meta">
+            <span><i class="fa-solid fa-clock"></i> 08:00 — 14:00 WIB</span>
+            <span><i class="fa-solid fa-location-dot"></i> Balai Desa Cijengkol, Setu</span>
+            <span><i class="fa-solid fa-users"></i> 42 pendaftar</span>
+          </div>
+          <a href="#" class="event-btn">Daftar Sekarang</a>
+        </div>
+      </div>
+
+      <div class="event-card fade-up">
+        <div class="event-img">
+          <div style="font-size:48px;color:var(--orange);opacity:.3;"><i class="fa-solid fa-chalkboard-user"></i></div>
+          <div class="date-badge"><span class="day">22</span><span class="month">Jun</span></div>
+          <div class="kategori">Pelatihan</div>
+        </div>
+        <div class="event-body">
+          <h3>Workshop UMKM Digital</h3>
+          <div class="meta">
+            <span><i class="fa-solid fa-clock"></i> 09:00 — 16:00 WIB</span>
+            <span><i class="fa-solid fa-location-dot"></i> Aula Kecamatan Cikarang Barat</span>
+            <span><i class="fa-solid fa-users"></i> 28 pendaftar</span>
+          </div>
+          <a href="#" class="event-btn">Daftar Sekarang</a>
+        </div>
+      </div>
+
+      <div class="event-card fade-up">
+        <div class="event-img">
+          <div style="font-size:48px;color:var(--orange);opacity:.3;"><i class="fa-solid fa-person-running"></i></div>
+          <div class="date-badge"><span class="day">29</span><span class="month">Jun</span></div>
+          <div class="kategori">Olahraga</div>
+        </div>
+        <div class="event-body">
+          <h3>Jalan Santai Sehat Bersama</h3>
+          <div class="meta">
+            <span><i class="fa-solid fa-clock"></i> 06:00 — 10:00 WIB</span>
+            <span><i class="fa-solid fa-location-dot"></i> Lapangan Tambun Selatan</span>
+            <span><i class="fa-solid fa-users"></i> 156 pendaftar</span>
+          </div>
+          <a href="#" class="event-btn">Daftar Sekarang</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROGRAM UNGGULAN ===== -->
+<section class="section" id="program" style="background:var(--white);">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="tag" style="background:var(--blue-light);color:var(--blue);">Program Kami</div>
+      <h2>Program Unggulan</h2>
+      <p>Pelayanan nyata untuk warga Kabupaten Bekasi</p>
+    </div>
+    <div class="program-grid">
+
+      <div class="program-card fade-up">
+        <div class="program-icon" style="background:#ec489915;color:#ec4899;"><i class="fa-solid fa-house-chimney-medical"></i></div>
+        <h3>RKI</h3>
+        <p>Rumah Keluarga Indonesia — pusat pemberdayaan perempuan & keluarga di setiap RW</p>
+        <div class="stat" style="color:#ec4899;">2.231 <span style="font-size:12px;color:var(--gray-400);">RW target</span></div>
+      </div>
+
+      <div class="program-card fade-up">
+        <div class="program-icon" style="background:#16a34a15;color:#16a34a;"><i class="fa-solid fa-dumbbell"></i></div>
+        <h3>KSN / Senam PKS</h3>
+        <p>Kelompok Senam Nusantara — titik senam rutin di setiap desa untuk kesehatan warga</p>
+        <div class="stat" style="color:#16a34a;">187 <span style="font-size:12px;color:var(--gray-400);">desa target</span></div>
+      </div>
+
+      <div class="program-card fade-up">
+        <div class="program-icon" style="background:#fe500015;color:var(--orange);"><i class="fa-solid fa-handshake-angle"></i></div>
+        <h3>Sapa Warga</h3>
+        <p>Silaturahmi door-to-door — mendengar aspirasi dan membangun jaringan kepedulian</p>
+        <div class="stat" style="color:var(--orange);">446K <span style="font-size:12px;color:var(--gray-400);">warga target</span></div>
+      </div>
+
+      <div class="program-card fade-up">
+        <div class="program-icon" style="background:#2563eb15;color:#2563eb;"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h3>Kaderisasi</h3>
+        <p>Pembinaan kader muda — pelatihan kepemimpinan, dakwah, dan organisasi</p>
+        <div class="stat" style="color:#2563eb;">2.000+ <span style="font-size:12px;color:var(--gray-400);">kader aktif</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== BERITA ===== -->
+<section class="section" id="berita">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="tag" style="background:var(--orange-light);color:var(--orange);">Kabar Terbaru</div>
+      <h2>Berita & Kegiatan</h2>
+    </div>
+    <div class="berita-layout fade-up">
+      <div class="berita-featured">
+        <div class="berita-featured-img">
+          <h3>DPD PKS Kabupaten Bekasi Gelar Musyawarah Kerja Daerah 2026 — Siapkan Strategi Pemenangan Pemilu 2029</h3>
+        </div>
+        <div class="berita-featured-body">
+          <p>Musyawarah Kerja Daerah DPD PKS Kabupaten Bekasi dihadiri seluruh pengurus DPC dan perwakilan kader dari 7 dapil. Agenda utama adalah penetapan target suara 350.000 dan roadmap program kerja...</p>
+          <div class="date"><i class="fa-regular fa-calendar"></i> 28 Mei 2026</div>
+        </div>
+      </div>
+      <div class="berita-list">
+        <div class="berita-item">
+          <div class="berita-thumb"><i class="fa-solid fa-newspaper"></i></div>
+          <div>
+            <h4>Baksos Kesehatan di Setu: 200 Warga Mendapat Layanan Gratis</h4>
+            <div class="date">25 Mei 2026</div>
+          </div>
+        </div>
+        <div class="berita-item">
+          <div class="berita-thumb"><i class="fa-solid fa-newspaper"></i></div>
+          <div>
+            <h4>Pelatihan UMKM Digital Angkatan 2 Sukses Digelar di Cikarang</h4>
+            <div class="date">20 Mei 2026</div>
+          </div>
+        </div>
+        <div class="berita-item">
+          <div class="berita-thumb"><i class="fa-solid fa-newspaper"></i></div>
+          <div>
+            <h4>Program Senam PKS Kini Hadir di 18 Desa — Ribuan Warga Antusias</h4>
+            <div class="date">18 Mei 2026</div>
+          </div>
+        </div>
+        <div class="berita-item">
+          <div class="berita-thumb"><i class="fa-solid fa-newspaper"></i></div>
+          <div>
+            <h4>Anggota DPRD PKS Reses di Dapil 3: Jembatan Rusak Jadi Prioritas</h4>
+            <div class="date">15 Mei 2026</div>
+          </div>
+        </div>
+        <div class="berita-item">
+          <div class="berita-thumb"><i class="fa-solid fa-newspaper"></i></div>
+          <div>
+            <h4>Safari Dakwah DPD ke 23 Kecamatan Capai Tahap ke-8</h4>
+            <div class="date">12 Mei 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DPRD KAMI ===== -->
+<section class="section" id="dprd" style="background:var(--white);">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="tag" style="background:var(--blue-light);color:var(--blue);">Wakil Rakyat</div>
+      <h2>Anggota DPRD PKS</h2>
+      <p>Melayani dengan amanah di Kabupaten Bekasi</p>
+    </div>
+    <div class="dprd-grid fade-up">
+
+      <div class="dprd-card">
+        <div class="dprd-photo"><i class="fa-solid fa-user"></i></div>
+        <div class="dprd-info">
+          <h4>H. Ahmad Syaikhu</h4>
+          <div class="jabatan">Anggota DPRD Kab. Bekasi</div>
+          <div class="dapil">Dapil 1</div>
+        </div>
+        <div class="dprd-socials">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="dprd-card">
+        <div class="dprd-photo"><i class="fa-solid fa-user"></i></div>
+        <div class="dprd-info">
+          <h4>Hj. Siti Mukaromah</h4>
+          <div class="jabatan">Anggota DPRD Kab. Bekasi</div>
+          <div class="dapil">Dapil 3</div>
+        </div>
+        <div class="dprd-socials">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+
+      <div class="dprd-card">
+        <div class="dprd-photo"><i class="fa-solid fa-user"></i></div>
+        <div class="dprd-info">
+          <h4>H. Bambang Irawan</h4>
+          <div class="jabatan">Anggota DPRD Kab. Bekasi</div>
+          <div class="dapil">Dapil 7</div>
+        </div>
+        <div class="dprd-socials">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="dprd-card">
+        <div class="dprd-photo"><i class="fa-solid fa-user"></i></div>
+        <div class="dprd-info">
+          <h4>Ust. Firdaus</h4>
+          <div class="jabatan">Anggota DPRD Kab. Bekasi</div>
+          <div class="dapil">Dapil 5</div>
+        </div>
+        <div class="dprd-socials">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats-section">
+  <div class="pattern"></div>
+  <div class="container">
+    <div class="stats-grid fade-up">
+      <div class="stat-item"><div class="num" data-count="350">0</div><div class="label">Event Terselenggara</div></div>
+      <div class="stat-item"><div class="num" data-count="12480">0</div><div class="label">Warga Terjangkau</div></div>
+      <div class="stat-item"><div class="num" data-count="2048">0</div><div class="label">Kader Aktif</div></div>
+      <div class="stat-item"><div class="num" data-count="187">0</div><div class="label">Titik Senam</div></div>
+      <div class="stat-item"><div class="num" data-count="342">0</div><div class="label">Anggota Terdaftar</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALERI ===== -->
+<section class="section" id="galeri">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="tag" style="background:var(--orange-light);color:var(--orange);">Dokumentasi</div>
+      <h2>Galeri Kegiatan</h2>
+    </div>
+    <div class="galeri-grid fade-up">
+      <div class="galeri-item"><div class="galeri-placeholder"><i class="fa-solid fa-image"></i></div><div class="overlay"><i class="fa-solid fa-expand"></i></div></div>
+      <div class="galeri-item"><div class="galeri-placeholder"><i class="fa-solid fa-image"></i></div><div class="overlay"><i class="fa-solid fa-expand"></i></div></div>
+      <div class="galeri-item"><div class="galeri-placeholder"><i class="fa-solid fa-image"></i></div><div class="overlay"><i class="fa-solid fa-expand"></i></div></div>
+      <div class="galeri-item"><div class="galeri-placeholder"><i class="fa-solid fa-image"></i></div><div class="overlay"><i class="fa-solid fa-expand"></i></div></div>
+      <div class="galeri-item"><div class="galeri-placeholder"><i class="fa-solid fa-image"></i></div><div class="overlay"><i class="fa-solid fa-expand"></i></div></div>
+      <div class="galeri-item"><div class="galeri-placeholder"><i class="fa-solid fa-image"></i></div><div class="overlay"><i class="fa-solid fa-expand"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA DAFTAR ===== -->
+<section class="cta" id="daftar">
+  <div class="container">
+    <h2>Bergabung Bersama Kami</h2>
+    <p>Daftar sekarang dan dapatkan kartu anggota digital. Ikuti event, jadi bagian dari perubahan.</p>
+    <a href="/register" class="btn"><i class="fa-solid fa-id-card"></i> Daftar & Dapatkan Kartu Anggota</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-main">
+      <div>
+        <div class="footer-brand">
+          <div class="icon"><i class="fa-solid fa-hexagon-check"></i></div>
+          <strong>Bekasi Hebat</strong>
+        </div>
+        <p>DPD PKS Kabupaten Bekasi<br>Jl. Raya Cikarang — Cibarusah KM. 5<br>Kabupaten Bekasi, Jawa Barat</p>
+        <div class="footer-socials">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Menu</h4>
+        <ul>
+          <li><a href="#">Beranda</a></li>
+          <li><a href="#event">Event</a></li>
+          <li><a href="#program">Program</a></li>
+          <li><a href="#berita">Berita</a></li>
+          <li><a href="#galeri">Galeri</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Program</h4>
+        <ul>
+          <li><a href="#">RKI</a></li>
+          <li><a href="#">KSN / Senam</a></li>
+          <li><a href="#">Sapa Warga</a></li>
+          <li><a href="#">Kaderisasi</a></li>
+          <li><a href="#">Baksos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lainnya</h4>
+        <ul>
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">DPRD Kami</a></li>
+          <li><a href="#">Daftar Anggota</a></li>
+          <li><a href="#">Hubungi Kami</a></li>
+          <li><a href="/login">Login Dashboard</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 DPD PKS Kabupaten Bekasi. Hak cipta dilindungi.</span>
+      <div class="orange-strip"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Counter animation
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const duration = 1500;
+    const start = Date.now();
+    function update() {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * target);
+      el.textContent = current.toLocaleString('id-ID');
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    update();
+  });
+}
+
+// Trigger counters when stats section visible
+const statsObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounters();
+      statsObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.hero-stats, .stats-section').forEach(el => statsObs.observe(el));
+</script>
+</body>
+</html>
