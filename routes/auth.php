@@ -40,23 +40,8 @@ Route::middleware('auth')->group(function () {
         ->name('password.confirm');
 });
 
-if (! Route::has('logout')) {
-    Route::post('logout', App\Livewire\Actions\Logout::class)
-        ->name('logout');
-}
-
 if (! Route::has('login') && class_exists(\App\Livewire\Public\Auth\Login::class)) {
     Route::get('/login', \App\Livewire\Public\Auth\Login::class)->name('login');
-}
-
-if (! Route::has('logout')) {
-    Route::post('/logout', function () {
-        Auth::logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-
-        return redirect('/');
-    })->name('logout');
 }
 
 if (! Route::has('profile.complete') && class_exists(\App\Livewire\Public\Profile\Complete::class)) {

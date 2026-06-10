@@ -60,7 +60,12 @@ Route::get('/aktivasi', AktivasiNia::class)->name('aktivasi');
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', function () {
-        AuditLog::log('logout', 'Logout: '.auth()->user()?->name);
+        $userName = auth()->user()?->name;
+        AuditLog::log('logout', 'Logout: '.$userName);
+        
+        // Clear session variable untuk Filament
+        session()->forget('logged_in_via_admin');
+        
         auth()->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
