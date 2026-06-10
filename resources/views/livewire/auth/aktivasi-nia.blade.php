@@ -1,11 +1,10 @@
 <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 16px;background:radial-gradient(circle at top,#1f2937 0%,#09090b 55%,#030712 100%);">
     <div style="width:100%;max-width:560px;">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:18px;text-align:center;">
-            <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(249,115,22,0.25);">
-                <x-app-logo-icon class="size-7 fill-current text-white" />
-            </div>
-            <div style="font-size:13px;color:#a1a1aa;letter-spacing:.18em;text-transform:uppercase;">Bekasi Hebat</div>
-            <div style="font-size:28px;font-weight:700;color:white;">Aktivasi Akun</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:24px;text-align:center;">
+            <a href="{{ route('public.home') }}" wire:navigate>
+                <img src="{{ asset('images/logo-hebat.png') }}" alt="Kabupaten Bekasi Hebat" style="height: 64px; width: auto; object-fit: contain;">
+            </a>
+            <div style="font-size:28px;font-weight:700;color:white;margin-top:4px;">Aktivasi Akun</div>
         </div>
 
         <div style="background:rgba(24,24,27,0.92);border:1px solid rgba(63,63,70,0.9);border-radius:24px;padding:24px;box-shadow:0 24px 60px rgba(0,0,0,0.35);backdrop-filter:blur(12px);">
@@ -77,7 +76,7 @@
                     </div>
                 @endif
 
-                <form wire:submit.prevent="aktivasiAkun" style="display:grid;gap:14px;">
+                <form wire:submit.prevent="kirimOtp" style="display:grid;gap:14px;">
                     <div>
                         <label style="display:block;font-size:11px;font-weight:700;color:#d4d4d8;margin-bottom:6px;">Email</label>
                         <input type="email" wire:model.defer="email" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #3f3f46;background:#09090b;color:white;font-size:13px;outline:none;">
@@ -94,9 +93,51 @@
                     </div>
 
                     <button type="submit" style="width:100%;padding:12px 16px;border:none;border-radius:14px;background:#16a34a;color:white;font-size:14px;font-weight:700;cursor:pointer;">
-                        Aktivasi akun saya
+                        Kirim OTP via WhatsApp
                     </button>
                 </form>
+            @endif
+
+            @if ($step === 3 && $kader)
+                <div style="text-align:center;margin-bottom:20px;">
+                    <div style="font-size:16px;font-weight:700;color:white;">Verifikasi Kode OTP</div>
+                    <div style="font-size:12px;color:#a1a1aa;margin-top:6px;line-height:1.45;">
+                        Kode OTP telah dikirim via WhatsApp ke nomor:<br>
+                        <strong style="color:#f97316;font-size:14px;">{{ $this->getMaskedPhone() }}</strong>
+                    </div>
+                </div>
+
+                @if (session()->has('successMsg'))
+                    <div style="margin-bottom:16px;padding:12px 14px;border-radius:14px;background:rgba(22,163,74,0.18);border:1px solid rgba(74,222,128,0.28);color:#86efac;font-size:12px;">
+                        {{ session('successMsg') }}
+                    </div>
+                @endif
+
+                @if ($errorMsg !== '')
+                    <div style="margin-bottom:16px;padding:12px 14px;border-radius:14px;background:rgba(127,29,29,0.22);border:1px solid rgba(248,113,113,0.35);color:#fca5a5;font-size:12px;">
+                        {{ $errorMsg }}
+                    </div>
+                @endif
+
+                <form wire:submit.prevent="verifikasiOtp" style="display:grid;gap:16px;">
+                    <div>
+                        <label style="display:block;font-size:11px;font-weight:700;color:#d4d4d8;margin-bottom:6px;text-align:center;text-transform:uppercase;letter-spacing:0.05em;">Masukkan 6 Digit Kode OTP</label>
+                        <input type="text" inputmode="numeric" maxlength="6" wire:model.defer="otpInput" placeholder="------" style="width:100%;padding:14px;border-radius:14px;border:1px solid #3f3f46;background:#09090b;color:white;font-size:24px;font-weight:800;letter-spacing:8px;text-align:center;outline:none;">
+                    </div>
+
+                    <button type="submit" style="width:100%;padding:14px 16px;border:none;border-radius:14px;background:#f97316;color:white;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(249,115,22,0.2);">
+                        Verifikasi & Aktivasi
+                    </button>
+                </form>
+
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;font-size:12px;">
+                    <button type="button" wire:click="resendOtp" style="background:none;border:none;color:#a1a1aa;cursor:pointer;font-weight:600;padding:4px 0;outline:none;">
+                        Kirim Ulang OTP
+                    </button>
+                    <button type="button" wire:click="$set('step', 2)" style="background:none;border:none;color:#a1a1aa;cursor:pointer;font-weight:600;padding:4px 0;outline:none;">
+                        ← Kembali ke Form
+                    </button>
+                </div>
             @endif
         </div>
     </div>

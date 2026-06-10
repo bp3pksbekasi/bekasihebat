@@ -51,13 +51,7 @@ class Login extends Component
 
     private function dashboardRoute(): string
     {
-        $user = auth()->user();
-
-        if ($user && method_exists($user, 'landingRouteName')) {
-            return route($user->landingRouteName());
-        }
-
-        return route('sapa-warga.index');
+        return route('member.dashboard');
     }
 
     private function shouldIgnoreIntendedUrl(string $intendedUrl): bool

@@ -15,10 +15,17 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        $userRole = $this->canonicalRole((string) auth()->user()->role);
+        $user = auth()->user();
+        $userRole = $this->canonicalRole((string) $user->role);
         $allowedRoles = array_map(fn ($role) => $this->canonicalRole((string) $role), $roles);
 
-        if (! in_array($userRole, $allowedRoles, true)) {
+        $hasAccess = in_array($userRole, $allowedRoles, true);
+
+        if (! $hasAccess && method_exists($user, 'hasAnyRole')) {
+            $hasAccess = $user->hasAnyRole($allowedRoles);
+        }
+
+        if (! $hasAccess) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 

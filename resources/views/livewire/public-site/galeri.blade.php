@@ -1,4 +1,4 @@
-<div class="section">
+<section class="min-h-screen bg-zinc-50 pb-16">
     <div class="container">
         <div style="background:white; border-radius:16px; padding:24px; margin-top:24px; border:1px solid #f4f4f5;">
             <h1 style="font-size:30px; font-weight:700; color:#18181b; line-height:1.2;">Galeri Bekasi Hebat</h1>
@@ -29,7 +29,7 @@
         </div>
 
         @if ($this->galeriList->count() > 0)
-            <div class="fade-up galeri-grid-public" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;">
+            <div class="fade-up galeri-grid-public" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:20px;">
                 @foreach ($this->galeriList as $index => $item)
                     @php($isFeaturedTile = $index === 0)
                     @php($imagePath = $item->file_path ?: $item->thumbnail)
@@ -168,7 +168,7 @@
             </div>
         @endif
     </div>
-</div>
+</section>
 
 <style>
     .galeri-card-interactive:hover {

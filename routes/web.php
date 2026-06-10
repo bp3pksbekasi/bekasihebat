@@ -234,6 +234,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/users', UserManagementIndex::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.users');
+
+    Route::get('/pengaturan/whatsapp', \App\Livewire\Pengaturan\WhapifySettings::class)
+        ->middleware('role:admin_dpd')
+        ->name('pengaturan.whatsapp');
 });
 
 Route::middleware(['auth'])->group(function () {

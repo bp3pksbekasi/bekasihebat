@@ -57,5 +57,27 @@ class RolesAndPermissionsSeeder extends Seeder
         // Give all permissions to admin_dpd
         $adminRole = Role::findByName('admin_dpd');
         $adminRole->givePermissionTo(Permission::all());
+
+        // Give permissions to dapil role
+        $dapilRole = Role::findByName('dapil');
+        $dapilPermissions = [
+            'menu.dashboard',
+            'menu.infra-rtrw',
+            'menu.sapa-warga',
+            'menu.sisir-rw',
+            'menu.kaderisasi',
+            'menu.bedah-dapil',
+            'menu.event',
+            'menu.event-view',
+            'menu.sosial-media',
+            'menu.program-kerja',
+            'menu.profil',
+            'menu.rki',
+            'menu.ksn',
+            'menu.aspirasi',
+        ];
+        foreach ($dapilPermissions as $permissionName) {
+            $dapilRole->givePermissionTo(Permission::findOrCreate($permissionName));
+        }
     }
 }

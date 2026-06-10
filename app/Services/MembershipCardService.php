@@ -54,8 +54,18 @@ class MembershipCardService
             'name' => $user->name,
             'wilayah' => $wilayahName,
             'wilayah_full' => $wilayahFull,
-            'joined_at' => $user->created_at->isoFormat('MMM YYYY'),
+            'joined_at' => $user->created_at->translatedFormat('M Y'),
+            'joined_at_full' => $user->created_at->translatedFormat('d F Y'),
             'qr_svg' => $this->generateQrSvg($user),
+            // Field baru:
+            'nik' => $user->nik ?? '-',
+            'ttl' => $user->ttl_lengkap,
+            'tanggal_lahir' => $user->ttl_tanggal?->translatedFormat('d F Y') ?? '-',
+            'jenis_kelamin' => $user->jenis_kelamin_label,
+            'alamat' => $user->address ?? '-',
+            'foto_path' => $user->foto_path,
+            'dapil' => $user->dapil ?? '-',
+            'nomor_rw' => $user->nomor_rw ?? '-',
         ];
     }
 

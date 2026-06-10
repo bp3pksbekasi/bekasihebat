@@ -84,14 +84,17 @@
                     <flux:error name="password_confirmation" />
                 </flux:field>
 
-                <flux:checkbox wire:model="agree" label="Saya setuju dengan Ketentuan & Kebijakan Privasi" />
-                <div class="text-xs text-zinc-500 -mt-2">
-                    <a href="#" class="underline font-medium hover:text-orange-600" style="color: #fe5000;">Ketentuan Layanan</a>
-                    ·
-                    <a href="#" class="underline font-medium hover:text-orange-600" style="color: #fe5000;">Kebijakan Privasi</a>
+                <div class="flex items-start gap-2.5 my-3">
+                    <input type="checkbox" id="agreeCheckbox" wire:model="agree" class="w-4 h-4 mt-0.5 rounded border-zinc-300 text-[#fe5000] focus:ring-[#fe5000] cursor-pointer" required>
+                    <label for="agreeCheckbox" class="text-sm text-zinc-600 select-none cursor-pointer">
+                        Saya setuju dengan <a href="#" class="underline font-medium hover:text-orange-600" style="color: #fe5000;">Ketentuan Layanan</a> & <a href="#" class="underline font-medium hover:text-orange-600" style="color: #fe5000;">Kebijakan Privasi</a>
+                    </label>
                 </div>
+                @error('agree')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
 
-                <button type="submit" class="w-full rounded-xl text-white font-bold transition duration-200 btn-sliding-arrow" style="display: flex; align-items: center; justify-content: center; height: 50px; background: #fe5000; box-shadow: 0 4px 14px rgba(254, 80, 0, 0.25);" onmouseover="this.style.background='#d94000'; this.style.boxShadow='0 6px 20px rgba(254, 80, 0, 0.4)';" onmouseout="this.style.background='#fe5000'; this.style.boxShadow='0 4px 14px rgba(254, 80, 0, 0.25)';" wire:loading.attr="disabled">
+                <button type="submit" class="w-full rounded-xl text-white font-bold transition duration-200 btn-sliding-arrow" style="display: flex; align-items: center; justify-content: center; height: 50px; background: #fe5000; box-shadow: 0 4px 14px rgba(254, 80, 0, 0.25);" onmouseover="this.style.background='#d94000'; this.style.boxShadow='0 6px 20px rgba(254, 80, 0, 0.4)';" onmouseout="this.style.background='#fe5000'; this.style.boxShadow='0 4px 14px rgba(254, 80, 0, 0.25)';" wire:loading.attr="disabled" wire:target="register">
                     <span wire:loading.remove wire:target="register" class="flex items-center justify-center gap-1">
                         Gabung Sekarang <i class="ti ti-arrow-right" style="font-size: 16px;"></i>
                     </span>

@@ -44,11 +44,16 @@ class Dashboard extends Component
 
     public int $selectedTahun;
 
-    public function mount(): void
+    public function mount()
     {
-        abort_unless($this->hasAdminAccess(), 403);
+        if (! $this->hasAdminAccess()) {
+            if (auth()->check() && session('logged_in_via_admin')) {
+                return redirect()->to('/sisir-rw');
+            }
+            abort(403);
+        }
 
-        $this->showSidebar = request()->boolean('sidebar');
+        $this->showSidebar = request()->has('sidebar') ? request()->boolean('sidebar') : true;
         $this->selectedBulan = (int) now()->month;
         $this->selectedTahun = (int) now()->year;
 
@@ -819,12 +824,18 @@ class Dashboard extends Component
             return false;
         }
 
-        if ((method_exists($user, 'isAdmin') && $user->isAdmin()) || (method_exists($user, 'isBidang') && $user->isBidang())) {
+        if (! session('logged_in_via_admin')) {
+            return false;
+        }
+
+        if ((method_exists($user, 'isAdmin') && $user->isAdmin()) || 
+            (method_exists($user, 'isBidang') && $user->isBidang()) || 
+            (method_exists($user, 'isDapil') && $user->isDapil())) {
             return true;
         }
 
         if (method_exists($user, 'hasAnyRole')) {
-            return $user->hasAnyRole(['admin', 'pengurus', 'pengurus_dpd', 'dpd', 'super-admin', 'super admin']);
+            return $user->hasAnyRole(['admin', 'pengurus', 'pengurus_dpd', 'dpd', 'super-admin', 'super admin', 'dapil']);
         }
 
         return false;

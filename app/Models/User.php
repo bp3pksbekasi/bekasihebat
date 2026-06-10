@@ -12,15 +12,21 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements \Filament\Models\Contracts\FilamentUser
 {
     use HasFactory;
     use HasRoles;
     use Notifiable;
 
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return $this->isAdmin() && session('logged_in_via_admin') === true;
+    }
+
     public const ROLE_ADMIN = 'admin_dpd';
     public const ROLE_BIDANG = 'pengurus_bidang';
     public const ROLE_KADER = 'kader';
+    public const ROLE_DAPIL = 'dapil';
 
     public const BIDANG_OPTIONS = [
         'advokasi' => 'Advokasi Partai',
@@ -71,6 +77,10 @@ class User extends Authenticatable
         'password',
         'member_number',
         'nik',
+        'ttl_tempat',
+        'ttl_tanggal',
+        'jenis_kelamin',
+        'foto_path',
         'birth_date',
         'gender',
         'address',
@@ -90,9 +100,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'last_login_at' => 'datetime',
             'birth_date' => 'date',
+            'ttl_tanggal' => 'date',
             'profile_completed_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getTtlLengkapAttribute(): string
+    {
+        if (!$this->ttl_tempat && !$this->ttl_tanggal) return '-';
+        $tempat = $this->ttl_tempat ?? '';
+        $tanggal = $this->ttl_tanggal?->translatedFormat('d F Y') ?? '';
+        return trim($tempat . ', ' . $tanggal, ', ');
+    }
+
+    public function getJenisKelaminLabelAttribute(): string
+    {
+        return match($this->jenis_kelamin) {
+            'L' => 'Laki-laki',
+            'P' => 'Perempuan',
+            default => '-',
+        };
     }
 
     public function initials(): string
@@ -143,6 +171,11 @@ class User extends Authenticatable
         return mb_strtolower((string) $this->role) === self::ROLE_KADER;
     }
 
+    public function isDapil(): bool
+    {
+        return mb_strtolower((string) $this->role) === self::ROLE_DAPIL || $this->hasRole('dapil');
+    }
+
     public function getBidangLabelAttribute(): string
     {
         return self::BIDANG_OPTIONS[$this->bidang_slug] ?? '-';
@@ -154,10 +187,20 @@ class User extends Authenticatable
             return true;
         }
 
-        $universal = ['dashboard', 'sapa-warga', 'profil', 'event-view'];
+        $universal = ['dashboard', 'sapa-warga', 'profil', 'event-view', 'sisir-rw'];
 
         if (in_array($menuSlug, $universal, true)) {
             return true;
+        }
+
+        if ($this->isDapil()) {
+            $allowed = [
+                'dashboard', 'kaderisasi', 'infra-rtrw', 'sisir-rw', 'sapa-warga',
+                'sosial-media', 'rki', 'ksn', 'bedah-dapil', 'aspirasi',
+                'program-kerja', 'event', 'event-view', 'profil'
+            ];
+
+            return in_array($menuSlug, $allowed, true);
         }
 
         if ($this->hasMenuPermission($menuSlug)) {
@@ -241,11 +284,11 @@ class User extends Authenticatable
 
     public function landingRouteName(): string
     {
-        if ($this->isAdmin() || $this->isBidang()) {
+        if ($this->isAdmin() || $this->isBidang() || $this->isDapil()) {
             return 'dashboard';
         }
 
-        return 'sapa-warga.index';
+        return 'member.dashboard';
     }
 
     public function scopeAktif($query)

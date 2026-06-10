@@ -1,4 +1,4 @@
-<div class="section">
+<section class="min-h-screen bg-zinc-50 pb-16">
     <div class="container">
         <div style="background:white; border-radius:16px; padding:24px; margin-top:24px; border:1px solid #f4f4f5;">
             <h1 style="font-size:30px; font-weight:700; color:#18181b; line-height:1.2;">Ruang Berita Publik</h1>
@@ -30,7 +30,7 @@
 
         @if ($this->beritaFeatured)
             @php($featuredImageUrl = $this->beritaFeatured->thumbnail ? '/storage/' . ltrim($this->beritaFeatured->thumbnail, '/') : null)
-            <div class="fade-up" style="display:grid;grid-template-columns:7fr 5fr;gap:20px;margin-bottom:28px;">
+            <div class="fade-up" style="display:grid;grid-template-columns:7fr 5fr;gap:20px;margin-top:20px;margin-bottom:28px;">
                 <div style="overflow:hidden;border-radius:14px;background:#fff;border:1px solid #ececea;box-shadow:0 2px 12px rgba(0,0,0,.08); display:flex; flex-direction:column; justify-content:space-between;">
                     <div>
                         <a href="{{ route('public.berita.show', $this->beritaFeatured->slug) }}" wire:navigate style="display:block; position:relative;height:260px;display:flex;align-items:flex-end;padding:20px;background:linear-gradient(135deg,#1a3a6b,#2155a0);overflow:hidden; text-decoration:none;">
@@ -78,7 +78,7 @@
         @endif
 
         @if ($this->beritaList->count() > 0)
-            <div class="fade-up berita-grid-public" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+            <div class="fade-up berita-grid-public" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px;">
                 @foreach ($this->beritaList as $item)
                     @php($thumbUrl = $item->thumbnail ? '/storage/' . ltrim($item->thumbnail, '/') : null)
                     <article style="overflow:hidden;border-radius:14px;border:1px solid #ececea;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.08); display:flex; flex-direction:column; justify-content:space-between; height:100%;">
@@ -126,7 +126,7 @@
             <div class="event-card-public fade-up" style="padding:32px;text-align:center;">Belum ada artikel untuk kategori ini.</div>
         @endif
     </div>
-</div>
+</section>
 
 <style>
     @media (max-width: 1100px) {

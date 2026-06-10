@@ -50,6 +50,7 @@ class DapilLoginUsersSeeder extends Seeder
                     'phone' => sprintf('081900000%03d', $number),
                     'password' => Hash::make($password),
                     'member_number' => sprintf('DAPIL-%03d', $number),
+                    'role' => 'dapil',
                     'gender' => 'L',
                     'kelurahan_code' => $kelurahanCode,
                     'address' => sprintf('Akun dashboard %s, RT 001/RW 001', $target->desa),

@@ -1,101 +1,100 @@
-<!-- Load Tailwind CSS, Fonts, and Tabler Icons -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-
-<style>
-    .login-wrap{min-height:100vh;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0e1a 0%,#0d1424 40%,#111827 100%);font-family:'Plus Jakarta Sans',sans-serif;}
-    .login-grid-bg{position:absolute;inset:0;opacity:.04;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:40px 40px}
-    .login-glow1{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(234,88,12,.08) 0%,transparent 70%);top:-150px;right:-150px}
-    .login-glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.06) 0%,transparent 70%);bottom:-100px;left:-100px}
-    .login-content{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
-    .login-left{padding:48px;display:flex;flex-direction:column;justify-content:center}
-    .login-right{padding:48px;display:flex;align-items:center;justify-content:center}
-    .mono{font-family:'JetBrains Mono',monospace}
-    .stat-card{background:rgba(255,255,255,.03);border:0.5px solid rgba(255,255,255,.06);border-radius:10px;padding:14px}
-    .stat-dot{width:6px;height:6px;border-radius:50%}
-    
-    /* Filament form design system overrides to match custom theme */
-    .filament-form-container .fi-input-wrp {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 10px !important;
-        box-shadow: none !important;
-        transition: border-color .2s !important;
-        overflow: hidden !important;
-    }
-    .filament-form-container .fi-input-wrp:focus-within {
-        border-color: rgba(234, 88, 12, 0.5) !important;
-        box-shadow: none !important;
-    }
-    .filament-form-container .fi-input-wrp input {
-        background: transparent !important;
-        border: none !important;
-        color: #ffffff !important;
-        height: 44px !important;
-        font-size: 14px !important;
-        box-shadow: none !important;
-        outline: none !important;
-        padding-left: 14px !important;
-    }
-    .filament-form-container label {
-        color: #a1a1aa !important; /* slate-400 */
-        font-size: 12px !important;
-        font-weight: 500 !important;
-        display: block !important;
-        margin-bottom: 5px !important;
-    }
-    .filament-form-container label span,
-    .filament-form-container .fi-checkbox-label {
-        color: #a1a1aa !important;
-        font-size: 12px !important;
-        font-weight: 500 !important;
-    }
-    .filament-form-container .fi-checkbox-input {
-        width: 15px !important;
-        height: 15px !important;
-        accent-color: #ea580c !important;
-        border-radius: 4px !important;
-    }
-    .filament-form-container .fi-fo-field-wrp-error-message {
-        color: #f87171 !important; /* red-400 */
-        font-size: 11px !important;
-        margin-top: 4px !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 4px !important;
-    }
-    
-    .login-btn-filament {
-        width: 100%;
-        padding: 12px;
-        background: #ea580c;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        transition: background .2s, transform 0.1s;
-    }
-    .login-btn-filament:hover {
-        background: #dc4b06;
-    }
-    .login-btn-filament:active {
-        transform: scale(.99);
-    }
-    @media(max-width:768px){
-        .login-content{grid-template-columns:1fr}
-        .login-left{display:none}
-    }
-</style>
-
 <div class="login-wrap">
+    <!-- Load Tailwind CSS, Fonts, and Tabler Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <style>
+        .login-wrap{min-height:100vh;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0e1a 0%,#0d1424 40%,#111827 100%);font-family:'Plus Jakarta Sans',sans-serif;}
+        .login-grid-bg{position:absolute;inset:0;opacity:.04;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:40px 40px}
+        .login-glow1{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(234,88,12,.08) 0%,transparent 70%);top:-150px;right:-150px}
+        .login-glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.06) 0%,transparent 70%);bottom:-100px;left:-100px}
+        .login-content{position:relative;z-index:2;display:grid;grid-template-columns:1.35fr 0.65fr;min-height:100vh}
+        .login-left{padding:48px;display:flex;flex-direction:column;justify-content:center}
+        .login-right{padding:48px;display:flex;align-items:center;justify-content:center}
+        .mono{font-family:'JetBrains Mono',monospace}
+        .stat-card{background:rgba(255,255,255,.03);border:0.5px solid rgba(255,255,255,.06);border-radius:10px;padding:14px}
+        .stat-dot{width:6px;height:6px;border-radius:50%}
+        
+        /* Filament form design system overrides to match custom theme */
+        .filament-form-container .fi-input-wrp {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 10px !important;
+            box-shadow: none !important;
+            transition: border-color .2s !important;
+            overflow: hidden !important;
+        }
+        .filament-form-container .fi-input-wrp:focus-within {
+            border-color: rgba(234, 88, 12, 0.5) !important;
+            box-shadow: none !important;
+        }
+        .filament-form-container .fi-input-wrp input {
+            background: transparent !important;
+            border: none !important;
+            color: #ffffff !important;
+            height: 44px !important;
+            font-size: 14px !important;
+            box-shadow: none !important;
+            outline: none !important;
+            padding-left: 14px !important;
+        }
+        .filament-form-container label {
+            color: #a1a1aa !important; /* slate-400 */
+            font-size: 12px !important;
+            font-weight: 500 !important;
+            display: block !important;
+            margin-bottom: 5px !important;
+        }
+        .filament-form-container label span,
+        .filament-form-container .fi-checkbox-label {
+            color: #a1a1aa !important;
+            font-size: 12px !important;
+            font-weight: 500 !important;
+        }
+        .filament-form-container .fi-checkbox-input {
+            width: 15px !important;
+            height: 15px !important;
+            accent-color: #ea580c !important;
+            border-radius: 4px !important;
+        }
+        .filament-form-container .fi-fo-field-wrp-error-message {
+            color: #f87171 !important; /* red-400 */
+            font-size: 11px !important;
+            margin-top: 4px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+        }
+        
+        .login-btn-filament {
+            width: 100%;
+            padding: 12px;
+            background: #ea580c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background .2s, transform 0.1s;
+        }
+        .login-btn-filament:hover {
+            background: #dc4b06;
+        }
+        .login-btn-filament:active {
+            transform: scale(.99);
+        }
+        @media(max-width:768px){
+            .login-content{grid-template-columns:1fr}
+            .login-left{display:none}
+        }
+    </style>
     <div class="login-grid-bg"></div>
     <div class="login-glow1"></div>
     <div class="login-glow2"></div>
@@ -104,17 +103,11 @@
 
         {{-- ======= KIRI: Branding + Live Stats ======= --}}
         <div class="login-left">
-            <div style="width:100%;max-width:480px;margin:0 auto;">
+            <div style="width:100%;max-width:860px;margin:0 auto;">
 
                 {{-- Logo --}}
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:36px;">
-                    <div style="width:48px;height:48px;background:#ea580c;border-radius:12px;display:flex;align-items:center;justify-content:center;">
-                        <i class="ti ti-hexagon-filled" style="font-size:24px;color:white;"></i>
-                    </div>
-                    <div>
-                        <div class="mono" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#71717a;">DPD PKS Kabupaten Bekasi</div>
-                        <div style="font-size:20px;font-weight:700;color:white;">Bekasi <span style="color:#ea580c;">Hebat</span></div>
-                    </div>
+                    <img src="{{ asset('images/logo-hebat.png') }}" alt="Bekasi Hebat" style="height:48px;width:auto;object-fit:contain;">
                 </div>
 
                 {{-- Tagline --}}
@@ -204,6 +197,20 @@
                 {{-- Filament Form Wrapper --}}
                 <div class="filament-form-container">
                     {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE, scopes: $this->getRenderHookScopes()) }}
+
+                    @if ($errors->any())
+                        <div style="margin-bottom:16px;padding:12px;border-radius:10px;background:rgba(239,68,68,0.1);border:0.5px solid rgba(239,68,68,0.3);color:#f87171;font-size:12px;display:flex;align-items:flex-start;gap:8px;">
+                            <i class="ti ti-alert-circle" style="font-size:16px;margin-top:2px;"></i>
+                            <div>
+                                <strong style="display:block;margin-bottom:2px;">Gagal Masuk:</strong>
+                                <ul style="margin:0;padding-left:16px;list-style-type:disc;">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
 
                     <form wire:submit="authenticate" class="space-y-6">
                         {{ $this->form }}

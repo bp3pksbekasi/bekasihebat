@@ -89,6 +89,7 @@
                 ['section' => 'MANAJEMEN'],
                 ['route' => 'settings.profile', 'slug' => 'profil', 'label' => 'Profil', 'icon' => 'user-circle', 'active' => ['settings.profile', 'settings.password', 'settings.appearance']],
                 ['route' => 'pengaturan.users', 'slug' => 'pengaturan-users', 'label' => 'Kelola User', 'icon' => 'users-cog', 'active' => ['pengaturan.users']],
+                ['route' => 'pengaturan.whatsapp', 'slug' => 'pengaturan-whatsapp', 'label' => 'Setting WhatsApp', 'icon' => 'brand-whatsapp', 'active' => ['pengaturan.whatsapp']],
                 ['route' => 'kartu-anggota.admin', 'slug' => 'kartu-anggota', 'label' => 'Kartu Anggota', 'icon' => 'id-badge-2', 'active' => ['kartu-anggota.*']],
             ];
 
@@ -146,14 +147,8 @@
         <flux:sidebar sticky stashable class="border-r border-zinc-800 !bg-[#111113] !text-zinc-300">
             <flux:sidebar.toggle class="lg:hidden !text-zinc-300" icon="x-mark" />
 
-            <a href="{{ route($dashboardRoute) }}" class="flex items-center gap-3 px-5 py-4" style="border-bottom:0.5px solid #27272a;" wire:navigate>
-                <div class="flex items-center justify-center rounded-lg" style="width:34px;height:34px;background:#fe5000;">
-                    <x-app-logo-icon class="size-[18px] fill-current text-white" />
-                </div>
-                <div>
-                    <div style="font-size:13px;font-weight:500;color:white;line-height:1.2;">Bekasi Hebat</div>
-                    <div style="font-size:10px;color:#71717a;margin-top:1px;">Management System</div>
-                </div>
+            <a href="{{ route($dashboardRoute) }}" class="flex items-center px-5 py-4" style="border-bottom:0.5px solid #27272a;" wire:navigate>
+                <img src="{{ asset('images/logo-hebat.png') }}" alt="Bekasi Hebat" style="height:36px;width:auto;object-fit:contain;">
             </a>
 
             <div class="sidebar-menu-scroll flex-1 overflow-y-auto py-2">

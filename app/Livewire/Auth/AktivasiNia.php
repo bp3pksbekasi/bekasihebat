@@ -30,6 +30,19 @@ class AktivasiNia extends Component
     public string $password_confirmation = '';
     public string $errorMsg = '';
 
+    public string $otpCode = '';
+    public string $otpInput = '';
+    public ?string $otpSentAt = null;
+
+    public function getMaskedPhone(): string
+    {
+        $phone = $this->resolveRawPhoneNumber();
+        if (strlen($phone) < 7) {
+            return $phone;
+        }
+        return substr($phone, 0, 4) . '****' . substr($phone, -4);
+    }
+
     public function verifikasiNia(): void
     {
         $nia = trim($this->nia1).'.'.trim($this->nia2).'.'.trim($this->nia3).'.'.trim($this->nia4).'.'.trim($this->nia5);
@@ -85,6 +98,21 @@ class AktivasiNia extends Component
         $role = $this->kader->bidang_slug ? User::ROLE_BIDANG : User::ROLE_KADER;
         $phone = $this->resolvePhoneNumber();
 
+        // Resolve Kelurahan Code based on Kader's desa and kecamatan
+        $kelurahanCode = null;
+        if ($this->kader->desa && $this->kader->kecamatan) {
+            $village = \Illuminate\Support\Facades\DB::table('indonesia_villages as village')
+                ->join('indonesia_districts as district', \Illuminate\Support\Facades\DB::raw('LEFT(village.code, 6)'), '=', 'district.code')
+                ->where('district.code', 'LIKE', '3216%')
+                ->whereRaw('UPPER(district.name) = ?', [mb_strtoupper(trim($this->kader->kecamatan))])
+                ->whereRaw('UPPER(village.name) = ?', [mb_strtoupper(trim($this->kader->desa))])
+                ->select('village.code')
+                ->first();
+            if ($village) {
+                $kelurahanCode = $village->code;
+            }
+        }
+
         $user = User::query()->create([
             'name' => $this->kader->nama,
             'email' => $this->email,
@@ -98,6 +126,7 @@ class AktivasiNia extends Component
             'kecamatan' => $this->kader->kecamatan,
             'desa' => $this->kader->desa,
             'nomor_rw' => $this->kader->nomor_rw,
+            'kelurahan_code' => $kelurahanCode,
             'status' => 'aktif',
             'email_verified_at' => now(),
             'profile_completed_at' => now(),
@@ -119,10 +148,10 @@ class AktivasiNia extends Component
         auth()->login($user);
         request()->session()->regenerate();
 
-        return redirect()->route($user->landingRouteName());
+        return redirect()->route('profile.complete');
     }
 
-    private function resolvePhoneNumber(): string
+    private function resolveRawPhoneNumber(): string
     {
         $candidate = preg_replace('/\D+/', '', (string) ($this->kader?->no_wa ?: $this->kader?->no_hp ?: ''));
 
@@ -130,6 +159,13 @@ class AktivasiNia extends Component
             $niaDigits = preg_replace('/\D+/', '', (string) ($this->kader?->nia ?? ''));
             $candidate = '08'.substr(str_pad($niaDigits, 10, '0', STR_PAD_LEFT), -10);
         }
+
+        return $candidate;
+    }
+
+    private function resolvePhoneNumber(): string
+    {
+        $candidate = $this->resolveRawPhoneNumber();
 
         $phone = $candidate;
         $counter = 1;
@@ -140,6 +176,92 @@ class AktivasiNia extends Component
         }
 
         return $phone;
+    }
+
+    public function kirimOtp(): void
+    {
+        $this->validate([
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        if (! $this->kader) {
+            $this->errorMsg = 'Data kader tidak ditemukan. Silakan ulangi verifikasi NIA.';
+            return;
+        }
+
+        $this->otpCode = (string) rand(100000, 999999);
+        $this->otpSentAt = now()->toDateTimeString();
+        $this->otpInput = '';
+
+        $candidate = $this->resolveRawPhoneNumber();
+        $recipient = str_starts_with($candidate, '0') ? '62' . substr($candidate, 1) : $candidate;
+
+        \Illuminate\Support\Facades\Log::info("Aktivasi OTP generated for NIA {$this->kader->nia}: {$this->otpCode}");
+
+        $response = \App\Services\WhapifyService::sendMessage($recipient, "Halo {$this->kader->nama}, kode OTP Anda untuk aktivasi akun Bekasi Hebat adalah: {$this->otpCode}. Kode ini berlaku selama 5 menit. Harap tidak membagikan kode ini kepada siapapun.");
+
+        if (!$response['success']) {
+            $this->errorMsg = 'Gagal mengirim OTP via WhatsApp: ' . $response['message'];
+            return;
+        }
+
+        $this->step = 3;
+        $this->errorMsg = '';
+    }
+
+    public function resendOtp(): void
+    {
+        if (! $this->kader) {
+            $this->errorMsg = 'Data kader tidak ditemukan. Silakan ulangi verifikasi NIA.';
+            return;
+        }
+
+        if ($this->otpSentAt && now()->diffInSeconds(\Carbon\Carbon::parse($this->otpSentAt)) < 30) {
+            $this->errorMsg = 'Harap tunggu beberapa saat sebelum mengirim ulang OTP.';
+            return;
+        }
+
+        $this->otpCode = (string) rand(100000, 999999);
+        $this->otpSentAt = now()->toDateTimeString();
+        $this->otpInput = '';
+
+        $candidate = $this->resolveRawPhoneNumber();
+        $recipient = str_starts_with($candidate, '0') ? '62' . substr($candidate, 1) : $candidate;
+
+        \Illuminate\Support\Facades\Log::info("Aktivasi OTP generated (resend) for NIA {$this->kader->nia}: {$this->otpCode}");
+
+        $response = \App\Services\WhapifyService::sendMessage($recipient, "Halo {$this->kader->nama}, kode OTP Anda untuk aktivasi akun Bekasi Hebat adalah: {$this->otpCode}. Kode ini berlaku selama 5 menit. Harap tidak membagikan kode ini kepada siapapun.");
+
+        if (!$response['success']) {
+            $this->errorMsg = 'Gagal mengirim ulang OTP via WhatsApp: ' . $response['message'];
+            return;
+        }
+
+        $this->errorMsg = '';
+        session()->flash('successMsg', 'Kode OTP baru telah dikirim.');
+    }
+
+    public function verifikasiOtp()
+    {
+        if (empty($this->otpInput)) {
+            $this->errorMsg = 'Silakan masukkan kode OTP.';
+            return null;
+        }
+
+        if ($this->otpInput !== $this->otpCode) {
+            $this->errorMsg = 'Kode OTP yang Anda masukkan salah.';
+            return null;
+        }
+
+        if ($this->otpSentAt && now()->diffInMinutes(\Carbon\Carbon::parse($this->otpSentAt)) >= 5) {
+            $this->errorMsg = 'Kode OTP sudah kedaluwarsa. Silakan kirim ulang OTP.';
+            return null;
+        }
+
+        $this->errorMsg = '';
+
+        return $this->aktivasiAkun();
     }
 
     public function render()

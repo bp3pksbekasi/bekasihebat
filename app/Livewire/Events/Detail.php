@@ -607,14 +607,14 @@ class Detail extends Component
             return false;
         }
 
-        if ($user->hasRole('admin')) {
+        if ($user->hasRole('admin_dpd') || $user->isAdmin()) {
             return true;
         }
 
         return match ($level) {
-            'dpd' => $user->hasRole('dpd'),
-            'dpc' => $user->hasRole('dapil'),
-            'dpra' => $user->hasRole('kecamatan'),
+            'dpd' => $user->hasRole('admin_dpd') || $user->isAdmin(),
+            'dpc' => $user->hasRole('dapil') || $user->isDapil(),
+            'dpra' => $user->hasRole('dapil') || $user->isDapil() || $user->hasRole('kecamatan'),
             default => false,
         };
     }

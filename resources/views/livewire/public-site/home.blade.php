@@ -802,6 +802,7 @@
                         <div class="gallery-overlay-public" style="flex-direction:column;gap:6px;padding:16px;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.75));opacity:1;align-items:center;justify-content:flex-end;">
                             <strong style="font-size:17px;font-weight:600;line-height:1.3;">{{ $item->judul }}</strong>
                             <span style="font-size:11px;color:rgba(255,255,255,.84);">{{ $item->lokasi ?: 'Kabupaten Bekasi' }}</span>
+                        </div>
                     </a>
                 @endforeach
             </div>

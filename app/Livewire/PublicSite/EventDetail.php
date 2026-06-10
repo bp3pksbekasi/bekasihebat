@@ -42,6 +42,26 @@ class EventDetail extends Component
             ->whereIn('status', [Event::STATUS_DISETUJUI, Event::STATUS_SELESAI])
             ->withCount('registrations')
             ->firstOrFail();
+
+        // Autofill if user is logged in
+        if (auth()->check()) {
+            $user = auth()->user();
+            $this->regNama = $user->name ?? '';
+            $this->regHp = $user->phone ?? '';
+            $this->regEmail = $user->email ?? '';
+            $this->regDapil = $user->dapil ?? '';
+            $this->regDesa = $user->desa ?? '';
+            $this->regRw = $user->nomor_rw ?? '';
+
+            // Check if already registered
+            $isAlreadyRegistered = EventRegistration::query()
+                ->where('event_id', $this->event->id)
+                ->where('user_id', $user->id)
+                ->exists();
+            if ($isAlreadyRegistered) {
+                $this->registered = true;
+            }
+        }
     }
 
     public function register(MembershipService $membershipService): void

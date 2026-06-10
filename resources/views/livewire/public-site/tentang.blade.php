@@ -1,7 +1,7 @@
 @php($coverage = $this->coverage)
 
-<section class="bg-[#f7f8fb] py-16">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<section class="min-h-screen bg-zinc-50 pb-16">
+    <div class="container">
         <div style="background:white; border-radius:16px; padding:24px; margin-top:24px; border:1px solid #f4f4f5;">
             <h1 style="font-size:30px; font-weight:700; color:#18181b; line-height:1.2;">DPD PKS Kabupaten Bekasi</h1>
             <p style="max-width:680px; font-size:17px; line-height:1.8; color:#71717a; margin-top:8px;">

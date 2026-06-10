@@ -4,11 +4,7 @@
 ])
 
 @php
-    $dashboardRoute = route('login');
-
-    if (auth()->check() && method_exists(auth()->user(), 'landingRouteName')) {
-        $dashboardRoute = route(auth()->user()->landingRouteName());
-    }
+    $dashboardRoute = route('member.dashboard');
 
     $navItems = [
         ['route' => 'public.home', 'label' => 'Beranda'],
@@ -515,6 +511,8 @@
                 <div class="nav-actions">
                     @auth
                         <a href="{{ $dashboardRoute }}" class="nav-dashboard">Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" wire:navigate class="nav-dashboard">Masuk</a>
                     @endauth
                     <a href="{{ route('register') }}" wire:navigate class="nav-cta">
                         <i class="ti ti-user-plus"></i>

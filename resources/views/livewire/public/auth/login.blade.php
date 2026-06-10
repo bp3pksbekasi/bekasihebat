@@ -31,13 +31,13 @@
             <form wire:submit="login" class="space-y-4">
                 <flux:field>
                     <flux:label>Email / No. WhatsApp / NIA</flux:label>
-                    <flux:input wire:model="identifier" placeholder="email@contoh.com, 08xxxxxxxxxx, atau 123.456.789" autofocus />
+                    <flux:input wire:model="identifier" name="identifier" autocomplete="username" placeholder="email@contoh.com, 08xxxxxxxxxx, atau 123.456.789" autofocus />
                     <flux:error name="identifier" />
                 </flux:field>
 
                 <flux:field>
                     <flux:label>Password</flux:label>
-                    <flux:input wire:model="password" type="password" />
+                    <flux:input wire:model="password" name="password" autocomplete="current-password" type="password" />
                     <flux:error name="password" />
                 </flux:field>
 
@@ -48,7 +48,7 @@
                     </a>
                 </div>
 
-                <button type="submit" class="w-full py-2.5 rounded-lg text-white font-medium hover:opacity-90 transition" style="background: #fe5000;" wire:loading.attr="disabled">
+                <button type="submit" class="w-full py-2.5 rounded-lg text-white font-medium hover:opacity-90 transition" style="background: #fe5000;" wire:loading.attr="disabled" wire:target="login">
                     <span wire:loading.remove wire:target="login">Masuk</span>
                     <span wire:loading wire:target="login">Memproses...</span>
                 </button>
