@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             ApprovedPublicEventsSeeder::class,
             CompletedPublicEventsSeeder::class,
             AspirasiPokirSeeder::class,
+            WhapifySettingsSeeder::class,
         ]);
     }
 }
