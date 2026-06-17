@@ -10,13 +10,6 @@
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;">
                             <div style="font-size:12px;color:#d4d4d8;font-weight:500;">Filter :</div>
-                            <select id="periodSelect" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#fff7f1;color:#fe5000;font-weight:600;min-width:145px;">
-                                @foreach ($periodOptions as $opt)
-                                    <option value="{{ $opt['id'] }}" {{ $selectedPeriodId === $opt['id'] ? 'selected' : '' }}>
-                                        {{ $opt['label'] }}
-                                    </option>
-                                @endforeach
-                            </select>
                             <select id="dapilSelect" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#fff7f1;color:#993c1d;font-weight:500;min-width:130px;">
                                 <option value="">Semua dapil</option>
                             </select>
@@ -184,7 +177,7 @@
 
             function cacheDom() {
                 [
-                    'periodSelect', 'dapilSelect', 'partaiSelect', 'genderSelect', 'resetFilterBtn', 'searchInput', 'csvFileInput', 'sourceStatus',
+                    'dapilSelect', 'partaiSelect', 'genderSelect', 'resetFilterBtn', 'searchInput', 'csvFileInput', 'sourceStatus',
                     'pageHeading', 'pageSubheading', 'pageMeta', 'rankingTitle', 'pksSebaranTitle', 'toggleHeadToHeadBtn', 'fullTableTitle',
                     'cardTotalCaleg', 'cardTotalSuara', 'cardPksCaleg', 'cardPksSuara', 'cardRataSuara',
                     'calegRankingWrap', 'pksSebaranWrap', 'headToHeadWrap', 'genderAnalysisWrap', 'fullTableWrap',
@@ -193,10 +186,6 @@
             }
 
             function bindEvents() {
-                dom.periodSelect.addEventListener('change', () => {
-                    const periodId = dom.periodSelect.value;
-                    window.location.href = `?period=${periodId}`;
-                });
                 dom.dapilSelect.addEventListener('change', () => {
                     state.currentDapil = dom.dapilSelect.value;
                     state.currentPage = 1;
@@ -232,103 +221,19 @@
                 });
             }
 
-            function inflateDataset(payload) {
-                const dataset = {
-                    dapils: new Map(),
-                    totalRows: payload.totalRows || 0,
-                    allPartyNames: new Set(payload.allPartyNames || [])
-                };
-
-                (payload.dapils || []).forEach((dapilData) => {
-                    const dapilKey = dapilData.dapil;
-                    
-                    const calegMap = new Map();
-                    (dapilData.calegs || []).forEach((c) => {
-                        const desaMap = new Map();
-                        if (c.desaMap) {
-                            Object.entries(c.desaMap).forEach(([shortKey, suara]) => {
-                                const fullKey = `${dapilKey}__${shortKey}`;
-                                const parts = shortKey.split('__');
-                                const kecamatan = parts[0] ? toTitleCase(parts[0]) : '';
-                                const desa = parts[1] ? toTitleCase(parts[1]) : '';
-                                desaMap.set(fullKey, { desa, kecamatan, suara });
-                            });
-                        }
-
-                        const kecamatanMap = new Map();
-                        if (c.kecamatanMap) {
-                            Object.entries(c.kecamatanMap).forEach(([kecKey, suara]) => {
-                                const kecamatan = toTitleCase(kecKey);
-                                kecamatanMap.set(kecKey, { kecamatan, suara });
-                            });
-                        }
-
-                        const tpsSet = new Set();
-                        const count = c.tpsCount || 0;
-                        for (let i = 0; i < count; i++) {
-                            tpsSet.add(`tps_${i}`);
-                        }
-
-                        calegMap.set(c.key, {
-                            ...c,
-                            dapil: dapilKey,
-                            desaMap,
-                            kecamatanMap,
-                            tpsSet
-                        });
-                    });
-
-                    const partyMap = new Map();
-                    (dapilData.parties || []).forEach((p) => {
-                        const partyCalegs = (dapilData.calegs || [])
-                            .filter((c) => c.partaiId === p.partaiId);
-
-                        partyMap.set(p.partaiId, {
-                            ...p,
-                            calegMap: new Map(partyCalegs.map(c => [c.key, calegMap.get(c.key)])),
-                            calegList: partyCalegs.map(c => calegMap.get(c.key)).sort((a, b) => b.totalSuara - a.totalSuara),
-                            calegCount: partyCalegs.length
-                        });
-                    });
-
-                    const villagePartyMap = new Map();
-                    (dapilData.villageParties || []).forEach((vp) => {
-                        const partyTotals = new Map();
-                        if (vp.partyTotals) {
-                            Object.entries(vp.partyTotals).forEach(([pName, val]) => {
-                                partyTotals.set(pName, { partai: pName, suara: val });
-                            });
-                        }
-
-                        const villageKey = `${dapilKey}__${normalizeKey(vp.kecamatan)}__${normalizeKey(vp.desa)}`;
-                        villagePartyMap.set(villageKey, {
-                            ...vp,
-                            partyTotals
-                        });
-                    });
-
-                    dataset.dapils.set(dapilKey, {
-                        dapil: dapilKey,
-                        totalSuara: dapilData.totalSuara || 0,
-                        calegMap,
-                        partyMap,
-                        villagePartyMap
-                    });
-                });
-
-                return dataset;
-            }
-
             async function autoLoadData() {
-                dom.sourceStatus.textContent = 'Memuat data caleg dari database...';
+                dom.sourceStatus.textContent = 'Memuat /data/pemilu/tps_dprd.csv...';
                 try {
-                    const payload = @json($compiledCalegPayload);
-                    state.dataset = inflateDataset(payload);
-                    dom.sourceStatus.textContent = `Auto-load database berhasil: ${formatNumber(state.dataset.totalRows)} baris caleg dibaca.`;
+                    const response = await fetch('/data/pemilu/tps_dprd.csv');
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const text = await response.text();
+                    const rows = parseSemicolonCsv(text);
+                    state.dataset = buildCalegDataset(rows);
+                    dom.sourceStatus.textContent = `Auto-load berhasil: ${formatNumber(state.dataset.totalRows)} baris caleg dibaca.`;
                     populateFilters();
                     render();
                 } catch (error) {
-                    dom.sourceStatus.textContent = `Gagal memuat database: ${error.message}`;
+                    dom.sourceStatus.textContent = `Gagal auto-load: ${error.message}`;
                 }
             }
 

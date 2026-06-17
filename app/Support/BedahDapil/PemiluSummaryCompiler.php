@@ -60,11 +60,7 @@ class PemiluSummaryCompiler
         }
         $this->readDptFiles($resolvedDptFiles, $villages, $progress);
         if ($progress !== null) {
-            $progress('Memulai kompilasi analisa caleg...');
-        }
-        $calegAnalysisPayload = (new CalegAnalysisCompiler())->compile($resolvedTpsFile);
-        if ($progress !== null) {
-            $progress('Kompilasi analisa caleg selesai.');
+            $progress('DPT selesai. Desa siap disimpan: '.count($villages));
         }
 
         // Reconnect after long CSV processing to avoid idle MySQL connections dropping
@@ -72,7 +68,7 @@ class PemiluSummaryCompiler
         DB::purge();
         DB::reconnect();
 
-        $period = DB::transaction(function () use ($tahun, $jenis, $label, $setDefault, $resolvedDptFiles, $resolvedTpsFile, $calegAnalysisPayload, &$villages): PemiluPeriod {
+        $period = DB::transaction(function () use ($tahun, $jenis, $label, $setDefault, $resolvedDptFiles, $resolvedTpsFile, &$villages): PemiluPeriod {
             if ($setDefault) {
                 PemiluPeriod::query()
                     ->where('jenis', $jenis)
@@ -90,7 +86,6 @@ class PemiluSummaryCompiler
                         'dpt_files' => array_map('basename', $resolvedDptFiles),
                         'tps_file' => basename($resolvedTpsFile),
                     ],
-                    'caleg_summary_payload' => $calegAnalysisPayload,
                 ]
             );
 

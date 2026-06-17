@@ -45,6 +45,22 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+
+    /* Pastikan semua input/select/textarea di form (background terang) punya teks terbaca */
+    input:not([style*="color:"]),
+    select:not([style*="color:"]),
+    textarea:not([style*="color:"]) {
+        color: #111827;
+    }
+
+    /* Khusus input dengan background gelap (dark mode) tetap putih */
+    input[style*="background:#27272a"],
+    input[style*="background:#09090b"],
+    input[style*="background:#1e1e2e"],
+    input[style*="background:rgb(0"],
+    input[style*="background: rgb(0"] {
+        color: #f4f4f5;
+    }
 }
 
 [data-flux-field] {

@@ -24,7 +24,6 @@ class PemiluPeriod extends Model
         'is_default',
         'source_meta',
         'catatan',
-        'caleg_summary_payload',
     ];
 
     protected function casts(): array
@@ -33,7 +32,6 @@ class PemiluPeriod extends Model
             'tahun' => 'integer',
             'is_default' => 'boolean',
             'source_meta' => 'array',
-            'caleg_summary_payload' => 'array',
         ];
     }
 

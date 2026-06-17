@@ -824,18 +824,16 @@ class Dashboard extends Component
             return false;
         }
 
-        if (! session('logged_in_via_admin')) {
-            return false;
-        }
+        $isAdminRole = (method_exists($user, 'isAdmin') && $user->isAdmin()) || 
+                       (method_exists($user, 'isBidang') && $user->isBidang()) || 
+                       (method_exists($user, 'isDapil') && $user->isDapil()) ||
+                       (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['admin', 'pengurus', 'pengurus_dpd', 'dpd', 'super-admin', 'super admin', 'dapil']));
 
-        if ((method_exists($user, 'isAdmin') && $user->isAdmin()) || 
-            (method_exists($user, 'isBidang') && $user->isBidang()) || 
-            (method_exists($user, 'isDapil') && $user->isDapil())) {
+        if ($isAdminRole) {
+            if (session('logged_in_via_admin') !== true) {
+                session(['logged_in_via_admin' => true]);
+            }
             return true;
-        }
-
-        if (method_exists($user, 'hasAnyRole')) {
-            return $user->hasAnyRole(['admin', 'pengurus', 'pengurus_dpd', 'dpd', 'super-admin', 'super admin', 'dapil']);
         }
 
         return false;

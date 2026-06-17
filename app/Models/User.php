@@ -20,7 +20,13 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
 
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
-        return $this->isAdmin() && session('logged_in_via_admin') === true;
+        if ($this->isAdmin()) {
+            if (session('logged_in_via_admin') !== true) {
+                session(['logged_in_via_admin' => true]);
+            }
+            return true;
+        }
+        return false;
     }
 
     public const ROLE_ADMIN = 'admin_dpd';
