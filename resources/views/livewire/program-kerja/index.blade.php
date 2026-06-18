@@ -310,7 +310,7 @@
             <div style="padding:18px;display:grid;gap:12px;">
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Bidang</label>
-                    <select wire:model="pgBidangId" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                    <select wire:model="pgBidangId" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                         <option value="">Pilih bidang</option>
                         @foreach ($this->bidangOptions as $bidang)
                             <option value="{{ $bidang->id }}">{{ $bidang->nama }}</option>
@@ -320,31 +320,31 @@
                 </div>
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Nama program</label>
-                    <input type="text" wire:model="pgNama" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                    <input type="text" wire:model="pgNama" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     @error('pgNama') <div style="font-size:10px;color:#dc2626;margin-top:4px;">{{ $message }}</div> @enderror
                 </div>
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Deskripsi</label>
-                    <textarea wire:model="pgDeskripsi" rows="3" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;"></textarea>
+                    <textarea wire:model="pgDeskripsi" rows="3" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;"></textarea>
                 </div>
                 <div style="display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:10px;">
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Target teks</label>
-                        <input type="text" wire:model="pgTargetTeks" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="text" wire:model="pgTargetTeks" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Target angka</label>
-                        <input type="number" min="0" wire:model="pgTargetAngka" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="number" min="0" wire:model="pgTargetAngka" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Satuan</label>
-                        <input type="text" wire:model="pgSatuan" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="text" wire:model="pgSatuan" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Periode</label>
-                        <select wire:model="pgPeriode" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <select wire:model="pgPeriode" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                             <option value="Q1">Q1</option>
                             <option value="Q2">Q2</option>
                             <option value="Q3">Q3</option>
@@ -354,17 +354,17 @@
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Deadline</label>
-                        <input type="date" wire:model="pgDeadline" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="date" wire:model="pgDeadline" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">PIC</label>
-                        <input type="text" wire:model="pgPicNama" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="text" wire:model="pgPicNama" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Status</label>
-                        <select wire:model="pgStatus" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <select wire:model="pgStatus" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                             @foreach (\App\Models\ProgramKerja::STATUS_CONFIG as $key => $status)
                                 <option value="{{ $key }}">{{ $status['label'] }}</option>
                             @endforeach
@@ -392,7 +392,7 @@
             <div style="padding:18px;display:grid;gap:12px;">
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Bidang</label>
-                    <select wire:model.live="agBidangId" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                    <select wire:model.live="agBidangId" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                         <option value="">Umum / lintas bidang</option>
                         @foreach ($this->bidangOptions as $bidang)
                             <option value="{{ $bidang->id }}">{{ $bidang->nama }}</option>
@@ -401,7 +401,7 @@
                 </div>
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Program terkait</label>
-                    <select wire:model="agProgramId" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                    <select wire:model="agProgramId" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                         <option value="">Opsional</option>
                         @foreach ($this->programOptions as $program)
                             <option value="{{ $program->id }}">{{ $program->nama_program }}</option>
@@ -410,13 +410,13 @@
                 </div>
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Judul</label>
-                    <input type="text" wire:model="agJudul" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                    <input type="text" wire:model="agJudul" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     @error('agJudul') <div style="font-size:10px;color:#dc2626;margin-top:4px;">{{ $message }}</div> @enderror
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Jenis</label>
-                        <select wire:model="agJenis" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <select wire:model="agJenis" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                             @foreach (\App\Models\AgendaDpd::JENIS_OPTIONS as $key => $jenis)
                                 <option value="{{ $key }}">{{ $jenis }}</option>
                             @endforeach
@@ -424,27 +424,27 @@
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Tanggal</label>
-                        <input type="datetime-local" wire:model="agTanggal" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="datetime-local" wire:model="agTanggal" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                         @error('agTanggal') <div style="font-size:10px;color:#dc2626;margin-top:4px;">{{ $message }}</div> @enderror
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Lokasi</label>
-                        <input type="text" wire:model="agLokasi" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="text" wire:model="agLokasi" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Dapil terkait</label>
-                        <input type="text" wire:model="agDapil" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                        <input type="text" wire:model="agDapil" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                     </div>
                 </div>
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Peserta target</label>
-                    <input type="number" min="0" wire:model="agPesertaTarget" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;">
+                    <input type="number" min="0" wire:model="agPesertaTarget" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;">
                 </div>
                 <div>
                     <label style="display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;">Catatan</label>
-                    <textarea wire:model="agCatatan" rows="3" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;"></textarea>
+                    <textarea wire:model="agCatatan" rows="3" style="width:100%;padding:10px;border:0.5px solid #d4d4d4;border-radius:10px;font-size:12px;color:#111827;background:white;"></textarea>
                 </div>
             </div>
             <div style="padding:18px;border-top:0.5px solid #e5e5e5;display:flex;justify-content:flex-end;gap:10px;">

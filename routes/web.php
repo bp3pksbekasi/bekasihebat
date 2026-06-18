@@ -87,21 +87,41 @@ Route::middleware('auth')->group(function () {
     })->middleware('menu:bedah-dapil')->name('bedah-dapil.index');
 
     Route::get('/bedah-dapil/pemilu-dprd', function (Request $request, PemiluSummaryPayload $payloadBuilder) {
-        // #region debug-point D:pemilu-dprd-route-hit
-        (function () {
-            $u = 'http://127.0.0.1:7777/event';
-            $s = 'bedah-dapil-redirect';
-            $p = base_path('.dbg/bedah-dapil-redirect.env');
-            if (is_file($p)) {
-                $e = @file_get_contents($p) ?: '';
-                preg_match('/DEBUG_SERVER_URL=(.+)/', $e, $m1);
-                preg_match('/DEBUG_SESSION_ID=(.+)/', $e, $m2);
-                $u = $m1[1] ?? $u;
-                $s = $m2[1] ?? $s;
-            }
-            @file_get_contents($u, false, stream_context_create(['http' => ['method' => 'POST', 'header' => "Content-Type: application/json\r\n", 'content' => json_encode(['sessionId' => $s, 'runId' => 'pre-fix', 'hypothesisId' => 'D', 'location' => 'routes/web.php bedah-dapil.pemilu-dprd', 'msg' => '[DEBUG] pemilu dprd route closure reached', 'data' => ['session_id' => request()->session()->getId(), 'user_id' => optional(auth()->user())->id, 'url' => url()->current()], 'ts' => (int) round(microtime(true) * 1000)])]]));
-        })();
-        // #endregion
+        if (app()->environment('local') && (bool) config('app.debug')) {
+            (function () {
+                $u = 'http://127.0.0.1:7777/event';
+                $s = 'bedah-dapil-redirect';
+                $p = base_path('.dbg/bedah-dapil-redirect.env');
+                if (is_file($p)) {
+                    $e = @file_get_contents($p) ?: '';
+                    preg_match('/DEBUG_SERVER_URL=(.+)/', $e, $m1);
+                    preg_match('/DEBUG_SESSION_ID=(.+)/', $e, $m2);
+                    $u = $m1[1] ?? $u;
+                    $s = $m2[1] ?? $s;
+                }
+                @file_get_contents($u, false, stream_context_create([
+                    'http' => [
+                        'method' => 'POST',
+                        'timeout' => 0.25,
+                        'ignore_errors' => true,
+                        'header' => "Content-Type: application/json\r\n",
+                        'content' => json_encode([
+                            'sessionId' => $s,
+                            'runId' => 'pre-fix',
+                            'hypothesisId' => 'D',
+                            'location' => 'routes/web.php bedah-dapil.pemilu-dprd',
+                            'msg' => '[DEBUG] pemilu dprd route closure reached',
+                            'data' => [
+                                'session_id' => request()->session()->getId(),
+                                'user_id' => optional(auth()->user())->id,
+                                'url' => url()->current(),
+                            ],
+                            'ts' => (int) round(microtime(true) * 1000),
+                        ]),
+                    ],
+                ]));
+            })();
+        }
 
         $periods = PemiluPeriod::query()
             ->forJenis('dprd')
@@ -135,18 +155,101 @@ Route::middleware('auth')->group(function () {
             ]];
         }
 
+        $profilRwMap = \App\Models\ProfilRw::query()
+            ->get(['kecamatan', 'desa', 'nomor_rw', 'completion_percent'])
+            ->mapWithKeys(function ($item) {
+                $key = strtoupper(trim($item->kecamatan) . '|' . trim($item->desa) . '|' . trim($item->nomor_rw));
+                return [$key => $item->completion_percent];
+            })
+            ->toArray();
+
         return view('bedah-dapil.pemilu-dprd', [
             'periodOptions' => $periodOptions,
             'selectedPeriodId' => $selectedPeriod?->id ?? $periodOptions[0]['id'],
             'compiledPayload' => $selectedPeriod ? $payloadBuilder->build($selectedPeriod) : null,
+            'profilRwMap' => $profilRwMap,
         ]);
     })->middleware('menu:bedah-dapil')->name('bedah-dapil.pemilu-dprd');
+
+    Route::get('/bedah-dapil/pemilu-dprd/get-profil-rw', function (Request $request) {
+        $kecamatan = $request->string('kecamatan')->toString();
+        $desa = $request->string('desa')->toString();
+        $nomorRw = $request->string('nomor_rw')->toString();
+        
+        $wilayah = \App\Models\TargetWilayah::query()
+            ->where('kecamatan', $kecamatan)
+            ->where('desa', $desa)
+            ->first();
+            
+        if (!$wilayah) {
+            return response()->json(['error' => 'Wilayah tidak ditemukan'], 404);
+        }
+        
+        $profil = \App\Models\ProfilRw::query()
+            ->where('target_wilayah_id', $wilayah->id)
+            ->where('nomor_rw', $nomorRw)
+            ->first();
+            
+        return response()->json([
+            'profil' => $profil,
+            'wilayah_id' => $wilayah->id
+        ]);
+    })->middleware('menu:bedah-dapil');
+
+    Route::post('/bedah-dapil/pemilu-dprd/save-profil-rw', function (Request $request) {
+        $wilayahId = $request->string('wilayah_id')->toString();
+        $nomorRw = $request->string('nomor_rw')->toString();
+        
+        $wilayah = \App\Models\TargetWilayah::find($wilayahId);
+        if (!$wilayah) {
+            return response()->json(['error' => 'Wilayah tidak ditemukan'], 404);
+        }
+        
+        $data = $request->all();
+        unset($data['wilayah_id'], $data['nomor_rw']);
+        
+        if (isset($data['caleg_terpilih_ada'])) {
+            $data['caleg_terpilih_ada'] = filter_var($data['caleg_terpilih_ada'], FILTER_VALIDATE_BOOLEAN);
+        }
+        
+        $payload = array_merge([
+            'target_wilayah_id' => $wilayah->id,
+            'nomor_rw' => $nomorRw,
+            'dapil' => $wilayah->dapil,
+            'kecamatan' => $wilayah->kecamatan,
+            'desa' => $wilayah->desa,
+            'filled_by' => auth()->id(),
+            'filled_at' => now(),
+            'suara_pks_2019' => 0,
+            'jumlah_kta' => 0,
+            'caleg_terpilih_ada' => false,
+        ], $data);
+        
+        $profil = \App\Models\ProfilRw::query()->updateOrCreate(
+            [
+                'target_wilayah_id' => $wilayah->id,
+                'nomor_rw' => $nomorRw,
+            ],
+            $payload
+        );
+        
+        $completion = $profil->calculateCompletion();
+        $profil->update([
+            'completion_percent' => $completion,
+            'is_complete' => $completion >= 80,
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'profil' => $profil
+        ]);
+    })->middleware('menu:bedah-dapil');
 
     Route::get('/bedah-dapil/peta-wilayah', function () {
         return view('bedah-dapil.peta-wilayah');
     })->middleware('menu:bedah-dapil')->name('bedah-dapil.peta-wilayah');
 
-    Route::get('/bedah-dapil/analisa-caleg', function (Request $request) {
+    Route::get('/bedah-dapil/analisa-caleg', function (Request $request, PemiluSummaryPayload $payloadBuilder) {
         $periods = PemiluPeriod::query()
             ->forJenis('dprd')
             ->ordered()
@@ -187,6 +290,7 @@ Route::middleware('auth')->group(function () {
                 'allPartyNames' => [],
                 'dapils' => [],
             ],
+            'compiledPayload' => $selectedPeriod ? $payloadBuilder->build($selectedPeriod) : null,
         ]);
     })->middleware('menu:bedah-dapil')->name('bedah-dapil.analisa-caleg');
 

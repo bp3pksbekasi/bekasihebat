@@ -78,7 +78,9 @@ class SisirRw extends Component
 
     public ?string $editId = null;
 
-    protected $queryString = ['selectedDapil', 'selectedKecamatan', 'selectedDesa'];
+    public ?string $selectedVillageId = null;
+
+    protected $queryString = ['selectedDapil', 'selectedKecamatan', 'selectedDesa', 'selectedVillageId'];
 
     public function mount(): void
     {
@@ -97,6 +99,16 @@ class SisirRw extends Component
 
         if (is_string($firstDapil) && $firstDapil !== '') {
             $this->selectedDapil = $firstDapil;
+        }
+
+        if ($this->selectedDesa !== '') {
+            $village = TargetWilayah::query()
+                ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+                ->where('desa', $this->selectedDesa)
+                ->first();
+            if ($village) {
+                $this->selectedVillageId = (string) $village->id;
+            }
         }
     }
 
@@ -643,6 +655,7 @@ class SisirRw extends Component
         $this->selectedKecamatan = '';
         $this->selectedDesa = '';
         $this->selectedRwStatus = '';
+        $this->selectedVillageId = null;
         $this->rwBelumPage = 1;
         $this->resetPage();
     }
@@ -651,6 +664,7 @@ class SisirRw extends Component
     {
         $this->selectedDesa = '';
         $this->selectedRwStatus = '';
+        $this->selectedVillageId = null;
         $this->rwBelumPage = 1;
         $this->resetPage();
     }
@@ -658,8 +672,41 @@ class SisirRw extends Component
     public function updatingSelectedDesa(): void
     {
         $this->selectedRwStatus = '';
+        $this->selectedVillageId = null;
         $this->rwBelumPage = 1;
         $this->resetPage();
+    }
+
+    public function updatedSelectedDesa(string $value): void
+    {
+        if ($value === '') {
+            $this->selectedVillageId = null;
+        } else {
+            $village = TargetWilayah::query()
+                ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+                ->where('desa', $value)
+                ->first();
+            $this->selectedVillageId = $village ? (string) $village->id : null;
+        }
+    }
+
+    public function selectVillage(string $id): void
+    {
+        $this->selectedVillageId = $this->selectedVillageId === $id ? null : $id;
+        if ($this->selectedVillageId) {
+            $w = TargetWilayah::find($this->selectedVillageId);
+            $this->selectedDesa = $w ? $w->desa : '';
+        } else {
+            $this->selectedDesa = '';
+        }
+        $this->rwBelumPage = 1;
+        $this->resetPage();
+    }
+
+    public function closeVillageDetail(): void
+    {
+        $this->selectedVillageId = null;
+        $this->selectedDesa = '';
     }
 
     public function updatingSelectedBulan(): void
@@ -672,6 +719,205 @@ class SisirRw extends Component
     {
         $this->rwBelumPage = 1;
         $this->resetPage();
+    }
+
+    #[Computed]
+    public function mapImage(): string
+    {
+        if ($this->selectedKecamatan !== '') {
+            $slug = str_replace(' ', '-', strtolower($this->selectedKecamatan));
+            return "/images/peta/kecamatan/{$slug}.png";
+        }
+
+        $activeDapil = $this->activeDapil();
+        if ($activeDapil !== '') {
+            $num = str_replace('BEKASI ', '', strtoupper($activeDapil));
+            return "/images/peta/dapil{$num}.png";
+        }
+
+        return "/images/peta/kabupaten-bekasi.png";
+    }
+
+    #[Computed]
+    public function mapMarkers(): array
+    {
+        $configs = (new \App\Livewire\Kaderisasi\Index())->getMapConfigs();
+        $config = null;
+
+        $activeDapil = $this->activeDapil();
+        if ($this->selectedKecamatan !== '') {
+            $config = $configs[strtoupper($this->selectedKecamatan)] ?? null;
+        } elseif ($activeDapil !== '') {
+            $config = $configs[strtoupper($activeDapil)] ?? null;
+        }
+
+        if (!$config) {
+            return [];
+        }
+
+        $wilayahs = TargetWilayah::query()
+            ->when($activeDapil !== '', fn ($q) => $q->where('dapil', $activeDapil))
+            ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+            ->get();
+
+        if ($wilayahs->isEmpty()) {
+            return [];
+        }
+
+        $targetIds = $wilayahs->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $rwTersisirCounts = KegiatanRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->periode($this->selectedBulan, $this->selectedTahun)
+            ->selectRaw("target_wilayah_id, COUNT(DISTINCT nomor_rw) as total")
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $markers = [];
+        foreach ($wilayahs as $w) {
+            $desaUpper = strtoupper($w->desa);
+            if (isset($config[$desaUpper])) {
+                $totalRw = (int) ($rwCounts[$w->id] ?? 0);
+                $tersisir = (int) ($rwTersisirCounts[$w->id] ?? 0);
+
+                if ($totalRw > 0) {
+                    if ($tersisir >= $totalRw) {
+                        $color = '#22c55e'; // Green
+                    } elseif ($tersisir > 0) {
+                        $color = '#eab308'; // Yellow
+                    } else {
+                        $color = '#ef4444'; // Red
+                    }
+                } else {
+                    $color = '#22c55e'; // Green if total RW is 0
+                }
+
+                $size = 12 + ($totalRw > 0 ? (int) round(($tersisir / $totalRw) * 12) : 12);
+
+                $markers[] = [
+                    'id' => $w->id,
+                    'key' => $w->id,
+                    'label' => "{$w->desa} · {$tersisir}/{$totalRw} RW Tersisir",
+                    'x' => $config[$desaUpper]['x'],
+                    'y' => $config[$desaUpper]['y'],
+                    'size' => $size,
+                    'color' => $color,
+                    'count' => $tersisir,
+                    'target' => $totalRw,
+                    'desa' => $w->desa,
+                    'kecamatan' => $w->kecamatan
+                ];
+            }
+        }
+
+        return $markers;
+    }
+
+    #[Computed]
+    public function villageList(): Collection
+    {
+        $activeDapil = $this->activeDapil();
+        $desaList = TargetWilayah::query()
+            ->when($activeDapil !== '', fn (Builder $query) => $query->where('dapil', $activeDapil))
+            ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
+            ->orderBy('kecamatan')
+            ->orderBy('desa')
+            ->get(['id', 'kecamatan', 'desa']);
+
+        if ($desaList->isEmpty()) {
+            return collect();
+        }
+
+        $targetIds = $desaList->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $rwTersisirCounts = KegiatanRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->periode($this->selectedBulan, $this->selectedTahun)
+            ->selectRaw("target_wilayah_id, COUNT(DISTINCT nomor_rw) as total")
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        return $desaList->map(function (TargetWilayah $target) use ($rwCounts, $rwTersisirCounts): array {
+            $total = (int) ($rwCounts[$target->id] ?? 0);
+            $tersisir = (int) ($rwTersisirCounts[$target->id] ?? 0);
+            $pct = $total > 0 ? round(($tersisir / $total) * 100) : 0;
+
+            return [
+                'id' => $target->id,
+                'desa' => $target->desa,
+                'kecamatan' => $target->kecamatan,
+                'total_rw' => $total,
+                'rw_tersisir' => $tersisir,
+                'pct_tersisir' => $pct,
+            ];
+        });
+    }
+
+    #[Computed]
+    public function selectedVillageDetail(): ?array
+    {
+        if (!$this->selectedVillageId) {
+            return null;
+        }
+
+        $w = TargetWilayah::find($this->selectedVillageId);
+        if (!$w) {
+            return null;
+        }
+
+        $rwList = DataRw::query()
+            ->where('target_wilayah_id', $w->id)
+            ->orderBy('nomor_rw')
+            ->get(['nomor_rw', 'dpt', 'estimasi_pks', 'status_wilayah']);
+
+        $kegiatanCounts = KegiatanRw::query()
+            ->where('target_wilayah_id', $w->id)
+            ->periode($this->selectedBulan, $this->selectedTahun)
+            ->selectRaw('nomor_rw, COUNT(*) as total')
+            ->groupBy('nomor_rw')
+            ->pluck('total', 'nomor_rw');
+
+        $totalRw = $rwList->count();
+        $rwTersisir = KegiatanRw::query()
+            ->where('target_wilayah_id', $w->id)
+            ->periode($this->selectedBulan, $this->selectedTahun)
+            ->distinct()
+            ->count('nomor_rw');
+
+        $pct = $totalRw > 0 ? round(($rwTersisir / $totalRw) * 100) : 0;
+
+        $mappedRws = $rwList->map(function (DataRw $rw) use ($kegiatanCounts): array {
+            return [
+                'nomor_rw' => $rw->nomor_rw,
+                'dpt' => (int) $rw->dpt,
+                'estimasi_pks' => (int) $rw->estimasi_pks,
+                'status' => $rw->status_wilayah,
+                'kegiatan_count' => (int) ($kegiatanCounts[$rw->nomor_rw] ?? 0),
+            ];
+        });
+
+        return [
+            'id' => $w->id,
+            'desa' => $w->desa,
+            'kecamatan' => $w->kecamatan,
+            'dapil' => $w->dapil,
+            'total_rw' => $totalRw,
+            'rw_tersisir' => $rwTersisir,
+            'pct_tersisir' => $pct,
+            'rw_list' => $mappedRws,
+        ];
     }
 
     public function render(): View

@@ -9,6 +9,7 @@ use App\Models\DataRw;
 use App\Models\DistribusiMateri;
 use App\Models\KontenMedsos;
 use App\Models\MateriDigital;
+use App\Models\TargetWilayah;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -23,11 +24,16 @@ class Index extends Component
 
     protected string $paginationTheme = 'tailwind';
 
-    public string $activeTab = 'profil';
+    public string $activeTab = 'video_materi';
     public string $selectedBulan = '';
     public string $selectedTahun = '';
     public string $selectedDewanId = '';
     public string $filterPlatform = '';
+    public string $selectedDapil = '';
+    public string $selectedKecamatan = '';
+    public string $selectedDesa = '';
+    public ?string $selectedTargetWilayahId = null;
+    public string $selectedRw = '';
 
     public bool $showDewanForm = false;
     public ?string $dewanEditId = null;
@@ -91,6 +97,80 @@ class Index extends Component
         $this->selectedBulan = now()->format('m');
         $this->selectedTahun = now()->format('Y');
         $this->kcTanggal = now()->format('Y-m-d');
+    }
+
+    public function updatingSelectedDapil(): void
+    {
+        $this->selectedKecamatan = '';
+        $this->selectedDesa = '';
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+    }
+
+    public function updatingSelectedKecamatan(): void
+    {
+        $this->selectedDesa = '';
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+    }
+
+    public function updatingSelectedDesa(): void
+    {
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+    }
+
+    public function updatedSelectedDapil(): void
+    {
+        $this->selectedKecamatan = '';
+        $this->selectedDesa = '';
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+    }
+
+    public function updatedSelectedKecamatan(): void
+    {
+        $this->selectedDesa = '';
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+    }
+
+    public function updatedSelectedDesa(string $value): void
+    {
+        if ($value === '') {
+            $this->selectedTargetWilayahId = null;
+        } else {
+            $village = TargetWilayah::query()
+                ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+                ->where('desa', $value)
+                ->first();
+            $this->selectedTargetWilayahId = $village ? (string) $village->id : null;
+        }
+        $this->selectedRw = '';
+    }
+
+    public function selectDesa(string $targetWilayahId): void
+    {
+        $this->selectedTargetWilayahId = $this->selectedTargetWilayahId === $targetWilayahId ? null : $targetWilayahId;
+        if ($this->selectedTargetWilayahId) {
+            $w = TargetWilayah::find($this->selectedTargetWilayahId);
+            $this->selectedDesa = $w ? $w->desa : '';
+        } else {
+            $this->selectedDesa = '';
+        }
+        $this->selectedRw = '';
+    }
+
+    public function closeVillageDetail(): void
+    {
+        $this->selectedTargetWilayahId = null;
+        $this->selectedDesa = '';
+        $this->selectedRw = '';
+    }
+
+    public function selectRw(string $rw): void
+    {
+        $this->selectedRw = $this->selectedRw === $rw ? '' : $rw;
     }
 
     public function updatedSelectedBulan(): void
@@ -251,6 +331,236 @@ class Index extends Component
             ->with(['distribusis' => fn (Builder $query) => $query->latest('tanggal_distribusi')->latest('created_at')])
             ->orderByDesc('created_at')
             ->get();
+    }
+
+    public function getDapilOptionsProperty(): Collection
+    {
+        return TargetWilayah::query()
+            ->select('dapil')
+            ->distinct()
+            ->orderBy('dapil')
+            ->pluck('dapil');
+    }
+
+    public function getKecamatanOptionsProperty(): Collection
+    {
+        return TargetWilayah::query()
+            ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
+            ->select('kecamatan')
+            ->distinct()
+            ->orderBy('kecamatan')
+            ->pluck('kecamatan');
+    }
+
+    public function getDesaOptionsProperty(): Collection
+    {
+        return TargetWilayah::query()
+            ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
+            ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
+            ->select('desa')
+            ->distinct()
+            ->orderBy('desa')
+            ->pluck('desa');
+    }
+
+    public function getMapImageProperty(): string
+    {
+        if ($this->selectedKecamatan !== '') {
+            $slug = str_replace(' ', '-', strtolower($this->selectedKecamatan));
+            return "/images/peta/kecamatan/{$slug}.png";
+        }
+
+        if ($this->selectedDapil !== '') {
+            $num = str_replace('BEKASI ', '', strtoupper($this->selectedDapil));
+            return "/images/peta/dapil{$num}.png";
+        }
+
+        return "/images/peta/kabupaten-bekasi.png";
+    }
+
+    public function getMapMarkersProperty(): array
+    {
+        $configs = (new \App\Livewire\Kaderisasi\Index())->getMapConfigs();
+        $config = null;
+
+        if ($this->selectedKecamatan !== '') {
+            $config = $configs[strtoupper($this->selectedKecamatan)] ?? null;
+        } elseif ($this->selectedDapil !== '') {
+            $config = $configs[strtoupper($this->selectedDapil)] ?? null;
+        }
+
+        if (!$config) {
+            return [];
+        }
+
+        $wilayahs = TargetWilayah::query()
+            ->when($this->selectedDapil !== '', fn ($q) => $q->where('dapil', $this->selectedDapil))
+            ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+            ->get();
+
+        if ($wilayahs->isEmpty()) {
+            return [];
+        }
+
+        $targetIds = $wilayahs->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $videoGroups = KontenMedsos::query()
+            ->where('is_video_pelayanan', true)
+            ->when($this->selectedBulan !== '', fn ($q) => $q->whereMonth('tanggal_posting', (int) $this->selectedBulan))
+            ->when($this->selectedTahun !== '', fn ($q) => $q->whereYear('tanggal_posting', (int) $this->selectedTahun))
+            ->select('desa_terkait', 'rw_terkait')
+            ->get()
+            ->groupBy(fn ($item) => strtolower(trim((string) $item->desa_terkait)))
+            ->map(fn (Collection $items) => $items->map(fn ($item) => str_pad(trim((string) $item->rw_terkait), 3, '0', STR_PAD_LEFT))->unique()->count());
+
+        $markers = [];
+        foreach ($wilayahs as $w) {
+            $desaUpper = strtoupper($w->desa);
+            if (isset($config[$desaUpper])) {
+                $totalRw = (int) ($rwCounts[$w->id] ?? 0);
+                $desaLower = strtolower(trim($w->desa));
+                $rwSudahVideo = (int) ($videoGroups[$desaLower] ?? 0);
+
+                if ($totalRw > 0) {
+                    if ($rwSudahVideo >= $totalRw) {
+                        $color = '#22c55e';
+                    } elseif ($rwSudahVideo > 0) {
+                        $color = '#eab308';
+                    } else {
+                        $color = '#ef4444';
+                    }
+                } else {
+                    $color = '#22c55e';
+                }
+
+                $size = 12 + ($totalRw > 0 ? (int) round(($rwSudahVideo / $totalRw) * 12) : 12);
+
+                $markers[] = [
+                    'id' => $w->id,
+                    'key' => $w->id,
+                    'label' => "{$w->desa} · {$rwSudahVideo}/{$totalRw} RW Ada Video",
+                    'x' => $config[$desaUpper]['x'],
+                    'y' => $config[$desaUpper]['y'],
+                    'size' => $size,
+                    'color' => $color,
+                    'count' => $rwSudahVideo,
+                    'target' => $totalRw,
+                    'desa' => $w->desa,
+                    'kecamatan' => $w->kecamatan
+                ];
+            }
+        }
+
+        return $markers;
+    }
+
+    public function getVillageListProperty(): Collection
+    {
+        $wilayahs = TargetWilayah::query()
+            ->when($this->selectedDapil !== '', fn ($q) => $q->where('dapil', $this->selectedDapil))
+            ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+            ->orderBy('kecamatan')
+            ->orderBy('desa')
+            ->get(['id', 'kecamatan', 'desa']);
+
+        if ($wilayahs->isEmpty()) {
+            return collect();
+        }
+
+        $targetIds = $wilayahs->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $videoGroups = KontenMedsos::query()
+            ->where('is_video_pelayanan', true)
+            ->when($this->selectedBulan !== '', fn ($q) => $q->whereMonth('tanggal_posting', (int) $this->selectedBulan))
+            ->when($this->selectedTahun !== '', fn ($q) => $q->whereYear('tanggal_posting', (int) $this->selectedTahun))
+            ->select('desa_terkait', 'rw_terkait')
+            ->get()
+            ->groupBy(fn ($item) => strtolower(trim((string) $item->desa_terkait)))
+            ->map(fn (Collection $items) => $items->map(fn ($item) => str_pad(trim((string) $item->rw_terkait), 3, '0', STR_PAD_LEFT))->unique()->count());
+
+        return $wilayahs->map(function (TargetWilayah $w) use ($rwCounts, $videoGroups): array {
+            $total = (int) ($rwCounts[$w->id] ?? 0);
+            $desaLower = strtolower(trim($w->desa));
+            $rwSudahVideo = (int) ($videoGroups[$desaLower] ?? 0);
+            $pct = $total > 0 ? (int) round(($rwSudahVideo / $total) * 100) : 0;
+
+            return [
+                'id' => $w->id,
+                'desa' => $w->desa,
+                'kecamatan' => $w->kecamatan,
+                'total_rw' => $total,
+                'rw_terisi' => $rwSudahVideo,
+                'pct_terisi' => $pct,
+            ];
+        });
+    }
+
+    public function getSelectedVillageDetailProperty(): ?array
+    {
+        if ($this->selectedTargetWilayahId === null) {
+            return null;
+        }
+
+        $w = TargetWilayah::find($this->selectedTargetWilayahId);
+        if (!$w) {
+            return null;
+        }
+
+        $rwList = DataRw::query()
+            ->where('target_wilayah_id', $w->id)
+            ->orderBy('nomor_rw')
+            ->get(['nomor_rw', 'dpt', 'estimasi_pks', 'status_wilayah']);
+
+        $villageVideos = KontenMedsos::query()
+            ->where('is_video_pelayanan', true)
+            ->where(fn ($query) => $query->where('desa_terkait', $w->desa)->orWhere('desa_terkait', strtolower($w->desa)))
+            ->when($this->selectedBulan !== '', fn ($q) => $q->whereMonth('tanggal_posting', (int) $this->selectedBulan))
+            ->when($this->selectedTahun !== '', fn ($q) => $q->whereYear('tanggal_posting', (int) $this->selectedTahun))
+            ->with('anggotaDewan')
+            ->get();
+
+        $videoCounts = $villageVideos
+            ->groupBy(fn ($item) => str_pad(trim((string) $item->rw_terkait), 3, '0', STR_PAD_LEFT))
+            ->map(fn (Collection $items) => $items->count());
+
+        $totalRw = $rwList->count();
+        $rwSudahVideo = $videoCounts->count();
+        $pct = $totalRw > 0 ? (int) round(($rwSudahVideo / $totalRw) * 100) : 0;
+
+        $mappedRws = $rwList->map(function (DataRw $rw) use ($videoCounts): array {
+            $rwNum = str_pad(trim((string) $rw->nomor_rw), 3, '0', STR_PAD_LEFT);
+            return [
+                'nomor_rw' => $rw->nomor_rw,
+                'dpt' => (int) $rw->dpt,
+                'estimasi_pks' => (int) $rw->estimasi_pks,
+                'status' => $rw->status_wilayah,
+                'video_count' => (int) ($videoCounts[$rwNum] ?? 0),
+            ];
+        });
+
+        return [
+            'id' => $w->id,
+            'desa' => $w->desa,
+            'kecamatan' => $w->kecamatan,
+            'dapil' => $w->dapil,
+            'total_rw' => $totalRw,
+            'rw_terisi' => $rwSudahVideo,
+            'pct_terisi' => $pct,
+            'rw_list' => $mappedRws,
+            'videos' => $villageVideos,
+        ];
     }
 
     public function getDewanOptionsProperty(): Collection

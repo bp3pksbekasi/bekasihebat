@@ -103,7 +103,6 @@ class ProfilRw extends Model
             'profil_warga',
             'faktor_penyebab',
             'anggota_pks',
-            'jumlah_kta',
             'upa_rw_status',
             'rki_status',
             'senam_status',

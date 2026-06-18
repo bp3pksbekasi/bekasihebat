@@ -148,7 +148,7 @@
 
                                 @if (! $item->assigned_dewan_id)
                                     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px;padding-top:12px;border-top:0.5px solid #e2e8f0;">
-                                        <select wire:model="assignSelection.{{ $item->id }}" style="height:34px;min-width:220px;padding:0 30px 0 10px;border-radius:8px;border:0.5px solid #cbd5e1;background:white;font-size:12px;">
+                                        <select wire:model="assignSelection.{{ $item->id }}" style="height:34px;min-width:220px;padding:0 30px 0 10px;border-radius:8px;border:0.5px solid #cbd5e1;background:white;font-size:12px;color:#111827;">
                                             <option value="">Assign ke dewan</option>
                                             @foreach ($this->dewanGroupedByDapil as $dapil => $dewanItems)
                                                 @continue($dapil !== ($item->dapil ?: $dapil) && $item->dapil !== '')
@@ -228,7 +228,7 @@
                                         <div style="font-size:11px;color:#64748b;margin-top:4px;">{{ $detail->assignedDewan?->jabatan ?? '-' }} · {{ $detail->assignedDewan?->dapil ?? $detail->dapil }}</div>
                                     </div>
                                     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                                        <select wire:model="assignSelection.{{ $detail->id }}" style="height:34px;min-width:190px;padding:0 28px 0 10px;border-radius:8px;border:0.5px solid #cbd5e1;background:white;font-size:12px;">
+                                        <select wire:model="assignSelection.{{ $detail->id }}" style="height:34px;min-width:190px;padding:0 28px 0 10px;border-radius:8px;border:0.5px solid #cbd5e1;background:white;font-size:12px;color:#111827;">
                                             <option value="">Pilih dewan</option>
                                             @foreach (($this->dewanGroupedByDapil[$detail->dapil] ?? collect()) as $dewan)
                                                 <option value="{{ $dewan->id }}">{{ $dewan->nama }}</option>
@@ -431,28 +431,28 @@
                 </button>
             </div>
             <div style="padding:18px;display:grid;gap:12px;">
-                <input wire:model="fJudul" type="text" placeholder="Judul aspirasi" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
-                <textarea wire:model="fDeskripsi" rows="5" placeholder="Deskripsi masalah dan kebutuhan warga" style="width:100%;border-radius:10px;border:0.5px solid #cbd5e1;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                <input wire:model="fJudul" type="text" placeholder="Judul aspirasi" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
+                <textarea wire:model="fDeskripsi" rows="5" placeholder="Deskripsi masalah dan kebutuhan warga" style="width:100%;border-radius:10px;border:0.5px solid #cbd5e1;padding:10px 12px;font-size:13px;resize:vertical;color:#111827;background:white;"></textarea>
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
-                    <select wire:model.live="fKategori" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <select wire:model.live="fKategori" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                         @foreach (\App\Models\Aspirasi::KATEGORI_OPTIONS as $key => $label)
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
-                    <select wire:model.live="fUrgensi" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <select wire:model.live="fUrgensi" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                         @foreach (\App\Models\Aspirasi::URGENSI_OPTIONS as $key => $cfg)
                             <option value="{{ $key }}">{{ $cfg['label'] }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
-                    <select wire:model.live="fDapil" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <select wire:model.live="fDapil" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                         <option value="">Pilih dapil</option>
                         @foreach ($this->dapilOptions as $dapil)
                             <option value="{{ $dapil }}">{{ $dapil }}</option>
                         @endforeach
                     </select>
-                    <select wire:model.live="fKecamatan" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <select wire:model.live="fKecamatan" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                         <option value="">Pilih kecamatan</option>
                         @foreach ($this->kecamatanOptions as $kecamatan)
                             <option value="{{ $kecamatan }}">{{ $kecamatan }}</option>
@@ -465,28 +465,28 @@
                     </div>
                 @endif
                 <div style="display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:10px;">
-                    <select wire:model.live="fDesa" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <select wire:model.live="fDesa" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                         <option value="">Pilih desa</option>
                         @foreach ($this->desaOptions as $desa)
                             <option value="{{ $desa->desa }}">{{ $desa->desa }}</option>
                         @endforeach
                     </select>
-                    <input wire:model="fRw" type="text" placeholder="RW" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <input wire:model="fRw" type="text" placeholder="RW" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                 </div>
-                <input wire:model="fAlamat" type="text" placeholder="Alamat detail" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                <input wire:model="fAlamat" type="text" placeholder="Alamat detail" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
-                    <input wire:model="fNamaPelapor" type="text" placeholder="Nama pelapor" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
-                    <input wire:model="fHpPelapor" type="text" placeholder="HP pelapor" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <input wire:model="fNamaPelapor" type="text" placeholder="Nama pelapor" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
+                    <input wire:model="fHpPelapor" type="text" placeholder="HP pelapor" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
-                    <select wire:model="fSumber" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <select wire:model="fSumber" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                         @foreach (\App\Models\Aspirasi::SUMBER_OPTIONS as $key => $label)
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
-                    <input wire:model="fSumberId" type="text" placeholder="ID sumber (opsional)" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                    <input wire:model="fSumberId" type="text" placeholder="ID sumber (opsional)" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                 </div>
-                <textarea wire:model="fCatatanInternal" rows="3" placeholder="Catatan internal (opsional)" style="width:100%;border-radius:10px;border:0.5px solid #cbd5e1;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                <textarea wire:model="fCatatanInternal" rows="3" placeholder="Catatan internal (opsional)" style="width:100%;border-radius:10px;border:0.5px solid #cbd5e1;padding:10px 12px;font-size:13px;resize:vertical;color:#111827;background:white;"></textarea>
                 <div style="display:flex;justify-content:flex-end;gap:8px;">
                     <button wire:click="closeForm" type="button" style="height:40px;padding:0 14px;border-radius:10px;border:0.5px solid #cbd5e1;background:white;color:#475569;font-size:12px;font-weight:600;">Batal</button>
                     <button wire:click="simpanAspirasi" type="button" style="height:40px;padding:0 14px;border:none;border-radius:10px;background:#0ea5e9;color:white;font-size:12px;font-weight:700;">Simpan Aspirasi</button>
@@ -501,7 +501,7 @@
             <div style="font-size:18px;font-weight:700;color:#111827;">Konfirmasi Input SIPD</div>
             <div style="font-size:12px;color:#64748b;margin-top:4px;">Masukkan nomor POKIR dari SIPD dan unggah screenshot bila tersedia.</div>
             <div style="display:grid;gap:10px;margin-top:14px;">
-                <input wire:model="fNomorPokir" type="text" placeholder="Nomor POKIR" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                <input wire:model="fNomorPokir" type="text" placeholder="Nomor POKIR" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                 <input wire:model="fScreenshotSipd" type="file" style="font-size:12px;">
             </div>
             <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
@@ -517,7 +517,7 @@
             <div style="font-size:18px;font-weight:700;color:#111827;">Update Status Aspirasi</div>
             <div style="font-size:12px;color:#64748b;margin-top:4px;">Lengkapi data sesuai tahap status yang akan dicatat.</div>
             <div style="display:grid;gap:10px;margin-top:14px;">
-                <select wire:model="fNewStatus" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                <select wire:model="fNewStatus" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                     <option value="verifikasi_bappeda">Verifikasi BAPPEDA</option>
                     <option value="dianggarkan">Dianggarkan</option>
                     <option value="terealisasi">Terealisasi</option>
@@ -525,14 +525,14 @@
                 </select>
                 @if ($fNewStatus === 'dianggarkan')
                     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
-                        <input wire:model="fAnggaranNominal" type="number" min="0" placeholder="Nominal anggaran" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
-                        <input wire:model="fTahunAnggaran" type="text" placeholder="Tahun anggaran" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;">
+                        <input wire:model="fAnggaranNominal" type="number" min="0" placeholder="Nominal anggaran" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
+                        <input wire:model="fTahunAnggaran" type="text" placeholder="Tahun anggaran" style="height:40px;border-radius:10px;border:0.5px solid #cbd5e1;padding:0 12px;font-size:13px;color:#111827;background:white;">
                     </div>
                 @endif
                 @if ($fNewStatus === 'terealisasi')
                     <input wire:model="fFotoRealisasi" type="file" style="font-size:12px;">
                 @endif
-                <textarea wire:model="fCatatan" rows="3" placeholder="Catatan perubahan status" style="width:100%;border-radius:10px;border:0.5px solid #cbd5e1;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                <textarea wire:model="fCatatan" rows="3" placeholder="Catatan perubahan status" style="width:100%;border-radius:10px;border:0.5px solid #cbd5e1;padding:10px 12px;font-size:13px;resize:vertical;color:#111827;background:white;"></textarea>
             </div>
             <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
                 <button wire:click="$set('showUpdateStatus', false)" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #cbd5e1;background:white;color:#475569;font-size:12px;font-weight:600;">Batal</button>

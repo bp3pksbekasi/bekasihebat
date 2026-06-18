@@ -44,6 +44,30 @@ class Index extends Component
         $this->ensureSelectedRw();
     }
 
+    public function updatingSelectedDapil(): void
+    {
+        $this->selectedKecamatan = '';
+        $this->selectedDesa = '';
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+        $this->resetPage('contactsPage');
+    }
+
+    public function updatingSelectedKecamatan(): void
+    {
+        $this->selectedDesa = '';
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+        $this->resetPage('contactsPage');
+    }
+
+    public function updatingSelectedDesa(): void
+    {
+        $this->selectedTargetWilayahId = null;
+        $this->selectedRw = '';
+        $this->resetPage('contactsPage');
+    }
+
     public function updatedSelectedDapil(): void
     {
         if ($this->isKaderScope()) {
@@ -92,7 +116,14 @@ class Index extends Component
             }
         }
 
-        $this->selectedTargetWilayahId = $targetWilayahId;
+        $this->selectedTargetWilayahId = $this->selectedTargetWilayahId === $targetWilayahId ? null : $targetWilayahId;
+        if ($this->selectedTargetWilayahId) {
+            $w = TargetWilayah::find($this->selectedTargetWilayahId);
+            $this->selectedDesa = $w ? $w->desa : '';
+        } else {
+            $this->selectedDesa = '';
+        }
+
         $this->selectedRw = '';
         $this->showBulkForm = false;
         $this->bulkText = '';
@@ -100,6 +131,18 @@ class Index extends Component
         $this->detailSearch = '';
         $this->resetPage('contactsPage');
         $this->ensureSelectedRw();
+    }
+
+    public function closeVillageDetail(): void
+    {
+        $this->selectedTargetWilayahId = null;
+        $this->selectedDesa = '';
+        $this->selectedRw = '';
+        $this->showBulkForm = false;
+        $this->bulkText = '';
+        $this->bulkCatatan = '';
+        $this->detailSearch = '';
+        $this->resetPage('contactsPage');
     }
 
     public function selectRw(string $rw): void
@@ -265,6 +308,196 @@ class Index extends Component
             ->distinct()
             ->orderBy('desa')
             ->pluck('desa');
+    }
+
+    #[Computed]
+    public function mapImage(): string
+    {
+        if ($this->selectedKecamatan !== '') {
+            $slug = str_replace(' ', '-', strtolower($this->selectedKecamatan));
+            return "/images/peta/kecamatan/{$slug}.png";
+        }
+
+        if ($this->selectedDapil !== '') {
+            $num = str_replace('BEKASI ', '', strtoupper($this->selectedDapil));
+            return "/images/peta/dapil{$num}.png";
+        }
+
+        return "/images/peta/kabupaten-bekasi.png";
+    }
+
+    #[Computed]
+    public function mapMarkers(): array
+    {
+        $configs = (new \App\Livewire\Kaderisasi\Index())->getMapConfigs();
+        $config = null;
+
+        if ($this->selectedKecamatan !== '') {
+            $config = $configs[strtoupper($this->selectedKecamatan)] ?? null;
+        } elseif ($this->selectedDapil !== '') {
+            $config = $configs[strtoupper($this->selectedDapil)] ?? null;
+        }
+
+        if (!$config) {
+            return [];
+        }
+
+        $wilayahs = TargetWilayah::query()
+            ->when($this->isKaderScope(), function (Builder $query): void {
+                $user = auth()->user();
+                $query->where('dapil', $user?->dapil)
+                    ->where('kecamatan', $user?->kecamatan)
+                    ->where('desa', $user?->desa);
+            })
+            ->when($this->selectedDapil !== '', fn ($q) => $q->where('dapil', $this->selectedDapil))
+            ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+            ->get();
+
+        if ($wilayahs->isEmpty()) {
+            return [];
+        }
+
+        $targetIds = $wilayahs->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $rwTerisiCounts = KontakWarga::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->where('status', 'aktif')
+            ->selectRaw('target_wilayah_id, COUNT(DISTINCT nomor_rw) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $markers = [];
+        foreach ($wilayahs as $w) {
+            $desaUpper = strtoupper($w->desa);
+            if (isset($config[$desaUpper])) {
+                $totalRw = (int) ($rwCounts[$w->id] ?? 0);
+                $rwTerisi = (int) ($rwTerisiCounts[$w->id] ?? 0);
+
+                if ($totalRw > 0) {
+                    if ($rwTerisi >= $totalRw) {
+                        $color = '#22c55e'; // Green
+                    } elseif ($rwTerisi > 0) {
+                        $color = '#eab308'; // Yellow
+                    } else {
+                        $color = '#ef4444'; // Red
+                    }
+                } else {
+                    $color = '#22c55e'; // Green if total RW is 0
+                }
+
+                $size = 12 + ($totalRw > 0 ? (int) round(($rwTerisi / $totalRw) * 12) : 12);
+
+                $markers[] = [
+                    'id' => $w->id,
+                    'key' => $w->id,
+                    'label' => "{$w->desa} · {$rwTerisi}/{$totalRw} RW Terisi",
+                    'x' => $config[$desaUpper]['x'],
+                    'y' => $config[$desaUpper]['y'],
+                    'size' => $size,
+                    'color' => $color,
+                    'count' => $rwTerisi,
+                    'target' => $totalRw,
+                    'desa' => $w->desa,
+                    'kecamatan' => $w->kecamatan
+                ];
+            }
+        }
+
+        return $markers;
+    }
+
+    #[Computed]
+    public function villageList(): Collection
+    {
+        $wilayahs = TargetWilayah::query()
+            ->when($this->isKaderScope(), function (Builder $query): void {
+                $user = auth()->user();
+                $query->where('dapil', $user?->dapil)
+                    ->where('kecamatan', $user?->kecamatan)
+                    ->where('desa', $user?->desa);
+            })
+            ->when($this->selectedDapil !== '', fn ($q) => $q->where('dapil', $this->selectedDapil))
+            ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+            ->orderBy('kecamatan')
+            ->orderBy('desa')
+            ->get(['id', 'kecamatan', 'desa']);
+
+        if ($wilayahs->isEmpty()) {
+            return collect();
+        }
+
+        $targetIds = $wilayahs->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        $rwTerisiCounts = KontakWarga::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->where('status', 'aktif')
+            ->selectRaw('target_wilayah_id, COUNT(DISTINCT nomor_rw) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        return $wilayahs->map(function (TargetWilayah $w) use ($rwCounts, $rwTerisiCounts): array {
+            $total = (int) ($rwCounts[$w->id] ?? 0);
+            $terisi = (int) ($rwTerisiCounts[$w->id] ?? 0);
+            $pct = $total > 0 ? (int) round(($terisi / $total) * 100) : 0;
+
+            return [
+                'id' => $w->id,
+                'desa' => $w->desa,
+                'kecamatan' => $w->kecamatan,
+                'total_rw' => $total,
+                'rw_terisi' => $terisi,
+                'pct_terisi' => $pct,
+            ];
+        });
+    }
+
+    #[Computed]
+    public function selectedVillageDetail(): ?array
+    {
+        if ($this->selectedTargetWilayahId === null) {
+            return null;
+        }
+
+        $w = TargetWilayah::find($this->selectedTargetWilayahId);
+        if (!$w) {
+            return null;
+        }
+
+        $totalRw = DataRw::query()->where('target_wilayah_id', $w->id)->count();
+        $totalRt = DataRw::query()->where('target_wilayah_id', $w->id)->sum('jumlah_rt');
+
+        $totalKontak = KontakWarga::query()
+            ->where('target_wilayah_id', $w->id)
+            ->where('status', 'aktif')
+            ->count();
+
+        $targetKontak = $totalRw * KontakWarga::TARGET_PER_RW;
+        $pct = $targetKontak > 0 ? (int) min(100, round(($totalKontak / $targetKontak) * 100)) : 0;
+
+        return [
+            'id' => $w->id,
+            'desa' => $w->desa,
+            'kecamatan' => $w->kecamatan,
+            'dapil' => $w->dapil,
+            'total_rw' => $totalRw,
+            'total_rt' => $totalRt,
+            'total_kontak' => $totalKontak,
+            'target_kontak' => $targetKontak,
+            'pct_tersisir' => $pct,
+            'pct_progress' => $pct,
+        ];
     }
 
     #[Computed]

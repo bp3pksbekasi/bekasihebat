@@ -34,13 +34,13 @@
                 <form wire:submit="save" style="display:flex;flex-direction:column;gap:16px;">
                     <div>
                         <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;">API Secret Token</label>
-                        <input type="password" wire:model.defer="secret" placeholder="Masukkan Whapify API Secret" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;">
+                        <input type="password" wire:model.defer="secret" placeholder="Masukkan Whapify API Secret" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;color:#111827;background:white;">
                         @error('secret') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
                         <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;">Account Unique ID</label>
-                        <input type="text" wire:model.defer="account" placeholder="Masukkan Whapify Account ID" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;">
+                        <input type="text" wire:model.defer="account" placeholder="Masukkan Whapify Account ID" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;color:#111827;background:white;">
                         @error('account') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                     </div>
 
@@ -63,13 +63,13 @@
                 <form wire:submit.prevent="sendTest" style="display:flex;flex-direction:column;gap:16px;">
                     <div>
                         <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;">Nomor HP Penerima (Contoh: 08123456789)</label>
-                        <input type="text" wire:model.defer="testRecipient" placeholder="Masukkan nomor HP tujuan" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;">
+                        <input type="text" wire:model.defer="testRecipient" placeholder="Masukkan nomor HP tujuan" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;color:#111827;background:white;">
                         @error('testRecipient') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
                         <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;">Isi Pesan Uji Coba</label>
-                        <textarea wire:model.defer="testMessage" rows="3" placeholder="Tulis isi pesan..." style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;resize:vertical;"></textarea>
+                        <textarea wire:model.defer="testMessage" rows="3" placeholder="Tulis isi pesan..." style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;outline:none;resize:vertical;color:#111827;background:white;"></textarea>
                         @error('testMessage') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                     </div>
 

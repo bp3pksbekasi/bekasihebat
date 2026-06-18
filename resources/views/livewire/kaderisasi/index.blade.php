@@ -77,7 +77,7 @@
         <div style="width:26px;height:26px;background:#2563eb;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 auto;">KD</div>
     </div>
 
-    <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;border-radius:0 0 14px 14px;overflow:hidden;">
+    <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;border-radius:0 0 14px 14px;overflow:clip;">
         @if (session()->has('message'))
             <div style="margin:14px 20px 0;padding:10px 12px;border-radius:10px;background:#eff6ff;color:#1d4ed8;font-size:12px;border:0.5px solid #bfdbfe;">
                 {{ session('message') }}
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <div style="padding:14px 20px 0;">
+        <div style="padding:14px 20px 0;position:sticky;top:0;z-index:30;background:white;border-bottom:0.5px solid #f1f5f9;">
             <div style="display:inline-flex;gap:6px;padding:4px;border-radius:10px;background:#f4f4f5;border:0.5px solid #e4e4e7;">
                 <button type="button" wire:click="setActiveTab('map')" style="padding:8px 14px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:{{ $mapTab ? '#dbeafe' : 'transparent' }};color:{{ $mapTab ? '#1d4ed8' : '#71717a' }};">Peta Sebaran</button>
                 <button type="button" wire:click="setActiveTab('pembentukan_upa')" style="padding:8px 14px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:{{ $activeTab === 'pembentukan_upa' ? '#dbeafe' : 'transparent' }};color:{{ $activeTab === 'pembentukan_upa' ? '#1d4ed8' : '#71717a' }};">Pembentukan UPA</button>
@@ -513,6 +513,7 @@
                     </div>
                     @endif
                 </div>
+            </div>
            @elseif ($activeTab === 'pembentukan_upa')
             @if (session()->has('error'))
                 <div style="margin:14px 20px 0;padding:10px 12px;border-radius:10px;background:#fef2f2;color:#dc2626;font-size:12px;border:0.5px solid #fecaca;">

@@ -1,7 +1,7 @@
 <x-layouts.app.sidebar>
     <flux:main class="!p-0">
-        <div style="min-height:100vh;background:#fafafa;">
-            <div style="width:100%;margin:0;">
+        <div style="min-height:100vh;padding:20px;background:#f5f5f5;position:relative;box-sizing:border-box;">
+            <div style="width:100%;margin:0;box-sizing:border-box;">
                 <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:flex-start;border-radius:14px 14px 0 0;gap:16px;flex-wrap:nowrap;overflow:hidden;">
                     <div style="display:flex;align-items:center;gap:18px;flex-wrap:nowrap;flex:1 1 auto;min-width:0;overflow:hidden;">
                         <div style="display:flex;align-items:center;gap:8px;">
@@ -26,11 +26,11 @@
                                 <option value="">Semua desa</option>
                             </select>
                             <select id="statusSelect" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;min-width:130px;">
-                                <option value="">Semua status</option>
+                                <option value="" selected>Semua status</option>
                                 <option value="JAGA KUAT">Jaga Kuat</option>
                                 <option value="AMANKAN">Amankan</option>
                                 <option value="REBUT REALISTIS">Rebut Realistis</option>
-                                <option value="GARAP INTENSIF" selected>Garap Intensif</option>
+                                <option value="GARAP INTENSIF">Garap Intensif</option>
                                 <option value="ZONA BERAT">Zona Berat</option>
                             </select>
                             <select id="periodSelect" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f8fafc;font-weight:500;min-width:78px;width:78px;">
@@ -73,31 +73,44 @@
                         </div>
                     </div>
 
-                    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0;padding:0 20px;" class="summary-grid">
+                    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0;padding:0 20px;" class="summary-grid">
                         <div id="cardDpt" style="background:white;border:0.5px solid #e5e5e5;border-radius:10px;padding:12px;"></div>
                         <div id="cardSuaraSah" style="background:white;border:0.5px solid #e5e5e5;border-radius:10px;padding:12px;"></div>
                         <div id="cardPks" style="background:linear-gradient(135deg,#fe5000,#d94400);border-radius:10px;padding:12px;color:white;"></div>
+                        <div id="cardProfilRw" style="background:white;border:0.5px solid #e5e5e5;border-radius:10px;padding:12px;"></div>
                     </div>
 
-                    <div style="display:grid;grid-template-columns:minmax(0,0.95fr) minmax(320px,1.05fr);gap:12px;padding:0 20px;align-items:stretch;" class="top-grid">
-                        <div id="inlineMapWrap"></div>
+                    <!-- Row 1: 3-column cockpit layout (Map, Party Ranking, List of Villages) -->
+                    <div class="kaderisasi-3col-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:0 20px 20px;box-sizing:border-box;">
+                        <!-- Column 1: Map Card -->
+                        <div id="inlineMapWrap" style="box-sizing:border-box;height:100%;"></div>
 
-                        <div id="partyRankingCard" style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:grid;gap:12px;">
-                            <div>
+                        <!-- Column 2: Party Ranking & Demography Card -->
+                        <div id="partyRankingCard" style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;height:100%;">
+                            <div style="flex:0 0 auto;">
                                 <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Ranking Partai</div>
                                 <div style="font-size:14px;color:#1a1a1a;font-weight:500;margin-top:2px;">Top 5 di Bekasi</div>
                             </div>
-                            <div id="partyRankWrap" style="display:grid;gap:5px;"></div>
-                            <div style="border-top:0.5px solid #e5e5e5;padding-top:12px;display:grid;gap:8px;">
+                            <div id="partyRankWrap" style="display:grid;gap:5px;align-content:start;flex:1 1 auto;overflow-y:auto;min-height:0;padding-right:4px;"></div>
+                            <div style="border-top:0.5px solid #e5e5e5;padding-top:12px;display:grid;gap:8px;flex:0 0 auto;">
                                 <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.8px;">Demografi Pemilih</div>
                                 <div id="demographyBar"></div>
                             </div>
                         </div>
+
+                        <!-- Column 3: Daftar Kelurahan/Desa -->
+                        <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:flex;flex-direction:column;box-sizing:border-box;height:100%;">
+                            <div style="font-size:10px;color:#fe5000;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;flex:0 0 auto;">Daftar Kelurahan/Desa</div>
+                            <div id="villageListWrap" style="flex:1 1 auto;overflow-y:auto;display:grid;gap:6px;align-content:start;padding-right:4px;min-height:0;">
+                                <!-- Will be populated dynamically by JavaScript -->
+                            </div>
+                        </div>
                     </div>
 
-                    <div style="padding:14px 20px 0;">
-                        <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;">
-                            <div style="margin-bottom:10px;">
+                    <!-- Row 2: Status Prioritas PKS (Full Width) -->
+                    <div style="padding:0 20px 20px;box-sizing:border-box;">
+                        <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;width:100%;">
+                            <div>
                                 <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Status Prioritas PKS</div>
                                 <div style="font-size:14px;color:#1a1a1a;font-weight:500;margin-top:2px;">Sebaran <span id="statusTotalDesa">0</span> kelurahan</div>
                             </div>
@@ -105,10 +118,15 @@
                         </div>
                     </div>
 
-                    <div id="mapAndCalegWrap" style="padding:14px 20px 0;"></div>
-                    <div id="villageDetailWrap" style="padding:14px 20px 0;"></div>
+                    <!-- Row 3: Analisis Wilayah Detail -->
+                    <div style="padding:0 20px 20px;box-sizing:border-box;">
+                        <div id="villageDetailWrap" style="box-sizing:border-box;width:100%;"></div>
+                    </div>
 
-                    <div style="padding:14px 20px 20px;display:grid;gap:14px;">
+                    <!-- Row 4: Caleg list or other detailed insights -->
+                    <div id="mapAndCalegWrap" style="padding:0 20px 20px;"></div>
+
+                    <div id="drilldownSection" style="padding:14px 20px 20px;display:grid;gap:14px;">
                         <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;">
                             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
                                 <div>
@@ -125,6 +143,7 @@
         </div>
 
         <style>
+            @keyframes spin { to { transform: rotate(360deg); } }
             .tab-btn {
                 padding: 6px 14px;
                 border-radius: 999px;
@@ -141,6 +160,35 @@
             }
             .tab-pane { display: none; }
             .tab-pane.active { display: block; }
+            @media (min-width: 1025px) {
+                .kaderisasi-3col-grid {
+                    height: 490px;
+                }
+                .kaderisasi-3col-grid > div {
+                    height: 100%;
+                    overflow: hidden;
+                }
+                #mapPanelCard {
+                    height: 100% !important;
+                }
+                #mapPanelMedia {
+                    height: 330px !important;
+                    flex: none !important;
+                }
+            }
+            @media (max-width: 1024px) {
+                .kaderisasi-3col-grid {
+                    grid-template-columns: minmax(0, 1fr) !important;
+                    height: auto !important;
+                }
+                .kaderisasi-3col-grid > div {
+                    height: auto !important;
+                }
+                #mapPanelMedia {
+                    height: 320px !important;
+                    flex: none !important;
+                }
+            }
             @media (max-width: 1200px) {
                 .summary-grid, .top-grid, .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
             }
@@ -151,7 +199,7 @@
         <div id="detailDrawer" class="hidden" style="position:fixed;top:0;right:0;width:420px;max-width:100vw;height:100vh;background:white;box-shadow:-4px 0 20px rgba(0,0,0,0.1);z-index:50;overflow-y:auto;transition:transform 0.2s;transform:translateX(100%);">
             <div style="padding:16px 20px;border-bottom:0.5px solid #e5e5e5;display:flex;align-items:center;justify-content:space-between;gap:12px;">
                 <div>
-                    <div id="detailDrawerTitle" style="font-size:15px;font-weight:500;">Detail Wilayah</div>
+                    <div id="detailDrawerTitle" style="font-size:16px;font-weight:700;color:#1e293b;">Detail Wilayah</div>
                     <div id="detailDrawerSubtitle" style="font-size:11px;color:#888;margin-top:2px;">-</div>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
@@ -165,9 +213,22 @@
             <div id="detailDrawerContent" style="padding:16px 20px;"></div>
         </div>
         <div id="detailDrawerBackdrop" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:49;"></div>
+        <div id="tpsModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;max-width:95vw;max-height:85vh;background:white;border-radius:12px;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);z-index:52;overflow:hidden;display:none;flex-direction:column;box-sizing:border-box;">
+            <div style="padding:16px 20px;border-bottom:0.5px solid #e5e5e5;display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;">
+                <div>
+                    <div id="tpsModalTitle" style="font-size:15px;font-weight:600;color:#1a1a1a;">Daftar TPS Terlibat</div>
+                    <div id="tpsModalSubtitle" style="font-size:11px;color:#666;margin-top:2px;">-</div>
+                </div>
+                <button id="tpsModalClose" type="button" style="width:28px;height:28px;border-radius:6px;border:0.5px solid #e5e5e5;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666;font-weight:600;">✕</button>
+            </div>
+            <div id="tpsModalContent" style="padding:20px;overflow-y:auto;flex:1 1 auto;min-height:0;box-sizing:border-box;"></div>
+        </div>
+        <div id="tpsModalBackdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:51;display:none;"></div>
         <script>
+            const csrfTokenFromBlade = '{{ csrf_token() }}';
             const compiledPeriodOptions = {!! json_encode($periodOptions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
             const compiledPayload = {!! json_encode($compiledPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
+            const initialProfilRwMap = {!! json_encode($profilRwMap ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
             const selectedPeriodId = {!! json_encode($selectedPeriodId, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
             const partyColors = {'PKB':'#008000','Gerindra':'#C8102E','PDIP':'#D72027','Golkar':'#FFD700','Nasdem':'#003087','Buruh':'#E31937','Gelora':'#DC143C','PKS':'#fe5000','PKN':'#336699','Hanura':'#4169E1','PAN':'#005BAC','PBB':'#009B3A','Demokrat':'#00529C','PSI':'#EC008C','Perindo':'#CC0000','PPP':'#006600','Ummat':'#2E8B57','Garuda':'#228B22','NasDem':'#003087','PDI-P':'#D72027'};
             const statusConfig = {
@@ -177,7 +238,7 @@
                 'GARAP INTENSIF': { color: '#d97706', bg: '#fff7f1', text: '#993c1d', dot: '#d97706', label: 'Garap Intensif', criteria: 'PKS rank ≤3 atau share ≥12%', description: 'Potensi ada, namun butuh kerja lapangan yang lebih rapat, terukur, dan konsisten.' },
                 'ZONA BERAT': { color: '#b91c1c', bg: '#fee2e2', text: '#991b1b', dot: '#b91c1c', label: 'Zona Berat', criteria: 'PKS share <12% & rank >3', description: 'PKS masih lemah di wilayah ini. Prioritasnya membangun fondasi, jaringan, dan pengenalan.' }
             };
-            const PKS_PARTY_ID = '12';
+            const PKS_PARTY_ID = '8';
             const PKS_PARTY_NAME = 'PKS';
             const TOTAL_DPRD_SEATS = 55;
             const DEFAULT_FOCUS_DAPIL = 'BEKASI 1';
@@ -210,20 +271,43 @@
                         { name: 'CIBENING', x: 87.5, y: 45.0 },
                         { name: 'TAMAN SARI', x: 48.0, y: 55.0 },
                         { name: 'TAMAN RAHAYU', x: 13.5, y: 58.5 },
-                        { name: 'CIKARAGEMAN', x: 52.0, y: 69.0 },
+                    { name: 'CIKARAGEMAN', x: 52.0, y: 69.0 },
                         { name: 'KERTARAHAYU', x: 79.0, y: 71.0 },
                         { name: 'RAGEMANUNGGAL', x: 33.0, y: 84.0 },
                         { name: 'MUKTIJAYA', x: 58.0, y: 87.0 },
                     ],
                 },
             };
-            const state = { dataset: new Map(), dptDatasets: {}, currentDapil: DEFAULT_FOCUS_DAPIL, currentKecamatan: DEFAULT_FOCUS_KECAMATAN, currentDesa: '', currentStatus: 'GARAP INTENSIF', searchKeyword: '', searchDebounceId: null, activeVillageTab: 'summary', detailDrawer: null, sourceMode: 'csv', selectedPeriodId };       
+            const state = { dataset: new Map(), dptDatasets: {}, currentDapil: DEFAULT_FOCUS_DAPIL, currentKecamatan: DEFAULT_FOCUS_KECAMATAN, currentDesa: '', currentStatus: '', currentTpsStatus: 'JAGA KUAT', searchKeyword: '', searchDebounceId: null, activeVillageTab: 'summary', detailDrawer: null, sourceMode: 'csv', selectedPeriodId, rwPage: 1, rtPage: 1, tpsPage: 1, rwStatusFilter: '', rtStatusFilter: '', currentProfilRw: null, isEditingProfilRw: false, wilayahId: null, currentRwNum: null, isLoadingProfilRw: false, hasLoadedProfilRwKey: null, profilRwMap: initialProfilRwMap };
             const dom = {};
 
-            document.addEventListener('DOMContentLoaded', async () => { cacheDom(); bindEvents(); await loadInitialData(); });
+            let initializedForThisScope = false;
+            window.initPemiluDprd = async function() {
+                if (initializedForThisScope) return;
+                if (!document.getElementById('scopeHeading')) return;
+                initializedForThisScope = true;
+                cacheDom();
+                bindEvents();
+                await loadInitialData();
+            };
+
+            if (!window.pemiluDprdListenerRegistered) {
+                window.pemiluDprdListenerRegistered = true;
+                document.addEventListener('livewire:navigated', () => {
+                    if (typeof window.initPemiluDprd === 'function' && document.getElementById('scopeHeading')) {
+                        window.initPemiluDprd();
+                    }
+                });
+            }
+
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                window.initPemiluDprd();
+            } else {
+                document.addEventListener('DOMContentLoaded', window.initPemiluDprd);
+            }
 
             function cacheDom() {
-                ['periodSelect','dapilSelect','kecamatanSelect','desaSelect','statusSelect','resetFilterBtn','searchInput','tpsFileInput','dptFileInput','sourceStatus','dptStatus','dataSourceBadge','scopeMeta','breadcrumb','breadcrumbHome','breadcrumbDapil','breadcrumbKecamatan','breadcrumbDesa','breadcrumbDividerKecamatan','breadcrumbDividerDesa','scopeHeading','scopeSubheading','cardDpt','cardSuaraSah','cardPks','cardKursi','dapilChartWrap','partyRankWrap','demographyBar','statusDashboard','statusTotalDesa','inlineMapWrap','mapAndCalegWrap','villageDetailWrap','drilldownSectionLabel','drilldownHeading','drilldownTableWrap','detailDrawer','detailDrawerTitle','detailDrawerSubtitle','detailDrawerBadge','detailDrawerContent','detailDrawerClose','detailDrawerBackdrop'].forEach((id) => { dom[id] = document.getElementById(id); });
+                ['periodSelect','dapilSelect','kecamatanSelect','desaSelect','statusSelect','resetFilterBtn','searchInput','tpsFileInput','dptFileInput','sourceStatus','dptStatus','dataSourceBadge','scopeMeta','breadcrumb','breadcrumbHome','breadcrumbDapil','breadcrumbKecamatan','breadcrumbDesa','breadcrumbDividerKecamatan','breadcrumbDividerDesa','scopeHeading','scopeSubheading','cardDpt','cardSuaraSah','cardPks','cardProfilRw','cardKursi','dapilChartWrap','partyRankWrap','demographyBar','statusDashboard','statusTotalDesa','inlineMapWrap','mapAndCalegWrap','villageDetailWrap','villageListWrap','drilldownSection','drilldownSectionLabel','drilldownHeading','drilldownTableWrap','detailDrawer','detailDrawerTitle','detailDrawerSubtitle','detailDrawerBadge','detailDrawerContent','detailDrawerClose','detailDrawerBackdrop','tpsModal','tpsModalTitle','tpsModalSubtitle','tpsModalContent','tpsModalClose','tpsModalBackdrop'].forEach((id) => { dom[id] = document.getElementById(id); });
             }
 
             function bindEvents() {
@@ -237,14 +321,14 @@
                     }
                     window.location.href = url.toString();
                 });
-                dom.dapilSelect?.addEventListener('change', () => { state.currentDapil = dom.dapilSelect.value; state.currentKecamatan = state.currentDapil === DEFAULT_FOCUS_DAPIL ? DEFAULT_FOCUS_KECAMATAN : ''; state.currentDesa = ''; render(); });
-                dom.kecamatanSelect?.addEventListener('change', () => { state.currentKecamatan = dom.kecamatanSelect.value; state.currentDesa = ''; render(); });
-                dom.desaSelect?.addEventListener('change', () => { state.currentDesa = dom.desaSelect.value; render(); });
+                dom.dapilSelect?.addEventListener('change', () => { state.currentDapil = dom.dapilSelect.value; state.currentKecamatan = state.currentDapil === DEFAULT_FOCUS_DAPIL ? DEFAULT_FOCUS_KECAMATAN : ''; state.currentDesa = ''; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; render(); });
+                dom.kecamatanSelect?.addEventListener('change', () => { state.currentKecamatan = dom.kecamatanSelect.value; state.currentDesa = ''; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; render(); });
+                dom.desaSelect?.addEventListener('change', () => { state.currentDesa = dom.desaSelect.value; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; render(); });
                 if (dom.statusSelect) {
                     dom.statusSelect.value = state.currentStatus;
                     dom.statusSelect.addEventListener('change', () => { state.currentStatus = dom.statusSelect.value; render(); });
                 }
-                dom.resetFilterBtn?.addEventListener('click', () => { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = ''; state.currentStatus = ''; state.searchKeyword = ''; dom.dapilSelect.value = DEFAULT_FOCUS_DAPIL; dom.kecamatanSelect.value = DEFAULT_FOCUS_KECAMATAN; dom.statusSelect.value = ''; dom.searchInput.value = ''; render(); });
+                dom.resetFilterBtn?.addEventListener('click', () => { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = ''; state.currentStatus = ''; state.searchKeyword = ''; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = DEFAULT_FOCUS_DAPIL; dom.kecamatanSelect.value = DEFAULT_FOCUS_KECAMATAN; dom.statusSelect.value = ''; dom.searchInput.value = ''; render(); });
                 dom.tpsFileInput?.addEventListener('change', handleTpsUpload);
                 dom.dptFileInput?.addEventListener('change', handleDptUpload);
                 dom.breadcrumbHome?.addEventListener('click', resetScope);
@@ -252,6 +336,8 @@
                 dom.breadcrumbKecamatan?.addEventListener('click', () => { if (!state.currentKecamatan) return; state.currentDesa = ''; render(); });
                 dom.detailDrawerClose?.addEventListener('click', closeDetailDrawer);
                 dom.detailDrawerBackdrop?.addEventListener('click', closeDetailDrawer);
+                dom.tpsModalClose?.addEventListener('click', closeTpsModal);
+                dom.tpsModalBackdrop?.addEventListener('click', closeTpsModal);
                 window.addEventListener('resize', syncTopPanelHeights);
             }
 
@@ -430,13 +516,16 @@
                     gen_x: numberValue(row.gen_x),
                     boomer: numberValue(row.boomer),
                     age_unknown: numberValue(row.age_unknown),
-                    tpsSet: { size: numberValue(row.tps_count) },
+                    tpsSet: { size: numberValue(row.tps_count), list: row.tps_list || [] },
                     pksVotes: numberValue(row.pks_votes),
                     share: Number(row.share || 0),
                     rank: numberValue(row.rank || 99),
                     status: row.status || 'ZONA BERAT',
                     topCandidate: row.top_candidate || null,
                     partyRows: row.party_rows || [],
+                    rivalParty: row.rival_party || null,
+                    rivalVotes: numberValue(row.rival_votes),
+                    rivalShare: Number(row.rival_share || 0),
                 };
             }
 
@@ -584,13 +673,13 @@
                 return 'ZONA BERAT';
             }
 
-            function getVisibleVillages(dapilObj = null) {
+            function getVisibleVillages(dapilObj = null, ignoreDesaFilter = false) {
                 const dapilObjects = state.currentDapil ? [state.dataset.get(state.currentDapil)].filter(Boolean) : Array.from(state.dataset.values());
                 let villages = dapilObjects.flatMap((entry) => Array.from(entry.desaMap.values()));
                 if (dapilObj && !state.currentDapil) villages = Array.from(dapilObj.desaMap.values());
                 return villages.filter((village) => {
                     if (state.currentKecamatan && village.district !== state.currentKecamatan) return false;
-                    if (state.currentDesa && village.key !== state.currentDesa) return false;
+                    if (!ignoreDesaFilter && state.currentDesa && village.key !== state.currentDesa) return false;
                     if (state.currentStatus && village.analytics.status !== state.currentStatus) return false;
                     if (state.searchKeyword) {
                         const keyword = normalizeKey(state.searchKeyword);
@@ -797,6 +886,7 @@
                         share: analytics.share,
                         status: analytics.status,
                         rank: analytics.rank,
+                        partyRows: analytics.partyRows,
                     };
                 }).sort((a, b) => b.pksVotes - a.pksVotes || compareNatural(a.key, b.key));
             }
@@ -848,6 +938,7 @@
                 renderStatusDashboard(scopeData.statusRows);
                 renderMapSection(scopeData);
                 renderVillageDetail(scopeData);
+                renderVillageList(scopeData);
                 renderDrilldownTable(scopeData.drilldownRows, scopeData.level);
             }
 
@@ -888,6 +979,27 @@
                 dom.cardDpt.innerHTML = renderSummaryCard({ label: 'Total DPT', value: formatNumber(dptScope.totalDpt), subtext: `${formatNumber(scopeData.scopeAnalytics.totalTps)} TPS · ${formatNumber(scopeData.visibleVillages.length)} desa`, icon: '👥' });
                 dom.cardSuaraSah.innerHTML = renderSummaryCard({ label: 'Suara Sah', value: formatNumber(scopeData.scopeAnalytics.totalVotes), subtext: `Partisipasi ${formatPercent(participation)}`, icon: '📊' });
                 dom.cardPks.innerHTML = renderSummaryCard({ label: 'Suara PKS', value: formatNumber(scopeData.scopeAnalytics.pksVotes), subtext: `${formatPercent(scopeData.scopeAnalytics.share)} suara sah · peringkat ${scopeData.scopeAnalytics.rank}`, icon: '⭐', invert: true });
+
+                let totalRw = 0;
+                let filledRw = 0;
+                scopeData.visibleVillages.forEach((village) => {
+                    const dptVillage = getDptVillage(village);
+                    if (dptVillage) {
+                        const rwRows = dptVillage.rwRows || (dptVillage.rwMap ? Array.from(dptVillage.rwMap.values()) : []);
+                        rwRows.forEach((rwRow) => {
+                            totalRw++;
+                            const mapKey = `${village.district.toUpperCase()}|${village.village.toUpperCase()}|${(rwRow.rw || '').trim().toUpperCase()}`;
+                            const completion = state.profilRwMap[mapKey];
+                            if (completion !== undefined && completion >= 0) {
+                                filledRw++;
+                            }
+                        });
+                    }
+                });
+                const pctFilled = totalRw > 0 ? (filledRw / totalRw) : 0;
+                if (dom.cardProfilRw) {
+                    dom.cardProfilRw.innerHTML = renderSummaryCard({ label: 'Pengisian Profil RW', value: `${formatNumber(filledRw)} / ${formatNumber(totalRw)} RW`, subtext: `${formatPercent(pctFilled)} RW terisi profil`, icon: '📝' });
+                }
             }
 
             function renderDapilChart(rows) {
@@ -925,17 +1037,18 @@
             }
 
             function renderMapSection(scopeData) {
-                const mapHtml = renderMap(scopeData.visibleVillages);
-                const calegHtml = renderCalegPanel(scopeData);
-                dom.inlineMapWrap.innerHTML = mapHtml;
-                dom.mapAndCalegWrap.innerHTML = scopeData.level === 'dapil' ? `<div style="display:grid;grid-template-columns:minmax(0,1fr);gap:12px;">${calegHtml}</div>` : '';
+                dom.inlineMapWrap.innerHTML = renderMap(scopeData.visibleVillages);
                 syncTopPanelHeights();
                 document.querySelectorAll('[data-map-marker]').forEach((marker) => marker.addEventListener('click', () => { const village = findVillageByKey(marker.dataset.mapMarker); if (village) { selectVillage(village); } }));
             }
 
+            function renderVillageDetailPlaceholder() {
+                return `<div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#71717a;box-sizing:border-box;height:100%;"><div style="width:48px;height:48px;border-radius:50%;background:#fff7f1;color:#fe5000;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:24px;">📍</div><div style="font-size:14px;font-weight:600;color:#1f2937;margin-bottom:6px;">Pilih Wilayah</div><div style="font-size:12px;color:#6b7280;max-width:240px;line-height:1.5;">Pilih desa/kelurahan dari peta sebaran atau daftar di samping untuk melihat rincian suara, DPT, dan breakdown wilayah RT/RW.</div></div>`;
+            }
+
             function renderVillageDetail(scopeData) {
                 if (scopeData.level !== 'desa' || !scopeData.selectedVillage) {
-                    dom.villageDetailWrap.innerHTML = '';
+                    dom.villageDetailWrap.innerHTML = renderVillageDetailPlaceholder();
                     closeDetailDrawer(true);
                     return;
                 }
@@ -959,9 +1072,81 @@
                 });
 
                 dom.villageDetailWrap.querySelectorAll('[data-detail-open]').forEach((button) => {
+                    button.addEventListener('click', async () => {
+                        const type = button.dataset.detailType;
+                        const key = button.dataset.detailOpen;
+                        state.detailDrawer = { type, key };
+                        
+                        if (type === 'rw') {
+                            const row = findDetailRow(dptScopeData, state.detailDrawer);
+                            if (row) {
+                                await loadProfilRwData(row.district, row.village, row.rw, dptScopeData, scopeData.scopeAnalytics.status, program);
+                            }
+                        } else {
+                            renderDetailDrawer(dptScopeData, scopeData.scopeAnalytics.status, program);
+                        }
+                    });
+                });
+
+                dom.villageDetailWrap.querySelectorAll('[data-tps-info-open]').forEach((button) => {
                     button.addEventListener('click', () => {
-                        state.detailDrawer = { type: button.dataset.detailType, key: button.dataset.detailOpen };
-                        renderDetailDrawer(dptScopeData, scopeData.scopeAnalytics.status, program);
+                        const rowKey = button.dataset.tpsInfoOpen;
+                        const type = button.dataset.detailType;
+                        const rows = type === 'rw' ? dptScopeData.rwRows : dptScopeData.rtRows;
+                        const row = rows.find(r => r.key === rowKey);
+                        if (row) {
+                            openTpsModal(row, scopeData.selectedVillage);
+                        }
+                    });
+                });
+
+                dom.villageDetailWrap.querySelectorAll('[data-rw-status-chip]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const next = button.getAttribute('data-rw-status-chip') || '';
+                        state.rwStatusFilter = state.rwStatusFilter === next ? '' : next;
+                        state.rwPage = 1;
+                        renderVillageDetail(scopeData);
+                    });
+                });
+
+                dom.villageDetailWrap.querySelectorAll('[data-rt-status-chip]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const next = button.getAttribute('data-rt-status-chip') || '';
+                        state.rtStatusFilter = state.rtStatusFilter === next ? '' : next;
+                        state.rtPage = 1;
+                        renderVillageDetail(scopeData);
+                    });
+                });
+
+                dom.villageDetailWrap.querySelectorAll('[data-rw-prev]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        if (state.rwPage > 1) {
+                            state.rwPage -= 1;
+                            renderVillageDetail(scopeData);
+                        }
+                    });
+                });
+
+                dom.villageDetailWrap.querySelectorAll('[data-rw-next]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        state.rwPage += 1;
+                        renderVillageDetail(scopeData);
+                    });
+                });
+
+                dom.villageDetailWrap.querySelectorAll('[data-rt-prev]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        if (state.rtPage > 1) {
+                            state.rtPage -= 1;
+                            renderVillageDetail(scopeData);
+                        }
+                    });
+                });
+
+                dom.villageDetailWrap.querySelectorAll('[data-rt-next]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        state.rtPage += 1;
+                        renderVillageDetail(scopeData);
                     });
                 });
 
@@ -970,50 +1155,321 @@
 
             function renderVillageTabs(scopeData, dptScopeData, program) {
                 if (!dptScopeData.available) {
-                    return `<div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;font-size:12px;color:#666;">Data DPT belum tersedia untuk desa ini. Upload file DPT via menu Sumber Data untuk membuka breakdown RW/RT.</div>`;
+                    return `<div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;height:100%;box-sizing:border-box;overflow:hidden;"><div style="flex:0 0 auto;">
+                        <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Analisis Wilayah Detail</div>
+                        <div style="font-size:14px;color:#1a1a1a;font-weight:500;margin-top:2px;">${escapeHtml(scopeData.selectedVillage.label)} · ${escapeHtml(scopeData.selectedVillage.districtLabel)}</div>
+                    </div><div style="flex:1;overflow-y:auto;font-size:12px;color:#666;padding:10px;background:#f8fafc;border-radius:8px;border:0.5px solid #e2e8f0;display:flex;align-items:center;justify-content:center;text-align:center;">Data DPT belum tersedia untuk desa ini. Upload file DPT via menu Sumber Data untuk membuka breakdown RW/RT.</div></div>`;
                 }
 
                 const summaryCards = [
-                    { label: 'DPT Wilayah', value: formatNumber(dptScopeData.totalDpt) },
-                    { label: 'TPS Cocok', value: `${formatNumber(dptScopeData.matchedTps)} / ${formatNumber(dptScopeData.totalScopeTps)}` },
-                    { label: 'Estimasi PKS', value: `~${formatNumber(scopeData.scopeAnalytics.pksVotes)}` },
-                    { label: 'RW Terbaca', value: formatNumber(dptScopeData.rwRows.length) },
-                    { label: 'RT Terbaca', value: formatNumber(dptScopeData.rtRows.length) },
+                    { label: 'DPT Desa', value: formatNumber(dptScopeData.totalDpt) },
+                    { label: 'DPT Terpetakan', value: formatNumber(dptScopeData.mappedDpt) },
+                    { label: 'RW Terpetakan', value: `${formatNumber(dptScopeData.mappedRwCount)} / ${formatNumber(dptScopeData.totalRwCount)}` },
+                    { label: 'RT Terpetakan', value: `${formatNumber(dptScopeData.mappedRtCount)} / ${formatNumber(dptScopeData.totalRtCount)}` },
+                    { label: 'TPS Terpetakan', value: `${formatNumber(dptScopeData.mappedTpsCount)} / ${formatNumber(dptScopeData.totalTpsCount)}` },
                     { label: 'TPS Missing', value: formatNumber(dptScopeData.missingTps) },
                 ];
 
-                return `<div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:grid;gap:14px;">
-                    <div>
-                        <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Analisis Wilayah Detail</div>
-                        <div style="font-size:14px;color:#1a1a1a;font-weight:500;margin-top:2px;">${escapeHtml(scopeData.selectedVillage.label)} · ${escapeHtml(scopeData.selectedVillage.districtLabel)}</div>
+                return `<div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;height:100%;box-sizing:border-box;overflow:hidden;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex:0 0 auto;position:relative;">
+                        <div>
+                            <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Analisis Wilayah Detail</div>
+                            <div style="font-size:14px;color:#1a1a1a;font-weight:500;margin-top:2px;">${escapeHtml(scopeData.selectedVillage.label)} · ${escapeHtml(scopeData.selectedVillage.districtLabel)}</div>
+                        </div>
+                        <div style="position:relative;">
+                            <button type="button" id="metricsInfoBtn" style="width:24px;height:24px;border-radius:50%;border:0.5px solid #fe5000;background:#fff7f1;color:#fe5000;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:700;transition:all 0.15s;padding:0;line-height:1;" title="Info Metrik" onmouseover="document.getElementById('metricsInfoPopover').style.display='block'" onmouseout="document.getElementById('metricsInfoPopover').style.display='none'">
+                                ⓘ
+                            </button>
+                            <div id="metricsInfoPopover" style="display:none;position:absolute;top:30px;right:0;width:300px;background:white;border:0.5px solid #e5e5e5;border-radius:10px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);padding:14px;z-index:9999;box-sizing:border-box;">
+                                <div style="font-size:12px;font-weight:700;color:#fe5000;margin-bottom:8px;border-bottom:1px solid #fee2d5;padding-bottom:4px;text-align:left;">Definisi & Asal Metrik</div>
+                                <div style="display:grid;gap:8px;font-size:11px;color:#4b5563;line-height:1.4;text-align:left;">
+                                    <div><strong style="color:#1f2937;">1. Estimasi PKS:</strong> Perkiraan suara PKS di wilayah RT/RW, dihitung secara proporsional berdasarkan sebaran alamat DPT pemilih yang terdaftar di masing-masing TPS.</div>
+                                    <div><strong style="color:#1f2937;">2. Share:</strong> Persentase suara PKS dibandingkan dengan total suara sah yang masuk di wilayah RT/RW tersebut.</div>
+                                    <div><strong style="color:#1f2937;">3. Rival Terkuat:</strong> Partai non-PKS dengan perolehan suara tertinggi di wilayah tersebut.</div>
+                                    <div><strong style="color:#1f2937;">4. Selisih (Gap):</strong> Selisih persentase suara PKS dengan partai rival terkuat (+ hijau jika PKS unggul, - merah jika tertinggal).</div>
+                                    <div><strong style="color:#1f2937;">5. TPS Terlibat:</strong> Jumlah TPS yang pemilihnya (berdasarkan DPT) terdaftar di wilayah RT/RW ini.</div>
+                                    <div><strong style="color:#1f2937;">6. Status:</strong> Kategori prioritas wilayah (Jaga Kuat, Amankan, Rebut Realistis, Garap Intensif, Zona Berat) berdasarkan perolehan suara, rank, dan selisih (gap) dengan rival.</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                    <div style="display:flex;gap:4px;flex-wrap:wrap;flex:0 0 auto;">
                         ${['summary','rw','rt','demography','program'].map((tab) => `<button type="button" class="tab-btn ${state.activeVillageTab === tab ? 'active' : ''}" data-village-tab="${tab}">${tab === 'summary' ? 'Ringkasan' : (tab === 'rw' ? 'RW' : (tab === 'rt' ? 'RT' : (tab === 'demography' ? 'Demografi' : 'Program')))}</button>`).join('')}
                     </div>
-                    <div class="tab-pane ${state.activeVillageTab === 'summary' ? 'active' : ''}" style="display:${state.activeVillageTab === 'summary' ? 'block' : 'none'};">
-                        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">${summaryCards.map((item) => `<div style="background:#fafafa;border-radius:8px;padding:10px;"><div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.6px;">${item.label}</div><div style="font-size:16px;color:#1a1a1a;font-weight:500;margin-top:5px;">${item.value}</div></div>`).join('')}</div>
-                        <div style="margin-top:12px;font-size:11px;color:#666;line-height:1.6;">${escapeHtml(statusConfig[scopeData.scopeAnalytics.status]?.description || '')}</div>
+                    <div style="flex:1 1 auto;overflow-y:auto;min-height:0;padding-right:4px;">
+                        <div class="tab-pane ${state.activeVillageTab === 'summary' ? 'active' : ''}" style="display:${state.activeVillageTab === 'summary' ? 'block' : 'none'};">
+                            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">${summaryCards.map((item) => `<div style="background:#fafafa;border-radius:8px;padding:10px;"><div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.6px;">${item.label}</div><div style="font-size:16px;color:#1a1a1a;font-weight:500;margin-top:5px;">${item.value}</div></div>`).join('')}</div>
+                            <div style="margin-top:12px;font-size:11px;color:#666;line-height:1.6;">${escapeHtml(statusConfig[scopeData.scopeAnalytics.status]?.description || '')}</div>
+                        </div>
+                        <div class="tab-pane ${state.activeVillageTab === 'rw' ? 'active' : ''}" style="display:${state.activeVillageTab === 'rw' ? 'block' : 'none'};">${renderRwTable(dptScopeData.rwRows)}</div>
+                        <div class="tab-pane ${state.activeVillageTab === 'rt' ? 'active' : ''}" style="display:${state.activeVillageTab === 'rt' ? 'block' : 'none'};">${renderRtTable(dptScopeData.rtRows)}</div>
+                        <div class="tab-pane ${state.activeVillageTab === 'demography' ? 'active' : ''}" style="display:${state.activeVillageTab === 'demography' ? 'block' : 'none'};">${renderVillageDemography(dptScopeData)}</div>
+                        <div class="tab-pane ${state.activeVillageTab === 'program' ? 'active' : ''}" style="display:${state.activeVillageTab === 'program' ? 'block' : 'none'};">${renderProgramPane(program, dptScopeData)}</div>
                     </div>
-                    <div class="tab-pane ${state.activeVillageTab === 'rw' ? 'active' : ''}" style="display:${state.activeVillageTab === 'rw' ? 'block' : 'none'};">${renderRwTable(dptScopeData.rwRows)}</div>
-                    <div class="tab-pane ${state.activeVillageTab === 'rt' ? 'active' : ''}" style="display:${state.activeVillageTab === 'rt' ? 'block' : 'none'};">${renderRtTable(dptScopeData.rtRows)}</div>
-                    <div class="tab-pane ${state.activeVillageTab === 'demography' ? 'active' : ''}" style="display:${state.activeVillageTab === 'demography' ? 'block' : 'none'};">${renderVillageDemography(dptScopeData)}</div>
-                    <div class="tab-pane ${state.activeVillageTab === 'program' ? 'active' : ''}" style="display:${state.activeVillageTab === 'program' ? 'block' : 'none'};">${renderProgramPane(program, dptScopeData)}</div>
                 </div>`;
             }
 
+            function getTpsList(tpsSet) {
+                if (!tpsSet) return [];
+                if (tpsSet instanceof Set) {
+                    return Array.from(tpsSet);
+                }
+                if (Array.isArray(tpsSet.list)) {
+                    return tpsSet.list;
+                }
+                return [];
+            }
+
+            function openTpsModal(row, selectedVillage) {
+                if (!dom.tpsModal || !dom.tpsModalContent) return;
+                
+                dom.tpsModalTitle.textContent = row.type === 'rw' 
+                    ? `RW ${row.rw} - ${row.village}`
+                    : `RT ${row.rt} / RW ${row.rw} - ${row.village}`;
+                
+                const tpsList = getTpsList(row.tpsSet);
+                dom.tpsModalSubtitle.textContent = `${row.district} · ${tpsList.length} TPS Terlibat`;
+                
+                let tpsRows = [];
+                if (selectedVillage) {
+                    const villageTpsList = Array.isArray(selectedVillage.tpsRows) 
+                        ? selectedVillage.tpsRows 
+                        : (selectedVillage.tpsMap ? Array.from(selectedVillage.tpsMap.values()) : []);
+                    tpsRows = villageTpsList.filter(t => tpsList.includes(t.label));
+                }
+                
+                const displayTps = tpsRows;
+                
+                const pageSize = 10;
+                const totalItems = displayTps.length;
+                const totalPages = Math.ceil(totalItems / pageSize) || 1;
+                if (state.tpsPage > totalPages) state.tpsPage = totalPages;
+                if (state.tpsPage < 1) state.tpsPage = 1;
+                
+                const pageTps = displayTps.slice((state.tpsPage - 1) * pageSize, state.tpsPage * pageSize);
+                
+                const bodyHtml = pageTps.map(t => `
+                    <tr>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#1a1a1a;font-weight:600;">${escapeHtml(t.label)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatNumber(t.totalVotes ?? t.total_votes)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#fe5000;font-weight:600;font-variant-numeric:tabular-nums;">${formatNumber(t.pksVotes ?? t.pks_votes)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatPercent(t.share)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">Rank ${formatNumber(t.rank)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;">${renderStatusPill(t.status)}</td>
+                    </tr>
+                `).join('');
+                
+                const paginationHtml = renderPagination(state.tpsPage, totalItems, pageSize, 'data-tps');
+                
+                const html = `
+                    <div style="overflow:auto;border:0.5px solid #e5e5e5;border-radius:10px 10px 0 0;">
+                        <table style="width:100%;border-collapse:collapse;background:white;">
+                            <thead>
+                                <tr style="background:#fafafa;">
+                                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">No TPS</th>
+                                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">DPT / Suara Sah</th>
+                                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Suara PKS</th>
+                                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">% PKS</th>
+                                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Rank PKS</th>
+                                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${bodyHtml || '<tr><td colspan="6" style="padding:18px;text-align:center;font-size:12px;color:#888;">Belum ada data TPS cocok.</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                    ${paginationHtml}
+                `;
+                
+                dom.tpsModalContent.innerHTML = html;
+                dom.tpsModal.style.display = 'flex';
+                dom.tpsModalBackdrop.style.display = 'block';
+                
+                dom.tpsModalContent.querySelectorAll('[data-tps-prev]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (state.tpsPage > 1) {
+                            state.tpsPage -= 1;
+                            openTpsModal(row, selectedVillage);
+                        }
+                    });
+                });
+                
+                dom.tpsModalContent.querySelectorAll('[data-tps-next]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        state.tpsPage += 1;
+                        openTpsModal(row, selectedVillage);
+                    });
+                });
+            }
+
+            function closeTpsModal() {
+                if (!dom.tpsModal) return;
+                dom.tpsModal.style.display = 'none';
+                dom.tpsModalBackdrop.style.display = 'none';
+            }
+
+            function getCompetitorData(row) {
+                if (row.rivalParty !== undefined && row.rivalParty !== null) {
+                    return {
+                        rivalParty: row.rivalParty,
+                        rivalVotes: row.rivalVotes || 0,
+                        rivalShare: row.rivalShare || 0.0
+                    };
+                }
+                const partyRows = row.partyRows || (row.analytics && row.analytics.partyRows);
+                if (Array.isArray(partyRows) && partyRows.length > 0) {
+                    const nonPks = partyRows
+                        .filter(pr => String(pr.party_id) !== PKS_PARTY_ID && String(pr.party_name).toUpperCase() !== 'PKS')
+                        .sort((a, b) => (b.votes || 0) - (a.votes || 0));
+                    
+                    if (nonPks.length > 0) {
+                        return {
+                            rivalParty: nonPks[0].party_name || nonPks[0].party_id,
+                            rivalVotes: nonPks[0].votes || 0,
+                            rivalShare: nonPks[0].share || 0.0
+                        };
+                    }
+                }
+                return { rivalParty: null, rivalVotes: 0, rivalShare: 0.0 };
+            }
+
+            function getTopParties(row) {
+                if (Array.isArray(row.partyRows) && row.partyRows.length > 0) {
+                    return row.partyRows.map(pr => ({
+                        partyName: pr.party_name || pr.party_id,
+                        votes: pr.votes || 0,
+                        share: pr.share || 0.0
+                    }));
+                }
+                return [];
+            }
+
             function renderRwTable(rows) {
-                const limitedRows = rows.slice(0, 25);
+                const rwCounts = rows.reduce((acc, r) => {
+                    acc.all += 1;
+                    acc[r.status] = (acc[r.status] || 0) + 1;
+                    return acc;
+                }, { all: 0, 'JAGA KUAT': 0, 'AMANKAN': 0, 'REBUT REALISTIS': 0, 'GARAP INTENSIF': 0, 'ZONA BERAT': 0 });
+
+                const displayRows = state.rwStatusFilter 
+                    ? rows.filter((r) => r.status === state.rwStatusFilter)
+                    : rows;
+
+                const pageSize = 10;
+                const totalItems = displayRows.length;
+                const totalPages = Math.ceil(totalItems / pageSize) || 1;
+                if (state.rwPage > totalPages) state.rwPage = totalPages;
+                if (state.rwPage < 1) state.rwPage = 1;
+
+                const pageRows = displayRows.slice((state.rwPage - 1) * pageSize, state.rwPage * pageSize);
+
+                const rwStatusFilterHtml = `
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                        ${renderStatusFilterChip('', 'Semua', rwCounts.all || 0, state.rwStatusFilter === '', '#9ca3af', 'data-rw-status-chip')}
+                        ${renderStatusFilterChip('JAGA KUAT', 'Jaga Kuat', rwCounts['JAGA KUAT'] || 0, state.rwStatusFilter === 'JAGA KUAT', '#15803d', 'data-rw-status-chip')}
+                        ${renderStatusFilterChip('AMANKAN', 'Amankan', rwCounts['AMANKAN'] || 0, state.rwStatusFilter === 'AMANKAN', '#65a30d', 'data-rw-status-chip')}
+                        ${renderStatusFilterChip('REBUT REALISTIS', 'Rebut Realistis', rwCounts['REBUT REALISTIS'] || 0, state.rwStatusFilter === 'REBUT REALISTIS', '#2563eb', 'data-rw-status-chip')}
+                        ${renderStatusFilterChip('GARAP INTENSIF', 'Garap Intensif', rwCounts['GARAP INTENSIF'] || 0, state.rwStatusFilter === 'GARAP INTENSIF', '#d97706', 'data-rw-status-chip')}
+                        ${renderStatusFilterChip('ZONA BERAT', 'Zona Berat', rwCounts['ZONA BERAT'] || 0, state.rwStatusFilter === 'ZONA BERAT', '#6b7280', 'data-rw-status-chip')}
+                    </div>
+                `;
+
                 const note = `<div style="font-size:11px;color:#666;margin-bottom:10px;">Angka PKS pada tabel ini adalah estimasi hasil distribusi suara TPS ke level RW berdasarkan proporsi DPT wilayah.</div>`;
-                const body = limitedRows.map((row) => `<tr><td style="padding:9px;border-bottom:0.5px solid #eee;">RW ${escapeHtml(row.rw)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${escapeHtml(row.village)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${formatNumber(row.totalDpt)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;color:#fe5000;font-weight:500;">~${formatNumber(row.pksVotes)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${formatPercent(row.share)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${formatNumber(row.tpsSet.size)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${renderStatusPill(row.status)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;"><button type="button" data-detail-open="${escapeHtml(row.key)}" data-detail-type="rw" style="padding:5px 10px;border-radius:6px;border:0.5px solid #e5e5e5;background:white;cursor:pointer;">Buka</button></td></tr>`).join('');
-                const footer = rows.length > limitedRows.length ? `<div style="margin-top:8px;font-size:11px;color:#666;">Tampilkan semua (${formatNumber(rows.length)} rows) belum diaktifkan, saat ini menampilkan 25 teratas.</div>` : '';
-                return `${note}<div style="overflow:auto;border:0.5px solid #e5e5e5;border-radius:10px;"><table style="width:100%;border-collapse:collapse;background:white;"><thead><tr style="background:#fafafa;"><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">RW</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Desa</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">DPT Wilayah</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Estimasi PKS</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Share</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">TPS Terlibat</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Status</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Detail</th></tr></thead><tbody>${body || '<tr><td colspan="8" style="padding:18px;text-align:center;font-size:12px;color:#888;">Belum ada data RW.</td></tr>'}</tbody></table></div>${footer}`;
+                
+                const body = pageRows.map((row) => {
+                    const comp = getCompetitorData(row);
+                    const gap = row.share - (comp.rivalShare || 0);
+                    const gapText = gap >= 0 ? `+${formatPercent(gap)}` : `${formatPercent(gap)}`;
+                    const gapColor = gap >= 0 ? '#16a34a' : '#dc2626';
+                    const rivalText = comp.rivalParty 
+                        ? `${renderPartyBadge(comp.rivalParty)}<span style="font-size:11px;color:#666;font-weight:400;margin-left:4px;">(~${formatNumber(comp.rivalVotes)})</span>` 
+                        : '-';
+                    
+                    const mapKey = `${(row.district || '').trim().toUpperCase()}|${(row.village || '').trim().toUpperCase()}|${(row.rw || '').trim().toUpperCase()}`;
+                    const completion = state.profilRwMap[mapKey];
+                    const isianHtml = completion !== undefined
+                        ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:${completion >= 80 ? '#dcfce7' : '#fff7f1'};color:${completion >= 80 ? '#14532d' : '#d97706'};font-size:11px;font-weight:600;">${completion}%</span>`
+                        : `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:#f5f5f5;color:#6b7280;font-size:11px;font-weight:500;">Belum Isi</span>`;
+
+                    return `<tr>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#1a1a1a;font-weight:600;">RW ${escapeHtml(row.rw)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;">${escapeHtml(row.village)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatNumber(row.totalDpt)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;color:#fe5000;font-weight:600;font-size:12px;font-variant-numeric:tabular-nums;">~${formatNumber(row.pksVotes)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatPercent(row.share)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;white-space:nowrap;"><div style="display:inline-flex;align-items:center;">${rivalText}</div></td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;font-weight:600;color:${gapColor};font-variant-numeric:tabular-nums;">${gapText}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatNumber(row.tpsSet.size)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;">${renderStatusPill(row.status)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;">${isianHtml}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;white-space:nowrap;"><button type="button" data-detail-open="${escapeHtml(row.key)}" data-detail-type="rw" style="padding:5px 12px;border-radius:6px;border:0.5px solid #fe5000;background:white;color:#fe5000;font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#fff7f1'" onmouseout="this.style.background='white'">Profil</button><button type="button" data-tps-info-open="${escapeHtml(row.key)}" data-detail-type="rw" style="padding:5px 12px;border-radius:6px;border:0.5px solid #2563eb;background:white;color:#2563eb;font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;margin-left:4px;" onmouseover="this.style.background='#f0f5ff'" onmouseout="this.style.background='white'">Info TPS</button></td>
+                    </tr>`;
+                }).join('');
+                
+                const paginationHtml = renderPagination(state.rwPage, totalItems, pageSize, 'data-rw');
+
+                return `${rwStatusFilterHtml}${note}<div style="overflow:auto;border:0.5px solid #e5e5e5;border-radius:10px 10px 0 0;"><table style="width:100%;border-collapse:collapse;background:white;"><thead><tr style="background:#fafafa;"><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">RW</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Desa</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">DPT Wilayah</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Estimasi PKS</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Share</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Rival Terkuat</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Selisih (Gap)</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">TPS Terlibat</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Status</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Isian Profil</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Aksi</th></tr></thead><tbody>${body || '<tr><td colspan="11" style="padding:18px;text-align:center;font-size:12px;color:#888;">Belum ada data RW.</td></tr>'}</tbody></table></div>${paginationHtml}`;
             }
 
             function renderRtTable(rows) {
-                const limitedRows = rows.slice(0, 30);
+                const rtCounts = rows.reduce((acc, r) => {
+                    acc.all += 1;
+                    acc[r.status] = (acc[r.status] || 0) + 1;
+                    return acc;
+                }, { all: 0, 'JAGA KUAT': 0, 'AMANKAN': 0, 'REBUT REALISTIS': 0, 'GARAP INTENSIF': 0, 'ZONA BERAT': 0 });
+
+                const displayRows = state.rtStatusFilter 
+                    ? rows.filter((r) => r.status === state.rtStatusFilter)
+                    : rows;
+
+                const pageSize = 10;
+                const totalItems = displayRows.length;
+                const totalPages = Math.ceil(totalItems / pageSize) || 1;
+                if (state.rtPage > totalPages) state.rtPage = totalPages;
+                if (state.rtPage < 1) state.rtPage = 1;
+
+                const pageRows = displayRows.slice((state.rtPage - 1) * pageSize, state.rtPage * pageSize);
+
+                const rtStatusFilterHtml = `
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                        ${renderStatusFilterChip('', 'Semua', rtCounts.all || 0, state.rtStatusFilter === '', '#9ca3af', 'data-rt-status-chip')}
+                        ${renderStatusFilterChip('JAGA KUAT', 'Jaga Kuat', rtCounts['JAGA KUAT'] || 0, state.rtStatusFilter === 'JAGA KUAT', '#15803d', 'data-rt-status-chip')}
+                        ${renderStatusFilterChip('AMANKAN', 'Amankan', rtCounts['AMANKAN'] || 0, state.rtStatusFilter === 'AMANKAN', '#65a30d', 'data-rt-status-chip')}
+                        ${renderStatusFilterChip('REBUT REALISTIS', 'Rebut Realistis', rtCounts['REBUT REALISTIS'] || 0, state.rtStatusFilter === 'REBUT REALISTIS', '#2563eb', 'data-rt-status-chip')}
+                        ${renderStatusFilterChip('GARAP INTENSIF', 'Garap Intensif', rtCounts['GARAP INTENSIF'] || 0, state.rtStatusFilter === 'GARAP INTENSIF', '#d97706', 'data-rt-status-chip')}
+                        ${renderStatusFilterChip('ZONA BERAT', 'Zona Berat', rtCounts['ZONA BERAT'] || 0, state.rtStatusFilter === 'ZONA BERAT', '#6b7280', 'data-rt-status-chip')}
+                    </div>
+                `;
+
                 const note = `<div style="font-size:11px;color:#666;margin-bottom:10px;">Urutan RT menggunakan estimasi kekuatan PKS dari distribusi suara TPS menurut proporsi DPT wilayah RT.</div>`;
-                const body = limitedRows.map((row) => `<tr><td style="padding:9px;border-bottom:0.5px solid #eee;">RT ${escapeHtml(row.rt)} / RW ${escapeHtml(row.rw)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${escapeHtml(row.village)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${formatNumber(row.totalDpt)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;color:#fe5000;font-weight:500;">~${formatNumber(row.pksVotes)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${formatNumber(row.tpsSet.size)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;">${renderStatusPill(row.status)}</td><td style="padding:9px;border-bottom:0.5px solid #eee;"><button type="button" data-detail-open="${escapeHtml(row.key)}" data-detail-type="rt" style="padding:5px 10px;border-radius:6px;border:0.5px solid #e5e5e5;background:white;cursor:pointer;">Buka</button></td></tr>`).join('');
-                return `${note}<div style="overflow:auto;border:0.5px solid #e5e5e5;border-radius:10px;"><table style="width:100%;border-collapse:collapse;background:white;"><thead><tr style="background:#fafafa;"><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">RT / RW</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Desa</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">DPT Wilayah</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Estimasi PKS</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">TPS</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Status</th><th style="padding:9px;text-align:left;font-size:11px;color:#666;font-weight:500;">Detail</th></tr></thead><tbody>${body || '<tr><td colspan="7" style="padding:18px;text-align:center;font-size:12px;color:#888;">Belum ada data RT.</td></tr>'}</tbody></table></div>`;
+                
+                const body = pageRows.map((row) => {
+                    const comp = getCompetitorData(row);
+                    const gap = row.share - (comp.rivalShare || 0);
+                    const gapText = gap >= 0 ? `+${formatPercent(gap)}` : `${formatPercent(gap)}`;
+                    const gapColor = gap >= 0 ? '#16a34a' : '#dc2626';
+                    const rivalText = comp.rivalParty 
+                        ? `${renderPartyBadge(comp.rivalParty)}<span style="font-size:11px;color:#666;font-weight:400;margin-left:4px;">(~${formatNumber(comp.rivalVotes)})</span>` 
+                        : '-';
+                    
+                    return `<tr>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#1a1a1a;font-weight:600;">RT ${escapeHtml(row.rt)} / RW ${escapeHtml(row.rw)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;">${escapeHtml(row.village)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatNumber(row.totalDpt)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;color:#fe5000;font-weight:600;font-size:12px;font-variant-numeric:tabular-nums;">~${formatNumber(row.pksVotes)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatPercent(row.share)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;white-space:nowrap;"><div style="display:inline-flex;align-items:center;">${rivalText}</div></td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;font-weight:600;color:${gapColor};font-variant-numeric:tabular-nums;">${gapText}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;color:#333;font-variant-numeric:tabular-nums;">${formatNumber(row.tpsSet.size)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;">${renderStatusPill(row.status)}</td>
+                        <td style="padding:10px 12px;border-bottom:0.5px solid #eee;font-size:12px;white-space:nowrap;"><button type="button" data-detail-open="${escapeHtml(row.key)}" data-detail-type="rt" style="padding:5px 12px;border-radius:6px;border:0.5px solid #fe5000;background:white;color:#fe5000;font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#fff7f1'" onmouseout="this.style.background='white'">Profil</button><button type="button" data-tps-info-open="${escapeHtml(row.key)}" data-detail-type="rt" style="padding:5px 12px;border-radius:6px;border:0.5px solid #2563eb;background:white;color:#2563eb;font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;margin-left:4px;" onmouseover="this.style.background='#f0f5ff'" onmouseout="this.style.background='white'">Info TPS</button></td>
+                    </tr>`;
+                }).join('');
+                
+                const paginationHtml = renderPagination(state.rtPage, totalItems, pageSize, 'data-rt');
+
+                return `${rtStatusFilterHtml}${note}<div style="overflow:auto;border:0.5px solid #e5e5e5;border-radius:10px 10px 0 0;"><table style="width:100%;border-collapse:collapse;background:white;"><thead><tr style="background:#fafafa;"><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">RT / RW</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Desa</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">DPT Wilayah</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Estimasi PKS</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Share</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Rival Terkuat</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Selisih (Gap)</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">TPS</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Status</th><th style="padding:10px 12px;text-align:left;font-size:11px;color:#666;font-weight:500;border-bottom:1px solid #e5e5e5;">Aksi</th></tr></thead><tbody>${body || '<tr><td colspan="10" style="padding:18px;text-align:center;font-size:12px;color:#888;">Belum ada data RT.</td></tr>'}</tbody></table></div>${paginationHtml}`;
             }
 
             function renderVillageDemography(dptScopeData) {
@@ -1045,6 +1501,15 @@
                     return;
                 }
 
+                if (state.detailDrawer.type === 'rw' && state.hasLoadedProfilRwKey !== state.detailDrawer.key && !state.isLoadingProfilRw) {
+                    loadProfilRwData(row.district, row.village, row.rw, dptScopeData, villageStatus, program);
+                    return;
+                }
+
+                if (state.isLoadingProfilRw) {
+                    return;
+                }
+
                 const status = statusConfig[row.status] || statusConfig['ZONA BERAT'];
                 const total = Math.max(1, row.totalDpt);
                 const topCandidate = row.topCandidate || getTopPksCandidate(row.partyMap);
@@ -1054,6 +1519,437 @@
                 dom.detailDrawerBadge.style.color = status.text;
                 dom.detailDrawerBadge.querySelector('i').style.background = status.dot;
                 dom.detailDrawerBadge.querySelector('span').textContent = status.label;
+
+                const tipologiLabels = {
+                    'perkampungan': 'Perkampungan',
+                    'campuran': 'Campuran (Kampung + Perumahan)',
+                    'perumahan': 'Perumahan',
+                    'perkotaan': 'Perkotaan',
+                    'pesisir': 'Pesisir / Tambak',
+                    'industri': 'Industri'
+                };
+                const ekonomiLabels = {
+                    'pertanian': 'Pertanian',
+                    'pabrik': 'Pekerja Pabrik / Industri',
+                    'informal': 'Pekerja Informal (Ojol/Freelance)',
+                    'pedagang': 'Pedagang / Wiraswasta',
+                    'pns': 'PNS / Karyawan',
+                    'nelayan': 'Nelayan',
+                    'campuran': 'Campuran'
+                };
+
+                if (state.isEditingProfilRw && state.detailDrawer.type === 'rw') {
+                    const p = state.currentProfilRw || {};
+
+                    let faktorSelect = '';
+                    let faktorDesc = p.faktor_penyebab || '';
+                    if (faktorDesc.startsWith('[')) {
+                        const closeBracketIdx = faktorDesc.indexOf(']');
+                        if (closeBracketIdx !== -1) {
+                            faktorSelect = faktorDesc.substring(1, closeBracketIdx);
+                            faktorDesc = faktorDesc.substring(closeBracketIdx + 1).trim();
+                        }
+                    } else {
+                        // Check if the whole string matches any preset option exactly
+                        const presets = [
+                            'Kekuatan Caleg Lokal',
+                            'Ketokohan Tokoh Agama/Masyarakat',
+                            'Program Kerja & Bantuan Nyata',
+                            'Pragmatisme Politik Uang',
+                            'Keaktifan Kader & Relawan',
+                            'Kurangnya Sosialisasi/Kehadiran',
+                            'Dominasi Partai Lain'
+                        ];
+                        if (presets.includes(faktorDesc.trim())) {
+                            faktorSelect = faktorDesc.trim();
+                            faktorDesc = '';
+                        }
+                    }
+
+                    let strategiSelect = '';
+                    let strategiDesc = p.strategi || '';
+                    if (strategiDesc.startsWith('[')) {
+                        const closeBracketIdx = strategiDesc.indexOf(']');
+                        if (closeBracketIdx !== -1) {
+                            strategiSelect = strategiDesc.substring(1, closeBracketIdx);
+                            strategiDesc = strategiDesc.substring(closeBracketIdx + 1).trim();
+                        }
+                    } else {
+                        const presets = [
+                            'Sapa Warga & Door to Door',
+                            'Penyediaan Layanan Sosial',
+                            'Penguatan Tokoh Kunci',
+                            'Event / Kegiatan Komunitas',
+                            'Kampanye Digital & Media Sosial',
+                            'Penguatan Saksi & Pengawalan Suara'
+                        ];
+                        if (presets.includes(strategiDesc.trim())) {
+                            strategiSelect = strategiDesc.trim();
+                            strategiDesc = '';
+                        }
+                    }
+
+                    dom.detailDrawerContent.innerHTML = `
+                        <form id="profilRwForm" style="display:grid; gap:16px;">
+                            <div id="draftRestoreBanner" style="display:none;background:#fffbeb;border:0.5px solid #d97706;border-radius:8px;padding:10px 12px;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 1px 2px rgba(0,0,0,0.05);margin-bottom:6px;">
+                                <span style="font-size:11px;color:#b45309;font-weight:600;">⚠️ Ada draf pengisian yang belum disimpan.</span>
+                                <div style="display:flex;gap:6px;flex-shrink:0;">
+                                    <button type="button" id="restoreDraftBtn" style="background:#fe5000;color:white;border:none;border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;">Pulihkan</button>
+                                    <button type="button" id="clearDraftBtn" style="background:#e5e7eb;color:#374151;border:none;border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;">Hapus</button>
+                                </div>
+                            </div>
+                            <div style="font-size:12px;font-weight:600;color:#d97706;border-bottom:1.5px solid #fee2d5;padding-bottom:4px;margin-bottom:4px;">PROFIL WILAYAH</div>
+                            
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Tipologi RW</label>
+                                <select name="tipologi" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;">
+                                    <option value="">- Pilih -</option>
+                                    ${Object.entries(tipologiLabels).map(([k, v]) => `<option value="${k}" ${p.tipologi === k ? 'selected' : ''}>${v}</option>`).join('')}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Sumber Ekonomi Dominan</label>
+                                <select name="ekonomi_dominan" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;">
+                                    <option value="">- Pilih -</option>
+                                    ${Object.entries(ekonomiLabels).map(([k, v]) => `<option value="${k}" ${p.ekonomi_dominan === k ? 'selected' : ''}>${v}</option>`).join('')}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Profil Umum Warga</label>
+                                <select name="profil_warga" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;">
+                                    <option value="">- Pilih Profil -</option>
+                                    ${[
+                                        'Agamis & Kondusif',
+                                        'Pragmatis & Transaksional',
+                                        'Nasionalis & Abangan',
+                                        'Heterogen & Individualis',
+                                        'Kritis & Akademis',
+                                        'Buruh & Pekerja'
+                                    ].map(opt => `<option value="${opt}" ${p.profil_warga === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                                </select>
+                            </div>
+
+
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Faktor Penyebab Menang/Kalah</label>
+                                <select name="faktor_penyebab_select" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;margin-bottom:6px;">
+                                    <option value="">- Pilih Faktor Utama -</option>
+                                    ${[
+                                        'Kekuatan Caleg Lokal',
+                                        'Ketokohan Tokoh Agama/Masyarakat',
+                                        'Program Kerja & Bantuan Nyata',
+                                        'Pragmatisme Politik Uang',
+                                        'Keaktifan Kader & Relawan',
+                                        'Kurangnya Sosialisasi/Kehadiran',
+                                        'Dominasi Partai Lain'
+                                    ].map(opt => `<option value="${opt}" ${faktorSelect === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                                </select>
+                                <textarea name="faktor_penyebab_desc" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Keterangan tambahan faktor penyebab...">${escapeHtml(faktorDesc)}</textarea>
+                            </div>
+
+                            <div style="font-size:12px;font-weight:600;color:#16a34a;border-bottom:1.5px solid #dcfce7;padding-bottom:4px;margin-top:8px;margin-bottom:4px;">INFRASTRUKTUR PARTAI</div>
+                            
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Anggota PKS di RW</label>
+                                <textarea name="anggota_pks" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Nama + jenjang keanggotaan">${escapeHtml(p.anggota_pks || '')}</textarea>
+                            </div>
+
+                            ${[
+                                ['upa_rw', 'UPA RW', 'upa_rw_nama', 'Nama pembina'],
+                                ['rki', 'RKI', 'rki_nama', 'Nama penggerak'],
+                                ['senam', 'Titik Senam PKS', 'senam_nama', 'Nama instruktur'],
+                                ['relawan_milenial', 'Relawan Milenial / Geka', 'relawan_milenial_nama', 'Nama + jabatan']
+                            ].map(([field, label, nameField, placeholder]) => {
+                                const status = p[field + '_status'] || 'belum';
+                                const { name, wa } = parseNameAndWa(p[nameField]);
+                                return `
+                                    <div style="border:0.5px solid #e5e5e5;border-radius:8px;padding:10px;background:#f9fafb;">
+                                        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+                                            <span style="font-size:12px;font-weight:500;color:#374151;">${label}</span>
+                                            <select name="${field}_status" data-toggle-target="${field}_input_container" style="height:30px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;background:white;font-size:12px;color:#1f2937;">
+                                                <option value="belum" ${status === 'belum' ? 'selected' : ''}>Belum</option>
+                                                <option value="sudah" ${status === 'sudah' ? 'selected' : ''}>Sudah</option>
+                                            </select>
+                                        </div>
+                                        <div id="${field}_input_container" style="display:${status === 'sudah' ? 'block' : 'none'};">
+                                            <div style="display:grid;gap:8px;">
+                                                <input type="text" name="${nameField}" value="${escapeHtml(name)}" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;" placeholder="${placeholder}">
+                                                <input type="text" name="${field}_wa" value="${escapeHtml(wa)}" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;" placeholder="No WhatsApp (contoh: 08123456789)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+
+                            <div style="border:0.5px solid #e5e5e5;border-radius:8px;padding:10px;background:#f9fafb;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+                                    <span style="font-size:12px;font-weight:500;color:#374151;">Caleg terpilih di RW?</span>
+                                    <select name="caleg_terpilih_ada" data-toggle-target="caleg_terpilih_input_container" style="height:30px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;background:white;font-size:12px;color:#1f2937;">
+                                        <option value="false" ${!p.caleg_terpilih_ada ? 'selected' : ''}>Tidak</option>
+                                        <option value="true" ${p.caleg_terpilih_ada ? 'selected' : ''}>Ya</option>
+                                    </select>
+                                </div>
+                                <div id="caleg_terpilih_input_container" style="display:${p.caleg_terpilih_ada ? 'block' : 'none'};">
+                                    <input type="text" name="caleg_terpilih_nama" value="${escapeHtml(p.caleg_terpilih_nama || '')}" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;" placeholder="Nama caleg">
+                                </div>
+                            </div>
+
+                            <div style="font-size:12px;font-weight:600;color:#dc2626;border-bottom:1.5px solid #fee2e2;padding-bottom:4px;margin-top:8px;margin-bottom:4px;">PETA POLITIK LOKAL</div>
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Afiliasi Ketua RW & RT</label>
+                                <textarea name="afiliasi_rw_rt" rows="3" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Ketua RW: Nama - Partai&#10;RT 1: Nama - Partai">${escapeHtml(p.afiliasi_rw_rt || '')}</textarea>
+                            </div>
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Afiliasi Kader Posyandu & DKM</label>
+                                <textarea name="afiliasi_posyandu_dkm" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Nama - organisasi - partai">${escapeHtml(p.afiliasi_posyandu_dkm || '')}</textarea>
+                            </div>
+
+                            ${(() => {
+                                const { name: kompName, wa: kompWa } = parseNameAndWa(p.kompetitor_detail);
+                                return `
+                                    <div style="border:0.5px solid #e5e5e5;border-radius:8px;padding:10px;background:#f9fafb;">
+                                        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+                                            <span style="font-size:12px;font-weight:500;color:#374151;">Pengurus kompetitor?</span>
+                                            <select name="kompetitor_status" data-toggle-target="kompetitor_input_container" style="height:30px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;background:white;font-size:12px;color:#1f2937;">
+                                                <option value="tidak_tahu" ${p.kompetitor_status === 'tidak_tahu' ? 'selected' : ''}>Tidak tahu</option>
+                                                <option value="ada" ${p.kompetitor_status === 'ada' ? 'selected' : ''}>Ada</option>
+                                                <option value="tidak" ${p.kompetitor_status === 'tidak' ? 'selected' : ''}>Tidak ada</option>
+                                            </select>
+                                        </div>
+                                        <div id="kompetitor_input_container" style="display:${p.kompetitor_status === 'ada' ? 'block' : 'none'};">
+                                            <div style="display:grid;gap:8px;">
+                                                <input type="text" name="kompetitor_detail" value="${escapeHtml(kompName)}" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;" placeholder="Nama + partai">
+                                                <input type="text" name="kompetitor_wa" value="${escapeHtml(kompWa)}" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;" placeholder="No WhatsApp kompetitor">
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            })()}
+
+                            ${(() => {
+                                const { name: tsName, wa: tsWa } = parseNameAndWa(p.tim_sukses_detail);
+                                return `
+                                    <div style="border:0.5px solid #e5e5e5;border-radius:8px;padding:10px;background:#f9fafb;">
+                                        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+                                            <span style="font-size:12px;font-weight:500;color:#374151;">Tim sukses lain?</span>
+                                            <select name="tim_sukses_status" data-toggle-target="tim_sukses_input_container" style="height:30px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;background:white;font-size:12px;color:#1f2937;">
+                                                <option value="tidak_tahu" ${p.tim_sukses_status === 'tidak_tahu' ? 'selected' : ''}>Tidak tahu</option>
+                                                <option value="ada" ${p.tim_sukses_status === 'ada' ? 'selected' : ''}>Ada</option>
+                                                <option value="tidak" ${p.tim_sukses_status === 'tidak' ? 'selected' : ''}>Tidak ada</option>
+                                            </select>
+                                        </div>
+                                        <div id="tim_sukses_input_container" style="display:${p.tim_sukses_status === 'ada' ? 'block' : 'none'};">
+                                            <div style="display:grid;gap:8px;">
+                                                <input type="text" name="tim_sukses_detail" value="${escapeHtml(tsName)}" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;" placeholder="Nama + partai">
+                                                <input type="text" name="tim_sukses_wa" value="${escapeHtml(tsWa)}" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;" placeholder="No WhatsApp tim sukses">
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            })()}
+
+                            <div style="font-size:12px;font-weight:600;color:#ea580c;border-bottom:1px solid #ffedd5;padding-bottom:4px;margin-top:8px;margin-bottom:4px;">STRATEGI & PENANGGUNG JAWAB</div>
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Strategi Mencapai Target Suara</label>
+                                <select name="strategi_select" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;margin-bottom:6px;">
+                                    <option value="">- Pilih Strategi Utama -</option>
+                                    ${[
+                                        'Sapa Warga & Door to Door',
+                                        'Penyediaan Layanan Sosial',
+                                        'Penguatan Tokoh Kunci',
+                                        'Event / Kegiatan Komunitas',
+                                        'Kampanye Digital & Media Sosial',
+                                        'Penguatan Saksi & Pengawalan Suara'
+                                    ].map(opt => `<option value="${opt}" ${strategiSelect === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                                </select>
+                                <textarea name="strategi_desc" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Keterangan tambahan rencana aksi/strategi...">${escapeHtml(strategiDesc)}</textarea>
+                            </div>
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Penanggung Jawab Dakwah di RW</label>
+                                <input type="text" name="penanggung_jawab" value="${escapeHtml(p.penanggung_jawab || '')}" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;" placeholder="Nama + jenjang">
+                            </div>
+
+                            <div>
+                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Keterangan Lain</label>
+                                <textarea name="keterangan_lain" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Catatan tambahan">${escapeHtml(p.keterangan_lain || '')}</textarea>
+                            </div>
+
+                            <div style="display:flex;gap:8px;margin-top:12px;">
+                                <button type="submit" style="flex:1;height:38px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:13px;font-weight:600;cursor:pointer;">Simpan Profil</button>
+                                <button type="button" id="cancelProfilRwBtn" style="height:38px;padding:0 16px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#374151;font-size:13px;font-weight:500;cursor:pointer;">Batal</button>
+                            </div>
+                        </form>
+                    `;
+
+                    dom.detailDrawerContent.querySelectorAll('[data-toggle-target]').forEach((select) => {
+                        select.addEventListener('change', () => {
+                            const targetId = select.dataset.toggleTarget;
+                            const targetDiv = document.getElementById(targetId);
+                            if (targetDiv) {
+                                targetDiv.style.display = (select.value === 'sudah' || select.value === 'ada' || select.value === 'true') ? 'block' : 'none';
+                            }
+                        });
+                    });
+
+                    const pfForm = document.getElementById('profilRwForm');
+                    pfForm.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        await saveProfilRwData(dptScopeData, villageStatus, program);
+                    });
+                    pfForm.addEventListener('input', saveProfilRwDraft);
+
+                    // Check for existing draft
+                    const currentDraftKey = getProfilRwDraftKey();
+                    if (localStorage.getItem(currentDraftKey)) {
+                        const banner = document.getElementById('draftRestoreBanner');
+                        if (banner) banner.style.display = 'flex';
+                    }
+
+                    const restoreBtn = document.getElementById('restoreDraftBtn');
+                    if (restoreBtn) {
+                        restoreBtn.addEventListener('click', restoreProfilRwDraft);
+                    }
+                    const clearBtn = document.getElementById('clearDraftBtn');
+                    if (clearBtn) {
+                        clearBtn.addEventListener('click', clearProfilRwDraft);
+                    }
+
+                    document.getElementById('cancelProfilRwBtn').addEventListener('click', () => {
+                        state.isEditingProfilRw = false;
+                        renderDetailDrawer(dptScopeData, villageStatus, program);
+                    });
+
+                    dom.detailDrawer.classList.remove('hidden');
+                    dom.detailDrawerBackdrop.classList.remove('hidden');
+                    dom.detailDrawer.style.transform = 'translateX(0)';
+                    return;
+                }
+
+                const topParties = getTopParties(row);
+                const topPartiesHtml = topParties.length > 0
+                    ? `
+                    <div style="margin-top:16px;">
+                        <div style="font-size:11px;color:#fe5000;font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">Peta Persaingan Partai (Top 5)</div>
+                        <div style="display:grid;gap:10px;background:#fafafa;border-radius:10px;padding:12px;border:0.5px solid #e5e5e5;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);">
+                            ${topParties.map((tp, idx) => {
+                                const color = partyColors[tp.partyName] || partyColors[tp.partyName.toLowerCase()] || '#94a3b8';
+                                const isPks = tp.partyName === 'PKS';
+                                const barWidth = Math.min(100, Math.max(0, tp.share * 100));
+                                return `
+                                    <div>
+                                        <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:4px;">
+                                            <span style="font-weight:${isPks ? '700' : '500'};color:${isPks ? '#fe5000' : '#1e293b'};display:inline-flex;align-items:center;gap:4px;">
+                                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};"></span>
+                                                ${idx + 1}. ${escapeHtml(tp.partyName)}
+                                            </span>
+                                            <span style="font-variant-numeric:tabular-nums;color:#475569;font-weight:${isPks ? '600' : '400'};">
+                                                ${formatNumber(tp.votes)} suara (${formatPercent(tp.share)})
+                                            </span>
+                                        </div>
+                                        <div style="height:6px;border-radius:999px;background:#e2e8f0;overflow:hidden;">
+                                            <div style="width:${barWidth}%;background:${color};height:100%;border-radius:999px;transition:width 0.3s ease;"></div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>`
+                    : '';
+
+                let profilHtml = '';
+                if (row.type === 'rw') {
+                    const p = state.currentProfilRw;
+                    if (!p) {
+                        profilHtml = `
+                            <div style="margin-top:16px; border:0.5px solid #e5e5e5; border-radius:12px; background:#fff7f1; overflow:hidden;">
+                                <div style="background:#fe5000; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; color:white;">
+                                    <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Profil & Intel RW</span>
+                                    <span style="font-size:11px; font-weight:700; background:rgba(255,255,255,0.25); padding:2px 6px; border-radius:6px;">Lengkap 0%</span>
+                                </div>
+                                <div style="padding:16px; text-align:center; background:white;">
+                                    <div style="font-size:12px; color:#666; margin-bottom:12px;">Belum ada data profil untuk RW ini. Lengkapi data intelijen lapangan untuk memetakan kondisi wilayah.</div>
+                                    <button type="button" id="editProfilRwBtn" style="padding:8px 16px; border-radius:8px; border:none; background:#fe5000; color:white; font-size:12px; font-weight:600; cursor:pointer;">
+                                        ✏️ Lengkapi Profil RW
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        const completion = p.completion_percent || 0;
+                        const statusUpa = p.upa_rw_status === 'sudah' ? `Sudah <span style="color:#666;">(${renderNameAndWaSummary(p.upa_rw_nama)})</span>` : 'Belum';
+                        const statusRki = p.rki_status === 'sudah' ? `Sudah <span style="color:#666;">(${renderNameAndWaSummary(p.rki_nama)})</span>` : 'Belum';
+                        const statusSenam = p.senam_status === 'sudah' ? `Sudah <span style="color:#666;">(${renderNameAndWaSummary(p.senam_nama)})</span>` : 'Belum';
+                        const statusRelawan = p.relawan_milenial_status === 'sudah' ? `Sudah <span style="color:#666;">(${renderNameAndWaSummary(p.relawan_milenial_nama)})</span>` : 'Belum';
+                        const statusCaleg = p.caleg_terpilih_ada ? `Ada <span style="color:#666;">(${escapeHtml(p.caleg_terpilih_nama || '-')} )</span>` : 'Tidak';
+                        
+                        const statusKompetitor = p.kompetitor_status === 'ada' ? `Ada <span style="color:#666;">(${renderNameAndWaSummary(p.kompetitor_detail)})</span>` : (p.kompetitor_status === 'tidak' ? 'Tidak ada' : 'Tidak tahu');
+                        const statusTimsuk = p.tim_sukses_status === 'ada' ? `Ada <span style="color:#666;">(${renderNameAndWaSummary(p.tim_sukses_detail)})</span>` : (p.tim_sukses_status === 'tidak' ? 'Tidak ada' : 'Tidak tahu');
+
+                        profilHtml = `
+                            <div style="margin-top:16px; border:0.5px solid #e5e5e5; border-radius:12px; background:#fff7f1; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                                <div style="background:#fe5000; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; color:white;">
+                                    <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Profil & Intel RW</span>
+                                    <span style="font-size:11px; font-weight:700; background:rgba(255,255,255,0.25); padding:2px 6px; border-radius:6px;">Lengkap ${completion}%</span>
+                                </div>
+                                <div style="padding:14px; display:grid; gap:12px; background:white; font-size:12px;">
+                                    
+                                    <div>
+                                        <div style="font-size:11px; font-weight:700; color:#d97706; border-bottom:0.5px solid #fee2d5; padding-bottom:3px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">1. Profil Wilayah</div>
+                                        <div style="display:grid; gap:6px;">
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Tipologi RW:</span><strong style="color:#1f2937; text-align:right;">${escapeHtml(tipologiLabels[p.tipologi] || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Ekonomi Dominan:</span><strong style="color:#1f2937; text-align:right;">${escapeHtml(ekonomiLabels[p.ekonomi_dominan] || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Profil Umum Warga:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${renderCombinedField(p.profil_warga)}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Faktor Menang/Kalah:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${renderCombinedField(p.faktor_penyebab)}</strong></div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style="font-size:11px; font-weight:700; color:#16a34a; border-bottom:0.5px solid #dcfce7; padding-bottom:3px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">2. Infrastruktur Partai</div>
+                                        <div style="display:grid; gap:6px;">
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Anggota PKS di RW:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${escapeHtml(p.anggota_pks || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>UPA RW:</span><strong style="color:#1f2937; text-align:right;">${statusUpa}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>RKI:</span><strong style="color:#1f2937; text-align:right;">${statusRki}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Titik Senam PKS:</span><strong style="color:#1f2937; text-align:right;">${statusSenam}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Relawan Milenial:</span><strong style="color:#1f2937; text-align:right;">${statusRelawan}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Caleg Terpilih di RW:</span><strong style="color:#1f2937; text-align:right;">${statusCaleg}</strong></div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style="font-size:11px; font-weight:700; color:#dc2626; border-bottom:0.5px solid #fee2e2; padding-bottom:3px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">3. Peta Politik Lokal</div>
+                                        <div style="display:grid; gap:6px;">
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Ketua RW & RT:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${escapeHtml(p.afiliasi_rw_rt || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Kader Posyandu & DKM:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${escapeHtml(p.afiliasi_posyandu_dkm || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Pengurus Kompetitor:</span><strong style="color:#1f2937; text-align:right;">${statusKompetitor}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Tim Sukses Lain:</span><strong style="color:#1f2937; text-align:right;">${statusTimsuk}</strong></div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style="font-size:11px; font-weight:700; color:#ea580c; border-bottom:0.5px solid #ffedd5; padding-bottom:3px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">4. Strategi & PJ</div>
+                                        <div style="display:grid; gap:6px;">
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Strategi Target Suara:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${renderCombinedField(p.strategi)}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>PJ Dakwah di RW:</span><strong style="color:#1f2937; text-align:right;">${escapeHtml(p.penanggung_jawab || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Keterangan Lain:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${escapeHtml(p.keterangan_lain || '-')}</strong></div>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" id="editProfilRwBtn" style="width:100%; margin-top:8px; padding:10px; border-radius:8px; border:none; background:#fe5000; color:white; font-size:12px; font-weight:600; cursor:pointer; text-align:center; transition:background 0.15s;">
+                                        ✏️ Edit Profil RW
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
                 dom.detailDrawerContent.innerHTML = `
                     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
                         ${[
@@ -1078,6 +1974,8 @@
                             ].map((item) => `<div><div style="display:flex;justify-content:space-between;font-size:11px;color:#666;margin-bottom:4px;"><span>${item[0]}</span><span>${formatPercent(item[1] / total)}</span></div><div style="height:8px;border-radius:999px;background:#f3f4f6;overflow:hidden;"><div style="width:${(item[1] / total) * 100}%;background:${item[2]};height:100%;"></div></div></div>`).join('')}
                         </div>
                     </div>
+                    ${topPartiesHtml}
+                    ${profilHtml}
                     <div style="margin-top:16px;display:grid;gap:8px;">
                         <div style="font-size:11px;color:#666;">Fokus aksi: <strong style="color:#1a1a1a;">${escapeHtml(program.focus)}</strong></div>
                         <div style="font-size:11px;color:#666;">Pesan utama: ${escapeHtml(program.message)}</div>
@@ -1088,13 +1986,28 @@
                         <div style="font-size:11px;color:#666;">Skor prioritas program: ${formatNumber(program.score)}</div>
                         <div style="font-size:11px;color:#888;">Catatan: estimasi suara RW/RT dibangun dari distribusi proporsional DPT terhadap suara TPS.</div>
                     </div>`;
+
+                const editBtn = document.getElementById('editProfilRwBtn');
+                if (editBtn) {
+                    editBtn.addEventListener('click', () => {
+                        state.isEditingProfilRw = true;
+                        renderDetailDrawer(dptScopeData, villageStatus, program);
+                    });
+                }
+
                 dom.detailDrawer.classList.remove('hidden');
                 dom.detailDrawerBackdrop.classList.remove('hidden');
                 dom.detailDrawer.style.transform = 'translateX(0)';
             }
 
-            function closeDetailDrawer(force = false) {
-                if (!force) state.detailDrawer = null;
+            function closeDetailDrawer() {
+                state.detailDrawer = null;
+                state.currentProfilRw = null;
+                state.isEditingProfilRw = false;
+                state.wilayahId = null;
+                state.currentRwNum = null;
+                state.isLoadingProfilRw = false;
+                state.hasLoadedProfilRwKey = null;
                 dom.detailDrawer.classList.add('hidden');
                 dom.detailDrawerBackdrop.classList.add('hidden');
                 dom.detailDrawer.style.transform = 'translateX(100%)';
@@ -1184,29 +2097,37 @@
             }
 
             function syncTopPanelHeights() {
-                const mapPanelCard = document.getElementById('mapPanelCard');
-                const mapPanelMedia = document.getElementById('mapPanelMedia');
-                const partyRankingCard = document.getElementById('partyRankingCard');
+                // No-op: layout height is now managed via CSS class constraints (.kaderisasi-3col-grid)
+            }
 
-                if (!mapPanelCard || !mapPanelMedia || !partyRankingCard) {
-                    return;
-                }
+            function renderVillageList(scopeData) {
+                const villages = getVisibleVillages(state.currentDapil ? state.dataset.get(state.currentDapil) : null, true);
+                
+                dom.villageListWrap.innerHTML = villages.map((village) => {
+                    const isActive = state.currentDesa === village.key;
+                    const statusVal = village.analytics.status;
+                    const config = statusConfig[statusVal] || statusConfig['ZONA BERAT'];
+                    
+                    return `<button type="button" data-village-item="${escapeHtml(village.key)}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:8px;border:0.5px solid ${isActive ? '#fbd3b6' : '#e5e5e5'};background:${isActive ? '#fff7f1' : 'white'};cursor:pointer;text-align:left;transition:all 0.15s;width:100%;box-shadow:0 1px 2px rgba(0,0,0,0.02);"><div style="min-width:0;flex:1;"><div style="font-weight:${isActive ? '700' : '500'};color:${isActive ? '#fe5000' : '#1e293b'};font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(village.label)}</div><div style="font-size:10px;color:#6b7280;margin-top:2px;">Suara: ${formatNumber(village.analytics.pksVotes)} · ${formatPercent(village.analytics.share)}</div></div><span style="display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;background:${config.bg};color:${config.text};font-size:9px;font-weight:500;white-space:nowrap;"><span style="width:5px;height:5px;border-radius:50%;background:${config.dot};display:inline-block;"></span>${config.label}</span></button>`;
+                }).join('') || '<div style="font-size:12px;color:#888;text-align:center;padding:20px 0;">Tidak ada kelurahan/desa yang cocok.</div>';
 
-                if (window.innerWidth <= 960) {
-                    mapPanelCard.style.height = '';
-                    mapPanelMedia.style.height = '';
-                    partyRankingCard.style.height = '';
-                    return;
-                }
-
-                const targetHeight = Math.max(320, Math.min(partyRankingCard.offsetHeight, 360));
-                const headerHeight = mapPanelCard.offsetHeight - mapPanelMedia.offsetHeight;
-                partyRankingCard.style.height = `${targetHeight}px`;
-                mapPanelCard.style.height = `${targetHeight}px`;
-                mapPanelMedia.style.height = `${Math.max(220, targetHeight - headerHeight)}px`;
+                dom.villageListWrap.querySelectorAll('[data-village-item]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const village = findVillageByKey(button.dataset.villageItem);
+                        if (village) {
+                            selectVillage(village);
+                        }
+                    });
+                });
             }
 
             function renderDrilldownTable(rows, level) {
+                if (level === 'desa') {
+                    if (dom.drilldownSection) dom.drilldownSection.style.display = 'none';
+                    return;
+                } else {
+                    if (dom.drilldownSection) dom.drilldownSection.style.display = 'grid';
+                }
                 dom.drilldownSectionLabel.textContent = level === 'kabupaten' ? 'Daftar Dapil' : (level === 'dapil' ? 'Daftar Kecamatan' : (level === 'kecamatan' ? 'Daftar Desa' : 'Daftar TPS'));
                 dom.drilldownHeading.textContent = level === 'kabupaten'
                     ? `${formatNumber(rows.length)} Dapil Kabupaten Bekasi`
@@ -1333,12 +2254,51 @@
             function mergePartyMaps(target, source) { source.forEach((entry, key) => { const targetEntry = getOrCreate(target, key, () => createPartyEntry(entry.partyId, entry.partyName)); targetEntry.partyVotes += entry.partyVotes; targetEntry.candidateVotes += entry.candidateVotes; entry.candidates.forEach((votes, name) => targetEntry.candidates.set(name, (targetEntry.candidates.get(name) || 0) + votes)); }); }
             function incrementAgeBucket(target, age) { if (!Number.isFinite(age) || age <= 0) { target.age_unknown += 1; return; } if (age <= 27) target.gen_z += 1; else if (age <= 43) target.millennial += 1; else if (age <= 59) target.gen_x += 1; else target.boomer += 1; }
             function renderSummaryCard({ label, value, subtext, icon, invert = false }) { const labelColor = invert ? 'rgba(255,255,255,0.78)' : '#666'; const valueColor = invert ? '#fff' : '#1a1a1a'; const subColor = invert ? 'rgba(255,255,255,0.82)' : '#888'; return `<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;"><div><div style="font-size:10px;color:${labelColor};margin-bottom:6px;">${escapeHtml(label)}</div><div style="font-size:20px;font-weight:500;color:${valueColor};line-height:1.05;">${escapeHtml(value)}</div><div style="font-size:10px;color:${subColor};margin-top:4px;">${escapeHtml(subtext)}</div></div><div style="font-size:16px;line-height:1;color:${invert ? '#fff' : '#fe5000'};">${icon}</div></div>`; }
-            function renderStatusFilterChip(value, label, count, active, dotColor) { return `<button type="button" data-desa-status-chip="${escapeHtml(value)}" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:0.5px solid ${active ? '#d1d5db' : '#e5e7eb'};background:${active ? '#f3f4f6' : '#fafafa'};color:#374151;font-size:12px;cursor:pointer;white-space:nowrap;"><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:${dotColor};display:inline-block;"></span>${escapeHtml(label)}</span><span style="font-size:11px;color:#6b7280;">${formatNumber(count)}</span></button>`; }
+            function renderStatusFilterChip(value, label, count, active, dotColor, dataAttr = 'data-desa-status-chip') { return `<button type="button" ${dataAttr}="${escapeHtml(value)}" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:0.5px solid ${active ? '#d1d5db' : '#e5e5e5'};background:${active ? '#f3f4f6' : '#fafafa'};color:#374151;font-size:12px;cursor:pointer;white-space:nowrap;"><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:${dotColor};display:inline-block;"></span>${escapeHtml(label)}</span><span style="font-size:11px;color:#6b7280;">${formatNumber(count)}</span></button>`; }
+            function renderPagination(currentPage, totalItems, pageSize, dataAttrPrefix) {
+                const totalPages = Math.ceil(totalItems / pageSize) || 1;
+                const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+                const endItem = Math.min(currentPage * pageSize, totalItems);
+                const prevDisabled = currentPage <= 1;
+                const nextDisabled = currentPage >= totalPages;
+                return `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#fafafa;border:0.5px solid #e5e5e5;border-top:none;border-radius:0 0 10px 10px;font-size:12px;color:#666;box-sizing:border-box;"><div>Menampilkan <span style="font-weight:600;color:#1a1a1a;">${startItem}-${endItem}</span> dari <span style="font-weight:600;color:#1a1a1a;">${totalItems}</span> data</div><div style="display:flex;align-items:center;gap:6px;"><button type="button" ${dataAttrPrefix}-prev style="padding:5px 10px;border-radius:6px;border:0.5px solid #e5e5e5;background:${prevDisabled ? '#f3f4f6' : 'white'};color:${prevDisabled ? '#9ca3af' : '#fe5000'};font-weight:500;cursor:${prevDisabled ? 'not-allowed' : 'pointer'};font-size:11px;" ${prevDisabled ? 'disabled' : ''}>Sebelumnya</button><span style="color:#1a1a1a;font-weight:500;">Halaman ${currentPage} / ${totalPages}</span><button type="button" ${dataAttrPrefix}-next style="padding:5px 10px;border-radius:6px;border:0.5px solid #e5e5e5;background:${nextDisabled ? '#f3f4f6' : 'white'};color:${nextDisabled ? '#9ca3af' : '#fe5000'};font-weight:500;cursor:${nextDisabled ? 'not-allowed' : 'pointer'};font-size:11px;" ${nextDisabled ? 'disabled' : ''}>Berikutnya</button></div></div>`;
+            }
             function renderStatusPill(status) { const config = statusConfig[status] || statusConfig['ZONA BERAT']; return `<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:${config.bg};color:${config.text};font-size:10px;font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:${config.dot};display:inline-block;"></span>${config.label}</span>`; }
+            function renderPartyBadge(partyName) {
+                 const name = String(partyName || '').trim();
+                 if (!name || name === '-') return '-';
+                 
+                 // Define brand colors
+                 const colors = {
+                     'PKS': { bg: '#fff7f1', text: '#fe5000', border: '#fbd3b6', dot: '#fe5000' },
+                     'GOLKAR': { bg: '#fffdf0', text: '#854d0e', border: '#fef08a', dot: '#eab308' },
+                     'GERINDRA': { bg: '#fff5f5', text: '#991b1b', border: '#fca5a5', dot: '#ef4444' },
+                     'PDIP': { bg: '#fff5f5', text: '#c53030', border: '#feb2b2', dot: '#e53e3e' },
+                     'PDI-P': { bg: '#fff5f5', text: '#c53030', border: '#feb2b2', dot: '#e53e3e' },
+                     'PKB': { bg: '#f0fdf4', text: '#166534', border: '#bbf7d0', dot: '#15803d' },
+                     'NASDEM': { bg: '#f0f7ff', text: '#1e3a8a', border: '#bfdbfe', dot: '#2563eb' },
+                     'DEMOKRAT': { bg: '#f0f7ff', text: '#2b6cb0', border: '#bee3f8', dot: '#3182ce' },
+                     'PAN': { bg: '#f0f9ff', text: '#0369a1', border: '#bae6fd', dot: '#0284c7' },
+                     'PPP': { bg: '#f0fdf4', text: '#14532d', border: '#bbf7d0', dot: '#166534' },
+                     'PSI': { bg: '#fff1f2', text: '#9f1239', border: '#fecdd3', dot: '#f43f5e' },
+                     'PERINDO': { bg: '#f5f3ff', text: '#5b21b6', border: '#ddd6fe', dot: '#7c3aed' },
+                     'HANURA': { bg: '#fff8e6', text: '#b45309', border: '#fef3c7', dot: '#d97706' },
+                     'GELORA': { bg: '#ecfeff', text: '#0891b2', border: '#cffafe', dot: '#06b6d4' },
+                     'UMMAT': { bg: '#fafaf9', text: '#292524', border: '#e7e5e4', dot: '#78716c' },
+                     'BURUH': { bg: '#fff7ed', text: '#c2410c', border: '#ffedd5', dot: '#f97316' },
+                     'PKN': { bg: '#fff5f5', text: '#9b2c2c', border: '#fed7d7', dot: '#e53e3e' },
+                     'GARUDA': { bg: '#fffaf0', text: '#dd6b20', border: '#feebc8', dot: '#ed8936' }
+                 };
+                 
+                 const key = name.toUpperCase();
+                 const config = colors[key] || { bg: '#f4f4f5', text: '#3f3f46', border: '#e4e4e7', dot: '#71717a' };
+                 
+                 return `<span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:6px;background:${config.bg};color:${config.text};border:0.5px solid ${config.border};font-size:11px;font-weight:600;line-height:1.2;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:${config.dot};display:inline-block;flex-shrink:0;"></span>${escapeHtml(name)}</span>`;
+             }
             function estimateSeats(pksVotes, totalVotes, totalSeats) { if (!totalVotes) return 0; return Math.max(0, Math.round((pksVotes / totalVotes) * totalSeats)); }
             function normalizePartyName(name) { return String(name || '').trim() === 'NasDem' ? 'Nasdem' : String(name || '').trim(); }
-            function selectVillage(village) { state.currentDapil = village.dapil; state.currentKecamatan = village.district; state.currentDesa = village.key; state.activeVillageTab = 'summary'; state.detailDrawer = null; dom.dapilSelect.value = village.dapil; dom.kecamatanSelect.value = village.district; if (dom.desaSelect) dom.desaSelect.value = village.key; render(); }
-            function resetScope() { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = ''; state.activeVillageTab = 'summary'; state.detailDrawer = null; render(); }
+            function selectVillage(village) { state.currentDapil = village.dapil; state.currentKecamatan = village.district; state.currentDesa = village.key; state.activeVillageTab = 'summary'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = village.dapil; dom.kecamatanSelect.value = village.district; if (dom.desaSelect) dom.desaSelect.value = village.key; render(); }
+            function resetScope() { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = ''; state.activeVillageTab = 'summary'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; render(); }
             window.resetScope = resetScope;
             function slugifyLabel(value) { return String(value || '').toLowerCase().replace(/\s+/g, '-'); }
             function formatRwRt(value) { const raw = String(value ?? '').trim(); if (!raw) return '-'; const number = Number(raw); return Number.isFinite(number) ? String(number).padStart(3, '0') : raw; }
@@ -1349,8 +2309,264 @@
             function numberValue(value) { const cleaned = String(value ?? '').replace(/[^\d.-]/g, ''); const result = Number(cleaned); return Number.isFinite(result) ? result : 0; }
             function toTitleCase(value) { return String(value ?? '').toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()); }
             function compareNatural(a, b) { return String(a).localeCompare(String(b), 'id-ID', { numeric: true, sensitivity: 'base' }); }
+            async function loadProfilRwData(kecamatan, desa, nomorRw, dptScopeData, villageStatus, program) {
+                state.isLoadingProfilRw = true;
+                state.currentProfilRw = null;
+                state.currentRwNum = nomorRw;
+                state.isEditingProfilRw = false;
+                state.hasLoadedProfilRwKey = null;
+                
+                if (dom.detailDrawerContent) {
+                    dom.detailDrawerContent.innerHTML = `
+                        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 0;color:#666;">
+                            <div class="spinner" style="width:24px;height:24px;border:2px solid #fe5000;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px;"></div>
+                            <div style="font-size:12px;">Memuat data Profil RW...</div>
+                        </div>
+                    `;
+                    dom.detailDrawerTitle.textContent = `RW ${nomorRw} - ${desa}`;
+                    dom.detailDrawerSubtitle.textContent = `Memuat...`;
+                    dom.detailDrawer.classList.remove('hidden');
+                    dom.detailDrawerBackdrop.classList.remove('hidden');
+                    dom.detailDrawer.style.transform = 'translateX(0)';
+                }
+                
+                try {
+                    const res = await fetch(`/bedah-dapil/pemilu-dprd/get-profil-rw?kecamatan=${encodeURIComponent(kecamatan)}&desa=${encodeURIComponent(desa)}&nomor_rw=${encodeURIComponent(nomorRw)}`);
+                    const data = await res.json();
+                    if (data.error) {
+                        alert(data.error);
+                        state.isLoadingProfilRw = false;
+                        state.hasLoadedProfilRwKey = null;
+                        return;
+                    }
+                    state.currentProfilRw = data.profil;
+                    state.wilayahId = data.wilayah_id;
+                    state.hasLoadedProfilRwKey = state.detailDrawer.key;
+                    state.isLoadingProfilRw = false;
+                    
+                    renderDetailDrawer(dptScopeData, villageStatus, program);
+                } catch (e) {
+                    console.error("Gagal memuat Profil RW", e);
+                    alert("Gagal memuat Profil RW. Silakan coba lagi.");
+                    state.isLoadingProfilRw = false;
+                    state.hasLoadedProfilRwKey = null;
+                }
+            }
+
+            function getProfilRwDraftKey() {
+                return 'profil_rw_draft_' + (state.wilayahId || '') + '_' + (state.currentRwNum || '');
+            }
+
+            function saveProfilRwDraft() {
+                const form = document.getElementById('profilRwForm');
+                if (!form) return;
+                const formData = new FormData(form);
+                const draft = {};
+                for (const [key, val] of formData.entries()) {
+                    draft[key] = val;
+                }
+                localStorage.setItem(getProfilRwDraftKey(), JSON.stringify(draft));
+            }
+
+            function restoreProfilRwDraft() {
+                const form = document.getElementById('profilRwForm');
+                if (!form) return;
+                const draftStr = localStorage.getItem(getProfilRwDraftKey());
+                if (!draftStr) return;
+                try {
+                    const draft = JSON.parse(draftStr);
+                    for (const [key, val] of Object.entries(draft)) {
+                        const inputs = form.querySelectorAll(`[name="${key}"]`);
+                        inputs.forEach(input => {
+                            if (input.type === 'checkbox' || input.type === 'radio') {
+                                input.checked = input.value === val;
+                            } else {
+                                input.value = val;
+                            }
+                            // Trigger change event for dynamic toggles
+                            input.dispatchEvent(new Event('change', { bubbles: true }));
+                        });
+                    }
+                    const banner = document.getElementById('draftRestoreBanner');
+                    if (banner) banner.style.display = 'none';
+                } catch (e) {
+                    console.error('Error restoring draft:', e);
+                }
+            }
+
+            function clearProfilRwDraft() {
+                localStorage.removeItem(getProfilRwDraftKey());
+                const banner = document.getElementById('draftRestoreBanner');
+                if (banner) banner.style.display = 'none';
+            }
+
+            async function saveProfilRwData(dptScopeData, villageStatus, program) {
+                const form = document.getElementById('profilRwForm');
+                if (!form) return;
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Simpan Profil';
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;"><span class="spinner" style="width:12px;height:12px;border:1.5px solid white;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></span> Menyimpan...</span>`;
+                }
+
+                const formData = new FormData(form);
+                const payload = {};
+                for (const [key, val] of formData.entries()) {
+                    payload[key] = val;
+                }
+
+                payload['wilayah_id'] = state.wilayahId;
+                payload['nomor_rw'] = state.currentRwNum;
+
+                // Combine Select + Desc for faktor_penyebab
+                if (payload['faktor_penyebab_select']) {
+                    const selectVal = payload['faktor_penyebab_select'];
+                    const descVal = (payload['faktor_penyebab_desc'] || '').trim();
+                    payload['faktor_penyebab'] = descVal ? `[${selectVal}] ${descVal}` : selectVal;
+                } else if (payload['faktor_penyebab_desc']) {
+                    payload['faktor_penyebab'] = payload['faktor_penyebab_desc'].trim();
+                } else {
+                    payload['faktor_penyebab'] = '';
+                }
+                delete payload['faktor_penyebab_select'];
+                delete payload['faktor_penyebab_desc'];
+
+                // Combine Select + Desc for strategi
+                if (payload['strategi_select']) {
+                    const selectVal = payload['strategi_select'];
+                    const descVal = (payload['strategi_desc'] || '').trim();
+                    payload['strategi'] = descVal ? `[${selectVal}] ${descVal}` : selectVal;
+                } else if (payload['strategi_desc']) {
+                    payload['strategi'] = payload['strategi_desc'].trim();
+                } else {
+                    payload['strategi'] = '';
+                }
+                delete payload['strategi_select'];
+                // Combine Name + WhatsApp for UPA, RKI, Senam, Relawan, Kompetitor, Tim Sukses
+                ['upa_rw_nama', 'rki_nama', 'senam_nama', 'relawan_milenial_nama', 'kompetitor_detail', 'tim_sukses_detail'].forEach(nameField => {
+                    let fieldPrefix = nameField.replace('_nama', '').replace('_detail', '');
+                    const nameVal = (payload[nameField] || '').trim();
+                    const waVal = (payload[fieldPrefix + '_wa'] || '').trim();
+                    if (nameVal && waVal) {
+                        payload[nameField] = `${nameVal} | WA: ${waVal}`;
+                    } else if (nameVal) {
+                        payload[nameField] = nameVal;
+                    } else {
+                        payload[nameField] = '';
+                    }
+                    delete payload[fieldPrefix + '_wa'];
+                });
+
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || (typeof csrfTokenFromBlade !== 'undefined' ? csrfTokenFromBlade : '');
+                
+                try {
+                    const res = await fetch('/bedah-dapil/pemilu-dprd/save-profil-rw', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await res.json();
+                    if (data.error) {
+                        alert(data.error);
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnText;
+                        }
+                        return;
+                    }
+
+                    if (data.success) {
+                        state.currentProfilRw = data.profil;
+                        state.isEditingProfilRw = false;
+                        state.hasLoadedProfilRwKey = state.detailDrawer.key;
+                        
+                        if (data.profil) {
+                            const key = `${data.profil.kecamatan.toUpperCase()}|${data.profil.desa.toUpperCase()}|${data.profil.nomor_rw.toUpperCase()}`;
+                            state.profilRwMap[key] = data.profil.completion_percent;
+                        }
+                        
+                        clearProfilRwDraft();
+                        showNotification('Profil RW berhasil disimpan!');
+                        
+                        render();
+                    }
+                } catch (e) {
+                    console.error("Gagal menyimpan Profil RW", e);
+                    alert("Gagal menyimpan Profil RW. Silakan coba lagi.");
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }
+                }
+            }
+
+            function showNotification(message) {
+                const toast = document.createElement('div');
+                toast.style.position = 'fixed';
+                toast.style.bottom = '20px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%)';
+                toast.style.background = '#10b981';
+                toast.style.color = 'white';
+                toast.style.padding = '10px 20px';
+                toast.style.borderRadius = '8px';
+                toast.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)';
+                toast.style.fontSize = '13px';
+                toast.style.fontWeight = '500';
+                toast.style.zIndex = '9999';
+                toast.style.transition = 'opacity 0.25s ease';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 250);
+                }, 3000);
+            }
+
             function getOrCreate(map, key, factory) { if (!map.has(key)) map.set(key, factory()); return map.get(key); }
             function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '\'': '&#039;' }[char])); }
+            function renderCombinedField(val) {
+                if (!val) return '-';
+                const str = String(val).trim();
+                if (str.startsWith('[')) {
+                    const idx = str.indexOf(']');
+                    if (idx !== -1) {
+                        const label = str.substring(1, idx);
+                        const desc = str.substring(idx + 1).trim();
+                        return `<span style="font-weight:600;color:#fe5000;">${escapeHtml(label)}</span>${desc ? `<span style="display:block;margin-top:2px;font-weight:400;color:#4b5563;font-size:11.5px;line-height:1.4;">${escapeHtml(desc)}</span>` : ''}`;
+                    }
+                }
+                return escapeHtml(str);
+            }
+            function parseNameAndWa(fieldVal) {
+                const val = String(fieldVal ?? '').trim();
+                let name = val;
+                let wa = '';
+                const marker = ' | WA: ';
+                const idx = val.indexOf(marker);
+                if (idx !== -1) {
+                    name = val.substring(0, idx).trim();
+                    wa = val.substring(idx + marker.length).trim();
+                }
+                return { name, wa };
+            }
+            function renderNameAndWaSummary(fieldVal) {
+                const { name, wa } = parseNameAndWa(fieldVal);
+                if (!name) return '-';
+                if (wa) {
+                    const cleanWa = wa.replace(/\D/g, '');
+                    const waLink = cleanWa.startsWith('0') ? '62' + cleanWa.substring(1) : cleanWa;
+                    return `${escapeHtml(name)} <a href="https://wa.me/${waLink}" target="_blank" style="display:inline-flex;align-items:center;color:#10b981;margin-left:4px;text-decoration:none;font-weight:600;" title="Hubungi via WhatsApp"><svg style="width:14px;height:14px;fill:currentColor;vertical-align:middle;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.006 5.284 5.292.001 11.794 0c3.148.001 6.107 1.227 8.33 3.454a11.722 11.722 0 0 1 3.456 8.33c-.007 6.516-5.293 11.799-11.795 11.799-2.001-.001-3.968-.508-5.717-1.478L0 24zm6.002-3.843c1.644.976 3.255 1.486 4.735 1.487 5.378 0 9.756-4.376 9.762-9.752a9.712 9.712 0 0 0-2.863-6.912 9.721 9.721 0 0 0-6.919-2.86c-5.38.001-9.759 4.379-9.765 9.755-.001 1.62.434 3.203 1.258 4.606l-.997 3.639 3.734-.979zm11.391-6.186c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.011c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></a>`;
+                }
+                return escapeHtml(name);
+            }
         </script>
     </flux:main>
 </x-layouts.app.sidebar>

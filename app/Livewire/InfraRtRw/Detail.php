@@ -95,6 +95,23 @@ class Detail extends Component
     public function mount(TargetWilayah $targetWilayah): void
     {
         $this->loadTargetWilayah($targetWilayah);
+
+        $tab = request()->query('tab');
+        if (in_array($tab, ['korwe', 'korte', 'penggalang'], true)) {
+            if ($tab === 'penggalang') {
+                $this->activeMainTab = 'penggalang';
+                if (request()->query('action') === 'create') {
+                    $this->openPenggalangForm();
+                }
+            } else {
+                $this->activeMainTab = 'korwe';
+                $this->activeTab = $tab;
+                if (request()->query('action') === 'create') {
+                    $this->openCreateForm();
+                }
+            }
+        }
+
         // #region debug-point A:detail-mount
         $this->reportDebug('A', 'Detail@mount', '[DEBUG] Infra RT/RW detail mounted', [
             'targetWilayahId' => $this->targetWilayah->id,
@@ -451,8 +468,10 @@ class Detail extends Component
     {
         $korweTarget = (int) $this->targetWilayah->{'target_korwe_' . $this->activeYear};
         $korteTarget = (int) $this->targetWilayah->{'target_korte_' . $this->activeYear};
+        $penggalangTarget = (int) $this->targetWilayah->{'target_penggalang_' . $this->activeYear};
         $korweFormed = $this->targetWilayah->korwes->where('status', 'terbentuk')->count();
         $korteFormed = $this->targetWilayah->kortes->where('status', 'terbentuk')->count();
+        $penggalangFormed = $this->targetWilayah->penggalangSuaras->where('status', 'aktif')->count();
 
         // #region debug-point B:detail-summary
         $this->reportDebug('B', 'Detail@summaryData', '[DEBUG] Detail summary calculated', [
@@ -460,18 +479,23 @@ class Detail extends Component
             'activeYear' => $this->activeYear,
             'korweTarget' => $korweTarget,
             'korteTarget' => $korteTarget,
+            'penggalangTarget' => $penggalangTarget,
             'korweFormed' => $korweFormed,
             'korteFormed' => $korteFormed,
+            'penggalangFormed' => $penggalangFormed,
         ]);
         // #endregion
 
         return [
             'korwe_target' => $korweTarget,
             'korte_target' => $korteTarget,
+            'penggalang_target' => $penggalangTarget,
             'korwe_formed' => $korweFormed,
             'korte_formed' => $korteFormed,
+            'penggalang_formed' => $penggalangFormed,
             'korwe_percent' => $korweTarget > 0 ? min(100, round(($korweFormed / $korweTarget) * 100, 1)) : 0,
             'korte_percent' => $korteTarget > 0 ? min(100, round(($korteFormed / $korteTarget) * 100, 1)) : 0,
+            'penggalang_percent' => $penggalangTarget > 0 ? min(100, round(($penggalangFormed / $penggalangTarget) * 100, 1)) : 0,
         ];
     }
 
@@ -479,6 +503,7 @@ class Detail extends Component
     {
         $korweFormed = $this->targetWilayah->korwes->where('status', 'terbentuk')->count();
         $korteFormed = $this->targetWilayah->kortes->where('status', 'terbentuk')->count();
+        $penggalangFormed = $this->targetWilayah->penggalangSuaras->where('status', 'aktif')->count();
         $rows = [];
 
         foreach ([2026, 2027, 2028, 2029] as $year) {
@@ -488,6 +513,8 @@ class Detail extends Component
                 'korwe_formed' => $korweFormed,
                 'korte_target' => (int) $this->targetWilayah->{'target_korte_' . $year},
                 'korte_formed' => $korteFormed,
+                'penggalang_target' => (int) $this->targetWilayah->{'target_penggalang_' . $year},
+                'penggalang_formed' => $penggalangFormed,
                 'active' => $this->activeYear === $year,
             ];
         }
@@ -659,7 +686,7 @@ class Detail extends Component
     public function getPenggalangSummaryProperty(): array
     {
         $total = $this->penggalangList->count();
-        $target = (int) $this->targetWilayah->target_penggalang;
+        $target = (int) $this->targetWilayah->{'target_penggalang_' . $this->activeYear};
         $aktif = $this->penggalangList->where('status', 'aktif')->count();
         $jangkauan = (int) $this->penggalangList->sum('realisasi_jangkauan');
         $targetJangkauan = (int) $this->penggalangList->sum('target_jangkauan');
@@ -889,7 +916,7 @@ class Detail extends Component
         // #endregion
 
         return view('livewire.infra-rtrw.detail')
-            ->layout('components.layouts.app-fullwidth', ['title' => 'Detail Infra RT/RW']);
+            ->layout('components.layouts.app-fullwidth', ['title' => 'Detail Infrastruktur']);
     }
 
     private function loadTargetWilayah(TargetWilayah $targetWilayah): void

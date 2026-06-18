@@ -12,7 +12,7 @@ use RuntimeException;
 
 class PemiluSummaryCompiler
 {
-    private const PKS_PARTY_ID = '12';
+    private const PKS_PARTY_ID = '8';
     private const PKS_PARTY_NAME = 'PKS';
     private const TOTAL_DPRD_SEATS = 55;
 
@@ -460,6 +460,35 @@ class PemiluSummaryCompiler
         foreach ($rows as $row) {
             $partyRows = $this->finalizePartyRows($row['party_map']);
             $analytics = $this->analyzePks($partyRows, $this->extractPksCandidatesFromPartyMap($row['party_map']));
+            
+            $rivalParty = null;
+            $rivalVotes = 0;
+            $rivalShare = 0.0;
+            $pksRank = (int) $analytics['rank'];
+            
+            if (count($partyRows) > 1) {
+                $rivalIndex = ($pksRank === 1) ? 1 : 0;
+                if (isset($partyRows[$rivalIndex])) {
+                    $rivalParty = (string) $partyRows[$rivalIndex]['party_name'];
+                    $rivalVotes = (int) $partyRows[$rivalIndex]['total_votes'];
+                    $rivalShare = (float) $partyRows[$rivalIndex]['share'];
+                }
+            } elseif (count($partyRows) === 1 && $pksRank !== 1) {
+                $rivalParty = (string) $partyRows[0]['party_name'];
+                $rivalVotes = (int) $partyRows[0]['total_votes'];
+                $rivalShare = (float) $partyRows[0]['share'];
+            }
+
+            $topParties = [];
+            foreach (array_slice($partyRows, 0, 5) as $pr) {
+                $topParties[] = [
+                    'party_id' => (string) $pr['party_id'],
+                    'party_name' => (string) $pr['party_name'],
+                    'votes' => (int) $pr['total_votes'],
+                    'share' => (float) $pr['share'],
+                ];
+            }
+
             $result[] = [
                 'key' => $row['key'],
                 'type' => $row['type'],
@@ -476,11 +505,16 @@ class PemiluSummaryCompiler
                 'boomer' => (int) $row['boomer'],
                 'age_unknown' => (int) $row['age_unknown'],
                 'tps_count' => count($row['tps_set']),
+                'tps_list' => array_values(array_keys($row['tps_set'])),
                 'pks_votes' => (int) round((float) $analytics['pks_votes']),
                 'share' => $analytics['share'],
                 'rank' => (int) $analytics['rank'],
                 'status' => $analytics['status'],
                 'top_candidate' => $analytics['pks_candidates'][0] ?? null,
+                'rival_party' => $rivalParty,
+                'rival_votes' => $rivalVotes,
+                'rival_share' => $rivalShare,
+                'party_rows' => $topParties,
             ];
         }
 

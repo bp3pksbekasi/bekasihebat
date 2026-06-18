@@ -9,9 +9,9 @@
     ];
 @endphp
 
-<div style="min-height:100vh;background:#fafafa;">
-    <div style="width:100%;margin:0;">
-        <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<div style="min-height:100vh;padding:20px;background:#f5f5f5;position:relative;box-sizing:border-box;">
+    <div style="width:100%;margin:0;box-sizing:border-box;">
+        <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;gap:16px;flex-wrap:wrap;">
             <div>
                 <div style="font-size:11px;color:#a3a3a3;">Event &gt; {{ $event->judul }}</div>
                 <div style="font-size:18px;font-weight:600;margin-top:4px;">{{ $event->judul }}</div>
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;padding:16px 20px 20px;">
+        <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;padding:16px 20px 20px;border-radius:0 0 14px 14px;overflow:hidden;">
             @if (session('message'))
                 <div style="margin-bottom:14px;padding:10px 12px;border-radius:8px;background:#ecfdf3;border:0.5px solid #bbf7d0;color:#166534;font-size:12px;">
                     {{ session('message') }}

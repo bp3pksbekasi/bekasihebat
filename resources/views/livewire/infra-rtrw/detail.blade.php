@@ -10,9 +10,9 @@
     $dapilNumber = trim(str_replace('BEKASI', '', $targetWilayah->dapil));
 @endphp
 
-<div style="min-height:100vh;background:#fafafa;">
-    <div style="width:100%;margin:0;">
-        <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-radius:0;gap:16px;flex-wrap:wrap;">
+<div style="min-height:100vh;padding:20px;background:#f5f5f5;position:relative;box-sizing:border-box;">
+    <div style="width:100%;margin:0;box-sizing:border-box;">
+        <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;gap:16px;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div style="width:28px;height:28px;background:#fe5000;border-radius:6px;display:flex;align-items:center;justify-content:center;">
@@ -22,7 +22,7 @@
                             <path d="M7 12H17" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <div style="font-weight:500;font-size:14px;">Detail Infra RT/RW</div>
+                    <div style="font-weight:500;font-size:14px;">Detail Infrastruktur</div>
                 </div>
                 <div style="font-size:11px;color:#aaa;">
                     {{ $targetWilayah->dapil }} · {{ $targetWilayah->kecamatan }} · {{ $targetWilayah->desa }}
@@ -34,9 +34,9 @@
             </div>
         </div>
 
-        <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;border-radius:0;overflow:hidden;">
+        <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;border-radius:0 0 14px 14px;overflow:hidden;">
             <div style="padding:12px 20px;border-bottom:0.5px solid #e5e5e5;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;color:#888;">
-                <a href="{{ route('infra-rtrw.index') }}" wire:navigate style="color:#fe5000;text-decoration:none;font-weight:500;">Infra RT/RW</a>
+                <a href="{{ route('infra-rtrw.index') }}" wire:navigate style="color:#fe5000;text-decoration:none;font-weight:500;">Infrastruktur</a>
                 <span>›</span>
                 <span style="color:#666;">{{ $targetWilayah->dapil }}</span>
                 <span>›</span>
@@ -102,10 +102,16 @@
                         <div style="height:100%;width:{{ $profilStats['pct_profil'] }}%;background:#3b82f6;border-radius:999px;"></div>
                     </div>
                 </div>
-                <div style="background:white;border:0.5px solid #e5e5e5;border-radius:10px;padding:14px;">
-                    <div style="font-size:11px;color:#666;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Penggalang</div>
-                    <div style="font-size:26px;font-weight:500;color:#ea580c;margin-top:6px;">{{ number_format($this->penggalangList->count()) }}</div>
-                    <div style="font-size:11px;color:#888;margin-top:4px;">target {{ number_format($targetWilayah->target_penggalang) }}</div>
+                <div style="background:linear-gradient(135deg,#fe5000,#d94400);border-radius:10px;padding:14px;color:white;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                        <div style="font-size:11px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;opacity:.9;">PENGGALANG</div>
+                        <div style="font-size:10px;opacity:.85;">Target {{ $this->activeYear }}</div>
+                    </div>
+                    <div style="font-size:26px;font-weight:500;margin-top:6px;">{{ number_format($summary['penggalang_formed']) }}/{{ number_format($summary['penggalang_target']) }}</div>
+                    <div style="margin-top:8px;height:6px;background:rgba(255,255,255,0.18);border-radius:999px;overflow:hidden;">
+                        <div style="height:100%;width:{{ min(100, max(0, $summary['penggalang_percent'])) }}%;background:white;border-radius:999px;"></div>
+                    </div>
+                    <div style="font-size:11px;margin-top:6px;opacity:.9;">{{ number_format($summary['penggalang_percent'], 1) }}% tercapai</div>
                 </div>
                 <div style="background:white;border:0.5px solid #e5e5e5;border-radius:10px;padding:14px;">
                     <div style="font-size:11px;color:#666;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">UPA RW</div>

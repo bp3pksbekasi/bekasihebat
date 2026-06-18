@@ -232,13 +232,13 @@
                                             </div>
 
                                             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                                                <select wire:change="ubahRole({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;">
+                                                <select wire:change="ubahRole({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;color:#111827;background:white;">
                                                     <option value="{{ \App\Models\User::ROLE_ADMIN }}" @selected($user->role === \App\Models\User::ROLE_ADMIN)>Admin DPD</option>
                                                     <option value="{{ \App\Models\User::ROLE_BIDANG }}" @selected($user->role === \App\Models\User::ROLE_BIDANG)>Pengurus Bidang</option>
                                                     <option value="{{ \App\Models\User::ROLE_KADER }}" @selected($user->role === \App\Models\User::ROLE_KADER)>Kader</option>
                                                 </select>
 
-                                                <select wire:change="assignBidang({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;" @disabled($user->role !== \App\Models\User::ROLE_BIDANG)>
+                                                <select wire:change="assignBidang({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;color:#111827;background:white;" @disabled($user->role !== \App\Models\User::ROLE_BIDANG)>
                                                     <option value="">Tanpa bidang</option>
                                                     @foreach ($this->bidangOptions as $bidang)
                                                         <option value="{{ $bidang['slug'] }}" @selected($user->bidang_slug === $bidang['slug'])>{{ $bidang['label'] }}</option>
@@ -290,7 +290,7 @@
         @if ($showAuditLog)
             <div style="padding:0 16px 16px;">
                 <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
-                    <select wire:model.live="filterAction" style="padding:8px 10px;border-radius:10px;border:0.5px solid #d4d4d8;font-size:12px;">
+                    <select wire:model.live="filterAction" style="padding:8px 10px;border-radius:10px;border:0.5px solid #d4d4d8;font-size:12px;color:#111827;background:white;">
                         <option value="">Semua action</option>
                         @foreach ($this->auditActionOptions as $action)
                             <option value="{{ $action }}">{{ $action }}</option>
@@ -348,19 +348,19 @@
                 <div style="padding:16px 18px;display:grid;gap:14px;overflow:auto;">
                     <div>
                         <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">Nama</label>
-                        <input type="text" wire:model.defer="fName" placeholder="Nama lengkap user" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                        <input type="text" wire:model.defer="fName" placeholder="Nama lengkap user" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                         @error('fName') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                     </div>
 
                     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;" class="user-form-grid">
                         <div>
                             <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">Email</label>
-                            <input type="email" wire:model.defer="fEmail" placeholder="nama@domain.com" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                            <input type="email" wire:model.defer="fEmail" placeholder="nama@domain.com" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                             @error('fEmail') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                         </div>
                         <div>
                             <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">No. HP</label>
-                            <input type="text" wire:model.defer="fPhone" placeholder="08xxxxxxxxxx" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                            <input type="text" wire:model.defer="fPhone" placeholder="08xxxxxxxxxx" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                             @error('fPhone') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                         </div>
                     </div>
@@ -368,12 +368,12 @@
                     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;" class="user-form-grid">
                         <div>
                             <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">Password awal</label>
-                            <input type="password" wire:model.defer="fPassword" placeholder="Minimal 6 karakter" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                            <input type="password" wire:model.defer="fPassword" placeholder="Minimal 6 karakter" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                             @error('fPassword') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                         </div>
                         <div>
                             <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">Konfirmasi password</label>
-                            <input type="password" wire:model.defer="fPasswordConfirmation" placeholder="Ulangi password" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                            <input type="password" wire:model.defer="fPasswordConfirmation" placeholder="Ulangi password" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                             @error('fPasswordConfirmation') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                         </div>
                     </div>
@@ -381,7 +381,7 @@
                     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;" class="user-form-grid">
                         <div>
                             <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">Role</label>
-                            <select wire:model.live="fRole" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                            <select wire:model.live="fRole" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                                 <option value="{{ \App\Models\User::ROLE_ADMIN }}">Admin DPD</option>
                                 <option value="{{ \App\Models\User::ROLE_BIDANG }}">Pengurus Bidang</option>
                                 <option value="{{ \App\Models\User::ROLE_KADER }}">Kader</option>
@@ -390,7 +390,7 @@
                         </div>
                         <div>
                             <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">Status</label>
-                            <select wire:model.defer="fStatus" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                            <select wire:model.defer="fStatus" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                                 <option value="aktif">Aktif</option>
                                 <option value="nonaktif">Nonaktif</option>
                             </select>
@@ -400,7 +400,7 @@
 
                     <div>
                         <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">Bidang</label>
-                        <select wire:model.defer="fBidangSlug" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;background:{{ $fRole === \App\Models\User::ROLE_BIDANG ? 'white' : '#f9fafb' }};" @disabled($fRole !== \App\Models\User::ROLE_BIDANG)>
+                        <select wire:model.defer="fBidangSlug" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;background:{{ $fRole === \App\Models\User::ROLE_BIDANG ? 'white' : '#f9fafb' }};color:#111827;" @disabled($fRole !== \App\Models\User::ROLE_BIDANG)>
                             <option value="">Tanpa bidang</option>
                             @foreach ($this->bidangOptions as $bidang)
                                 <option value="{{ $bidang['slug'] }}">{{ $bidang['label'] }}</option>
@@ -412,7 +412,7 @@
 
                     <div>
                         <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;">NIA (opsional)</label>
-                        <input type="text" wire:model.defer="fNia" placeholder="32.16.06.10.0065" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;">
+                        <input type="text" wire:model.defer="fNia" placeholder="32.16.06.10.0065" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                         <div style="font-size:11px;color:#9ca3af;margin-top:5px;">Isi jika akun ini sudah punya NIA kader.</div>
                         @error('fNia') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
                     </div>

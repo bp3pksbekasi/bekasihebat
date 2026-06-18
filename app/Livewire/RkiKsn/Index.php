@@ -179,7 +179,7 @@ class Index extends Component
 
         return TitikRki::query()
             ->where('target_wilayah_id', $this->selectedDesaId)
-            ->with(['logSesis' => fn (Builder $query) => $query->latest('tanggal_sesi')->limit(3)])
+            ->with(['logSesis' => fn ($query) => $query->latest('tanggal_sesi')->limit(3)])
             ->orderByRaw("FIELD(status, 'aktif', 'pembentukan', 'nonaktif')")
             ->orderBy('nomor_rw')
             ->get();
@@ -199,7 +199,7 @@ class Index extends Component
         return TitikSenam::query()
             ->where('kecamatan', $targetWilayah->kecamatan)
             ->where('desa', $targetWilayah->desa)
-            ->with(['logSesis' => fn (Builder $query) => $query->latest('tanggal_sesi')->limit(5)])
+            ->with(['logSesis' => fn ($query) => $query->latest('tanggal_sesi')->limit(5)])
             ->orderByRaw("FIELD(status, 'aktif', 'pembentukan', 'nonaktif')")
             ->latest('updated_at')
             ->get();
@@ -290,13 +290,13 @@ class Index extends Component
 
     public function selectDesa(string $id): void
     {
-        $this->selectedDesaId = $id;
+        $this->selectedDesaId = $this->selectedDesaId === $id ? null : $id;
         $this->expandedLogKey = '';
         $this->showLogForm = false;
         $this->resetErrorBag();
 
-        if ($this->activeTab === 'ksn') {
-            $this->ksnDesaId = $id;
+        if ($this->activeTab === 'ksn' && $this->selectedDesaId) {
+            $this->ksnDesaId = $this->selectedDesaId;
         }
     }
 
@@ -727,5 +727,219 @@ class Index extends Component
     private function baseTargetQuery(): Builder
     {
         return TargetWilayah::query();
+    }
+
+    public function getMapImageProperty(): string
+    {
+        if ($this->selectedKecamatan !== '') {
+            $slug = str_replace(' ', '-', strtolower($this->selectedKecamatan));
+            return "/images/peta/kecamatan/{$slug}.png";
+        }
+
+        if ($this->selectedDapil !== '') {
+            $num = str_replace('BEKASI ', '', strtoupper($this->selectedDapil));
+            return "/images/peta/dapil{$num}.png";
+        }
+
+        return "/images/peta/kabupaten-bekasi.png";
+    }
+
+    public function getMapMarkersProperty(): array
+    {
+        $configs = (new \App\Livewire\Kaderisasi\Index())->getMapConfigs();
+        $config = null;
+
+        if ($this->selectedKecamatan !== '') {
+            $config = $configs[strtoupper($this->selectedKecamatan)] ?? null;
+        } elseif ($this->selectedDapil !== '') {
+            $config = $configs[strtoupper($this->selectedDapil)] ?? null;
+        }
+
+        if (!$config) {
+            return [];
+        }
+
+        $wilayahs = TargetWilayah::query()
+            ->when($this->selectedDapil !== '', fn ($q) => $q->where('dapil', $this->selectedDapil))
+            ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+            ->get();
+
+        if ($wilayahs->isEmpty()) {
+            return [];
+        }
+
+        $targetIds = $wilayahs->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        if ($this->activeTab === 'rki') {
+            $aktifCounts = TitikRki::query()
+                ->whereIn('target_wilayah_id', $targetIds)
+                ->where('status', 'aktif')
+                ->selectRaw('target_wilayah_id, COUNT(*) as total')
+                ->groupBy('target_wilayah_id')
+                ->pluck('total', 'target_wilayah_id');
+        } else {
+            $aktifCounts = TitikSenam::query()
+                ->where('status', 'aktif')
+                ->selectRaw('desa, kecamatan, COUNT(*) as total')
+                ->groupBy('desa', 'kecamatan')
+                ->get()
+                ->keyBy(fn ($item) => strtolower($item->desa) . '|' . strtolower($item->kecamatan))
+                ->map(fn ($item) => $item->total);
+        }
+
+        $markers = [];
+        foreach ($wilayahs as $w) {
+            $desaUpper = strtoupper($w->desa);
+            if (isset($config[$desaUpper])) {
+                if ($this->activeTab === 'rki') {
+                    $target = (int) ($rwCounts[$w->id] ?? 0);
+                    $actual = (int) ($aktifCounts[$w->id] ?? 0);
+                    $label = "{$w->desa} · {$actual}/{$target} RW RKI Aktif";
+                    if ($target > 0) {
+                        if ($actual >= $target) {
+                            $color = '#22c55e';
+                        } elseif ($actual > 0) {
+                            $color = '#eab308';
+                        } else {
+                            $color = '#ef4444';
+                        }
+                    } else {
+                        $color = '#22c55e';
+                    }
+                    $size = 12 + ($target > 0 ? (int) round(($actual / $target) * 12) : 12);
+                } else {
+                    $target = 1;
+                    $key = strtolower($w->desa) . '|' . strtolower($w->kecamatan);
+                    $actual = (int) ($aktifCounts[$key] ?? 0);
+                    $label = "{$w->desa} · {$actual} KSN Aktif";
+                    if ($actual >= $target) {
+                        $color = '#22c55e';
+                    } else {
+                        $color = '#ef4444';
+                    }
+                    $size = 12 + ($actual > 0 ? 12 : 0);
+                }
+
+                $markers[] = [
+                    'id' => $w->id,
+                    'key' => $w->id,
+                    'label' => $label,
+                    'x' => $config[$desaUpper]['x'],
+                    'y' => $config[$desaUpper]['y'],
+                    'size' => $size,
+                    'color' => $color,
+                    'actual' => $actual,
+                    'target' => $target,
+                    'desa' => $w->desa,
+                    'kecamatan' => $w->kecamatan
+                ];
+            }
+        }
+
+        return $markers;
+    }
+
+    public function getVillageListProperty(): Collection
+    {
+        $wilayahs = TargetWilayah::query()
+            ->when($this->selectedDapil !== '', fn ($q) => $q->where('dapil', $this->selectedDapil))
+            ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
+            ->orderBy('kecamatan')
+            ->orderBy('desa')
+            ->get();
+
+        if ($wilayahs->isEmpty()) {
+            return collect();
+        }
+
+        $targetIds = $wilayahs->pluck('id');
+
+        $rwCounts = DataRw::query()
+            ->whereIn('target_wilayah_id', $targetIds)
+            ->selectRaw('target_wilayah_id, COUNT(*) as total')
+            ->groupBy('target_wilayah_id')
+            ->pluck('total', 'target_wilayah_id');
+
+        if ($this->activeTab === 'rki') {
+            $aktifCounts = TitikRki::query()
+                ->whereIn('target_wilayah_id', $targetIds)
+                ->where('status', 'aktif')
+                ->selectRaw('target_wilayah_id, COUNT(*) as total')
+                ->groupBy('target_wilayah_id')
+                ->pluck('total', 'target_wilayah_id');
+        } else {
+            $aktifCounts = TitikSenam::query()
+                ->where('status', 'aktif')
+                ->selectRaw('desa, kecamatan, COUNT(*) as total')
+                ->groupBy('desa', 'kecamatan')
+                ->get()
+                ->keyBy(fn ($item) => strtolower($item->desa) . '|' . strtolower($item->kecamatan))
+                ->map(fn ($item) => $item->total);
+        }
+
+        return $wilayahs->map(function (TargetWilayah $w) use ($rwCounts, $aktifCounts): array {
+            if ($this->activeTab === 'rki') {
+                $target = (int) ($rwCounts[$w->id] ?? 0);
+                $actual = (int) ($aktifCounts[$w->id] ?? 0);
+                $pct = $target > 0 ? (int) round(($actual / $target) * 100) : 0;
+            } else {
+                $target = 1;
+                $key = strtolower($w->desa) . '|' . strtolower($w->kecamatan);
+                $actual = (int) ($aktifCounts[$key] ?? 0);
+                $pct = $actual >= 1 ? 100 : 0;
+            }
+
+            return [
+                'id' => $w->id,
+                'desa' => $w->desa,
+                'kecamatan' => $w->kecamatan,
+                'dapil' => $w->dapil,
+                'target' => $target,
+                'actual' => $actual,
+                'pct' => $pct,
+            ];
+        });
+    }
+
+    public function getSelectedVillageDetailProperty(): ?array
+    {
+        if (! $this->selectedDesaId) {
+            return null;
+        }
+
+        $w = TargetWilayah::find($this->selectedDesaId);
+        if (! $w) {
+            return null;
+        }
+
+        $rwCount = DataRw::where('target_wilayah_id', $w->id)->count();
+        $rkiCount = TitikRki::where('target_wilayah_id', $w->id)->count();
+        $rkiAktif = TitikRki::where('target_wilayah_id', $w->id)->where('status', 'aktif')->count();
+        
+        $ksnCount = TitikSenam::where('desa', $w->desa)->where('kecamatan', $w->kecamatan)->count();
+        $ksnAktif = TitikSenam::where('desa', $w->desa)->where('kecamatan', $w->kecamatan)->where('status', 'aktif')->count();
+
+        return [
+            'id' => $w->id,
+            'desa' => $w->desa,
+            'kecamatan' => $w->kecamatan,
+            'dapil' => $w->dapil,
+            'jumlah_rw' => $rwCount,
+            'rki_total' => $rkiCount,
+            'rki_aktif' => $rkiAktif,
+            'ksn_total' => $ksnCount,
+            'ksn_aktif' => $ksnAktif,
+        ];
+    }
+
+    public function closeVillageDetail(): void
+    {
+        $this->selectedDesaId = null;
     }
 }

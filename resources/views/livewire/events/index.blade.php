@@ -10,8 +10,8 @@
     ];
 @endphp
 
-<div style="min-height:100vh;background:#fafafa;">
-    <div style="width:100%;margin:0;">
+<div style="min-height:100vh;padding:20px;background:#f5f5f5;position:relative;box-sizing:border-box;">
+    <div style="width:100%;margin:0;box-sizing:border-box;">
         <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-radius:14px 14px 0 0;">
             <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex:1 1 auto;">
                 <div style="font-size:15px;font-weight:500;">Kegiatan / Event</div>

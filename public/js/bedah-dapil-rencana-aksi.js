@@ -1,4 +1,5 @@
-const statusConfig = {
+(function() {
+    const statusConfig = {
                 'JAGA KUAT': { color: '#15803d', bg: '#dcfce7', text: '#14532d', label: 'Jaga Kuat' },
                 'AMANKAN': { color: '#65a30d', bg: '#ecfccb', text: '#3f6212', label: 'Amankan' },
                 'REBUT REALISTIS': { color: '#2563eb', bg: '#dbeafe', text: '#1e3a5f', label: 'Rebut Realistis' },
@@ -123,11 +124,12 @@ const statusConfig = {
 
             const dom = {};
 
-            document.addEventListener('DOMContentLoaded', async () => {
+            async function init() {
+                if (!document.getElementById('rwTableTitle')) return;
                 cacheDom();
                 bindEvents();
                 await autoLoadData();
-            });
+            }
 
             function cacheDom() {
                 [
@@ -985,3 +987,10 @@ const statusConfig = {
                 if (!map.has(key)) map.set(key, factory());
                 return map.get(key);
             }
+
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                init();
+            } else {
+                document.addEventListener('DOMContentLoaded', init);
+            }
+        })();
