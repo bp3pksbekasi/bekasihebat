@@ -2,7 +2,7 @@
     <div style="width:100%;max-width:560px;">
         <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:24px;text-align:center;">
             <a href="{{ route('public.home') }}" wire:navigate>
-                <img src="{{ asset('images/logo-hebat.png') }}" alt="Kabupaten Bekasi Hebat" style="height: 64px; width: auto; object-fit: contain;">
+                <img src="{{ asset('images/logoputih.png') }}" alt="Kabupaten Bekasi Hebat" style="height: 64px; width: auto; object-fit: contain;">
             </a>
             <div style="font-size:28px;font-weight:700;color:white;margin-top:4px;">Aktivasi Akun</div>
         </div>

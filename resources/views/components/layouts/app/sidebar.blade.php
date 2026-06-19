@@ -148,7 +148,7 @@
             <flux:sidebar.toggle class="lg:hidden !text-zinc-300" icon="x-mark" />
 
             <a href="{{ route($dashboardRoute) }}" class="flex items-center px-5 py-4" style="border-bottom:0.5px solid #27272a;" wire:navigate>
-                <img src="{{ asset('images/logo-hebat.png') }}" alt="Bekasi Hebat" style="height:36px;width:auto;object-fit:contain;">
+                <img src="{{ asset('images/logoputih.png') }}" alt="Bekasi Hebat" style="height:36px;width:auto;object-fit:contain;">
             </a>
 
             <div class="sidebar-menu-scroll flex-1 overflow-y-auto py-2">

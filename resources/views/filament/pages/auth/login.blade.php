@@ -107,7 +107,7 @@
 
                 {{-- Logo --}}
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:36px;">
-                    <img src="{{ asset('images/logo-hebat.png') }}" alt="Bekasi Hebat" style="height:48px;width:auto;object-fit:contain;">
+                    <img src="{{ asset('images/logoputih.png') }}" alt="Bekasi Hebat" style="height:48px;width:auto;object-fit:contain;">
                 </div>
 
                 {{-- Tagline --}}
