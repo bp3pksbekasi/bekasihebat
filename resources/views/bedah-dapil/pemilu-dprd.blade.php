@@ -244,7 +244,13 @@
             const TOTAL_DPRD_SEATS = 55;
             const userScope = @json($userScope ?? null);
             const userIsScoped = userScope && userScope.mode === 'dapil';
-            const DEFAULT_FOCUS_DAPIL = userScope && userScope.locked_dapil ? 'BEKASI ' + userScope.locked_dapil : '';
+            let focusDapil = '';
+            if (userScope && userScope.locked_dapil) {
+                focusDapil = String(userScope.locked_dapil).toUpperCase().startsWith('BEKASI') 
+                    ? userScope.locked_dapil 
+                    : 'BEKASI ' + userScope.locked_dapil;
+            }
+            const DEFAULT_FOCUS_DAPIL = focusDapil;
             const DEFAULT_FOCUS_KECAMATAN = userScope && userScope.kecamatan ? userScope.kecamatan.toUpperCase() : '';
             const DEFAULT_FOCUS_DESA = userScope && userScope.desa ? userScope.desa.toUpperCase() : '';
             const dptAutoLoadCandidates = {

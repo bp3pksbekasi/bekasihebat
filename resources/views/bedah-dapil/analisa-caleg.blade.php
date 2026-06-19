@@ -251,9 +251,16 @@
             const userScope = @json($userScope ?? null);
             const userIsScoped = userScope && userScope.mode === 'dapil';
 
+            function getScopedDapil(scope) {
+                if (!scope || !scope.locked_dapil) return '';
+                return String(scope.locked_dapil).toUpperCase().startsWith('BEKASI') 
+                    ? scope.locked_dapil 
+                    : 'BEKASI ' + scope.locked_dapil;
+            }
+
             const state = {
                 dataset: null,
-                currentDapil: userScope && userScope.locked_dapil ? 'BEKASI ' + userScope.locked_dapil : '',
+                currentDapil: getScopedDapil(userScope),
                 currentKecamatan: userScope && userScope.kecamatan ? userScope.kecamatan.toUpperCase() : '',
                 currentDesa: userScope && userScope.desa ? userScope.desa.toUpperCase() : '',
                 currentPartai: '',
@@ -1263,9 +1270,10 @@
             }
 
             function resetFilters() {
-                state.currentDapil = userScope && userScope.locked_dapil ? 'BEKASI ' + userScope.locked_dapil : '';
+                state.currentDapil = getScopedDapil(userScope);
                 state.currentKecamatan = userScope && userScope.kecamatan ? userScope.kecamatan.toUpperCase() : '';
                 state.currentDesa = userScope && userScope.desa ? userScope.desa.toUpperCase() : '';
+                state.sortOption = 'votes_desc';
                 state.currentPartai = '';
                 state.currentGender = '';
                 state.searchKeyword = '';

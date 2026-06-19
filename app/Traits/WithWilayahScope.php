@@ -35,7 +35,7 @@ trait WithWilayahScope
                     ?? '');
             }
         } elseif ($isDapil && ! empty($user->dapil)) {
-            $lockedDapil = $user->dapil;
+            $lockedDapil = preg_match('/^\d+$/', (string)$user->dapil) ? 'BEKASI ' . $user->dapil : $user->dapil;
         } elseif ($isDpc && ! empty($user->kecamatan)) {
             $kecamatan = mb_strtoupper((string) $user->kecamatan);
             $lockedDapil = (string) (TargetWilayah::query()

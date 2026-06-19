@@ -5,6 +5,7 @@
         \App\Models\User::ROLE_BIDANG => (int) ($kpi['perRole'][\App\Models\User::ROLE_BIDANG] ?? 0),
         \App\Models\User::ROLE_DPC => (int) ($kpi['perRole'][\App\Models\User::ROLE_DPC] ?? 0),
         \App\Models\User::ROLE_DPRA => (int) ($kpi['perRole'][\App\Models\User::ROLE_DPRA] ?? 0),
+        \App\Models\User::ROLE_DAPIL => (int) ($kpi['perRole'][\App\Models\User::ROLE_DAPIL] ?? 0),
         \App\Models\User::ROLE_KADER => (int) ($kpi['perRole'][\App\Models\User::ROLE_KADER] ?? 0),
     ];
     $roleLabels = [
@@ -12,6 +13,7 @@
         \App\Models\User::ROLE_BIDANG => 'Pengurus Bidang',
         \App\Models\User::ROLE_DPC => 'Pengurus DPC',
         \App\Models\User::ROLE_DPRA => 'Pengurus DPRa',
+        \App\Models\User::ROLE_DAPIL => 'Dapil',
         \App\Models\User::ROLE_KADER => 'Kader',
     ];
     $roleColors = [
@@ -19,6 +21,7 @@
         \App\Models\User::ROLE_BIDANG => '#7c3aed',
         \App\Models\User::ROLE_DPC => '#ea580c',
         \App\Models\User::ROLE_DPRA => '#ca8a04',
+        \App\Models\User::ROLE_DAPIL => '#10b981',
         \App\Models\User::ROLE_KADER => '#64748b',
     ];
     $roleMax = max(max($roleCounts), 1);
@@ -41,6 +44,7 @@
                     <option value="{{ \App\Models\User::ROLE_BIDANG }}">Pengurus Bidang</option>
                     <option value="{{ \App\Models\User::ROLE_DPC }}">Pengurus DPC</option>
                     <option value="{{ \App\Models\User::ROLE_DPRA }}">Pengurus DPRa</option>
+                    <option value="{{ \App\Models\User::ROLE_DAPIL }}">Dapil</option>
                     <option value="{{ \App\Models\User::ROLE_KADER }}">Kader</option>
                 </select>
                 <select wire:model.live="filterBidang" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
@@ -182,6 +186,7 @@
                                         \App\Models\User::ROLE_BIDANG => ['bg' => '#ede9fe', 'text' => '#7c3aed', 'label' => 'Pengurus Bidang'],
                                         \App\Models\User::ROLE_DPC => ['bg' => '#ffedd5', 'text' => '#c2410c', 'label' => 'Pengurus DPC'],
                                         \App\Models\User::ROLE_DPRA => ['bg' => '#fef08a', 'text' => '#854d0e', 'label' => 'Pengurus DPRa'],
+                                        \App\Models\User::ROLE_DAPIL => ['bg' => '#d1fae5', 'text' => '#047857', 'label' => 'Dapil'],
                                         default => ['bg' => '#f3f4f6', 'text' => '#4b5563', 'label' => 'Kader'],
                                     };
                                     $nia = $user->nia ?: ($user->kader_nia ?? '-');
@@ -247,6 +252,7 @@
                                                     <option value="{{ \App\Models\User::ROLE_BIDANG }}" @selected($user->role === \App\Models\User::ROLE_BIDANG)>Pengurus Bidang</option>
                                                     <option value="{{ \App\Models\User::ROLE_DPC }}" @selected($user->role === \App\Models\User::ROLE_DPC)>Pengurus DPC</option>
                                                     <option value="{{ \App\Models\User::ROLE_DPRA }}" @selected($user->role === \App\Models\User::ROLE_DPRA)>Pengurus DPRa</option>
+                                                    <option value="{{ \App\Models\User::ROLE_DAPIL }}" @selected($user->role === \App\Models\User::ROLE_DAPIL)>Dapil</option>
                                                     <option value="{{ \App\Models\User::ROLE_KADER }}" @selected($user->role === \App\Models\User::ROLE_KADER)>Kader</option>
                                                 </select>
 
@@ -396,6 +402,9 @@
                             <select wire:model.live="fRole" style="width:100%;padding:10px 12px;border:0.5px solid #d1d5db;border-radius:10px;font-size:13px;color:#111827;background:white;">
                                 <option value="{{ \App\Models\User::ROLE_ADMIN }}">Admin DPD</option>
                                 <option value="{{ \App\Models\User::ROLE_BIDANG }}">Pengurus Bidang</option>
+                                <option value="{{ \App\Models\User::ROLE_DPC }}">Pengurus DPC</option>
+                                <option value="{{ \App\Models\User::ROLE_DPRA }}">Pengurus DPRa</option>
+                                <option value="{{ \App\Models\User::ROLE_DAPIL }}">Dapil</option>
                                 <option value="{{ \App\Models\User::ROLE_KADER }}">Kader</option>
                             </select>
                             @error('fRole') <div style="font-size:11px;color:#dc2626;margin-top:5px;">{{ $message }}</div> @enderror
