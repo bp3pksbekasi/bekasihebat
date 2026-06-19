@@ -1,6 +1,6 @@
 @php
-    $pageTitle = 'Buat Event Baru';
-    $pageSubtitle = 'Susun draft kegiatan dan ajukan approval berjenjang';
+    $pageTitle = 'Buat Program Baru';
+    $pageSubtitle = 'Buat program kegiatan untuk DPD, DPC, atau DPRa';
     $submitDraftLabel = 'Simpan Draft';
     $submitApprovalLabel = 'Simpan & Ajukan Approval';
     $existingCover = null;

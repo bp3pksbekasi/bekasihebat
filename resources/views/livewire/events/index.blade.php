@@ -14,28 +14,28 @@
     <div style="width:100%;margin:0;box-sizing:border-box;">
         <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-radius:14px 14px 0 0;">
             <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex:1 1 auto;">
-                <div style="font-size:15px;font-weight:500;">Kegiatan / Event</div>
+                <div style="font-size:15px;font-weight:500;">Program</div>
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1 1 auto;">
                     <div style="font-size:12px;color:#d4d4d8;font-weight:500;">Filter :</div>
-                    <select wire:model.live="filterStatus" style="height:38px;border-radius:8px;border:0.5px solid #3f3f46;padding:0 12px;font-size:12px;min-width:170px;background:#27272a;color:#f4f4f5;">
-                        <option value="">Semua status</option>
-                        @foreach (\App\Models\Event::STATUS_CONFIG as $key => $cfg)
-                            <option value="{{ $key }}">{{ $cfg['label'] }}</option>
-                        @endforeach
-                    </select>
-                    <select wire:model.live="filterJenis" style="height:38px;border-radius:8px;border:0.5px solid #3f3f46;padding:0 12px;font-size:12px;min-width:170px;background:#27272a;color:#f4f4f5;">
-                        <option value="">Semua jenis</option>
-                        @foreach (\App\Models\Event::JENIS_EVENT as $key => $label)
-                            <option value="{{ $key }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                    <select wire:model.live="filterDapil" style="height:38px;border-radius:8px;border:0.5px solid #3f3f46;padding:0 12px;font-size:12px;min-width:160px;background:#fff7f1;color:#993c1d;font-weight:500;">
+                    <select wire:model.live="filterDapil" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#fff7f1;color:#993c1d;font-weight:500;">
                         <option value="">Semua dapil</option>
                         @foreach ($this->dapilOptions as $dapil)
                             <option value="{{ $dapil }}">{{ $dapil }}</option>
                         @endforeach
                     </select>
-                    <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari judul, lokasi, PIC..." style="width:220px;height:38px;border-radius:8px;border:0.5px solid #3f3f46;padding:0 12px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                    <select wire:model.live="filterKecamatan" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                        <option value="">Semua kecamatan</option>
+                        @foreach ($this->kecamatanOptions as $kec)
+                            <option value="{{ $kec }}">{{ $kec }}</option>
+                        @endforeach
+                    </select>
+                    <select wire:model.live="filterDesa" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                        <option value="">Semua desa</option>
+                        @foreach ($this->desaOptions as $desa)
+                            <option value="{{ $desa }}">{{ $desa }}</option>
+                        @endforeach
+                    </select>
+                    <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari judul, lokasi, PIC..." style="padding:5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;width:180px;background:#27272a;color:#f4f4f5;">
                 </div>
             </div>
             <div style="width:26px;height:26px;background:#fe5000;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 auto;">EV</div>
@@ -50,14 +50,14 @@
 
             <div style="padding-top:2px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <h1 style="font-size:20px;font-weight:500;color:#1a1a1a;margin:0;">Kegiatan / Event</h1>
+                    <h1 style="font-size:20px;font-weight:500;color:#1a1a1a;margin:0;">Program</h1>
                     <div style="font-size:12px;color:#666;">Manajemen agenda, approval, dan publikasi kegiatan lintas wilayah.</div>
                 </div>
                 <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
-                    <div style="font-size:11px;color:#888;">Mode tampilan {{ $viewMode === 'table' ? 'tabel' : 'cards' }} · {{ number_format($events->total()) }} event</div>
+                    <div style="font-size:11px;color:#888;">Mode tampilan {{ $viewMode === 'table' ? 'tabel' : 'cards' }} · {{ number_format($events->total()) }} program</div>
                     <a href="{{ route('events.create') }}" wire:navigate style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;background:#fe5000;color:white;text-decoration:none;font-size:12px;font-weight:600;">
                         <i class="ti ti-plus" aria-hidden="true"></i>
-                        <span>Buat Event Baru</span>
+                        <span>Buat Program</span>
                     </a>
                 </div>
             </div>
@@ -69,6 +69,49 @@
                         <div style="font-size:11px;color:#666;margin-top:4px;">{{ $cfg['label'] }}</div>
                     </button>
                 @endforeach
+            </div>
+
+            {{-- Peta Sebaran --}}
+            <div style="margin-bottom:24px;margin-top:20px;">
+                <div style="font-size:12px;color:#fe5000;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">Peta Sebaran Program</div>
+                <div style="height:300px;background:#f8fafc;border:0.5px solid #e2e8f0;border-radius:12px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+                    <img src="{{ $this->mapImage }}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;" alt="Peta Sebaran">
+                    @foreach ($this->mapMarkers as $marker)
+                        <div title="{{ $marker['label'] }}"
+                            style="position:absolute;left:{{ $marker['x'] }}%;top:{{ $marker['y'] }}%;transform:translate(-50%,-50%);width:{{ $marker['size'] }}px;height:{{ $marker['size'] }}px;border-radius:50%;border:1.5px solid white;background:{{ $marker['color'] }};box-shadow:0 3px 8px rgba(0,0,0,0.25);cursor:pointer;transition:transform 0.15s ease-in-out;z-index:10;"
+                            onmouseover="this.style.transform='translate(-50%,-50%) scale(1.25)'"
+                            onmouseout="this.style.transform='translate(-50%,-50%) scale(1)'">
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Filters on Top Right of Table --}}
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+                <select wire:model.live="filterStatus" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+                    <option value="">Semua status</option>
+                    @foreach (\App\Models\Event::STATUS_CONFIG as $key => $cfg)
+                        <option value="{{ $key }}">{{ $cfg['label'] }}</option>
+                    @endforeach
+                </select>
+                <select wire:model.live="filterJenis" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+                    <option value="">Semua jenis</option>
+                    @foreach (\App\Models\Event::JENIS_EVENT as $key => $label)
+                        <option value="{{ $key }}">{{ $label }}</option>
+                    @endforeach
+                </select>
+                <select wire:model.live="filterLevel" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+                    <option value="">Semua level</option>
+                    <option value="dpra">DPRa</option>
+                    <option value="dpc">DPC</option>
+                    <option value="dpd">DPD</option>
+                </select>
+                <select wire:model.live="filterBidang" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+                    <option value="">Semua bidang</option>
+                    @foreach($this->bidangOptions as $b)
+                        <option value="{{ $b->id }}">{{ $b->nama }}</option>
+                    @endforeach
+                </select>
             </div>
 
             @if ($viewMode === 'cards')
@@ -84,6 +127,22 @@
                                 @endif
                                 <div style="position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;">
                                     <span style="font-size:10px;padding:3px 8px;border-radius:999px;background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};font-weight:600;">{{ $cfg['label'] }}</span>
+                                    
+                                    {{-- Badge org_level --}}
+                                    <span style="
+                                        font-size:9px;padding:2px 7px;border-radius:4px;font-weight:500;
+                                        background:{{ $event->org_level === 'dpd' ? '#fee2e2' : ($event->org_level === 'dpc' ? '#dbeafe' : '#dcfce7') }};
+                                        color:{{ $event->org_level === 'dpd' ? '#991b1b' : ($event->org_level === 'dpc' ? '#1e3a8a' : '#14532d') }};">
+                                        {{ strtoupper($event->org_level ?? '') }}
+                                    </span>
+
+                                    {{-- Badge bidang --}}
+                                    @if($event->bidang)
+                                    <span style="font-size:9px;padding:2px 7px;border-radius:4px;background:#f5f5f5;color:#52525b;">
+                                        {{ $event->bidang->nama }}
+                                    </span>
+                                    @endif
+
                                     @if ($event->is_public)
                                         <span style="font-size:10px;padding:3px 8px;border-radius:999px;background:#dcfce7;color:#166534;font-weight:600;">Publik</span>
                                     @endif
@@ -104,7 +163,7 @@
                         </a>
                     @empty
                         <div style="grid-column:1/-1;border:0.5px dashed #d4d4d8;border-radius:12px;padding:34px 16px;text-align:center;font-size:12px;color:#888;background:#fafafa;">
-                            Belum ada event pada filter ini.
+                            Belum ada program pada filter ini.
                         </div>
                     @endforelse
                 </div>
@@ -114,7 +173,7 @@
                         <table style="width:100%;border-collapse:collapse;font-size:12px;">
                             <thead style="background:#fafafa;">
                                 <tr style="border-bottom:0.5px solid #e5e7eb;">
-                                    <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Judul</th>
+                                    <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Judul Program</th>
                                     <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Jenis</th>
                                     <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Tanggal</th>
                                     <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Lokasi</th>
@@ -136,7 +195,26 @@
                                         <td style="padding:12px;color:#525252;">{{ $event->tanggal_mulai?->format('d M Y, H:i') ?? '-' }}</td>
                                         <td style="padding:12px;color:#525252;">{{ $event->lokasi_desa ?? $event->lokasi }}</td>
                                         <td style="padding:12px;text-align:center;">
-                                            <span style="display:inline-flex;padding:4px 8px;border-radius:999px;background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};font-size:10px;font-weight:600;">{{ $cfg['label'] }}</span>
+                                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+                                                <span style="display:inline-flex;padding:4px 8px;border-radius:999px;background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};font-size:10px;font-weight:600;">{{ $cfg['label'] }}</span>
+                                                
+                                                <div style="display:flex;gap:4px;">
+                                                    {{-- Badge org_level --}}
+                                                    <span style="
+                                                        font-size:9px;padding:2px 7px;border-radius:4px;font-weight:500;
+                                                        background:{{ $event->org_level === 'dpd' ? '#fee2e2' : ($event->org_level === 'dpc' ? '#dbeafe' : '#dcfce7') }};
+                                                        color:{{ $event->org_level === 'dpd' ? '#991b1b' : ($event->org_level === 'dpc' ? '#1e3a8a' : '#14532d') }};">
+                                                        {{ strtoupper($event->org_level ?? '') }}
+                                                    </span>
+
+                                                    {{-- Badge bidang --}}
+                                                    @if($event->bidang)
+                                                    <span style="font-size:9px;padding:2px 7px;border-radius:4px;background:#f5f5f5;color:#52525b;border:0.5px solid #e5e5e5;">
+                                                        {{ $event->bidang->nama }}
+                                                    </span>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </td>
                                         <td style="padding:12px;text-align:center;">
                                             <div style="display:flex;align-items:center;justify-content:center;gap:5px;">
@@ -154,14 +232,16 @@
                                         <td style="padding:12px;text-align:center;">
                                             <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;">
                                                 <a href="{{ route('events.detail', $event) }}" wire:navigate style="padding:5px 9px;border-radius:7px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:11px;">Lihat</a>
-                                                <a href="{{ route('events.edit', $event) }}" wire:navigate style="padding:5px 9px;border-radius:7px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:11px;">Edit</a>
+                                                @if(in_array($event->status, [\App\Models\Event::STATUS_DRAFT, \App\Models\Event::STATUS_DITOLAK], true))
+                                                    <a href="{{ route('events.edit', $event) }}" wire:navigate style="padding:5px 9px;border-radius:7px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:11px;">Edit</a>
+                                                @endif
                                                 <button wire:click="confirmDelete('{{ $event->uuid }}')" type="button" style="padding:5px 9px;border-radius:7px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:11px;cursor:pointer;">Hapus</button>
                                             </div>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" style="padding:34px 16px;text-align:center;font-size:12px;color:#888;background:#fafafa;">Belum ada event pada filter ini.</td>
+                                        <td colspan="8" style="padding:34px 16px;text-align:center;font-size:12px;color:#888;background:#fafafa;">Belum ada program pada filter ini.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -179,8 +259,8 @@
     @if ($showDeleteConfirm)
         <div style="position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:40;" wire:click="cancelDelete"></div>
         <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;max-width:calc(100vw - 32px);background:white;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,0.16);z-index:50;padding:18px;">
-            <div style="font-size:15px;font-weight:600;color:#1a1a1a;">Hapus event?</div>
-            <div style="font-size:12px;color:#666;margin-top:6px;">Data event, approval, RAB, dan laporan terkait akan ikut terhapus.</div>
+            <div style="font-size:15px;font-weight:600;color:#1a1a1a;">Hapus program?</div>
+            <div style="font-size:12px;color:#666;margin-top:6px;">Data program, approval, RAB, dan laporan terkait akan ikut terhapus.</div>
             <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:8px;">
                 <button wire:click="cancelDelete" type="button" style="height:38px;padding:0 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;cursor:pointer;">Batal</button>
                 <button wire:click="deleteEvent" type="button" style="height:38px;padding:0 12px;border-radius:8px;border:none;background:#dc2626;color:white;cursor:pointer;">Hapus</button>

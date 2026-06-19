@@ -19,19 +19,19 @@
             </div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1 1 auto;">
                 <div style="font-size:12px;color:#d4d4d8;font-weight:500;">Filter :</div>
-                <select wire:model.live="selectedDapil" style="padding:6px 28px 6px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                <select wire:model.live="selectedDapil" style="padding:6px 28px 6px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;" @if ($this->accessScope['is_dapil'] ?? false) disabled @endif>
                     <option value="">Semua dapil</option>
                     @foreach ($this->dapilOptions as $d)
                         <option value="{{ $d }}">{{ $d }}</option>
                     @endforeach
                 </select>
-                <select wire:model.live="selectedKecamatan" style="padding:6px 28px 6px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                <select wire:model.live="selectedKecamatan" style="padding:6px 28px 6px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;" @if (($this->accessScope['kecamatan'] ?? '') !== '') disabled @endif>
                     <option value="">Semua kecamatan</option>
                     @foreach ($this->kecamatanOptions as $k)
                         <option value="{{ $k }}">{{ $k }}</option>
                     @endforeach
                 </select>
-                <select wire:model.live="selectedDesa" style="padding:6px 28px 6px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                <select wire:model.live="selectedDesa" style="padding:6px 28px 6px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;" @if (auth()->user()?->isDpra()) disabled @endif>
                     <option value="">Semua desa</option>
                     @foreach ($this->desaOptions as $desaOption)
                         <option value="{{ $desaOption }}">{{ $desaOption }}</option>

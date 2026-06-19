@@ -225,6 +225,7 @@
         </div>
         <div id="tpsModalBackdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:51;display:none;"></div>
         <script>
+        (() => {
             const csrfTokenFromBlade = '{{ csrf_token() }}';
             const compiledPeriodOptions = {!! json_encode($periodOptions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
             const compiledPayload = {!! json_encode($compiledPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
@@ -241,8 +242,11 @@
             const PKS_PARTY_ID = '8';
             const PKS_PARTY_NAME = 'PKS';
             const TOTAL_DPRD_SEATS = 55;
-            const DEFAULT_FOCUS_DAPIL = 'BEKASI 1';
-            const DEFAULT_FOCUS_KECAMATAN = 'SETU';
+            const userScope = @json($userScope ?? null);
+            const userIsScoped = userScope && userScope.mode === 'dapil';
+            const DEFAULT_FOCUS_DAPIL = userScope && userScope.locked_dapil ? 'BEKASI ' + userScope.locked_dapil : '';
+            const DEFAULT_FOCUS_KECAMATAN = userScope && userScope.kecamatan ? userScope.kecamatan.toUpperCase() : '';
+            const DEFAULT_FOCUS_DESA = userScope && userScope.desa ? userScope.desa.toUpperCase() : '';
             const dptAutoLoadCandidates = {
                 'BEKASI 1': ['/data/pemilu/dpt_dapil1_rt_rw.csv', '/data/pemilu/dpt_pileg2024_bekasi%201.csv'],
                 'BEKASI 2': ['/data/pemilu/dpt_dapil2_rt_rw.csv', '/data/pemilu/dpt_pileg2024_bekasi%202.csv'],
@@ -278,7 +282,7 @@
                     ],
                 },
             };
-            const state = { dataset: new Map(), dptDatasets: {}, currentDapil: DEFAULT_FOCUS_DAPIL, currentKecamatan: DEFAULT_FOCUS_KECAMATAN, currentDesa: '', currentStatus: '', currentTpsStatus: 'JAGA KUAT', searchKeyword: '', searchDebounceId: null, activeVillageTab: 'summary', detailDrawer: null, sourceMode: 'csv', selectedPeriodId, rwPage: 1, rtPage: 1, tpsPage: 1, rwStatusFilter: '', rtStatusFilter: '', currentProfilRw: null, isEditingProfilRw: false, wilayahId: null, currentRwNum: null, isLoadingProfilRw: false, hasLoadedProfilRwKey: null, profilRwMap: initialProfilRwMap };
+            const state = { dataset: new Map(), dptDatasets: {}, currentDapil: DEFAULT_FOCUS_DAPIL, currentKecamatan: DEFAULT_FOCUS_KECAMATAN, currentDesa: DEFAULT_FOCUS_DESA, currentStatus: '', currentTpsStatus: 'JAGA KUAT', searchKeyword: '', searchDebounceId: null, activeVillageTab: 'summary', detailDrawer: null, sourceMode: 'csv', selectedPeriodId, rwPage: 1, rtPage: 1, tpsPage: 1, rwStatusFilter: '', rtStatusFilter: '', currentProfilRw: null, isEditingProfilRw: false, wilayahId: null, currentRwNum: null, isLoadingProfilRw: false, hasLoadedProfilRwKey: null, profilRwMap: initialProfilRwMap };
             const dom = {};
 
             let initializedForThisScope = false;
@@ -300,10 +304,10 @@
                 });
             }
 
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                window.initPemiluDprd();
-            } else {
+            if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', window.initPemiluDprd);
+            } else {
+                window.initPemiluDprd();
             }
 
             function cacheDom() {
@@ -328,7 +332,7 @@
                     dom.statusSelect.value = state.currentStatus;
                     dom.statusSelect.addEventListener('change', () => { state.currentStatus = dom.statusSelect.value; render(); });
                 }
-                dom.resetFilterBtn?.addEventListener('click', () => { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = ''; state.currentStatus = ''; state.searchKeyword = ''; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = DEFAULT_FOCUS_DAPIL; dom.kecamatanSelect.value = DEFAULT_FOCUS_KECAMATAN; dom.statusSelect.value = ''; dom.searchInput.value = ''; render(); });
+                dom.resetFilterBtn?.addEventListener('click', () => { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = DEFAULT_FOCUS_DESA; state.currentStatus = ''; state.searchKeyword = ''; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = DEFAULT_FOCUS_DAPIL; dom.kecamatanSelect.value = DEFAULT_FOCUS_KECAMATAN; if(dom.desaSelect) dom.desaSelect.value = DEFAULT_FOCUS_DESA; dom.statusSelect.value = ''; dom.searchInput.value = ''; populateKecamatanOptions(); populateDesaOptions(); render(); });
                 dom.tpsFileInput?.addEventListener('change', handleTpsUpload);
                 dom.dptFileInput?.addEventListener('change', handleDptUpload);
                 dom.breadcrumbHome?.addEventListener('click', resetScope);
@@ -2223,18 +2227,30 @@
             }
 
             function populateDapilOptions() {
-                dom.dapilSelect.innerHTML = Array.from(state.dataset.keys()).sort(compareNatural).map((dapil) => `<option value="${escapeHtml(dapil)}">Dapil ${escapeHtml(dapil.replace('BEKASI ', ''))}</option>`).join('');
+                const options = Array.from(state.dataset.keys()).sort(compareNatural).map((dapil) => `<option value="${escapeHtml(dapil)}">Dapil ${escapeHtml(dapil.replace('BEKASI ', ''))}</option>`).join('');
+                dom.dapilSelect.innerHTML = (!userIsScoped ? '<option value="">Semua dapil</option>' : '') + options;
                 dom.dapilSelect.value = state.currentDapil;
+                if (userIsScoped && userScope.locked_dapil) {
+                    dom.dapilSelect.disabled = true;
+                }
             }
             function populateKecamatanOptions() {
                 const districts = state.currentDapil ? Array.from(state.dataset.get(state.currentDapil)?.kecamatanMap.keys() || []) : Array.from(new Set(Array.from(state.dataset.values()).flatMap((dapilObj) => Array.from(dapilObj.kecamatanMap.keys()))));
-                dom.kecamatanSelect.innerHTML = ['<option value="">Semua kecamatan</option>', ...districts.sort(compareNatural).map((district) => `<option value="${escapeHtml(district)}">${escapeHtml(toTitleCase(district))}</option>`)].join('');
+                const options = districts.sort(compareNatural).map((district) => `<option value="${escapeHtml(district)}">${escapeHtml(toTitleCase(district))}</option>`).join('');
+                dom.kecamatanSelect.innerHTML = (!(userIsScoped && userScope.kecamatan) ? '<option value="">Semua kecamatan</option>' : '') + options;
                 dom.kecamatanSelect.value = state.currentKecamatan;
+                if (userIsScoped && userScope.kecamatan) {
+                    dom.kecamatanSelect.disabled = true;
+                }
             }
             function populateDesaOptions() {
                 const villages = getVisibleVillagesForDesaFilter();
-                dom.desaSelect.innerHTML = ['<option value="">Semua desa</option>', ...villages.map((village) => `<option value="${escapeHtml(village.key)}">${escapeHtml(village.label)}</option>`)].join('');
+                const options = villages.map((village) => `<option value="${escapeHtml(village.key)}">${escapeHtml(village.label)}</option>`).join('');
+                dom.desaSelect.innerHTML = (!(userIsScoped && userScope.desa) ? '<option value="">Semua desa</option>' : '') + options;
                 dom.desaSelect.value = state.currentDesa;
+                if (userIsScoped && userScope.desa) {
+                    dom.desaSelect.disabled = true;
+                }
             }
             function getVisibleVillagesForDesaFilter() {
                 const dapilObjects = state.currentDapil ? [state.dataset.get(state.currentDapil)].filter(Boolean) : Array.from(state.dataset.values());
@@ -2298,7 +2314,7 @@
             function estimateSeats(pksVotes, totalVotes, totalSeats) { if (!totalVotes) return 0; return Math.max(0, Math.round((pksVotes / totalVotes) * totalSeats)); }
             function normalizePartyName(name) { return String(name || '').trim() === 'NasDem' ? 'Nasdem' : String(name || '').trim(); }
             function selectVillage(village) { state.currentDapil = village.dapil; state.currentKecamatan = village.district; state.currentDesa = village.key; state.activeVillageTab = 'summary'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = village.dapil; dom.kecamatanSelect.value = village.district; if (dom.desaSelect) dom.desaSelect.value = village.key; render(); }
-            function resetScope() { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = ''; state.activeVillageTab = 'summary'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; render(); }
+            function resetScope() { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = DEFAULT_FOCUS_DESA; state.activeVillageTab = 'summary'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = DEFAULT_FOCUS_DAPIL; populateKecamatanOptions(); populateDesaOptions(); render(); }
             window.resetScope = resetScope;
             function slugifyLabel(value) { return String(value || '').toLowerCase().replace(/\s+/g, '-'); }
             function formatRwRt(value) { const raw = String(value ?? '').trim(); if (!raw) return '-'; const number = Number(raw); return Number.isFinite(number) ? String(number).padStart(3, '0') : raw; }
@@ -2567,6 +2583,7 @@
                 }
                 return escapeHtml(name);
             }
+        })();
         </script>
     </flux:main>
 </x-layouts.app.sidebar>

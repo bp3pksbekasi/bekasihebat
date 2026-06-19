@@ -10,6 +10,7 @@ use App\Models\DistribusiMateri;
 use App\Models\KontenMedsos;
 use App\Models\MateriDigital;
 use App\Models\TargetWilayah;
+use App\Traits\WithWilayahScope;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -21,6 +22,7 @@ class Index extends Component
 {
     use WithFileUploads;
     use WithPagination;
+    use WithWilayahScope;
 
     protected string $paginationTheme = 'tailwind';
 
@@ -94,6 +96,22 @@ class Index extends Component
 
     public function mount(): void
     {
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') === 'dapil') {
+            $this->selectedDapil = (string) ($scope['locked_dapil'] ?? '');
+            $this->selectedKecamatan = (string) ($scope['kecamatan'] ?? '');
+            if (!empty($scope['desa'])) {
+                $this->selectedDesa = $scope['desa'];
+                $desa = TargetWilayah::where('dapil', $this->selectedDapil)
+                    ->where('kecamatan', $this->selectedKecamatan)
+                    ->where('desa', $this->selectedDesa)
+                    ->first();
+                if ($desa) {
+                    $this->selectedTargetWilayahId = (string) $desa->id;
+                }
+            }
+        }
+
         $this->selectedBulan = now()->format('m');
         $this->selectedTahun = now()->format('Y');
         $this->kcTanggal = now()->format('Y-m-d');
@@ -869,7 +887,7 @@ class Index extends Component
 
     private function filteredDewanQuery(): Builder
     {
-        return AnggotaDewan::query()
+        return $this->applyUserScope(AnggotaDewan::query(), ['dapil'])
             ->when($this->selectedDewanId !== '', fn (Builder $query) => $query->whereKey($this->selectedDewanId))
             ->when($this->filterPlatform !== '', function (Builder $query): void {
                 $platformColumn = match ($this->filterPlatform) {
@@ -889,16 +907,17 @@ class Index extends Component
 
     private function filteredKontenBaseQuery(): Builder
     {
-        $query = KontenMedsos::query()
-            ->when($this->selectedDewanId !== '', fn (Builder $builder) => $builder->where('anggota_dewan_id', $this->selectedDewanId))
-            ->when($this->filterPlatform !== '', fn (Builder $builder) => $builder->where('platform', $this->filterPlatform));
-
-        return $this->applyPeriodeFilter($query, 'tanggal_posting');
+        return $this->applyPeriodeFilter(
+            $this->applyUserScope(KontenMedsos::query())
+                ->when($this->selectedDewanId !== '', fn (Builder $builder) => $builder->where('anggota_dewan_id', $this->selectedDewanId))
+                ->when($this->filterPlatform !== '', fn (Builder $builder) => $builder->where('platform', $this->filterPlatform)),
+            'tanggal_posting'
+        );
     }
 
     private function filteredRwCoverageQuery(): Builder
     {
-        $query = DataRw::query()
+        $query = $this->applyUserScope(DataRw::query())
             ->select('dapil', 'desa', 'nomor_rw');
 
         if ($this->selectedDewanId !== '') {
@@ -917,7 +936,7 @@ class Index extends Component
 
     private function filteredDistribusiQuery(): Builder
     {
-        return DistribusiMateri::query()
+        return $this->applyUserScope(DistribusiMateri::query())
             ->when($this->selectedBulan !== '', fn (Builder $query) => $query->whereMonth('tanggal_distribusi', (int) $this->selectedBulan))
             ->when($this->selectedTahun !== '', fn (Builder $query) => $query->whereYear('tanggal_distribusi', (int) $this->selectedTahun));
     }

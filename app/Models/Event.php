@@ -59,9 +59,19 @@ class Event extends Model
         'selesai' => ['label' => 'Selesai', 'order' => 4],
     ];
 
+    public const ORG_LEVEL_OPTIONS = [
+        'dpra' => 'DPRa (Desa/Kelurahan)',
+        'dpc'  => 'DPC (Kecamatan)',
+        'dpd'  => 'DPD (Kabupaten Bekasi)',
+    ];
+
     protected $fillable = [
         'uuid',
         'slug',
+        'org_level',
+        'bidang_dpd_id',
+        'org_kecamatan',
+        'org_desa',
         'judul',
         'deskripsi',
         'jenis',
@@ -81,6 +91,11 @@ class Event extends Model
         'pic_hp',
         'kegiatan_rw_id',
         'created_by',
+        'speakers',
+        'funding_source',
+        'target_program',
+        'requirements',
+        'budget_notes',
     ];
 
     protected function casts(): array
@@ -134,6 +149,11 @@ class Event extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function bidang(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\BidangDpd::class, 'bidang_dpd_id');
+    }
+
     public function kegiatanRw(): BelongsTo
     {
         return $this->belongsTo(KegiatanRw::class);
@@ -162,6 +182,22 @@ class Event extends Model
     public function scopeApproved(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_DISETUJUI);
+    }
+
+    public function scopeForUser(Builder $query, \App\Models\User $user): Builder
+    {
+        // DPD bisa lihat semua
+        if ($user->isDpd()) {
+            return $query;
+        }
+
+        // DPC hanya lihat program di kecamatannya
+        if ($user->isDpc()) {
+            return $query->where('org_kecamatan', $user->kecamatan);
+        }
+
+        // DPRa hanya lihat program di desanya sendiri
+        return $query->where('org_desa', $user->desa);
     }
 
     public function getStatusConfigAttribute(): array
@@ -214,5 +250,15 @@ class Event extends Model
     public function getJenisLabelAttribute(): string
     {
         return self::JENIS_EVENT[$this->jenis] ?? self::JENIS_EVENT['lainnya'];
+    }
+
+    public function needsApproval(): bool
+    {
+        return $this->org_level === 'dpd';
+    }
+
+    public function getOrgLevelLabelAttribute(): string
+    {
+        return self::ORG_LEVEL_OPTIONS[$this->org_level] ?? $this->org_level;
     }
 }

@@ -22,6 +22,14 @@ class Index extends Component
 
     public string $filterDapil = '';
 
+    public string $filterKecamatan = '';
+
+    public string $filterDesa = '';
+
+    public string $filterLevel = '';
+
+    public string $filterBidang = '';
+
     public string $search = '';
 
     public bool $showDeleteConfirm = false;
@@ -34,6 +42,10 @@ class Index extends Component
         'filterStatus' => ['as' => 'status', 'except' => ''],
         'filterJenis' => ['as' => 'jenis', 'except' => ''],
         'filterDapil' => ['as' => 'dapil', 'except' => ''],
+        'filterKecamatan' => ['as' => 'kecamatan', 'except' => ''],
+        'filterDesa' => ['as' => 'desa', 'except' => ''],
+        'filterLevel' => ['as' => 'level', 'except' => ''],
+        'filterBidang' => ['as' => 'bidang', 'except' => ''],
         'search' => ['except' => ''],
         'viewMode' => ['as' => 'view', 'except' => 'table'],
     ];
@@ -49,6 +61,29 @@ class Index extends Component
     }
 
     public function updatedFilterDapil(): void
+    {
+        $this->filterKecamatan = '';
+        $this->filterDesa = '';
+        $this->resetPage();
+    }
+
+    public function updatedFilterKecamatan(): void
+    {
+        $this->filterDesa = '';
+        $this->resetPage();
+    }
+
+    public function updatedFilterDesa(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterLevel(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterBidang(): void
     {
         $this->resetPage();
     }
@@ -76,6 +111,10 @@ class Index extends Component
         $this->filterStatus = '';
         $this->filterJenis = '';
         $this->filterDapil = '';
+        $this->filterKecamatan = '';
+        $this->filterDesa = '';
+        $this->filterLevel = '';
+        $this->filterBidang = '';
         $this->search = '';
         $this->resetPage();
     }
@@ -139,39 +178,157 @@ class Index extends Component
             ->with(['creator', 'approvals'])
             ->orderByDesc('tanggal_mulai')
             ->orderByDesc('created_at')
-            ->paginate($this->viewMode === 'cards' ? 12 : 15);
+            ->paginate(5);
     }
 
     #[Computed]
     public function dapilOptions(): Collection
     {
-        return Event::query()
-            ->whereNotNull('lokasi_dapil')
-            ->where('lokasi_dapil', '!=', '')
+        return \App\Models\TargetWilayah::query()
+            ->select('dapil')
             ->distinct()
-            ->orderBy('lokasi_dapil')
-            ->pluck('lokasi_dapil');
+            ->orderBy('dapil')
+            ->pluck('dapil');
+    }
+
+    #[Computed]
+    public function kecamatanOptions(): Collection
+    {
+        return \App\Models\TargetWilayah::query()
+            ->when($this->filterDapil !== '', fn (Builder $query) => $query->where('dapil', $this->filterDapil))
+            ->select('kecamatan')
+            ->distinct()
+            ->orderBy('kecamatan')
+            ->pluck('kecamatan');
+    }
+
+    #[Computed]
+    public function desaOptions(): Collection
+    {
+        return \App\Models\TargetWilayah::query()
+            ->when($this->filterDapil !== '', fn (Builder $query) => $query->where('dapil', $this->filterDapil))
+            ->when($this->filterKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->filterKecamatan))
+            ->select('desa')
+            ->distinct()
+            ->orderBy('desa')
+            ->pluck('desa');
+    }
+
+    #[Computed]
+    public function mapImage(): string
+    {
+        if ($this->filterKecamatan !== '') {
+            $slug = str_replace(' ', '-', strtolower($this->filterKecamatan));
+            return "/images/peta/kecamatan/{$slug}.png";
+        }
+
+        if ($this->filterDapil !== '') {
+            $num = str_replace('BEKASI ', '', strtoupper($this->filterDapil));
+            return "/images/peta/dapil{$num}.png";
+        }
+
+        return "/images/peta/kabupaten-bekasi.png";
+    }
+
+    #[Computed]
+    public function mapMarkers(): array
+    {
+        $configs = (new \App\Livewire\Kaderisasi\Index())->getMapConfigs();
+        $config = null;
+
+        if ($this->filterKecamatan !== '') {
+            $config = $configs[strtoupper($this->filterKecamatan)] ?? null;
+        } elseif ($this->filterDapil !== '') {
+            $config = $configs[strtoupper($this->filterDapil)] ?? null;
+        }
+
+        if (!$config) {
+            return [];
+        }
+
+        // Aggregate actual event counts per desa
+        $actualCounts = $this->filteredQuery()
+            ->whereNotNull('lokasi_desa')
+            ->select('lokasi_desa', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('lokasi_desa')
+            ->pluck('total', 'lokasi_desa')
+            ->mapWithKeys(function ($item, $key) {
+                return [strtoupper($key) => $item];
+            });
+
+        $wilayahs = \App\Models\TargetWilayah::query()
+            ->when($this->filterDapil !== '', fn ($q) => $q->where('dapil', $this->filterDapil))
+            ->when($this->filterKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->filterKecamatan))
+            ->get();
+
+        $maxCount = max(1, $actualCounts->max() ?? 1);
+
+        $markers = [];
+        foreach ($wilayahs as $w) {
+            $desaUpper = strtoupper($w->desa);
+            if (isset($config[$desaUpper])) {
+                $count = $actualCounts[$desaUpper] ?? 0;
+
+                // Color coding based on count (e.g. gray if 0, light green, dark green)
+                $color = '#d1d5db'; // gray-300
+                if ($count > 0) {
+                    $color = '#22c55e'; // green-500
+                    if ($count > $maxCount / 2) {
+                        $color = '#15803d'; // green-700
+                    }
+                }
+
+                $size = 14;
+                if ($count > 0) {
+                    $size = 14 + min(12, round(($count / $maxCount) * 12));
+                }
+
+                $markers[] = [
+                    'id' => $w->id,
+                    'desa' => $w->desa,
+                    'x' => $config[$desaUpper]['x'],
+                    'y' => $config[$desaUpper]['y'],
+                    'color' => $color,
+                    'size' => $size,
+                    'label' => "{$w->desa} ({$count} Program)",
+                ];
+            }
+        }
+
+        return $markers;
+    }
+
+    #[Computed]
+    public function bidangOptions(): \Illuminate\Support\Collection
+    {
+        return \App\Models\BidangDpd::query()->orderBy('urutan')->get();
     }
 
     public function render()
     {
         return view('livewire.events.index')
-            ->layout('components.layouts.app-fullwidth', ['title' => 'Kegiatan / Event']);
+            ->layout('components.layouts.app-fullwidth', ['title' => 'Program']);
     }
 
     private function filteredQuery(): Builder
     {
+        $user = auth()->user();
+
         return Event::query()
-            ->when($this->filterStatus !== '', fn (Builder $query) => $query->where('status', $this->filterStatus))
-            ->when($this->filterJenis !== '', fn (Builder $query) => $query->where('jenis', $this->filterJenis))
-            ->when($this->filterDapil !== '', fn (Builder $query) => $query->where('lokasi_dapil', $this->filterDapil))
+            ->forUser($user)
+            ->when($this->filterStatus !== '', fn(Builder $q) => $q->where('status', $this->filterStatus))
+            ->when($this->filterJenis !== '', fn(Builder $q) => $q->where('jenis', $this->filterJenis))
+            ->when($this->filterLevel !== '', fn(Builder $q) => $q->where('org_level', $this->filterLevel))
+            ->when($this->filterBidang !== '', fn(Builder $q) => $q->where('bidang_dpd_id', $this->filterBidang))
+            ->when($this->filterDapil !== '', fn(Builder $q) => $q->where('lokasi_dapil', $this->filterDapil))
+            ->when($this->filterKecamatan !== '', fn(Builder $q) => $q->where('lokasi_kecamatan', $this->filterKecamatan))
+            ->when($this->filterDesa !== '', fn(Builder $q) => $q->where('lokasi_desa', $this->filterDesa))
             ->when($this->search !== '', function (Builder $query): void {
                 $query->where(function (Builder $sub): void {
-                    $sub->where('judul', 'like', '%' . $this->search . '%')
-                        ->orWhere('deskripsi', 'like', '%' . $this->search . '%')
-                        ->orWhere('lokasi', 'like', '%' . $this->search . '%')
-                        ->orWhere('lokasi_desa', 'like', '%' . $this->search . '%')
-                        ->orWhere('pic_nama', 'like', '%' . $this->search . '%');
+                    $sub->where('judul', 'like', '%'.$this->search.'%')
+                        ->orWhere('lokasi', 'like', '%'.$this->search.'%')
+                        ->orWhere('lokasi_desa', 'like', '%'.$this->search.'%')
+                        ->orWhere('pic_nama', 'like', '%'.$this->search.'%');
                 });
             });
     }

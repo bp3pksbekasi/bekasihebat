@@ -101,7 +101,12 @@
                 </div>
             @endif
 
-            <div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,0.95fr);gap:14px;" class="event-detail-top-grid">
+            @php
+                $isBidangDpd = $event->org_level === 'dpd' && !empty($event->bidang_dpd_id);
+            @endphp
+            <div style="display:grid;gap:14px;{{ $isBidangDpd ? 'grid-template-columns:minmax(0,1.05fr) minmax(360px,0.95fr);' : 'grid-template-columns:minmax(0,1fr);' }}" class="{{ $isBidangDpd ? 'event-detail-top-grid' : '' }}">
+                
+                @if($isBidangDpd)
                 <div style="border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                     <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Approval Tracker</div>
                     <div style="margin-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -140,6 +145,7 @@
                         </div>
                     @endif
                 </div>
+                @endif
 
                 <div style="border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">

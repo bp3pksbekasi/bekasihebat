@@ -93,6 +93,7 @@ class SisirRw extends Component
         }
 
         $firstDapil = TargetWilayah::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->distinct()
             ->orderBy('dapil')
             ->value('dapil');
@@ -101,8 +102,19 @@ class SisirRw extends Component
             $this->selectedDapil = $firstDapil;
         }
 
+        $kecamatanOptions = TargetWilayah::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
+            ->when($this->selectedDapil !== '', fn ($q) => $q->where('dapil', $this->selectedDapil))
+            ->distinct()
+            ->pluck('kecamatan');
+
+        if ($kecamatanOptions->count() === 1) {
+            $this->selectedKecamatan = $kecamatanOptions->first();
+        }
+
         if ($this->selectedDesa !== '') {
             $village = TargetWilayah::query()
+                ->tap(fn (Builder $q) => $this->applyUserScope($q))
                 ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
                 ->where('desa', $this->selectedDesa)
                 ->first();
@@ -116,6 +128,7 @@ class SisirRw extends Component
     public function dapilOptions(): Collection
     {
         return TargetWilayah::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->select('dapil')
             ->distinct()
             ->orderBy('dapil')
@@ -128,6 +141,7 @@ class SisirRw extends Component
         $selectedDapil = $this->activeDapil();
 
         return TargetWilayah::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->when($selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $selectedDapil))
             ->select('kecamatan')
             ->distinct()
@@ -141,6 +155,7 @@ class SisirRw extends Component
         $selectedDapil = $this->activeDapil();
 
         return TargetWilayah::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->when($selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->select('desa')
@@ -756,6 +771,7 @@ class SisirRw extends Component
         }
 
         $wilayahs = TargetWilayah::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->when($activeDapil !== '', fn ($q) => $q->where('dapil', $activeDapil))
             ->when($this->selectedKecamatan !== '', fn ($q) => $q->where('kecamatan', $this->selectedKecamatan))
             ->get();
@@ -931,6 +947,7 @@ class SisirRw extends Component
         $selectedDapil = $this->activeDapil();
 
         return TargetWilayah::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->when($selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedDesa !== '', fn (Builder $query) => $query->where('desa', $this->selectedDesa));
@@ -941,6 +958,7 @@ class SisirRw extends Component
         $selectedDapil = $this->activeDapil();
 
         return DataRw::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->when($selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedDesa !== '', fn (Builder $query) => $query->where('desa', $this->selectedDesa));
@@ -951,6 +969,7 @@ class SisirRw extends Component
         $selectedDapil = $this->activeDapil();
 
         return KegiatanRw::query()
+            ->tap(fn (Builder $q) => $this->applyUserScope($q))
             ->when($selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedDesa !== '', fn (Builder $query) => $query->where('desa', $this->selectedDesa));
@@ -982,5 +1001,22 @@ class SisirRw extends Component
         $text = preg_replace('/\s+/', '', $text) ?? $text;
 
         return $text;
+    }
+
+    private function applyUserScope(Builder $query): void
+    {
+        $user = auth()->user();
+
+        if (! $user || $user->isAdmin()) {
+            return;
+        }
+
+        if ($user->org_level === \App\Models\User::ORG_LEVEL_DPC && ! empty($user->kecamatan)) {
+            $query->where('kecamatan', $user->kecamatan);
+        } elseif ($user->org_level === \App\Models\User::ORG_LEVEL_DPRA && ! empty($user->desa)) {
+            $query->where('desa', $user->desa);
+        } elseif ($user->isDapil() && ! empty($user->dapil)) {
+            $query->where('dapil', $user->dapil);
+        }
     }
 }

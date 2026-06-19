@@ -1,9 +1,9 @@
 @php
-    $pageTitle = 'Edit Event';
-    $pageSubtitle = 'Revisi draft atau event yang ditolak sebelum diajukan ulang';
-    $submitDraftLabel = 'Update Draft';
-    $submitApprovalLabel = 'Update & Ajukan Ulang';
-    $sourceKegiatan = [];
+    $pageTitle = 'Edit Program';
+    $pageSubtitle = 'Update data program kegiatan';
+    $submitDraftLabel = 'Simpan Draft';
+    $submitApprovalLabel = 'Update & Ajukan Approval';
+    $existingCover = $event->cover_image ?? null;
 @endphp
 
 @include('livewire.events.form')

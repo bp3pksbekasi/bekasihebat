@@ -28,7 +28,10 @@
         @php
             $user = auth()->user();
             $pendingCount = class_exists(\App\Models\Event::class)
-                ? \App\Models\Event::query()->where('status', 'menunggu_approval')->count()
+                ? \App\Models\Event::query()
+                    ->where('status', 'pending_approval')
+                    ->where('org_level', 'dpd')  // hanya DPD yang butuh approval
+                    ->count()
                 : 0;
             $totalKontak = class_exists(\App\Models\KontakWarga::class)
                 ? \App\Models\KontakWarga::query()->where('status', 'aktif')->count()
@@ -83,13 +86,13 @@
                 ['route' => 'aspirasi.index', 'slug' => 'aspirasi', 'label' => 'Aspirasi & POKIR', 'icon' => 'message-chatbot', 'active' => ['aspirasi.*']],
 
                 ['section' => 'ORGANISASI'],
-                ['route' => 'program-kerja.index', 'slug' => 'program-kerja', 'label' => 'Program Kerja DPD', 'icon' => 'clipboard-list', 'active' => ['program-kerja.*']],
-                ['route' => 'events.index', 'slug' => 'event', 'access_slugs' => ['event', 'event-view'], 'label' => 'Event', 'icon' => 'calendar-event', 'active' => ['events.*']],
+                ['route' => 'events.index', 'slug' => 'event', 'access_slugs' => ['event', 'event-view'], 'label' => 'Program', 'icon' => 'calendar-event', 'active' => ['events.*']],
 
                 ['section' => 'MANAJEMEN'],
                 ['route' => 'settings.profile', 'slug' => 'profil', 'label' => 'Profil', 'icon' => 'user-circle', 'active' => ['settings.profile', 'settings.password', 'settings.appearance']],
                 ['route' => 'pengaturan.users', 'slug' => 'pengaturan-users', 'label' => 'Kelola User', 'icon' => 'users-cog', 'active' => ['pengaturan.users']],
                 ['route' => 'pengaturan.whatsapp', 'slug' => 'pengaturan-whatsapp', 'label' => 'Setting WhatsApp', 'icon' => 'brand-whatsapp', 'active' => ['pengaturan.whatsapp']],
+                ['route' => 'pengaturan.rule', 'slug' => 'pengaturan-rule', 'label' => 'Pengaturan Rule', 'icon' => 'shield-lock', 'active' => ['pengaturan.rule']],
                 ['route' => 'kartu-anggota.admin', 'slug' => 'kartu-anggota', 'label' => 'Kartu Anggota', 'icon' => 'id-badge-2', 'active' => ['kartu-anggota.*']],
             ];
 

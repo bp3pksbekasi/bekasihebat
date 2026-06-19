@@ -15,6 +15,7 @@ use App\Models\UpaRwMember;
 use App\Models\User;
 use App\Models\EventPeserta;
 use App\Models\TitikRki;
+use App\Traits\WithWilayahScope;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,6 +26,7 @@ use Livewire\WithPagination;
 class Index extends Component
 {
     use WithPagination;
+    use WithWilayahScope;
 
     public string $activeTab = 'map';
     public string $selectedDapil = '';
@@ -86,9 +88,23 @@ class Index extends Component
     public function mount(): void
     {
         $this->pelTanggal = now()->format('Y-m-d');
-        $this->selectedDapil = 'BEKASI 1';
-        $this->selectedKecamatan = 'SETU';
-        $this->selectedDesa = 'BURANGKENG';
+        
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') === 'dapil') {
+            $this->selectedDapil = (string) ($scope['locked_dapil'] ?? '');
+            $this->selectedKecamatan = (string) ($scope['kecamatan'] ?? '');
+            // For DPRA, they might have a desa scope, we can rely on applyUserScope to filter queries if needed
+            // Actually, we should check if they have 'desa' scope in the future, but for now we lock dapil and kec
+            $user = auth()->user();
+            if ($user && $user->isDpra() && !empty($user->desa)) {
+                $this->selectedDesa = mb_strtoupper((string) $user->desa);
+            }
+        } else {
+            // Give some default if needed, or leave empty to show all
+            $this->selectedDapil = '';
+            $this->selectedKecamatan = '';
+            $this->selectedDesa = '';
+        }
     }
 
     public function getKpiProperty(): array
@@ -823,9 +839,26 @@ class Index extends Component
             ->layout('components.layouts.app.sidebar');
     }
 
+    private function applyKaderScope(Builder $query): void
+    {
+        $user = auth()->user();
+        if (! $user || $user->isAdmin()) {
+            return;
+        }
+
+        if ($user->isDpc() && ! empty($user->kecamatan)) {
+            $query->where('kecamatan', $user->kecamatan);
+        } elseif ($user->isDpra() && ! empty($user->desa)) {
+            $query->where('desa', $user->desa);
+        } elseif ($user->isDapil() && ! empty($user->dapil)) {
+            $query->where('dapil', $user->dapil);
+        }
+    }
+
     private function filteredKaderQuery(): Builder
     {
         return Kader::query()
+            ->tap(fn (Builder $q) => $this->applyKaderScope($q))
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedDesa !== '', fn (Builder $query) => $query->where('desa', $this->selectedDesa))
@@ -844,6 +877,24 @@ class Index extends Component
     private function filteredPelatihanQuery(): Builder
     {
         return Pelatihan::query()
+            ->tap(function (Builder $q) {
+                $user = auth()->user();
+                if ($user && !$user->isAdmin()) {
+                    if ($user->isDpc() && ! empty($user->kecamatan)) {
+                        $scope = $this->accessScope;
+                        if (!empty($scope['locked_dapil'])) {
+                            $q->where('dapil_terkait', $scope['locked_dapil']);
+                        }
+                    } elseif ($user->isDpra() && ! empty($user->desa)) {
+                        $scope = $this->accessScope;
+                        if (!empty($scope['locked_dapil'])) {
+                            $q->where('dapil_terkait', $scope['locked_dapil']);
+                        }
+                    } elseif ($user->isDapil() && ! empty($user->dapil)) {
+                        $q->where('dapil_terkait', $user->dapil);
+                    }
+                }
+            })
             ->when($this->filterJenjang !== '', fn (Builder $query) => $query->where('jenjang_target', $this->filterJenjang))
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil_terkait', $this->selectedDapil))
             ->when($this->filterStatus !== '' && in_array($this->filterStatus, ['dijadwalkan', 'berlangsung', 'selesai', 'dibatalkan'], true), fn (Builder $query) => $query->where('status', $this->filterStatus));

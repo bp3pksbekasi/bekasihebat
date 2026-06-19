@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use App\Traits\WithWilayahScope;
 
 class Dashboard extends Component
 {
@@ -89,34 +90,7 @@ class Dashboard extends Component
         $this->selectedKecamatan = $this->selectedKecamatan === $kecamatan ? '' : $kecamatan;
     }
 
-    #[Computed]
-    public function accessScope(): array
-    {
-        $user = auth()->user();
-        $isDapil = (bool) ($user?->hasRole('dapil') ?? false);
-        $kecamatan = '';
-        $lockedDapil = '';
-
-        if ($isDapil && ! empty($user?->kelurahan_code)) {
-            $wilayah = app(WilayahService::class)->getWilayahDetailByKelurahan($user->kelurahan_code);
-            $kecamatan = trim((string) ($wilayah?->kecamatan_name ?? ''));
-
-            if ($kecamatan !== '') {
-                $lockedDapil = (string) (TargetWilayah::query()
-                    ->where('kecamatan', mb_strtoupper($kecamatan))
-                    ->value('dapil')
-                    ?? TargetWilayah::query()->where('kecamatan', $kecamatan)->value('dapil')
-                    ?? '');
-            }
-        }
-
-        return [
-            'mode' => $isDapil ? 'dapil' : 'global',
-            'is_dapil' => $isDapil,
-            'locked_dapil' => $lockedDapil,
-            'kecamatan' => $kecamatan,
-        ];
-    }
+    use WithWilayahScope;
 
     #[Computed]
     public function kpi(): array

@@ -10,6 +10,7 @@ use App\Models\ProfilRw;
 use App\Models\TargetWilayah;
 use App\Models\TitikRki;
 use App\Models\TitikSenam;
+use App\Traits\WithWilayahScope;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,7 @@ class Index extends Component
 {
     use WithFileUploads;
     use WithPagination;
+    use WithWilayahScope;
 
     public string $menuMode = 'rki';
 
@@ -108,6 +110,24 @@ class Index extends Component
         if (in_array($mode, ['rki', 'ksn'], true)) {
             $this->menuMode = $mode;
             $this->activeTab = $mode;
+        }
+        
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') === 'dapil') {
+            $this->selectedDapil = (string) ($scope['locked_dapil'] ?? '');
+            if (!empty($scope['kecamatan'])) {
+                $this->selectedKecamatan = $scope['kecamatan'];
+            }
+            if (!empty($scope['desa'])) {
+                // We need to fetch TargetWilayah ID for this desa, since selectedFilterDesaId requires the ID
+                $desa = TargetWilayah::where('dapil', $this->selectedDapil)
+                    ->where('kecamatan', $this->selectedKecamatan)
+                    ->where('desa', $scope['desa'])
+                    ->first();
+                if ($desa) {
+                    $this->selectedFilterDesaId = (string) $desa->id;
+                }
+            }
         }
 
         $this->logTanggal = now()->format('Y-m-d\TH:i');
@@ -326,8 +346,11 @@ class Index extends Component
 
     public function resetFilters(): void
     {
-        $this->selectedDapil = '';
-        $this->selectedKecamatan = '';
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') !== 'dapil') {
+            $this->selectedDapil = '';
+            $this->selectedKecamatan = '';
+        }
         $this->selectedFilterDesaId = '';
         $this->selectedDesaId = null;
         $this->expandedLogKey = '';
@@ -665,7 +688,7 @@ class Index extends Component
 
     private function filteredTargetQuery(): Builder
     {
-        return $this->baseTargetQuery()
+        return $this->applyUserScope($this->baseTargetQuery())
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedFilterDesaId !== '', fn (Builder $query) => $query->where('id', $this->selectedFilterDesaId));
@@ -673,7 +696,7 @@ class Index extends Component
 
     private function filteredDataRwQuery(): Builder
     {
-        return DataRw::query()
+        return $this->applyUserScope(DataRw::query())
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedFilterDesaId !== '', fn (Builder $query) => $query->where('target_wilayah_id', $this->selectedFilterDesaId));
@@ -681,7 +704,7 @@ class Index extends Component
 
     private function filteredRkiQuery(): Builder
     {
-        return TitikRki::query()
+        return $this->applyUserScope(TitikRki::query())
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedFilterDesaId !== '', fn (Builder $query) => $query->where('target_wilayah_id', $this->selectedFilterDesaId));
@@ -689,7 +712,7 @@ class Index extends Component
 
     private function filteredSenamQuery(): Builder
     {
-        return TitikSenam::query()
+        return $this->applyUserScope(TitikSenam::query())
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->selectedFilterDesaId !== '', function (Builder $query): void {
@@ -706,12 +729,10 @@ class Index extends Component
     {
         return LogSesi::query()
             ->where('loggable_type', $type)
-            ->when($this->selectedDapil !== '' || $this->selectedKecamatan !== '', function (Builder $query) use ($type): void {
-                $query->whereHasMorph('loggable', [$type], function (Builder $morph): void {
-                    $morph
-                        ->when($this->selectedDapil !== '', fn (Builder $q) => $q->where('dapil', $this->selectedDapil))
-                        ->when($this->selectedKecamatan !== '', fn (Builder $q) => $q->where('kecamatan', $this->selectedKecamatan));
-                });
+            ->whereHasMorph('loggable', [$type], function (Builder $morph): void {
+                $this->applyUserScope($morph)
+                    ->when($this->selectedDapil !== '', fn (Builder $q) => $q->where('dapil', $this->selectedDapil))
+                    ->when($this->selectedKecamatan !== '', fn (Builder $q) => $q->where('kecamatan', $this->selectedKecamatan));
             });
     }
 

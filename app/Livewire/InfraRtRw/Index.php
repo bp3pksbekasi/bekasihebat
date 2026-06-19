@@ -10,6 +10,7 @@ use App\Models\Korwe;
 use App\Models\Korte;
 use App\Models\PenggalangSuara;
 use App\Models\DataRw;
+use App\Traits\WithWilayahScope;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class Index extends Component
 {
     use WithPagination;
+    use WithWilayahScope;
 
     public string $selectedDapil = '';
 
@@ -56,6 +58,18 @@ class Index extends Component
     public string $rwStatusFilter = '';
     public array $profilData = [];
     public array $autoFillData = [];
+
+    public function mount(): void
+    {
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') === 'dapil') {
+            $this->selectedDapil = (string) ($scope['locked_dapil'] ?? '');
+            $this->selectedKecamatan = (string) ($scope['kecamatan'] ?? '');
+            if (!empty($scope['desa'])) {
+                $this->selectedDesa = $scope['desa'];
+            }
+        }
+    }
     public bool $isEditingProfil = false;
     public int $profilCompletion = 0;
     public string $upa_rw_wa = '';
@@ -138,6 +152,21 @@ class Index extends Component
             $this->reportDebug('D', 'Index@setActiveTab', '[DEBUG] Active tab updated', ['activeTab' => $this->activeTab]);
             // #endregion
         }
+    }
+
+    public function resetFilters(): void
+    {
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') !== 'dapil') {
+            $this->selectedDapil = '';
+            $this->selectedKecamatan = '';
+        }
+        $this->filterDesa = '';
+        $this->selectedTahun = 2026;
+        $this->search = '';
+        $this->activeTab = 'korwe';
+        $this->selectedVillageId = null;
+        $this->selectedDesa = '';
     }
 
     public function export(): StreamedResponse
@@ -586,7 +615,7 @@ class Index extends Component
 
     private function applyFilters(Builder $query): Builder
     {
-        return $query
+        return $this->applyUserScope($query)
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
             ->when($this->selectedKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->selectedKecamatan))
             ->when($this->filterDesa !== '', fn (Builder $query) => $query->where('desa', $this->filterDesa))

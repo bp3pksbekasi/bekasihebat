@@ -3,16 +3,22 @@
     $roleCounts = [
         \App\Models\User::ROLE_ADMIN => (int) ($kpi['perRole'][\App\Models\User::ROLE_ADMIN] ?? 0),
         \App\Models\User::ROLE_BIDANG => (int) ($kpi['perRole'][\App\Models\User::ROLE_BIDANG] ?? 0),
+        \App\Models\User::ROLE_DPC => (int) ($kpi['perRole'][\App\Models\User::ROLE_DPC] ?? 0),
+        \App\Models\User::ROLE_DPRA => (int) ($kpi['perRole'][\App\Models\User::ROLE_DPRA] ?? 0),
         \App\Models\User::ROLE_KADER => (int) ($kpi['perRole'][\App\Models\User::ROLE_KADER] ?? 0),
     ];
     $roleLabels = [
         \App\Models\User::ROLE_ADMIN => 'Admin DPD',
         \App\Models\User::ROLE_BIDANG => 'Pengurus Bidang',
+        \App\Models\User::ROLE_DPC => 'Pengurus DPC',
+        \App\Models\User::ROLE_DPRA => 'Pengurus DPRa',
         \App\Models\User::ROLE_KADER => 'Kader',
     ];
     $roleColors = [
         \App\Models\User::ROLE_ADMIN => '#2563eb',
         \App\Models\User::ROLE_BIDANG => '#7c3aed',
+        \App\Models\User::ROLE_DPC => '#ea580c',
+        \App\Models\User::ROLE_DPRA => '#ca8a04',
         \App\Models\User::ROLE_KADER => '#64748b',
     ];
     $roleMax = max(max($roleCounts), 1);
@@ -33,6 +39,8 @@
                     <option value="">Semua role</option>
                     <option value="{{ \App\Models\User::ROLE_ADMIN }}">Admin DPD</option>
                     <option value="{{ \App\Models\User::ROLE_BIDANG }}">Pengurus Bidang</option>
+                    <option value="{{ \App\Models\User::ROLE_DPC }}">Pengurus DPC</option>
+                    <option value="{{ \App\Models\User::ROLE_DPRA }}">Pengurus DPRa</option>
                     <option value="{{ \App\Models\User::ROLE_KADER }}">Kader</option>
                 </select>
                 <select wire:model.live="filterBidang" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
@@ -172,6 +180,8 @@
                                     $roleBadge = match ($user->role) {
                                         \App\Models\User::ROLE_ADMIN => ['bg' => '#dbeafe', 'text' => '#1d4ed8', 'label' => 'Admin DPD'],
                                         \App\Models\User::ROLE_BIDANG => ['bg' => '#ede9fe', 'text' => '#7c3aed', 'label' => 'Pengurus Bidang'],
+                                        \App\Models\User::ROLE_DPC => ['bg' => '#ffedd5', 'text' => '#c2410c', 'label' => 'Pengurus DPC'],
+                                        \App\Models\User::ROLE_DPRA => ['bg' => '#fef08a', 'text' => '#854d0e', 'label' => 'Pengurus DPRa'],
                                         default => ['bg' => '#f3f4f6', 'text' => '#4b5563', 'label' => 'Kader'],
                                     };
                                     $nia = $user->nia ?: ($user->kader_nia ?? '-');
@@ -235,6 +245,8 @@
                                                 <select wire:change="ubahRole({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;color:#111827;background:white;">
                                                     <option value="{{ \App\Models\User::ROLE_ADMIN }}" @selected($user->role === \App\Models\User::ROLE_ADMIN)>Admin DPD</option>
                                                     <option value="{{ \App\Models\User::ROLE_BIDANG }}" @selected($user->role === \App\Models\User::ROLE_BIDANG)>Pengurus Bidang</option>
+                                                    <option value="{{ \App\Models\User::ROLE_DPC }}" @selected($user->role === \App\Models\User::ROLE_DPC)>Pengurus DPC</option>
+                                                    <option value="{{ \App\Models\User::ROLE_DPRA }}" @selected($user->role === \App\Models\User::ROLE_DPRA)>Pengurus DPRa</option>
                                                     <option value="{{ \App\Models\User::ROLE_KADER }}" @selected($user->role === \App\Models\User::ROLE_KADER)>Kader</option>
                                                 </select>
 

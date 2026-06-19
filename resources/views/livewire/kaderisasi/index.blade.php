@@ -46,19 +46,19 @@
                     }
                 }" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                     <div style="font-size:12px;color:#d4d4d8;font-weight:500;">Filter :</div>
-                    <select x-model="$wire.selectedDapil" id="selectedDapilSelect" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#eff6ff;color:#1d4ed8;font-weight:500;">
+                    <select x-model="$wire.selectedDapil" id="selectedDapilSelect" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#eff6ff;color:#1d4ed8;font-weight:500;" @if ($this->accessScope['is_dapil'] ?? false) disabled @endif>
                         <option value="">Semua dapil</option>
                         @foreach ($this->dapilOptions as $dapil)
                             <option value="{{ $dapil }}">{{ $dapil }}</option>
                         @endforeach
                     </select>
-                    <select x-model="$wire.selectedKecamatan" id="selectedKecamatanSelect" wire:ignore style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                    <select x-model="$wire.selectedKecamatan" id="selectedKecamatanSelect" wire:ignore style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;" @if (($this->accessScope['kecamatan'] ?? '') !== '') disabled @endif>
                         <option value="">Semua kecamatan</option>
                         <template x-for="kec in kecamatanOptions" :key="kec">
                             <option :value="kec" x-text="toTitleCase(kec)" :selected="$wire.selectedKecamatan === kec"></option>
                         </template>
                     </select>
-                    <select x-model="$wire.selectedDesa" id="selectedDesaSelect" wire:ignore style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
+                    <select x-model="$wire.selectedDesa" id="selectedDesaSelect" wire:ignore style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;" @if (auth()->user()?->isDpra()) disabled @endif>
                         <option value="">Semua desa/kelurahan</option>
                         <template x-for="desa in desaOptions" :key="desa">
                             <option :value="desa" x-text="toTitleCase(desa)" :selected="$wire.selectedDesa === desa"></option>

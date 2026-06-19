@@ -51,16 +51,65 @@ class Create extends Component
 
     public ?string $fromKegiatanRwId = null;
 
+    public string $orgLevel = 'dpra';
+    
+    public string $bidangDpdId = '';
+
     public array $sourceKegiatan = [];
+
+    public string $speakers = '';
+
+    public string $fundingSource = '';
+
+    public string $targetProgram = '';
+
+    public string $requirements = '';
+
+    public string $budgetNotes = '';
+
+    public array $budgetItems = [];
+
+    // Tab Pelaksanaan
+    public int $pesertaHadir = 0;
+    public array $dokFoto = [];
+
+    // Tab Evaluasi
+    public string $evaluasiRingkasan = '';
+    public string $evaluasiCatatan = '';
+    public string $evaluasiRealisasiAnggaran = '0';
+    public string $evaluasiRating = '';
 
     public function mount(): void
     {
+        $user = auth()->user();
+        $this->orgLevel = $user?->org_level ?? 'dpra';
         $this->tanggalMulai = now()->format('Y-m-d\TH:i');
         $this->fromKegiatanRwId = request()->query('from_kegiatan');
 
         if ($this->fromKegiatanRwId !== null) {
             $this->prefillFromKegiatan($this->fromKegiatanRwId);
         }
+
+        $this->budgetItems = [['item' => '', 'qty' => 1, 'satuan' => 'Pcs', 'harga_satuan' => 0, 'subtotal' => 0, 'keterangan' => '']];
+    }
+
+    public function addBudgetItem(): void
+    {
+        $this->budgetItems[] = ['item' => '', 'qty' => 1, 'satuan' => 'Pcs', 'harga_satuan' => 0, 'subtotal' => 0, 'keterangan' => ''];
+    }
+
+    public function removeBudgetItem(int $index): void
+    {
+        unset($this->budgetItems[$index]);
+        $this->budgetItems = array_values($this->budgetItems);
+    }
+
+    #[Computed]
+    public function totalBudget(): float
+    {
+        return collect($this->budgetItems)->sum(fn($item) =>
+            (float)($item['qty'] ?? 1) * (float)($item['harga_satuan'] ?? 0)
+        );
     }
 
     #[Computed]
@@ -94,6 +143,31 @@ class Create extends Component
             ->distinct()
             ->orderBy('desa')
             ->pluck('desa');
+    }
+
+    #[Computed]
+    public function bidangOptions(): \Illuminate\Support\Collection
+    {
+        return \App\Models\BidangDpd::query()->orderBy('urutan')->get();
+    }
+
+    #[Computed]
+    public function orgLevelOptions(): array
+    {
+        $user = auth()->user();
+
+        if ($user?->isDpra()) {
+            return ['dpra' => 'DPRa (Desa/Kelurahan)'];
+        }
+
+        if ($user?->isDpc()) {
+            return [
+                'dpra' => 'DPRa (Desa/Kelurahan)',
+                'dpc'  => 'DPC (Kecamatan)',
+            ];
+        }
+
+        return \App\Models\Event::ORG_LEVEL_OPTIONS;
     }
 
     public function updatedLokasiDapil(): void
@@ -131,12 +205,14 @@ class Create extends Component
     public function render()
     {
         return view('livewire.events.create')
-            ->layout('components.layouts.app-fullwidth', ['title' => 'Buat Event']);
+            ->layout('components.layouts.app-fullwidth', ['title' => 'Buat Program Baru']);
     }
 
     private function persist(string $status, string $levelApproval): Event
     {
         $validated = $this->validate([
+            'orgLevel'    => ['required', 'in:dpd,dpc,dpra'],
+            'bidangDpdId' => ['nullable', 'exists:bidang_dpds,id'],
             'judul' => ['required', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
             'jenis' => ['required', 'string'],
@@ -151,6 +227,11 @@ class Create extends Component
             'picNama' => ['nullable', 'string', 'max:255'],
             'picHp' => ['nullable', 'string', 'max:255'],
             'coverImage' => ['nullable', 'image', 'max:4096'],
+            'speakers' => ['nullable', 'string'],
+            'fundingSource' => ['nullable', 'string'],
+            'targetProgram' => ['nullable', 'string'],
+            'requirements' => ['nullable', 'string'],
+            'budgetNotes' => ['nullable', 'string'],
         ]);
 
         $coverPath = $this->coverImage ? $this->coverImage->store('events', 'public') : null;
@@ -168,8 +249,31 @@ class Create extends Component
 
         $organizerDpraId = (int) (DB::table('dpra')->orderBy('id')->value('id') ?? 0);
 
+        $user = auth()->user();
+        $orgKecamatan = $user?->kecamatan ?? null;
+        $orgDesa = $user?->desa ?? null;
+
+        // DPD tidak perlu filter kecamatan/desa
+        if ($this->orgLevel === 'dpd') {
+            $orgKecamatan = null;
+            $orgDesa = null;
+        }
+
+        // Draft tetap draft. Jika diajukan, DPD Bidang perlu approval, selebihnya langsung approved
+        $finalStatus = $status;
+        if ($status !== Event::STATUS_DRAFT) {
+            $finalStatus = ($this->orgLevel === 'dpd' && !empty($this->bidangDpdId))
+                ? Event::STATUS_MENUNGGU
+                : Event::STATUS_DISETUJUI;
+        }
+
         $event = new Event();
         $event->forceFill([
+            'org_level'     => $this->orgLevel,
+            'bidang_dpd_id' => $this->bidangDpdId ?: null,
+            'org_kecamatan' => $orgKecamatan,
+            'org_desa'      => $orgDesa,
+            'status'        => $finalStatus,
             'judul' => $judul,
             'deskripsi' => $deskripsi,
             'jenis' => array_key_exists($validated['jenis'], Event::JENIS_EVENT) ? $validated['jenis'] : 'lainnya',
@@ -182,7 +286,6 @@ class Create extends Component
             'kapasitas' => (int) ($validated['kapasitas'] ?? 0),
             'is_public' => false,
             'cover_image' => $coverPath,
-            'status' => $status,
             'level_approval' => $levelApproval,
             'penyelenggara' => $penyelenggara,
             'pic_nama' => $picNama,
@@ -199,8 +302,38 @@ class Create extends Component
             'visibility' => 'internal',
             'organizer_dpra_id' => $organizerDpraId,
             'max_participants' => (int) ($validated['kapasitas'] ?? 0),
+            'speakers' => $this->speakers !== '' ? $this->speakers : null,
+            'funding_source' => $this->fundingSource !== '' ? $this->fundingSource : null,
+            'target_program' => $this->targetProgram !== '' ? $this->targetProgram : null,
+            'requirements' => $this->requirements !== '' ? $this->requirements : null,
+            'budget_notes' => $this->budgetNotes !== '' ? $this->budgetNotes : null,
         ]);
         $event->save();
+
+        foreach ($this->budgetItems as $item) {
+            if (!empty($item['item'])) {
+                $event->budgetItems()->create([
+                    'item' => $item['item'],
+                    'kategori' => $item['kategori'] ?? null,
+                    'qty' => (int) ($item['qty'] ?? 1),
+                    'satuan' => $item['satuan'] ?: 'Pcs',
+                    'harga_satuan' => (float) ($item['harga_satuan'] ?? 0),
+                    'subtotal' => (int) ($item['qty'] ?? 1) * (float) ($item['harga_satuan'] ?? 0),
+                    'keterangan' => $item['keterangan'] ?? null,
+                ]);
+            }
+        }
+
+        if ($this->pesertaHadir > 0 || $this->evaluasiRingkasan !== '') {
+            \App\Models\EventReport::create([
+                'event_id' => $event->id,
+                'ringkasan' => $this->evaluasiRingkasan ?: $judul,
+                'peserta_hadir' => $this->pesertaHadir,
+                'evaluasi' => $this->evaluasiCatatan ?: null,
+                'realisasi_anggaran' => (float)$this->evaluasiRealisasiAnggaran,
+                'created_by' => auth()->id(),
+            ]);
+        }
 
         collect(['dpra', 'dpc', 'dpd'])->each(function (string $level) use ($event): void {
             EventApproval::query()->create([

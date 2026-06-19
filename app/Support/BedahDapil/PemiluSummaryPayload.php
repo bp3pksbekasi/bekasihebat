@@ -9,17 +9,22 @@ use App\Models\PemiluPeriod;
 
 class PemiluSummaryPayload
 {
+    use \App\Traits\WithWilayahScope;
+
     /**
      * @return array{period:array<string,mixed>,villages:list<array<string,mixed>>}
      */
     public function build(PemiluPeriod $period): array
     {
-        $villages = PemiluDesaSummary::query()
+        $query = PemiluDesaSummary::query()
             ->forPeriod($period->id)
             ->orderBy('dapil')
             ->orderBy('kecamatan')
-            ->orderBy('desa')
-            ->get()
+            ->orderBy('desa');
+
+        $query = $this->applyUserScope($query, ['dapil', 'kecamatan']);
+
+        $villages = $query->get()
             ->map(function (PemiluDesaSummary $summary): array {
                 return [
                     'scope_key' => $summary->scope_key,

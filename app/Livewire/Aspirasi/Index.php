@@ -9,6 +9,7 @@ use App\Models\Aspirasi;
 use App\Models\AspirasiLog;
 use App\Models\AspirasiReminder;
 use App\Models\TargetWilayah;
+use App\Traits\WithWilayahScope;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -22,6 +23,7 @@ class Index extends Component
 {
     use WithFileUploads;
     use WithPagination;
+    use WithWilayahScope;
 
     public string $selectedDapil = '';
 
@@ -96,14 +98,23 @@ class Index extends Component
 
     public function mount(): void
     {
-        $this->selectedDapil = (string) request()->query('dapil', '');
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') === 'dapil') {
+            $this->selectedDapil = (string) ($scope['locked_dapil'] ?? '');
+        } else {
+            $this->selectedDapil = (string) request()->query('dapil', '');
+        }
         $this->selectedAspirasiId = request()->query('aspirasi');
 
         if (request()->filled('source')) {
             $this->showForm = true;
             $this->fSumber = (string) request()->query('source', 'langsung');
             $this->fSumberId = (string) request()->query('source_id', '');
-            $this->fDapil = (string) request()->query('dapil', '');
+            if (($scope['mode'] ?? 'global') === 'dapil') {
+                $this->fDapil = (string) ($scope['locked_dapil'] ?? '');
+            } else {
+                $this->fDapil = (string) request()->query('dapil', '');
+            }
             $this->fKecamatan = (string) request()->query('kecamatan', '');
             $this->fDesa = (string) request()->query('desa', '');
             $this->fRw = (string) request()->query('rw', '');
@@ -126,6 +137,21 @@ class Index extends Component
     public function updatingFilterKategori(): void
     {
         $this->resetPage();
+    }
+
+    private function baseAspirasiQuery(): Builder
+    {
+        return $this->applyUserScope(Aspirasi::query());
+    }
+
+    private function baseTargetQuery(): Builder
+    {
+        return $this->applyUserScope(TargetWilayah::query());
+    }
+
+    private function baseDewanQuery(): Builder
+    {
+        return $this->applyUserScope(AnggotaDewan::query(), ['dapil']);
     }
 
     public function updatingSearch(): void
@@ -171,7 +197,7 @@ class Index extends Component
      */
     public function getDapilOptionsProperty(): array
     {
-        return TargetWilayah::query()
+        return $this->baseTargetQuery()
             ->select('dapil')
             ->distinct()
             ->orderBy('dapil')
@@ -181,7 +207,7 @@ class Index extends Component
 
     public function getKecamatanOptionsProperty(): Collection
     {
-        return TargetWilayah::query()
+        return $this->baseTargetQuery()
             ->when($this->fDapil !== '', fn (Builder $query) => $query->where('dapil', $this->fDapil))
             ->select('kecamatan')
             ->distinct()
@@ -191,7 +217,7 @@ class Index extends Component
 
     public function getDesaOptionsProperty(): Collection
     {
-        return TargetWilayah::query()
+        return $this->baseTargetQuery()
             ->when($this->fDapil !== '', fn (Builder $query) => $query->where('dapil', $this->fDapil))
             ->when($this->fKecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $this->fKecamatan))
             ->orderBy('desa')
@@ -204,7 +230,7 @@ class Index extends Component
             return null;
         }
 
-        return AnggotaDewan::query()
+        return $this->baseDewanQuery()
             ->aktif()
             ->where('dapil', $this->fDapil)
             ->orderBy('nama')
@@ -220,7 +246,7 @@ class Index extends Component
                 'label' => $config['label'],
                 'color' => $config['color'],
                 'bg' => $config['bg'],
-                'count' => (int) Aspirasi::query()->where('status', $status)->count(),
+                'count' => (int) $this->baseAspirasiQuery()->where('status', $status)->count(),
             ])
             ->values()
             ->all();
@@ -228,15 +254,15 @@ class Index extends Component
 
     public function getPipelineSummaryProperty(): array
     {
-        $counts = Aspirasi::query()
+        $counts = $this->baseAspirasiQuery()
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
 
         return [
             'total' => (int) $counts->sum(),
-            'belum_assign' => (int) Aspirasi::query()->belumAssign()->count(),
-            'stuck' => (int) Aspirasi::query()->stuck(14)->count(),
+            'belum_assign' => (int) $this->baseAspirasiQuery()->belumAssign()->count(),
+            'stuck' => (int) $this->baseAspirasiQuery()->stuck(14)->count(),
             'diterima' => (int) ($counts['diterima'] ?? 0),
             'assigned' => (int) ($counts['assigned'] ?? 0),
             'input_sipd' => (int) ($counts['input_sipd'] ?? 0),
@@ -248,7 +274,7 @@ class Index extends Component
 
     public function getAspirasiListProperty(): LengthAwarePaginator
     {
-        return Aspirasi::query()
+        return $this->baseAspirasiQuery()
             ->with(['assignedDewan', 'creator'])
             ->withCount('logs')
             ->when($this->selectedDapil !== '', fn (Builder $query) => $query->where('dapil', $this->selectedDapil))
@@ -274,21 +300,21 @@ class Index extends Component
             return null;
         }
 
-        return Aspirasi::query()
+        return $this->baseAspirasiQuery()
             ->with(['assignedDewan', 'creator', 'targetWilayah', 'logs.user', 'reminders.targetUser'])
             ->find($this->selectedAspirasiId);
     }
 
     public function getKinerjaDewanProperty(): Collection
     {
-        $summary = Aspirasi::query()
+        $summary = $this->baseAspirasiQuery()
             ->whereNotNull('assigned_dewan_id')
             ->selectRaw('assigned_dewan_id, status, COUNT(*) as total')
             ->groupBy('assigned_dewan_id', 'status')
             ->get()
             ->groupBy('assigned_dewan_id');
 
-        return AnggotaDewan::query()
+        return $this->baseDewanQuery()
             ->aktif()
             ->orderBy('dapil')
             ->orderBy('nama')
@@ -331,7 +357,7 @@ class Index extends Component
             ->map(fn (string $label, string $key): array => [
                 'key' => $key,
                 'label' => $label,
-                'count' => (int) Aspirasi::query()->where('sumber', $key)->count(),
+                'count' => (int) $this->baseAspirasiQuery()->where('sumber', $key)->count(),
             ])
             ->values();
     }
@@ -342,14 +368,14 @@ class Index extends Component
             ->map(fn (string $label, string $key): array => [
                 'key' => $key,
                 'label' => $label,
-                'count' => (int) Aspirasi::query()->where('kategori', $key)->count(),
+                'count' => (int) $this->baseAspirasiQuery()->where('kategori', $key)->count(),
             ])
             ->values();
     }
 
     public function getStuckAspirasiProperty(): Collection
     {
-        return Aspirasi::query()
+        return $this->baseAspirasiQuery()
             ->with('assignedDewan')
             ->stuck(14)
             ->latest('assigned_at')
@@ -360,11 +386,11 @@ class Index extends Component
     public function getPublikPreviewProperty(): array
     {
         return [
-            'total' => (int) Aspirasi::query()->count(),
-            'sipd' => (int) Aspirasi::query()->whereIn('status', ['input_sipd', 'verifikasi_bappeda', 'dianggarkan', 'terealisasi'])->count(),
-            'dianggarkan' => (int) Aspirasi::query()->whereIn('status', ['dianggarkan', 'terealisasi'])->count(),
-            'terealisasi' => (int) Aspirasi::query()->where('status', 'terealisasi')->count(),
-            'stories' => Aspirasi::query()
+            'total' => (int) $this->baseAspirasiQuery()->count(),
+            'sipd' => (int) $this->baseAspirasiQuery()->whereIn('status', ['input_sipd', 'verifikasi_bappeda', 'dianggarkan', 'terealisasi'])->count(),
+            'dianggarkan' => (int) $this->baseAspirasiQuery()->whereIn('status', ['dianggarkan', 'terealisasi'])->count(),
+            'terealisasi' => (int) $this->baseAspirasiQuery()->where('status', 'terealisasi')->count(),
+            'stories' => $this->baseAspirasiQuery()
                 ->with('assignedDewan')
                 ->where('status', 'terealisasi')
                 ->latest('realisasi_at')
@@ -375,7 +401,7 @@ class Index extends Component
 
     public function getDewanGroupedByDapilProperty(): Collection
     {
-        return AnggotaDewan::query()
+        return $this->baseDewanQuery()
             ->aktif()
             ->orderBy('dapil')
             ->orderBy('nama')
@@ -406,7 +432,7 @@ class Index extends Component
         $autoSuggestDewan = $this->autoSuggestDewan;
         $isAutoAssigned = $autoSuggestDewan instanceof AnggotaDewan;
 
-        $aspirasi = Aspirasi::query()->create([
+        $aspirasi = $this->baseAspirasiQuery()->create([
             'judul' => trim($validated['fJudul']),
             'deskripsi' => trim($validated['fDeskripsi']),
             'kategori' => $validated['fKategori'],
@@ -472,7 +498,7 @@ class Index extends Component
 
     public function assignDewan(string $aspirasiId, ?string $dewanId = null): void
     {
-        $aspirasi = Aspirasi::query()->findOrFail($aspirasiId);
+        $aspirasi = $this->baseAspirasiQuery()->findOrFail($aspirasiId);
         $dewanId ??= $this->assignSelection[$aspirasiId] ?? null;
 
         if (! $dewanId) {
@@ -481,7 +507,7 @@ class Index extends Component
             return;
         }
 
-        $dewan = AnggotaDewan::query()->findOrFail($dewanId);
+        $dewan = $this->baseDewanQuery()->findOrFail($dewanId);
 
         $aspirasi->assigned_dewan_id = $dewan->id;
         $aspirasi->assigned_at = now();
@@ -518,7 +544,7 @@ class Index extends Component
             'fScreenshotSipd' => ['nullable', 'image', 'max:4096'],
         ]);
 
-        $aspirasi = Aspirasi::query()->findOrFail((string) $this->konfirmasiAspirasiId);
+        $aspirasi = $this->baseAspirasiQuery()->findOrFail((string) $this->konfirmasiAspirasiId);
         $path = $this->fScreenshotSipd ? $this->fScreenshotSipd->store('aspirasi/sipd', 'public') : $aspirasi->screenshot_sipd;
 
         $aspirasi->update([
@@ -550,7 +576,7 @@ class Index extends Component
 
     public function updateStatus(?string $aspirasiId = null): void
     {
-        $aspirasi = Aspirasi::query()->findOrFail($aspirasiId ?? (string) $this->updateAspirasiId);
+        $aspirasi = $this->baseAspirasiQuery()->findOrFail($aspirasiId ?? (string) $this->updateAspirasiId);
 
         $rules = [
             'fNewStatus' => ['required', 'string'],
@@ -603,7 +629,7 @@ class Index extends Component
 
     public function copyDraftPokir(string $aspirasiId): void
     {
-        $aspirasi = Aspirasi::query()->findOrFail($aspirasiId);
+        $aspirasi = $this->baseAspirasiQuery()->findOrFail($aspirasiId);
         $draft = $aspirasi->draft_pokir ?: $aspirasi->generateDraftPokir();
 
         if (! $aspirasi->draft_pokir) {
@@ -621,7 +647,7 @@ class Index extends Component
 
     public function kirimReminderManual(string $aspirasiId): void
     {
-        $aspirasi = Aspirasi::query()->with('assignedDewan')->findOrFail($aspirasiId);
+        $aspirasi = $this->baseAspirasiQuery()->with('assignedDewan')->findOrFail($aspirasiId);
         $targetUserId = $aspirasi->resolveReminderTargetUserId();
 
         if (! $aspirasi->assigned_dewan_id || ! $targetUserId) {
@@ -659,7 +685,7 @@ class Index extends Component
 
     private function resolveTargetWilayah(string $dapil, string $kecamatan, string $desa): ?TargetWilayah
     {
-        return TargetWilayah::query()
+        return $this->baseTargetQuery()
             ->where('dapil', $dapil)
             ->when($kecamatan !== '', fn (Builder $query) => $query->where('kecamatan', $kecamatan))
             ->when($desa !== '', fn (Builder $query) => $query->where('desa', $desa))

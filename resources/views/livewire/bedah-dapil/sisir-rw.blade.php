@@ -25,19 +25,23 @@
                 </div>
                 <div class="sisir-topbar-filters" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1 1 auto;min-width:0;">
                     <div style="font-size:12px;color:#d4d4d8;font-weight:500;">Filter :</div>
-                    <select class="sisir-filter-select sisir-filter-dapil" wire:model.live="selectedDapil" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#fff7f1;color:#993c1d;font-weight:500;min-width:108px;">
-                        <option value="">Semua dapil</option>
+                    <select class="sisir-filter-select sisir-filter-dapil" wire:model.live="selectedDapil" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#fff7f1;color:#993c1d;font-weight:500;min-width:108px;" @if(count($this->dapilOptions) === 1) disabled @endif>
+                        @if (count($this->dapilOptions) !== 1)
+                            <option value="">Semua dapil</option>
+                        @endif
                         @foreach ($this->dapilOptions as $dapil)
                             <option value="{{ $dapil }}">{{ $dapil }}</option>
                         @endforeach
                     </select>
-                    <select class="sisir-filter-select sisir-filter-kecamatan" wire:model.live="selectedKecamatan" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#27272a;color:#f4f4f5;min-width:132px;">
-                        <option value="">Semua kecamatan</option>
+                    <select class="sisir-filter-select sisir-filter-kecamatan" wire:model.live="selectedKecamatan" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#27272a;color:#f4f4f5;min-width:132px;" @if(count($this->kecamatanOptions) === 1 && $user && !$user->isAdmin()) disabled @endif>
+                        @if (count($this->kecamatanOptions) !== 1)
+                            <option value="">Semua kecamatan</option>
+                        @endif
                         @foreach ($this->kecamatanOptions as $kecamatan)
                             <option value="{{ $kecamatan }}">{{ $kecamatan }}</option>
                         @endforeach
                     </select>
-                    <select class="sisir-filter-select sisir-filter-desa" wire:model.live="selectedDesa" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#27272a;color:#f4f4f5;min-width:120px;">
+                    <select class="sisir-filter-select sisir-filter-desa" wire:model.live="selectedDesa" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#27272a;color:#f4f4f5;min-width:120px;" @if($user && $user->isDpra()) disabled @endif>
                         <option value="">Semua desa</option>
                         @foreach ($this->filterDesaOptions as $desa)
                             <option value="{{ $desa }}">{{ $desa }}</option>

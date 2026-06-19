@@ -15,7 +15,7 @@
                 <div style="font-size:15px;font-weight:500;">Aspirasi & POKIR</div>
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1 1 auto;">
                     <div style="font-size:12px;color:#d4d4d8;font-weight:500;">Filter :</div>
-                <select wire:model.live="selectedDapil" style="height:38px;border-radius:8px;border:0.5px solid #3f3f46;padding:0 12px;font-size:12px;min-width:160px;background:#fff7f1;color:#993c1d;font-weight:500;">
+                <select wire:model.live="selectedDapil" style="height:38px;border-radius:8px;border:0.5px solid #3f3f46;padding:0 12px;font-size:12px;min-width:160px;background:#fff7f1;color:#993c1d;font-weight:500;" @if ($this->accessScope['is_dapil'] ?? false) disabled @endif>
                     <option value="">Semua dapil</option>
                     @foreach ($this->dapilOptions as $dapil)
                         <option value="{{ $dapil }}">{{ $dapil }}</option>

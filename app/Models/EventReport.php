@@ -22,6 +22,7 @@ class EventReport extends Model
         'tindak_lanjut',
         'foto',
         'realisasi_anggaran',
+        'rating',
         'created_by',
     ];
 

@@ -25,5 +25,14 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, \Illuminate\Http\Request $request) {
+            if ($e->getStatusCode() === 403 && $request->is('admin*')) {
+                if (auth()->check() && !auth()->user()->isAdmin()) {
+                    auth()->logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return redirect('/login')->with('error', 'Sesi Anda telah dikeluarkan karena Anda tidak memiliki akses ke halaman admin.');
+                }
+            }
+        });
     })->create();

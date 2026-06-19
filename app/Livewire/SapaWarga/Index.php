@@ -8,6 +8,7 @@ use App\Models\DataRw;
 use App\Models\KontakWarga;
 use App\Models\PenggalangSuara;
 use App\Models\TargetWilayah;
+use App\Traits\WithWilayahScope;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -18,6 +19,7 @@ use Livewire\WithPagination;
 class Index extends Component
 {
     use WithPagination;
+    use WithWilayahScope;
 
     public string $selectedDapil = '';
 
@@ -39,7 +41,7 @@ class Index extends Component
 
     public function mount(): void
     {
-        $this->applyUserScope();
+        $this->enforceScope();
         $this->ensureSelectedDesa();
         $this->ensureSelectedRw();
     }
@@ -71,7 +73,7 @@ class Index extends Component
     public function updatedSelectedDapil(): void
     {
         if ($this->isKaderScope()) {
-            $this->applyUserScope();
+            $this->enforceScope();
             return;
         }
 
@@ -83,7 +85,7 @@ class Index extends Component
     public function updatedSelectedKecamatan(): void
     {
         if ($this->isKaderScope()) {
-            $this->applyUserScope();
+            $this->enforceScope();
             return;
         }
 
@@ -94,7 +96,7 @@ class Index extends Component
     public function updatedSelectedDesa(): void
     {
         if ($this->isKaderScope()) {
-            $this->applyUserScope();
+            $this->enforceScope();
             return;
         }
 
@@ -814,7 +816,7 @@ class Index extends Component
 
     public function render()
     {
-        $this->applyUserScope();
+        $this->enforceScope();
         $this->ensureSelectedDesa();
         $this->ensureSelectedRw();
 
@@ -930,17 +932,35 @@ class Index extends Component
             ->with('penggalang');
     }
 
-    private function applyUserScope(): void
+    private function enforceScope(): void
     {
-        if (! $this->isKaderScope()) {
+        $user = auth()->user();
+        if (! $user) {
             return;
         }
 
-        $user = auth()->user();
-        $this->selectedDapil = (string) ($user?->dapil ?? '');
-        $this->selectedKecamatan = (string) ($user?->kecamatan ?? '');
-        $this->selectedDesa = (string) ($user?->desa ?? '');
-        $this->selectedRw = $this->userRw();
+        $scope = $this->accessScope;
+        if (($scope['mode'] ?? 'global') === 'dapil') {
+            $this->selectedDapil = (string) ($scope['locked_dapil'] ?? '');
+            $this->selectedKecamatan = (string) ($scope['kecamatan'] ?? '');
+            if (!empty($scope['desa'])) {
+                $this->selectedDesa = $scope['desa'];
+                $desa = TargetWilayah::where('dapil', $this->selectedDapil)
+                    ->where('kecamatan', $this->selectedKecamatan)
+                    ->where('desa', $this->selectedDesa)
+                    ->first();
+                if ($desa) {
+                    $this->selectedTargetWilayahId = (string) $desa->id;
+                }
+            }
+        }
+
+        if ($this->isKaderScope()) {
+            $this->selectedDapil = (string) ($user->dapil ?? '');
+            $this->selectedKecamatan = (string) ($user->kecamatan ?? '');
+            $this->selectedDesa = (string) ($user->desa ?? '');
+            $this->selectedRw = $this->userRw();
+        }
     }
 
     private function currentUserTargetWilayah(): ?TargetWilayah

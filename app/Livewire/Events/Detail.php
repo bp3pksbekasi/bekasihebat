@@ -596,7 +596,7 @@ class Detail extends Component
     public function render()
     {
         return view('livewire.events.detail')
-            ->layout('components.layouts.app-fullwidth', ['title' => $this->event->judul]);
+            ->layout('components.layouts.app-fullwidth', ['title' => 'Detail Program']);
     }
 
     public function canApproveLevel(string $level): bool

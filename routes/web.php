@@ -13,7 +13,6 @@ use App\Livewire\InfraRtRw\Index as InfraRtRwIndex;
 use App\Livewire\KartuAnggota\Register as KartuAnggotaRegister;
 use App\Livewire\Kaderisasi\Index as KaderisasiIndex;
 use App\Livewire\Pengaturan\UserManagement as UserManagementIndex;
-use App\Livewire\ProgramKerja\Index as ProgramKerjaIndex;
 use App\Livewire\Public\Auth\Login;
 use App\Livewire\Public\Dashboard as MemberDashboard;
 use App\Livewire\Public\Profile\Complete;
@@ -163,11 +162,17 @@ Route::middleware('auth')->group(function () {
             })
             ->toArray();
 
+        $scopeClass = new class {
+            use \App\Traits\WithWilayahScope;
+        };
+        $userScope = $scopeClass->accessScope();
+
         return view('bedah-dapil.pemilu-dprd', [
             'periodOptions' => $periodOptions,
             'selectedPeriodId' => $selectedPeriod?->id ?? $periodOptions[0]['id'],
             'compiledPayload' => $selectedPeriod ? $payloadBuilder->build($selectedPeriod) : null,
             'profilRwMap' => $profilRwMap,
+            'userScope' => $userScope,
         ]);
     })->middleware('menu:bedah-dapil')->name('bedah-dapil.pemilu-dprd');
 
@@ -282,15 +287,31 @@ Route::middleware('auth')->group(function () {
             ]];
         }
 
+        $compiledCalegPayload = $selectedPeriod?->caleg_summary_payload ?? [
+            'totalRows' => 0,
+            'allPartyNames' => [],
+            'dapils' => [],
+        ];
+
+        // Filter based on user scope
+        $scopeClass = new class {
+            use \App\Traits\WithWilayahScope;
+        };
+        $userScope = $scopeClass->accessScope();
+        
+        if (($userScope['mode'] ?? 'global') === 'dapil' && !empty($userScope['locked_dapil']) && !empty($compiledCalegPayload['dapils'])) {
+            $compiledCalegPayload['dapils'] = array_values(array_filter(
+                $compiledCalegPayload['dapils'],
+                fn($d) => (string) $d['dapil'] === (string) $userScope['locked_dapil']
+            ));
+        }
+
         return view('bedah-dapil.analisa-caleg', [
             'periodOptions' => $periodOptions,
             'selectedPeriodId' => $selectedPeriod?->id ?? $periodOptions[0]['id'],
-            'compiledCalegPayload' => $selectedPeriod?->caleg_summary_payload ?? [
-                'totalRows' => 0,
-                'allPartyNames' => [],
-                'dapils' => [],
-            ],
+            'compiledCalegPayload' => $compiledCalegPayload,
             'compiledPayload' => $selectedPeriod ? $payloadBuilder->build($selectedPeriod) : null,
+            'userScope' => $userScope,
         ]);
     })->middleware('menu:bedah-dapil')->name('bedah-dapil.analisa-caleg');
 
@@ -317,7 +338,7 @@ Route::middleware('auth')->group(function () {
 
         abort(403, 'Anda tidak memiliki akses ke halaman ini.');
     })->middleware('auth')->name('rki-ksn.index');
-    Route::get('/program-kerja', ProgramKerjaIndex::class)->middleware('menu:program-kerja')->name('program-kerja.index');
+    Route::redirect('/program-kerja', '/admin/events')->name('program-kerja.index');
     Route::get('/aspirasi', AspirasiIndex::class)->middleware('menu:aspirasi')->name('aspirasi.index');
     Route::get('/aspirasi/reminders/{reminder}/read', function (AspirasiReminder $reminder) {
         abort_unless($reminder->target_user_id === auth()->id() || auth()->user()?->isAdmin(), 403);
@@ -347,6 +368,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/whatsapp', \App\Livewire\Pengaturan\WhapifySettings::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.whatsapp');
+
+    Route::get('/pengaturan/rule', \App\Livewire\Pengaturan\RuleManagement::class)
+        ->middleware('role:admin_dpd')
+        ->name('pengaturan.rule');
 });
 
 Route::middleware(['auth'])->group(function () {

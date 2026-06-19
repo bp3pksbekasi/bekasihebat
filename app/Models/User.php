@@ -33,6 +33,12 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
     public const ROLE_BIDANG = 'pengurus_bidang';
     public const ROLE_KADER = 'kader';
     public const ROLE_DAPIL = 'dapil';
+    public const ROLE_DPC = 'pengurus_dpc';
+    public const ROLE_DPRA = 'pengurus_dpra';
+
+    public const ORG_LEVEL_DPD  = 'dpd';
+    public const ORG_LEVEL_DPC  = 'dpc';
+    public const ORG_LEVEL_DPRA = 'dpra';
 
     public const BIDANG_OPTIONS = [
         'advokasi' => 'Advokasi Partai',
@@ -68,6 +74,7 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
     protected $fillable = [
         'name',
         'email',
+        'org_level',
         'nia',
         'kader_id',
         'role',
@@ -177,6 +184,21 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
         return mb_strtolower((string) $this->role) === self::ROLE_KADER;
     }
 
+    public function isDpd(): bool
+    {
+        return $this->org_level === self::ORG_LEVEL_DPD || $this->isAdmin();
+    }
+
+    public function isDpc(): bool
+    {
+        return $this->org_level === self::ORG_LEVEL_DPC;
+    }
+
+    public function isDpra(): bool
+    {
+        return $this->org_level === self::ORG_LEVEL_DPRA;
+    }
+
     public function isDapil(): bool
     {
         return mb_strtolower((string) $this->role) === self::ROLE_DAPIL || $this->hasRole('dapil');
@@ -191,22 +213,6 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
     {
         if ($this->isAdmin()) {
             return true;
-        }
-
-        $universal = ['dashboard', 'sapa-warga', 'profil', 'event-view', 'sisir-rw'];
-
-        if (in_array($menuSlug, $universal, true)) {
-            return true;
-        }
-
-        if ($this->isDapil()) {
-            $allowed = [
-                'dashboard', 'kaderisasi', 'infra-rtrw', 'sisir-rw', 'sapa-warga',
-                'sosial-media', 'rki', 'ksn', 'bedah-dapil', 'aspirasi',
-                'program-kerja', 'event', 'event-view', 'profil'
-            ];
-
-            return in_array($menuSlug, $allowed, true);
         }
 
         if ($this->hasMenuPermission($menuSlug)) {
@@ -230,6 +236,13 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
             $allowedMenus = self::BIDANG_MENUS[$this->bidang_slug] ?? [];
 
             return in_array($menuSlug, $allowedMenus, true);
+        }
+
+        if ($this->isDpc() || $this->isDpra() || $this->isDapil()) {
+            $defaultStrukturMenus = ['infra-rtrw', 'dashboard', 'sisir-rw', 'sapa-warga', 'bedah-dapil', 'kaderisasi'];
+            if (in_array($menuSlug, $defaultStrukturMenus, true)) {
+                return true;
+            }
         }
 
         return false;

@@ -219,8 +219,8 @@
         </div>
 
         <script>
-            const compiledPayload = @json($compiledPayload);
             (function() {
+                const compiledPayload = @json($compiledPayload);
                 const partyColors = {
                 "PKB": "#008000", "Gerindra": "#C8102E", "PDIP": "#D72027", "PDI-P": "#D72027",
                 "Golkar": "#FFD700", "Nasdem": "#003087", "NasDem": "#003087", "Buruh": "#E31937",
@@ -230,8 +230,8 @@
             };
 
             const tpsToRwMap = new Map();
-            if (window.compiledPayload && window.compiledPayload.villages) {
-                window.compiledPayload.villages.forEach((v) => {
+            if (compiledPayload && compiledPayload.villages) {
+                compiledPayload.villages.forEach((v) => {
                     const villageKey = `${normalizeKey(v.dapil)}__${normalizeKey(v.kecamatan)}__${normalizeKey(v.desa)}`;
                     const tpsMap = new Map();
                     if (v.rw_rows) {
@@ -248,11 +248,14 @@
                 });
             }
 
+            const userScope = @json($userScope ?? null);
+            const userIsScoped = userScope && userScope.mode === 'dapil';
+
             const state = {
                 dataset: null,
-                currentDapil: '',
-                currentKecamatan: '',
-                currentDesa: '',
+                currentDapil: userScope && userScope.locked_dapil ? 'BEKASI ' + userScope.locked_dapil : '',
+                currentKecamatan: userScope && userScope.kecamatan ? userScope.kecamatan.toUpperCase() : '',
+                currentDesa: userScope && userScope.desa ? userScope.desa.toUpperCase() : '',
                 currentPartai: '',
                 currentGender: '',
                 searchKeyword: '',
@@ -734,8 +737,12 @@
                     });
                 }
                 const sortedDistricts = Array.from(districts).sort(compareNatural);
-                dom.kecamatanSelect.innerHTML = `<option value="">Semua kecamatan</option>${sortedDistricts.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(toTitleCase(d))}</option>`).join('')}`;
+                const options = sortedDistricts.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(toTitleCase(d))}</option>`).join('');
+                dom.kecamatanSelect.innerHTML = (!(userIsScoped && userScope.kecamatan) ? '<option value="">Semua kecamatan</option>' : '') + options;
                 dom.kecamatanSelect.value = state.currentKecamatan;
+                if (userIsScoped && userScope.kecamatan) {
+                    dom.kecamatanSelect.disabled = true;
+                }
             }
 
             function populateDesaOptions() {
@@ -760,14 +767,22 @@
                     });
                 }
                 villages.sort((a, b) => compareNatural(a.label, b.label));
-                dom.desaSelect.innerHTML = `<option value="">Semua desa</option>${villages.map((v) => `<option value="${escapeHtml(v.key)}">${escapeHtml(v.label)}</option>`).join('')}`;
+                const options = villages.map((v) => `<option value="${escapeHtml(v.key)}">${escapeHtml(v.label)}</option>`).join('');
+                dom.desaSelect.innerHTML = (!(userIsScoped && userScope.desa) ? '<option value="">Semua desa</option>' : '') + options;
                 dom.desaSelect.value = state.currentDesa;
+                if (userIsScoped && userScope.desa) {
+                    dom.desaSelect.disabled = true;
+                }
             }
 
             function populateDapilSelect() {
                 const dapils = Array.from(state.dataset?.dapils.keys() || []).sort(compareNatural);
-                dom.dapilSelect.innerHTML = `<option value="">Semua dapil</option>${dapils.map((dapil) => `<option value="${escapeHtml(dapil)}">${escapeHtml(toTitleCase(dapil))}</option>`).join('')}`;
+                const options = dapils.map((dapil) => `<option value="${escapeHtml(dapil)}">${escapeHtml(toTitleCase(dapil))}</option>`).join('');
+                dom.dapilSelect.innerHTML = (!userIsScoped ? '<option value="">Semua dapil</option>' : '') + options;
                 dom.dapilSelect.value = state.currentDapil;
+                if (userIsScoped && userScope.locked_dapil) {
+                    dom.dapilSelect.disabled = true;
+                }
             }
 
             function populatePartaiSelect() {
@@ -1248,9 +1263,9 @@
             }
 
             function resetFilters() {
-                state.currentDapil = '';
-                state.currentKecamatan = '';
-                state.currentDesa = '';
+                state.currentDapil = userScope && userScope.locked_dapil ? 'BEKASI ' + userScope.locked_dapil : '';
+                state.currentKecamatan = userScope && userScope.kecamatan ? userScope.kecamatan.toUpperCase() : '';
+                state.currentDesa = userScope && userScope.desa ? userScope.desa.toUpperCase() : '';
                 state.currentPartai = '';
                 state.currentGender = '';
                 state.searchKeyword = '';
@@ -1258,9 +1273,9 @@
                 state.currentPage = 1;
                 state.selectedCalegKey = '';
                 state.showAllHeadToHead = false;
-                dom.dapilSelect.value = '';
-                dom.kecamatanSelect.value = '';
-                dom.desaSelect.value = '';
+                dom.dapilSelect.value = state.currentDapil;
+                dom.kecamatanSelect.value = state.currentKecamatan;
+                dom.desaSelect.value = state.currentDesa;
                 dom.partaiSelect.value = '';
                 dom.genderSelect.value = '';
                 dom.searchInput.value = '';
@@ -1502,10 +1517,10 @@
                 });
             }
 
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                init();
-            } else {
+            if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
             }
         })();
     </script>
