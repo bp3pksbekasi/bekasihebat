@@ -9,7 +9,7 @@
 @php
     $dashboardRoute = route('member.dashboard');
     $canonicalUrl = url()->current();
-    $ogImage = $image ?? asset('images/logoputih.png');
+    $ogImage = $image ?? asset('images/logo-kabupaten-bekasi-hebat-sm.jpg');
     $siteName = 'DPD PKS Kabupaten Bekasi';
     $fullTitle = $title !== 'Kabupaten Bekasi Hebat' ? $title . ' — ' . $siteName : $title;
 
@@ -62,7 +62,7 @@
         "@@type": "PoliticalParty",
         "name": "{{ $siteName }}",
         "url": "{{ url('/') }}",
-        "logo": "{{ asset('images/logoputih.png') }}",
+        "logo": "{{ asset('images/logo-kabupaten-bekasi-hebat-sm.jpg') }}",
         "description": "Kabupaten Bekasi Hebat : Komunitas pelatihan dan pengembangan potensi masyarakat, program sosial, dan aspirasi warga untuk membangun Kabupaten Bekasi yang lebih baik.",
         "address": {
             "@@type": "PostalAddress",

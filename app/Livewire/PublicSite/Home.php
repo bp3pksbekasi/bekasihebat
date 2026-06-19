@@ -23,7 +23,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('components.layouts.public')]
-#[Title('Bekasi Hebat')]
+#[Title('Kabupaten Bekasi Hebat')]
 class Home extends Component
 {
     public function getEventMendatangProperty(): Collection
