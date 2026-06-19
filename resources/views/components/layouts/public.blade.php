@@ -572,7 +572,7 @@
             <div class="footer-main">
                 <div>
                     <div class="footer-brand">
-                        <img src="{{ asset('images/logo-hebat.png') }}" alt="Kabupaten Bekasi Hebat" style="height: 48px; width: auto; object-fit: contain; filter: brightness(0) invert(1);">
+                        <img src="{{ asset('images/logoputih.png') }}" alt="Kabupaten Bekasi Hebat" style="height: 48px; width: auto; object-fit: contain">
                     </div>
                     <p>
                         DPD PKS Kabupaten Bekasi<br>
