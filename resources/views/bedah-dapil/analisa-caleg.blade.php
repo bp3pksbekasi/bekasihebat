@@ -220,33 +220,21 @@
 
         <script>
             (function() {
-                const compiledPayload = @json($compiledPayload);
-                const partyColors = {
+            const tpsToRwData = @json($tpsToRwMap ?? []);
+            const partyColors = {
                 "PKB": "#008000", "Gerindra": "#C8102E", "PDIP": "#D72027", "PDI-P": "#D72027",
                 "Golkar": "#FFD700", "Nasdem": "#003087", "NasDem": "#003087", "Buruh": "#E31937",
                 "Gelora": "#DC143C", "PKS": "#fe5000", "PKN": "#336699", "Hanura": "#4169E1",
                 "Garuda": "#228B22", "PAN": "#005BAC", "PBB": "#009B3A", "Demokrat": "#00529C",
                 "PSI": "#EC008C", "Perindo": "#CC0000", "PPP": "#006600", "Ummat": "#2E8B57"
             };
-
             const tpsToRwMap = new Map();
-            if (compiledPayload && compiledPayload.villages) {
-                compiledPayload.villages.forEach((v) => {
-                    const villageKey = `${normalizeKey(v.dapil)}__${normalizeKey(v.kecamatan)}__${normalizeKey(v.desa)}`;
-                    const tpsMap = new Map();
-                    if (v.rw_rows) {
-                        v.rw_rows.forEach((rwRow) => {
-                            if (rwRow.tps_list) {
-                                rwRow.tps_list.forEach((tpsName) => {
-                                    const num = String(tpsName || '').replace(/[^\d]/g, '');
-                                    tpsMap.set(num, rwRow.rw);
-                                });
-                            }
-                        });
-                    }
-                    tpsToRwMap.set(villageKey, tpsMap);
-                });
-            }
+            Object.keys(tpsToRwData).forEach(villageKey => {
+                const mapObj = tpsToRwData[villageKey];
+                const tMap = new Map();
+                Object.keys(mapObj).forEach(tps => tMap.set(tps, mapObj[tps]));
+                tpsToRwMap.set(villageKey, tMap);
+            });
 
             const userScope = @json($userScope ?? null);
             const userIsScoped = userScope && userScope.mode === 'dapil';

@@ -306,11 +306,35 @@ Route::middleware('auth')->group(function () {
             ));
         }
 
+        $tpsToRwMap = [];
+        if ($selectedPeriod) {
+            $payload = $payloadBuilder->build($selectedPeriod);
+            foreach ($payload['villages'] ?? [] as $v) {
+                $dapil = str_replace(' ', '', mb_strtoupper((string) ($v['dapil'] ?? '')));
+                $kec = str_replace(' ', '', mb_strtoupper((string) ($v['kecamatan'] ?? '')));
+                $desa = str_replace(' ', '', mb_strtoupper((string) ($v['desa'] ?? '')));
+                $villageKey = "{$dapil}__{$kec}__{$desa}";
+                $tpsMap = [];
+                foreach ($v['rw_rows'] ?? [] as $rwRow) {
+                    foreach ($rwRow['tps_list'] ?? [] as $tpsName) {
+                        $num = preg_replace('/[^\d]/', '', (string) $tpsName);
+                        if ($num !== '') {
+                            $tpsMap[$num] = $rwRow['rw'];
+                        }
+                    }
+                }
+                if ($tpsMap !== []) {
+                    $tpsToRwMap[$villageKey] = $tpsMap;
+                }
+            }
+            unset($payload);
+        }
+
         return view('bedah-dapil.analisa-caleg', [
             'periodOptions' => $periodOptions,
             'selectedPeriodId' => $selectedPeriod?->id ?? $periodOptions[0]['id'],
             'compiledCalegPayload' => $compiledCalegPayload,
-            'compiledPayload' => $selectedPeriod ? $payloadBuilder->build($selectedPeriod) : null,
+            'tpsToRwMap' => $tpsToRwMap,
             'userScope' => $userScope,
         ]);
     })->middleware('menu:bedah-dapil')->name('bedah-dapil.analisa-caleg');
