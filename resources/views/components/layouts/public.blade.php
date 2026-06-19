@@ -550,9 +550,8 @@
             <div class="news-ticker-content">
                 <div class="news-ticker-list">
                     <div class="news-ticker-item">PKS Kabupaten Bekasi berkomitmen hadir melayani sedekat mungkin hingga ke tingkat RW.</div>
-                    <div class="news-ticker-item">Total Aspirasi Diperjuangkan: <span>{{ number_format($aspirasiCount) }} Usulan Masuk</span> melalui SIPD & Pengusulan.</div>
                     <div class="news-ticker-item">Event Terdekat: Ikuti Senam PKS Bersama dan pelayanan kesehatan gratis di daerah Anda.</div>
-                    <div class="news-ticker-item">Pendaftaran Relawan & Anggota: Dapatkan Kartu Tanda Anggota (KTA) Digital di menu Daftar.</div>
+                    <div class="news-ticker-item">Segara daftarkan diri Anda sebagai member Kabupaten Bekasi Hebat.</div>
                 </div>
             </div>
         </div>
@@ -575,7 +574,11 @@
                     <div class="footer-brand">
                         <img src="{{ asset('images/logo-hebat.png') }}" alt="Kabupaten Bekasi Hebat" style="height: 48px; width: auto; object-fit: contain; filter: brightness(0) invert(1);">
                     </div>
-                    <p>DPD PKS Kabupaten Bekasi<br>Jl. Rw. Jaya No.3, Bojong Rawalumbu, Bekasi<br>Telp/WA: (+62) 813 5631 291</p>
+                    <p>
+                        DPD PKS Kabupaten Bekasi<br>
+                        Ruko Sentra Niaga Kalimas<br>
+                        Jl. kiyai H. Noer Ali No.16 blok A, Setiadarma, Kec. Tambun Sel., Kabupaten Bekasi, Jawa Barat 17510
+                    </p>
                     <div class="footer-socials">
                         @foreach ([
                             ['icon' => 'brand-instagram', 'label' => 'Instagram'],

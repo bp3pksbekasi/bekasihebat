@@ -756,25 +756,6 @@
     </div>
 </section>
 
-<section class="stats-public">
-    <div class="container">
-        <div class="stats-grid-public fade-up">
-            @foreach ([
-                ['label' => 'Event Terselenggara', 'value' => $stats['event_total']],
-                ['label' => 'Warga Terjangkau', 'value' => $stats['warga_terjangkau']],
-                ['label' => 'Kader Aktif', 'value' => $stats['kader_aktif']],
-                ['label' => 'Titik Senam', 'value' => $stats['titik_senam']],
-                ['label' => 'Anggota Terdaftar', 'value' => $stats['member']],
-            ] as $item)
-                <div class="stats-item-public">
-                    <div class="num" data-counter="{{ $item['value'] }}">0</div>
-                    <div class="label">{{ $item['label'] }}</div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
 <section class="section section-white bg-glow-container" id="galeri">
     <div class="bg-glow-accent bg-glow-orange" style="top: -120px; right: -120px;"></div>
     <div class="bg-glow-accent bg-glow-blue" style="bottom: -120px; left: -120px;"></div>

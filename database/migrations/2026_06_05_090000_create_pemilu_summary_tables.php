@@ -69,7 +69,7 @@ return new class extends Migration
                     ->on('pemilu_periods')
                     ->cascadeOnDelete();
 
-                $table->unique(['pemilu_period_id', 'dapil', 'kecamatan', 'desa']);
+                $table->unique(['pemilu_period_id', 'dapil', 'kecamatan', 'desa'], 'pds_period_dapil_kec_desa_unique');
                 $table->index(['pemilu_period_id', 'dapil']);
                 $table->index(['pemilu_period_id', 'kecamatan']);
             });
