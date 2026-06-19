@@ -29,6 +29,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fe5000">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-kabupaten-bekasi-hebat-sm.jpg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-kabupaten-bekasi-hebat-sm.jpg') }}">
     <meta name="description" content="{{ $description }}">
     @if ($noindex)
         <meta name="robots" content="noindex, nofollow">
