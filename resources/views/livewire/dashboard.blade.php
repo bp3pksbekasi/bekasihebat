@@ -236,10 +236,15 @@
                 ];
             }
         @endphp
-        <div x-data="{ tab: 'infra' }" class="flex flex-col gap-3">
+        <div x-data="{ tab: 'kinerja' }" class="flex flex-col gap-3">
             
             {{-- Tab Navigation --}}
             <div class="flex gap-1.5 p-1 bg-zinc-100 rounded-lg self-start overflow-x-auto max-w-full">
+                <button @click="tab='kinerja'"
+                    :class="tab==='kinerja' ? 'bg-white text-zinc-900 shadow-sm font-bold' : 'text-zinc-500 hover:text-zinc-800'"
+                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-all duration-200">
+                    <i class="ti ti-chart-line text-sm"></i> Kinerja & Trend
+                </button>
                 <button @click="tab='infra'"
                     :class="tab==='infra' ? 'bg-white text-zinc-900 shadow-sm font-bold' : 'text-zinc-500 hover:text-zinc-800'"
                     class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-all duration-200">
@@ -249,11 +254,6 @@
                     :class="tab==='program' ? 'bg-white text-zinc-900 shadow-sm font-bold' : 'text-zinc-500 hover:text-zinc-800'"
                     class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-all duration-200">
                     <i class="ti ti-calendar-event text-sm"></i> Program
-                </button>
-                <button @click="tab='kinerja'"
-                    :class="tab==='kinerja' ? 'bg-white text-zinc-900 shadow-sm font-bold' : 'text-zinc-500 hover:text-zinc-800'"
-                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-all duration-200">
-                    <i class="ti ti-chart-line text-sm"></i> Kinerja & Trend
                 </button>
                 <button @click="tab='aktivitas'"
                     :class="tab==='aktivitas' ? 'bg-white text-zinc-900 shadow-sm font-bold' : 'text-zinc-500 hover:text-zinc-800'"
@@ -284,54 +284,54 @@
                 {{-- 3 Metric utama --}}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {{-- KORWE --}}
-                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-                        <div class="flex items-start justify-between mb-2">
-                            <div>
-                                <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">KORWE Terbentuk</span>
-                                <div class="text-3xl font-black text-zinc-900 mt-0.5 flex items-baseline">
-                                    {{ $this->kpi['korwePct'] }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
-                                </div>
-                            </div>
-                            <div class="text-right leading-none shrink-0 mt-0.5">
+                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="flex items-start justify-between">
+                            <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">KORWE TERBENTUK</span>
+                            <div class="text-right leading-none shrink-0">
                                 <div class="text-[13px] font-extrabold text-zinc-800">{{ number_format($this->kpi['korweTerbentuk']) }}</div>
                                 <div class="text-[9px] font-bold text-zinc-400 mt-0.5">/{{ number_format($this->kpi['targetKorwe']) }}</div>
                             </div>
                         </div>
-                        <div class="text-[10px] text-zinc-500 mt-1 font-bold">{{ number_format(max(0, $this->kpi['targetKorwe'] - $this->kpi['korweTerbentuk'])) }} RW tersisa</div>
+                        <div class="flex items-end justify-between mt-2">
+                            <div class="text-3xl font-black text-zinc-900 flex items-baseline leading-none">
+                                {{ $this->kpi['korwePct'] }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 font-bold leading-none pb-0.5">{{ number_format(max(0, $this->kpi['targetKorwe'] - $this->kpi['korweTerbentuk'])) }} RW tersisa</div>
+                        </div>
                     </div>
 
                     {{-- KORTE --}}
-                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-                        <div class="flex items-start justify-between mb-2">
-                            <div>
-                                <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">Korte Terbentuk</span>
-                                <div class="text-3xl font-black text-zinc-900 mt-0.5 flex items-baseline">
-                                    {{ $this->kpi['kortePct'] }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
-                                </div>
-                            </div>
-                            <div class="text-right leading-none shrink-0 mt-0.5">
+                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="flex items-start justify-between">
+                            <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">KORTE TERBENTUK</span>
+                            <div class="text-right leading-none shrink-0">
                                 <div class="text-[13px] font-extrabold text-zinc-800">{{ number_format($this->kpi['korteTerbentuk']) }}</div>
                                 <div class="text-[9px] font-bold text-zinc-400 mt-0.5">/{{ number_format($this->kpi['targetKorte']) }}</div>
                             </div>
                         </div>
-                        <div class="text-[10px] text-zinc-500 mt-1 font-bold">{{ number_format(max(0, $this->kpi['targetKorte'] - $this->kpi['korteTerbentuk'])) }} korte tersisa</div>
+                        <div class="flex items-end justify-between mt-2">
+                            <div class="text-3xl font-black text-zinc-900 flex items-baseline leading-none">
+                                {{ $this->kpi['kortePct'] }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 font-bold leading-none pb-0.5">{{ number_format(max(0, $this->kpi['targetKorte'] - $this->kpi['korteTerbentuk'])) }} korte tersisa</div>
+                        </div>
                     </div>
 
                     {{-- PENGGALANG --}}
-                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-                        <div class="flex items-start justify-between mb-2">
-                            <div>
-                                <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">Penggalang Aktif</span>
-                                <div class="text-3xl font-black text-zinc-900 mt-0.5 flex items-baseline">
-                                    {{ $penggalangPct }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
-                                </div>
-                            </div>
-                            <div class="text-right leading-none shrink-0 mt-0.5">
+                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="flex items-start justify-between">
+                            <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">PENGGALANG AKTIF</span>
+                            <div class="text-right leading-none shrink-0">
                                 <div class="text-[13px] font-extrabold text-zinc-800">{{ number_format($this->kpi['penggalang']) }}</div>
                                 <div class="text-[9px] font-bold text-zinc-400 mt-0.5">/{{ number_format($this->kpi['targetPenggalang']) }}</div>
                             </div>
                         </div>
-                        <div class="text-[10px] text-zinc-500 mt-1 font-bold">{{ number_format(max(0, ($this->kpi['targetPenggalang'] ?? 0) - ($this->kpi['penggalang'] ?? 0))) }} target tersisa</div>
+                        <div class="flex items-end justify-between mt-2">
+                            <div class="text-3xl font-black text-zinc-900 flex items-baseline leading-none">
+                                {{ $penggalangPct }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 font-bold leading-none pb-0.5">{{ number_format(max(0, ($this->kpi['targetPenggalang'] ?? 0) - ($this->kpi['penggalang'] ?? 0))) }} target tersisa</div>
+                        </div>
                     </div>
                 </div>
 
@@ -399,6 +399,9 @@
 
             {{-- ===== TAB KINERJA & TREND ===== --}}
             <div x-show="tab==='kinerja'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" class="w-full flex flex-col gap-3">
+                @php
+                    $penggalangPct = ($this->kpi['targetPenggalang'] ?? 0) > 0 ? (int) round((($this->kpi['penggalang'] ?? 0) / $this->kpi['targetPenggalang']) * 100) : 0;
+                @endphp
                 
                 {{-- Trend infrastruktur 6 bulan --}}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -413,7 +416,7 @@
                             <div class="text-xl font-black mb-2" style="color:{{ $trend['color'] }}">{{ $trend['current'] }}</div>
                             
                             {{-- Mini bar chart --}}
-                            <div class="flex items-end gap-1.5 h-10 pt-1">
+                            <div class="flex items-end gap-1.5 h-6 pt-0.5">
                                 @foreach ($trend['months'] as $m)
                                     <div class="flex-1 rounded-t-sm transition-all duration-300 {{ $m['current'] ? 'brightness-95' : 'opacity-30' }}"
                                          title="{{ $m['label'] }}: {{ $m['count'] }}"
@@ -427,6 +430,60 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+
+                {{-- 3 Metric utama --}}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {{-- KORWE --}}
+                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="flex items-start justify-between">
+                            <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">KORWE TERBENTUK</span>
+                            <div class="text-right leading-none shrink-0">
+                                <div class="text-[13px] font-extrabold text-zinc-800">{{ number_format($this->kpi['korweTerbentuk']) }}</div>
+                                <div class="text-[9px] font-bold text-zinc-400 mt-0.5">/{{ number_format($this->kpi['targetKorwe']) }}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-end justify-between mt-2">
+                            <div class="text-3xl font-black text-zinc-900 flex items-baseline leading-none">
+                                {{ $this->kpi['korwePct'] }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 font-bold leading-none pb-0.5">{{ number_format(max(0, $this->kpi['targetKorwe'] - $this->kpi['korweTerbentuk'])) }} RW tersisa</div>
+                        </div>
+                    </div>
+
+                    {{-- KORTE --}}
+                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="flex items-start justify-between">
+                            <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">KORTE TERBENTUK</span>
+                            <div class="text-right leading-none shrink-0">
+                                <div class="text-[13px] font-extrabold text-zinc-800">{{ number_format($this->kpi['korteTerbentuk']) }}</div>
+                                <div class="text-[9px] font-bold text-zinc-400 mt-0.5">/{{ number_format($this->kpi['targetKorte']) }}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-end justify-between mt-2">
+                            <div class="text-3xl font-black text-zinc-900 flex items-baseline leading-none">
+                                {{ $this->kpi['kortePct'] }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 font-bold leading-none pb-0.5">{{ number_format(max(0, $this->kpi['targetKorte'] - $this->kpi['korteTerbentuk'])) }} korte tersisa</div>
+                        </div>
+                    </div>
+
+                    {{-- PENGGALANG --}}
+                    <div class="bg-white border border-zinc-100 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="flex items-start justify-between">
+                            <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-extrabold">PENGGALANG AKTIF</span>
+                            <div class="text-right leading-none shrink-0">
+                                <div class="text-[13px] font-extrabold text-zinc-800">{{ number_format($this->kpi['penggalang']) }}</div>
+                                <div class="text-[9px] font-bold text-zinc-400 mt-0.5">/{{ number_format($this->kpi['targetPenggalang']) }}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-end justify-between mt-2">
+                            <div class="text-3xl font-black text-zinc-900 flex items-baseline leading-none">
+                                {{ $penggalangPct }}<span class="text-lg font-bold text-zinc-400 ml-0.5">%</span>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 font-bold leading-none pb-0.5">{{ number_format(max(0, ($this->kpi['targetPenggalang'] ?? 0) - ($this->kpi['penggalang'] ?? 0))) }} target tersisa</div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
