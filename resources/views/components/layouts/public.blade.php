@@ -1,10 +1,17 @@
 @props([
     'title' => 'Kabupaten Bekasi Hebat',
-    'description' => 'Website resmi DPD PKS Kabupaten Bekasi. Program, event, berita, dan pendaftaran anggota.',
+    'description' => 'Kabupaten Bekasi Hebat : Komunitas pelatihan dan pengembangan potensi masyarakat, program sosial, dan aspirasi warga untuk membangun Kabupaten Bekasi yang lebih baik.',
+    'image' => null,
+    'ogType' => 'website',
+    'noindex' => false,
 ])
 
 @php
     $dashboardRoute = route('member.dashboard');
+    $canonicalUrl = url()->current();
+    $ogImage = $image ?? asset('images/logoputih.png');
+    $siteName = 'DPD PKS Kabupaten Bekasi';
+    $fullTitle = $title !== 'Kabupaten Bekasi Hebat' ? $title . ' — ' . $siteName : $title;
 
     $navItems = [
         ['route' => 'public.home', 'label' => 'Beranda'],
@@ -23,7 +30,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fe5000">
     <meta name="description" content="{{ $description }}">
-    <title>{{ $title }}</title>
+    @if ($noindex)
+        <meta name="robots" content="noindex, nofollow">
+    @else
+        <meta name="robots" content="index, follow">
+    @endif
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+    <title>{{ $fullTitle }}</title>
+
+    {{-- Open Graph --}}
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:title" content="{{ $fullTitle }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="id_ID">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $fullTitle }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+
+    {{-- JSON-LD Organization --}}
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "PoliticalParty",
+        "name": "{{ $siteName }}",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('images/logoputih.png') }}",
+        "description": "Kabupaten Bekasi Hebat : Komunitas pelatihan dan pengembangan potensi masyarakat, program sosial, dan aspirasi warga untuk membangun Kabupaten Bekasi yang lebih baik.",
+        "address": {
+            "@@type": "PostalAddress",
+            "streetAddress": "Ruko Sentra Niaga Kalimas, Jl. Kiyai H. Noer Ali No.16 Blok A, Setiadarma",
+            "addressLocality": "Tambun Selatan",
+            "addressRegion": "Kabupaten Bekasi",
+            "addressCountry": "ID",
+            "postalCode": "17510"
+        }
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
