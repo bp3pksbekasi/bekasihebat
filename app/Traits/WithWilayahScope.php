@@ -16,6 +16,10 @@ trait WithWilayahScope
             return ['mode' => 'global', 'is_dapil' => false, 'locked_dapil' => '', 'kecamatan' => ''];
         }
 
+        if ($user->isAdmin()) {
+            return ['mode' => 'global', 'is_dapil' => false, 'locked_dapil' => '', 'kecamatan' => '', 'desa' => ''];
+        }
+
         $isDapil = (bool) ($user->hasRole('dapil') || $user->isDapil());
         $isDpc = $user->isDpc();
         $isDpra = $user->isDpra();

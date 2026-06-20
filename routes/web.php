@@ -121,7 +121,7 @@ Route::middleware('auth')->group(function () {
                 ]));
             })();
         }
-
+        ini_set('memory_limit', '512M');
         $periods = PemiluPeriod::query()
             ->forJenis('dprd')
             ->ordered()
