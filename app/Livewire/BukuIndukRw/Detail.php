@@ -25,7 +25,7 @@ class Detail extends Component
     public array $rtRows = [];
 
     // Form Infrastruktur
-    public ?int $infraId = null;
+    public ?string $infraId = null;
     public string $infraType = 'korwe';
     public ?string $infraNama = '';
     public ?string $infraHp = '';
@@ -284,6 +284,7 @@ class Detail extends Component
         $this->infraTarget = '';
 
         session()->flash('success', 'Data infrastruktur berhasil disimpan.');
+        $this->activeTab = 'struktur';
         $this->dispatch('close-infra-drawer');
     }
 
@@ -297,7 +298,7 @@ class Detail extends Component
         $this->dispatch('open-infra-drawer');
     }
 
-    public function editInfrastruktur(string $type, int $id)
+    public function editInfrastruktur(string $type, string $id)
     {
         $this->infraType = $type;
         $this->infraId = $id;
@@ -325,7 +326,7 @@ class Detail extends Component
         $this->dispatch('open-infra-drawer');
     }
 
-    public function hapusInfrastruktur(string $type, int $id)
+    public function hapusInfrastruktur(string $type, string $id)
     {
         if ($type === 'korwe') {
             Korwe::destroy($id);
