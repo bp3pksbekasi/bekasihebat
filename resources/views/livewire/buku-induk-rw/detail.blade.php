@@ -143,39 +143,41 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="mb-6 bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
-        <nav class="flex w-full px-2 sm:px-6 min-w-max" aria-label="Tabs">
-            <button wire:click="setActiveTab('profil_wilayah')" class="{{ $activeTab === 'profil_wilayah' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'profil_wilayah' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Profil Wilayah
-            </button>
-            <button wire:click="setActiveTab('peta_politik')" class="{{ $activeTab === 'peta_politik' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'peta_politik' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Peta Politik Lokal
-            </button>
-            <button wire:click="setActiveTab('strategi')" class="{{ $activeTab === 'strategi' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'strategi' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Strategi & Penanggung Jawab
-            </button>
-            <button wire:click="setActiveTab('struktur')" class="{{ $activeTab === 'struktur' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'struktur' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Infrastruktur Pemenangan
-            </button>
-            <button wire:click="setActiveTab('realisasi')" class="{{ $activeTab === 'realisasi' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'realisasi' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Target & Realisasi
-            </button>
-        </nav>
+    <div class="flex justify-center mb-8 w-full">
+        <div class="bg-white rounded-full shadow-sm border border-gray-200 p-1.5 overflow-x-auto max-w-full">
+            <nav class="flex items-center gap-1 min-w-max" aria-label="Tabs">
+                <button wire:click="setActiveTab('profil_wilayah')" class="{{ $activeTab === 'profil_wilayah' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} rounded-full whitespace-nowrap py-2.5 px-5 font-medium text-sm flex justify-center items-center transition-all duration-200 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'profil_wilayah' ? 'text-white' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Profil Wilayah
+                </button>
+                <button wire:click="setActiveTab('peta_politik')" class="{{ $activeTab === 'peta_politik' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} rounded-full whitespace-nowrap py-2.5 px-5 font-medium text-sm flex justify-center items-center transition-all duration-200 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'peta_politik' ? 'text-white' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Peta Politik Lokal
+                </button>
+                <button wire:click="setActiveTab('strategi')" class="{{ $activeTab === 'strategi' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} rounded-full whitespace-nowrap py-2.5 px-5 font-medium text-sm flex justify-center items-center transition-all duration-200 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'strategi' ? 'text-white' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Strategi & Penanggung Jawab
+                </button>
+                <button wire:click="setActiveTab('struktur')" class="{{ $activeTab === 'struktur' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} rounded-full whitespace-nowrap py-2.5 px-5 font-medium text-sm flex justify-center items-center transition-all duration-200 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'struktur' ? 'text-white' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Infrastruktur Pemenangan
+                </button>
+                <button wire:click="setActiveTab('realisasi')" class="{{ $activeTab === 'realisasi' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} rounded-full whitespace-nowrap py-2.5 px-5 font-medium text-sm flex justify-center items-center transition-all duration-200 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'realisasi' ? 'text-white' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Target & Realisasi
+                </button>
+            </nav>
+        </div>
     </div>
 
     <!-- Tab Contents -->
