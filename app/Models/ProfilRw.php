@@ -15,6 +15,27 @@ class ProfilRw extends Model
     use HasFactory;
     use HasUuids;
 
+    protected static function booted(): void
+    {
+        static::saving(function (ProfilRw $profil) {
+            $profil->completion_percent = $profil->calculateCompletion();
+            
+            // Check if required fields are filled for is_complete
+            $requiredFields = ['tipologi', 'ekonomi_dominan', 'suara_pks_2019', 'kompetitor_status', 'tim_sukses_status'];
+            $isComplete = true;
+            foreach ($requiredFields as $field) {
+                $val = $profil->{$field};
+                // For string required fields, they cannot be empty string
+                // For integers like suara_pks_2019, 0 is acceptable
+                if ($val === null || (is_string($val) && trim($val) === '')) {
+                    $isComplete = false;
+                    break;
+                }
+            }
+            $profil->is_complete = $isComplete;
+        });
+    }
+
     public const TIPOLOGI_OPTIONS = [
         'perkampungan' => 'Perkampungan',
         'campuran' => 'Campuran (Kampung + Perumahan)',
