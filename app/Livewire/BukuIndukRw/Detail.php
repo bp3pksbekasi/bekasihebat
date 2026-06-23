@@ -235,6 +235,15 @@ class Detail extends Component
         ];
 
         if ($this->infraType === 'korwe') {
+            if (!$this->infraId) {
+                $existing = Korwe::where('target_wilayah_id', $this->dataRw->target_wilayah_id)
+                                 ->where('nomor_rw', $this->profilRwId)
+                                 ->exists();
+                if ($existing) {
+                    $this->addError('infraType', 'Korwe untuk RW ini sudah terdaftar. Silakan edit data yang sudah ada.');
+                    return;
+                }
+            }
             if ($this->infraId) {
                 Korwe::where('id', $this->infraId)->update($baseData);
             } else {
@@ -244,7 +253,20 @@ class Detail extends Component
                 Korwe::create($baseData);
             }
         } elseif ($this->infraType === 'korte') {
-            $baseData['nomor_rt'] = str_pad($this->infraRt ?: '000', 3, '0', STR_PAD_LEFT);
+            $nomorRt = str_pad($this->infraRt ?: '000', 3, '0', STR_PAD_LEFT);
+            $baseData['nomor_rt'] = $nomorRt;
+            
+            if (!$this->infraId) {
+                $existing = Korte::where('target_wilayah_id', $this->dataRw->target_wilayah_id)
+                                 ->where('nomor_rw', $this->profilRwId)
+                                 ->where('nomor_rt', $nomorRt)
+                                 ->exists();
+                if ($existing) {
+                    $this->addError('infraRt', "Korte untuk RT $nomorRt sudah terdaftar. Silakan edit data yang sudah ada.");
+                    return;
+                }
+            }
+
             if ($this->infraId) {
                 Korte::where('id', $this->infraId)->update($baseData);
             } else {
