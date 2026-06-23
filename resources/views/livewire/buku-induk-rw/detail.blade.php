@@ -917,7 +917,7 @@
                 @endif
             </div>
         @elseif($activeTab === 'struktur')
-            <div class="flex flex-col gap-6">
+            <div wire:key="tab-struktur" class="flex flex-col gap-6">
                 <!-- Korwe Section -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div class="bg-gray-50 px-5 py-4 border-b border-gray-200 flex justify-between items-center">
@@ -998,7 +998,7 @@
             </div>
             
         @elseif($activeTab === 'realisasi')
-            <div class="flex flex-col gap-6">
+            <div wire:key="tab-realisasi" class="flex flex-col gap-6">
                 <!-- Target Overview -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
