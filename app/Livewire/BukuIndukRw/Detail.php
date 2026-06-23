@@ -132,6 +132,9 @@ class Detail extends Component
         $dataToSave = array_merge($this->profilData, [
             'target_wilayah_id' => $tw->id,
             'nomor_rw' => $this->profilRwId,
+            'dapil' => $tw->dapil,
+            'kecamatan' => $tw->kecamatan,
+            'desa' => $tw->desa,
             'is_complete' => $isComplete,
         ]);
         

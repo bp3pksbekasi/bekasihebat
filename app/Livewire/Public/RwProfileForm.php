@@ -353,6 +353,9 @@ class RwProfileForm extends Component
                 [
                     'target_wilayah_id' => $rw->target_wilayah_id,
                     'nomor_rw' => $rw->nomor_rw,
+                    'dapil' => $rw->targetWilayah->dapil,
+                    'kecamatan' => $rw->targetWilayah->kecamatan,
+                    'desa' => $rw->targetWilayah->desa,
                     'is_complete' => $isComplete,
                     'tipologi' => $this->tipologi,
                     'ekonomi_dominan' => $this->ekonomi_dominan,
