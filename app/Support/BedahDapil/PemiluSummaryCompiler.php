@@ -449,7 +449,7 @@ class PemiluSummaryCompiler
 
         return [
             $this->finalizeAreaRows($summary['rw_map'], true),
-            $this->finalizeAreaRows($summary['rt_map'], false),
+            $this->finalizeAreaRows($summary['rt_map'], true),
             $matchedTps,
             $missingTps,
         ];
@@ -574,14 +574,15 @@ class PemiluSummaryCompiler
             $total = (float) $entry['party_votes'] + (float) $entry['candidate_votes'];
             
             $candidatesList = [];
-            if (!empty($entry['candidates']) && ((string) $entry['party_id'] === '8' || strtolower((string) $entry['party_name']) === 'pks')) {
+            if (!empty($entry['candidates'])) {
                 foreach ($entry['candidates'] as $name => $votes) {
                     if ($votes > 0) {
                         $candidatesList[] = ['name' => (string) $name, 'votes' => (int) round((float) $votes)];
                     }
                 }
                 usort($candidatesList, fn (array $left, array $right): int => $right['votes'] <=> $left['votes']);
-                $candidatesList = array_slice($candidatesList, 0, 10);
+                // We initially keep up to 5, we will filter further down
+                $candidatesList = array_slice($candidatesList, 0, 5);
             }
 
             $rows[] = [
@@ -597,12 +598,26 @@ class PemiluSummaryCompiler
 
         usort($rows, fn (array $left, array $right): int => $right['total_votes'] <=> $left['total_votes']);
 
-        foreach ($rows as &$row) {
-            $row['share'] = $totalVotes > 0 ? round($row['total_votes'] / $totalVotes, 6) : 0.0;
-        }
-        unset($row);
+        $finalRows = [];
+        foreach ($rows as $index => $row) {
+            $isPks = ((string) $row['party_id'] === '8' || strtolower((string) $row['party_name']) === 'pks');
+            
+            // If the party got 0 votes and it's not PKS, don't store it to save DB space
+            if ($row['total_votes'] <= 0 && !$isPks) {
+                continue;
+            }
 
-        return $rows;
+            $row['share'] = $totalVotes > 0 ? round($row['total_votes'] / $totalVotes, 6) : 0.0;
+            
+            // Only keep candidates for top 5 parties or PKS to save database JSON size
+            if ($index >= 5 && !$isPks) {
+                unset($row['candidates']);
+            }
+
+            $finalRows[] = $row;
+        }
+
+        return $finalRows;
     }
 
     /**
