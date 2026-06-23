@@ -215,7 +215,7 @@
 
                     @if($activeTab === 'profil_wilayah')
                         <!-- Data Demografi -->
-                        <div class="mb-8">
+                        <div wire:key="tab-profil" class="mb-8">
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
                                 <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                                     <div class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1">DPT Wilayah</div>
@@ -344,7 +344,7 @@
                             </div>
                         </div>
                     @elseif($activeTab === 'peta_politik')
-                        <div x-data="{ 
+                        <div wire:key="tab-peta" x-data="{ 
                             showTpsModal: false, 
                             showRtModal: false,
                             showPartyDrawer: false, 
@@ -895,7 +895,7 @@
                         </div>
                         </div>
                     @elseif($activeTab === 'strategi')
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                        <div wire:key="tab-strategi" class="bg-gray-50 p-6 rounded-xl border border-gray-100">
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                     <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Strategi Mencapai Target Suara</span>
