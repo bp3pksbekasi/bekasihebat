@@ -143,9 +143,9 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="border-b border-gray-200 mb-6 bg-white rounded-t-xl px-4 pt-4 shadow-sm">
-        <nav class="flex w-full px-6" aria-label="Tabs">
-            <button wire:click="setActiveTab('profil_wilayah')" class="{{ $activeTab === 'profil_wilayah' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
+    <div class="mb-6 bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+        <nav class="flex w-full px-2 sm:px-6 min-w-max" aria-label="Tabs">
+            <button wire:click="setActiveTab('profil_wilayah')" class="{{ $activeTab === 'profil_wilayah' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'profil_wilayah' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
