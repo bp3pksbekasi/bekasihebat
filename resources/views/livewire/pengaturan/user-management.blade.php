@@ -262,6 +262,29 @@
                                                         <option value="{{ $bidang['slug'] }}" @selected($user->bidang_slug === $bidang['slug'])>{{ $bidang['label'] }}</option>
                                                     @endforeach
                                                 </select>
+
+                                                @if ($user->role === \App\Models\User::ROLE_DAPIL)
+                                                    <select wire:change="assignDapil({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;color:#111827;background:white;">
+                                                        <option value="">Pilih Dapil</option>
+                                                        @foreach ($this->dapilList as $dapil)
+                                                            <option value="{{ $dapil }}" @selected($user->dapil === $dapil)>{{ $dapil }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @elseif ($user->role === \App\Models\User::ROLE_DPC)
+                                                    <select wire:change="assignKecamatan({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;color:#111827;background:white;">
+                                                        <option value="">Pilih DPC (Kecamatan)</option>
+                                                        @foreach ($this->kecamatanList as $kec)
+                                                            <option value="{{ $kec }}" @selected($user->kecamatan === $kec)>{{ $kec }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @elseif ($user->role === \App\Models\User::ROLE_DPRA)
+                                                    <select wire:change="assignDesa({{ $user->id }}, $event.target.value)" style="padding:6px 8px;border-radius:8px;border:0.5px solid #d4d4d8;font-size:11px;color:#111827;background:white;">
+                                                        <option value="">Pilih DPRa (Desa)</option>
+                                                        @foreach ($this->desaList as $desa)
+                                                            <option value="{{ $desa }}" @selected($user->desa === $desa)>{{ $desa }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @endif
                                             </div>
 
                                             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">

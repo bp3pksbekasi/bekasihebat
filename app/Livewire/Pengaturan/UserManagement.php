@@ -6,6 +6,7 @@ namespace App\Livewire\Pengaturan;
 
 use App\Models\AuditLog;
 use App\Models\Kader;
+use App\Models\TargetWilayah;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -87,6 +88,33 @@ class UserManagement extends Component
             'ksn' => 'Binapora',
         ])->map(fn (string $label, string $slug) => ['slug' => $slug, 'label' => $label])
             ->values();
+    }
+
+    public function getDapilListProperty(): Collection
+    {
+        return TargetWilayah::query()
+            ->whereNotNull('dapil')
+            ->distinct()
+            ->orderBy('dapil')
+            ->pluck('dapil');
+    }
+
+    public function getKecamatanListProperty(): Collection
+    {
+        return TargetWilayah::query()
+            ->whereNotNull('kecamatan')
+            ->distinct()
+            ->orderBy('kecamatan')
+            ->pluck('kecamatan');
+    }
+
+    public function getDesaListProperty(): Collection
+    {
+        return TargetWilayah::query()
+            ->whereNotNull('desa')
+            ->distinct()
+            ->orderBy('desa')
+            ->pluck('desa');
     }
 
     public function getUserListProperty(): LengthAwarePaginator
@@ -221,6 +249,48 @@ class UserManagement extends Component
         ]);
 
         session()->flash('message', 'Bidang user berhasil diperbarui.');
+    }
+
+    public function assignDapil(int $userId, string $dapil): void
+    {
+        $user = User::query()->findOrFail($userId);
+        $before = $user->dapil;
+        $user->update(['dapil' => $dapil !== '' ? $dapil : null]);
+
+        AuditLog::log('assign_dapil', "Assign dapil {$user->name}: ".($before ?: '-').' -> '.($dapil ?: '-'), [
+            'target_user_id' => $user->id,
+            'before' => $before,
+            'after' => $dapil,
+        ]);
+        session()->flash('message', 'Dapil user berhasil diperbarui.');
+    }
+
+    public function assignKecamatan(int $userId, string $kecamatan): void
+    {
+        $user = User::query()->findOrFail($userId);
+        $before = $user->kecamatan;
+        $user->update(['kecamatan' => $kecamatan !== '' ? $kecamatan : null]);
+
+        AuditLog::log('assign_kecamatan', "Assign kecamatan {$user->name}: ".($before ?: '-').' -> '.($kecamatan ?: '-'), [
+            'target_user_id' => $user->id,
+            'before' => $before,
+            'after' => $kecamatan,
+        ]);
+        session()->flash('message', 'Kecamatan DPC berhasil diperbarui.');
+    }
+
+    public function assignDesa(int $userId, string $desa): void
+    {
+        $user = User::query()->findOrFail($userId);
+        $before = $user->desa;
+        $user->update(['desa' => $desa !== '' ? $desa : null]);
+
+        AuditLog::log('assign_desa', "Assign desa {$user->name}: ".($before ?: '-').' -> '.($desa ?: '-'), [
+            'target_user_id' => $user->id,
+            'before' => $before,
+            'after' => $desa,
+        ]);
+        session()->flash('message', 'Desa DPRa berhasil diperbarui.');
     }
 
     public function toggleMenuAccess(int $userId, string $menuSlug): void
