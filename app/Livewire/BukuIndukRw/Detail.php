@@ -12,7 +12,7 @@ use Livewire\Component;
 class Detail extends Component
 {
     public DataRw $dataRw;
-    public $profilRw;
+    public ?ProfilRw $profilRw = null;
     public string $activeTab = 'profil_wilayah'; // profil_wilayah, peta_politik, strategi, struktur, realisasi
     
     public bool $showProfilDrawer = false;
