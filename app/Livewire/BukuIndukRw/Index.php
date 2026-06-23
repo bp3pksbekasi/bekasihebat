@@ -161,6 +161,6 @@ class Index extends Component
             'kecamatans' => TargetWilayah::when($this->selectedDapil, fn($q) => $q->where('dapil', $this->selectedDapil))->select('kecamatan')->distinct()->orderBy('kecamatan')->pluck('kecamatan'),
             'desas' => TargetWilayah::when($this->selectedKecamatan, fn($q) => $q->where('kecamatan', $this->selectedKecamatan))->select('desa')->distinct()->orderBy('desa')->pluck('desa'),
             'statuses' => TargetWilayah::STATUS_CONFIG,
-        ])->layout('components.layouts.app', ['title' => 'Buku Induk RW']);
+        ])->layout('components.layouts.app', ['title' => 'Peta Kekuatan RW']);
     }
 }

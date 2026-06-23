@@ -13,7 +13,7 @@
                 <span class="text-sm font-medium text-gray-500">{{ $dataRw->targetWilayah->desa }}</span>
             </div>
             <h1 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
-                Buku Induk RW {{ str_pad($dataRw->nomor_rw, 3, '0', STR_PAD_LEFT) }}
+                Peta Kekuatan RW {{ str_pad($dataRw->nomor_rw, 3, '0', STR_PAD_LEFT) }}
                 @if($profilRw && $profilRw->is_complete)
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-green-100 text-green-800">
                         Profil Lengkap

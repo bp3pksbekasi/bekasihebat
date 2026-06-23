@@ -1,6 +1,6 @@
 <div>
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Buku Induk RW</h1>
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Peta Kekuatan RW</h1>
         <p class="text-sm text-gray-500 mt-1">Manajemen terpadu profil dan struktur pemenangan di tingkat RW.</p>
     </div>
 
@@ -124,7 +124,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
-                                    Buka Buku Induk
+                                    Buka Peta Kekuatan
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                     </svg>

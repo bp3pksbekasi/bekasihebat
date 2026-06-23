@@ -66,7 +66,7 @@
                 ['section' => 'PROGRAM'],
                 ['route' => 'kaderisasi.index', 'slug' => 'kaderisasi', 'label' => 'Kaderisasi', 'icon' => 'school', 'active' => ['kaderisasi.*']],
                 ['route' => 'infra-rtrw.index', 'slug' => 'infra-rtrw', 'label' => 'Infrastruktur', 'icon' => 'building-community', 'active' => ['infra-rtrw.*']],
-                ['route' => 'buku-induk-rw.index', 'slug' => 'infra-rtrw', 'label' => 'Buku Induk RW', 'icon' => 'book', 'active' => ['buku-induk-rw.*']],
+                ['route' => 'buku-induk-rw.index', 'slug' => 'infra-rtrw', 'label' => 'Peta Kekuatan RW', 'icon' => 'book', 'active' => ['buku-induk-rw.*']],
                 ['route' => 'sisir-rw.index', 'slug' => 'sisir-rw', 'label' => 'Sisir RW', 'icon' => 'walk', 'active' => ['sisir-rw.*']],
                 ['route' => 'sapa-warga.index', 'slug' => 'sapa-warga', 'label' => 'Sapa Warga', 'icon' => 'address-book', 'active' => ['sapa-warga.*']],
                 ['route' => 'sosial-media.index', 'slug' => 'sosial-media', 'label' => 'Sosial Media', 'icon' => 'brand-instagram', 'active' => ['sosial-media.*']],

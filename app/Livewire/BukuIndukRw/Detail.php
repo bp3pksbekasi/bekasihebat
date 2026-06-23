@@ -297,6 +297,6 @@ class Detail extends Component
             'kortes' => $kortes,
             'penggalangs' => $penggalangs,
             'targetWilayah' => $this->dataRw->targetWilayah,
-        ])->layout('components.layouts.app', ['title' => 'Buku Induk RW - Detail']);
+        ])->layout('components.layouts.app', ['title' => 'Peta Kekuatan RW - Detail']);
     }
 }
