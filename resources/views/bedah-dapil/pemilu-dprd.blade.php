@@ -228,7 +228,7 @@
         (() => {
             const csrfTokenFromBlade = '{{ csrf_token() }}';
             const compiledPeriodOptions = {!! json_encode($periodOptions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
-            const compiledPayload = {!! json_encode($compiledPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
+            const compiledPayload = {!! $compiledPayloadJson ?? 'null' !!};
             const initialProfilRwMap = {!! json_encode($profilRwMap ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
             const selectedPeriodId = {!! json_encode($selectedPeriodId, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
             const partyColors = {'PKB':'#008000','Gerindra':'#C8102E','PDIP':'#D72027','Golkar':'#FFD700','Nasdem':'#003087','Buruh':'#E31937','Gelora':'#DC143C','PKS':'#fe5000','PKN':'#336699','Hanura':'#4169E1','PAN':'#005BAC','PBB':'#009B3A','Demokrat':'#00529C','PSI':'#EC008C','Perindo':'#CC0000','PPP':'#006600','Ummat':'#2E8B57','Garuda':'#228B22','NasDem':'#003087','PDI-P':'#D72027'};

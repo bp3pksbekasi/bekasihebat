@@ -17,29 +17,29 @@ class TargetWilayah extends Model
 
     public const STATUS_CONFIG = [
         'SANGAT KUAT' => [
-            'label' => 'Sangat Kuat',
+            'label' => 'Jaga Kuat',
             'bg' => '#dcfce7',
             'text' => '#166534',
         ],
         'KUAT' => [
-            'label' => 'Kuat',
+            'label' => 'Amankan',
+            'bg' => '#ecfccb',
+            'text' => '#4d7c0f',
+        ],
+        'POTENSIAL' => [
+            'label' => 'Rebut Realistis',
             'bg' => '#dbeafe',
             'text' => '#1d4ed8',
         ],
-        'POTENSIAL' => [
-            'label' => 'Potensial',
-            'bg' => '#fef3c7',
-            'text' => '#b45309',
-        ],
         'RAWAN' => [
-            'label' => 'Rawan',
+            'label' => 'Garap Intensif',
             'bg' => '#ffedd5',
             'text' => '#c2410c',
         ],
         'ZONA BERAT' => [
             'label' => 'Zona Berat',
-            'bg' => '#f3f4f6',
-            'text' => '#6b7280',
+            'bg' => '#fee2e2',
+            'text' => '#b91c1c',
         ],
     ];
 

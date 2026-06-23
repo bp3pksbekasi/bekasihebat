@@ -341,19 +341,23 @@
                 });
             }
 
+            const compiledCalegPayload = {!! json_encode($compiledCalegPayload ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
+
             async function autoLoadData() {
-                dom.sourceStatus.textContent = 'Memuat /data/pemilu/tps_dprd.csv...';
+                dom.sourceStatus.textContent = 'Memuat data dari database (Mode Cepat)...';
                 try {
-                    const response = await fetch('/data/pemilu/tps_dprd.csv');
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const text = await response.text();
-                    const rows = parseSemicolonCsv(text);
-                    state.dataset = buildCalegDataset(rows);
-                    dom.sourceStatus.textContent = `Auto-load berhasil: ${formatNumber(state.dataset.totalRows)} baris caleg dibaca.`;
-                    populateFilters();
-                    render();
+                    if (compiledCalegPayload && compiledCalegPayload.dapils && compiledCalegPayload.dapils.length > 0) {
+                        state.dataset = hydrateCalegPayload(compiledCalegPayload);
+                        dom.sourceStatus.textContent = `Auto-load database berhasil: ${formatNumber(state.dataset.totalRows)} baris caleg di agregasi. (Mode Cepat)`;
+                        populateFilters();
+                        render();
+                        return;
+                    }
+                    
+                    throw new Error('Data payload JSON kosong atau tidak memiliki dapil. Pastikan admin sudah memuat payload.');
                 } catch (error) {
                     dom.sourceStatus.textContent = `Gagal auto-load: ${error.message}`;
+                    console.error('Error in autoLoadData:', error, compiledCalegPayload);
                 }
             }
 
@@ -537,6 +541,80 @@
                     });
                 });
 
+                return dataset;
+            }
+
+            function hydrateCalegPayload(payload) {
+                const dataset = { dapils: new Map(), totalRows: payload.totalRows || 0, allPartyNames: new Set(payload.allPartyNames || []) };
+                
+                (payload.dapils || []).forEach(dapilData => {
+                    const dapilObj = {
+                        dapil: dapilData.dapil,
+                        totalSuara: dapilData.totalSuara || 0,
+                        calegMap: new Map(),
+                        partyMap: new Map(),
+                        villagePartyMap: new Map(),
+                        rwPartyMap: new Map(),
+                    };
+
+                    (dapilData.calegs || []).forEach(caleg => {
+                        caleg.dapil = dapilData.dapil;
+                        
+                        const newDesaMap = new Map();
+                        Object.entries(caleg.desaMap || {}).forEach(([key, suara]) => {
+                            const parts = String(key).split('__');
+                            const kec = parts[1] || '';
+                            const desa = parts[2] || parts[0] || '';
+                            newDesaMap.set(key, { desa: toTitleCase(desa), kecamatan: toTitleCase(kec), suara: Number(suara) });
+                        });
+                        caleg.desaMap = newDesaMap;
+                        
+                        const newKecMap = new Map();
+                        Object.entries(caleg.kecamatanMap || {}).forEach(([key, suara]) => {
+                            newKecMap.set(key, { kecamatan: toTitleCase(key), suara: Number(suara) });
+                        });
+                        caleg.kecamatanMap = newKecMap;
+                        
+                        caleg.rwMap = new Map();
+                        caleg.tpsSet = new Set();
+                        
+                        dapilObj.calegMap.set(caleg.key, caleg);
+                    });
+
+                    (dapilData.parties || []).forEach(party => {
+                        party.calegMap = new Map();
+                        party.calegList = [];
+                        party.calegCount = 0;
+                        dapilObj.partyMap.set(party.partaiId || party.partai, party);
+                    });
+
+                    dapilObj.calegMap.forEach(caleg => {
+                        const party = dapilObj.partyMap.get(caleg.partaiId || caleg.partai);
+                        if (party) {
+                            party.calegMap.set(caleg.key, caleg);
+                            party.calegList.push(caleg);
+                        }
+                    });
+
+                    dapilObj.partyMap.forEach(party => {
+                        party.calegList.sort((a, b) => b.totalSuara - a.totalSuara);
+                        party.calegCount = party.calegList.length;
+                    });
+
+                    (dapilData.villageParties || []).forEach(vp => {
+                        const newPartyTotals = new Map();
+                        Object.entries(vp.partyTotals || {}).forEach(([p, suara]) => {
+                            newPartyTotals.set(p, { partai: p, suara: Number(suara) });
+                        });
+                        vp.partyTotals = newPartyTotals;
+                        const vKey = `${dapilData.dapil}__${vp.kecamatan}__${vp.desa}`;
+                        vp.villageKey = vKey;
+                        dapilObj.villagePartyMap.set(vKey, vp);
+                    });
+
+                    dataset.dapils.set(dapilData.dapil, dapilObj);
+                });
+                
                 return dataset;
             }
 

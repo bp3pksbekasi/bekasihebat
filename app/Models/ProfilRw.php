@@ -34,6 +34,34 @@ class ProfilRw extends Model
         'campuran' => 'Campuran',
     ];
 
+    public const PROFIL_OPTIONS = [
+        'agamis' => 'Agamis & Kondusif',
+        'pragmatis' => 'Pragmatis & Transaksional',
+        'nasionalis' => 'Nasionalis & Abangan',
+        'heterogen' => 'Heterogen & Individualis',
+        'kritis' => 'Kritis & Akademis',
+        'buruh' => 'Buruh & Pekerja',
+    ];
+
+    public const FAKTOR_OPTIONS = [
+        'caleg_lokal' => 'Kekuatan Caleg Lokal',
+        'tokoh_agama' => 'Ketokohan Tokoh Agama/Masyarakat',
+        'program_kerja' => 'Program Kerja & Bantuan Nyata',
+        'politik_uang' => 'Pragmatisme Politik Uang',
+        'keaktifan_kader' => 'Keaktifan Kader & Relawan',
+        'kurang_sosialisasi' => 'Kurangnya Sosialisasi/Kehadiran',
+        'dominasi_partai_lain' => 'Dominasi Partai Lain',
+    ];
+
+    public const STRATEGI_OPTIONS = [
+        'sapa_warga' => 'Sapa Warga & Door to Door',
+        'layanan_sosial' => 'Penyediaan Layanan Sosial',
+        'tokoh_kunci' => 'Penguatan Tokoh Kunci',
+        'event_komunitas' => 'Event / Kegiatan Komunitas',
+        'kampanye_digital' => 'Kampanye Digital & Media Sosial',
+        'pengawalan_suara' => 'Penguatan Saksi & Pengawalan Suara',
+    ];
+
     protected $fillable = [
         'target_wilayah_id',
         'nomor_rw',
@@ -43,8 +71,10 @@ class ProfilRw extends Model
         'tipologi',
         'ekonomi_dominan',
         'profil_warga',
+        'profil_warga_keterangan',
         'suara_pks_2019',
         'faktor_penyebab',
+        'faktor_penyebab_keterangan',
         'anggota_pks',
         'jumlah_kta',
         'upa_rw_status',
@@ -64,6 +94,7 @@ class ProfilRw extends Model
         'tim_sukses_status',
         'tim_sukses_detail',
         'strategi',
+        'strategi_keterangan',
         'penanggung_jawab',
         'keterangan_lain',
         'is_complete',

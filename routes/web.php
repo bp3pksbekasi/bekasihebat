@@ -45,6 +45,8 @@ Route::get('/berita/{slug}', PublicBeritaDetail::class)->name('public.berita.sho
 Route::get('/galeri', PublicGaleri::class)->name('public.galeri');
 Route::get('/tentang', PublicTentang::class)->name('public.tentang');
 Route::get('/aspirasi-warga', PublicAspirasiWarga::class)->name('public.aspirasi');
+Route::get('/profil-rw', \App\Livewire\Public\RwProfileForm::class)->name('public.rw-profile');
+Route::get('/input-infrastruktur', \App\Livewire\Public\InputInfrastruktur::class)->name('public.input-infrastruktur');
 Route::get('/daftar', KartuAnggotaRegister::class)->name('member.register');
 Route::get('/ref/{code}', KartuAnggotaRegister::class)->name('member.register.referral');
 Route::redirect('/tentang-kami', '/tentang');
@@ -170,7 +172,7 @@ Route::middleware('auth')->group(function () {
         return view('bedah-dapil.pemilu-dprd', [
             'periodOptions' => $periodOptions,
             'selectedPeriodId' => $selectedPeriod?->id ?? $periodOptions[0]['id'],
-            'compiledPayload' => $selectedPeriod ? $payloadBuilder->build($selectedPeriod) : null,
+            'compiledPayloadJson' => $selectedPeriod ? $payloadBuilder->buildJson($selectedPeriod) : 'null',
             'profilRwMap' => $profilRwMap,
             'userScope' => $userScope,
         ]);
@@ -287,7 +289,9 @@ Route::middleware('auth')->group(function () {
             ]];
         }
 
-        $compiledCalegPayload = $selectedPeriod?->caleg_summary_payload ?? [
+        $rawPayload = $selectedPeriod?->caleg_summary_payload;
+        $compiledCalegPayload = is_string($rawPayload) ? json_decode($rawPayload, true) : $rawPayload;
+        $compiledCalegPayload ??= [
             'totalRows' => 0,
             'allPartyNames' => [],
             'dapils' => [],
@@ -300,9 +304,13 @@ Route::middleware('auth')->group(function () {
         $userScope = $scopeClass->accessScope();
         
         if (($userScope['mode'] ?? 'global') === 'dapil' && !empty($userScope['locked_dapil']) && !empty($compiledCalegPayload['dapils'])) {
+            $lockedDapilStr = strtoupper((string) $userScope['locked_dapil']);
+            if (!str_starts_with($lockedDapilStr, 'BEKASI')) {
+                $lockedDapilStr = trim("BEKASI " . $lockedDapilStr);
+            }
             $compiledCalegPayload['dapils'] = array_values(array_filter(
                 $compiledCalegPayload['dapils'],
-                fn($d) => (string) $d['dapil'] === (string) $userScope['locked_dapil']
+                fn($d) => strtoupper((string) $d['dapil']) === $lockedDapilStr
             ));
         }
 
@@ -385,9 +393,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/{targetWilayah}', InfraRtRwDetail::class)->middleware('menu:infra-rtrw')->name('infra-rtrw.detail');
     });
 
+    Route::prefix('buku-induk-rw')->middleware(['auth'])->group(function () {
+        Route::get('/', \App\Livewire\BukuIndukRw\Index::class)->middleware('menu:infra-rtrw')->name('buku-induk-rw.index');
+        Route::get('/{dataRw}', \App\Livewire\BukuIndukRw\Detail::class)->middleware('menu:infra-rtrw')->name('buku-induk-rw.detail');
+    });
+
     Route::get('/pengaturan/users', UserManagementIndex::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.users');
+
+    Route::get('/approval-rw', \App\Livewire\ApprovalRw\Index::class)
+        ->middleware('role:admin_dpd')
+        ->name('approval-rw.index');
 
     Route::get('/pengaturan/whatsapp', \App\Livewire\Pengaturan\WhapifySettings::class)
         ->middleware('role:admin_dpd')

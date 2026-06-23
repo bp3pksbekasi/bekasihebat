@@ -442,8 +442,8 @@ class PemiluSummaryCompiler
         }
 
         return [
-            $this->finalizeAreaRows($summary['rw_map']),
-            $this->finalizeAreaRows($summary['rt_map']),
+            $this->finalizeAreaRows($summary['rw_map'], true),
+            $this->finalizeAreaRows($summary['rt_map'], true),
             $matchedTps,
             $missingTps,
         ];
@@ -453,7 +453,7 @@ class PemiluSummaryCompiler
      * @param array<string, array<string, mixed>> $rows
      * @return list<array<string, mixed>>
      */
-    private function finalizeAreaRows(array $rows): array
+    private function finalizeAreaRows(array $rows, bool $includeCandidates = false): array
     {
         $result = [];
 
@@ -480,13 +480,17 @@ class PemiluSummaryCompiler
             }
 
             $topParties = [];
-            foreach (array_slice($partyRows, 0, 5) as $pr) {
-                $topParties[] = [
+            foreach ($partyRows as $pr) {
+                $partyRow = [
                     'party_id' => (string) $pr['party_id'],
                     'party_name' => (string) $pr['party_name'],
                     'votes' => (int) $pr['total_votes'],
                     'share' => (float) $pr['share'],
                 ];
+                if ($includeCandidates && !empty($pr['candidates'])) {
+                    $partyRow['candidates'] = $pr['candidates'];
+                }
+                $topParties[] = $partyRow;
             }
 
             $result[] = [
@@ -562,12 +566,25 @@ class PemiluSummaryCompiler
 
         foreach ($partyMap as $entry) {
             $total = (float) $entry['party_votes'] + (float) $entry['candidate_votes'];
+            
+            $candidatesList = [];
+            if (!empty($entry['candidates'])) {
+                foreach ($entry['candidates'] as $name => $votes) {
+                    if ($votes > 0) {
+                        $candidatesList[] = ['name' => (string) $name, 'votes' => (int) round((float) $votes)];
+                    }
+                }
+                usort($candidatesList, fn (array $left, array $right): int => $right['votes'] <=> $left['votes']);
+                $candidatesList = array_slice($candidatesList, 0, 10);
+            }
+
             $rows[] = [
                 'party_id' => (string) $entry['party_id'],
                 'party_name' => (string) $entry['party_name'],
                 'party_votes' => (int) round((float) $entry['party_votes']),
                 'candidate_votes' => (int) round((float) $entry['candidate_votes']),
                 'total_votes' => (int) round($total),
+                'candidates' => $candidatesList,
             ];
             $totalVotes += $total;
         }

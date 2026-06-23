@@ -36,6 +36,10 @@ class DataRw extends Model
         'status_wilayah',
         'prioritas_urutan',
         'target_suara_per_rw',
+        'upa_rw_terbentuk',
+        'nama_ketua_upa',
+        'no_hp_ketua_upa',
+        'tipologi_warga',
     ];
 
     protected function casts(): array
