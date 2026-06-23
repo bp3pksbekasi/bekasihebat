@@ -448,8 +448,8 @@ class PemiluSummaryCompiler
         }
 
         return [
-            $this->finalizeAreaRows($summary['rw_map'], true),
-            $this->finalizeAreaRows($summary['rt_map'], true),
+            $this->finalizeAreaRows($summary['rw_map'], true, false),
+            $this->finalizeAreaRows($summary['rt_map'], true, true),
             $matchedTps,
             $missingTps,
         ];
@@ -459,7 +459,7 @@ class PemiluSummaryCompiler
      * @param array<string, array<string, mixed>> $rows
      * @return list<array<string, mixed>>
      */
-    private function finalizeAreaRows(array $rows, bool $includeCandidates = false): array
+    private function finalizeAreaRows(array $rows, bool $includeCandidates = false, bool $isRt = false): array
     {
         $result = [];
 
@@ -499,33 +499,40 @@ class PemiluSummaryCompiler
                 $topParties[] = $partyRow;
             }
 
-            $result[] = [
-                'key' => $row['key'],
+            $baseData = [
                 'type' => $row['type'],
                 'village' => $row['desa'],
                 'district' => $row['kecamatan'],
                 'rw' => $row['rw'],
                 'rt' => $row['rt'],
                 'total_dpt' => (int) $row['total_dpt'],
-                'male' => (int) round((float) $row['total_laki_float']),
-                'female' => (int) round((float) $row['total_perempuan_float']),
-                'gen_z' => (int) $row['gen_z'],
-                'millennial' => (int) $row['millennial'],
-                'gen_x' => (int) $row['gen_x'],
-                'boomer' => (int) $row['boomer'],
-                'age_unknown' => (int) $row['age_unknown'],
                 'tps_count' => count($row['tps_set']),
-                'tps_list' => array_values(array_keys($row['tps_set'])),
                 'pks_votes' => (int) round((float) $analytics['pks_votes']),
-                'share' => $analytics['share'],
-                'rank' => (int) $analytics['rank'],
                 'status' => $analytics['status'],
-                'top_candidate' => $analytics['pks_candidates'][0] ?? null,
                 'rival_party' => $rivalParty,
                 'rival_votes' => $rivalVotes,
-                'rival_share' => $rivalShare,
                 'party_rows' => $topParties,
+                // Add key for sorting at the end of the method
+                'key' => $row['key'],
             ];
+
+            // Include heavy demographic data only for non-RT (RW) level to save massive DB JSON space
+            if (!$isRt) {
+                $baseData['male'] = (int) round((float) $row['total_laki_float']);
+                $baseData['female'] = (int) round((float) $row['total_perempuan_float']);
+                $baseData['gen_z'] = (int) $row['gen_z'];
+                $baseData['millennial'] = (int) $row['millennial'];
+                $baseData['gen_x'] = (int) $row['gen_x'];
+                $baseData['boomer'] = (int) $row['boomer'];
+                $baseData['age_unknown'] = (int) $row['age_unknown'];
+                $baseData['tps_list'] = array_values(array_keys($row['tps_set']));
+                $baseData['share'] = $analytics['share'];
+                $baseData['rank'] = (int) $analytics['rank'];
+                $baseData['top_candidate'] = $analytics['pks_candidates'][0] ?? null;
+                $baseData['rival_share'] = $rivalShare;
+            }
+
+            $result[] = $baseData;
         }
 
         usort($result, function (array $left, array $right): int {

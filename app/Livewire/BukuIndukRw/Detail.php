@@ -129,16 +129,21 @@ class Detail extends Component
             }
         }
 
+        $dataToSave = array_merge($this->profilData, [
+            'target_wilayah_id' => $tw->id,
+            'nomor_rw' => $this->profilRwId,
+            'is_complete' => $isComplete,
+        ]);
+        
+        $dataToSave['suara_pks_2019'] = (int) ($dataToSave['suara_pks_2019'] ?? 0);
+        $dataToSave['jumlah_kta'] = (int) ($dataToSave['jumlah_kta'] ?? 0);
+
         ProfilRw::updateOrCreate(
             [
                 'target_wilayah_id' => $tw->id,
                 'nomor_rw' => $this->profilRwId,
             ],
-            array_merge($this->profilData, [
-                'target_wilayah_id' => $tw->id,
-                'nomor_rw' => $this->profilRwId,
-                'is_complete' => $isComplete,
-            ])
+            $dataToSave
         );
 
         $this->showProfilDrawer = false;
