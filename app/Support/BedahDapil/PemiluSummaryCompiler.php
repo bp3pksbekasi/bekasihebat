@@ -68,39 +68,43 @@ class PemiluSummaryCompiler
         DB::purge();
         DB::reconnect();
 
-        $period = DB::transaction(function () use ($tahun, $jenis, $label, $setDefault, $resolvedDptFiles, $resolvedTpsFile, &$villages): PemiluPeriod {
-            if ($setDefault) {
-                PemiluPeriod::query()
-                    ->where('jenis', $jenis)
-                    ->update(['is_default' => false]);
+        if ($setDefault) {
+            PemiluPeriod::query()
+                ->where('jenis', $jenis)
+                ->update(['is_default' => false]);
+        }
+
+        $period = PemiluPeriod::query()->updateOrCreate(
+            ['tahun' => $tahun, 'jenis' => $jenis],
+            [
+                'label' => $label ?: strtoupper($jenis).' '.$tahun,
+                'slug' => Str::slug($jenis.'-'.$tahun),
+                'status' => 'published',
+                'is_default' => $setDefault,
+                'source_meta' => [
+                    'dpt_files' => array_map('basename', $resolvedDptFiles),
+                    'tps_file' => basename($resolvedTpsFile),
+                ],
+            ]
+        );
+
+        PemiluDesaSummary::query()->where('pemilu_period_id', $period->id)->delete();
+
+        foreach ($villages as $summary) {
+            $payload = $this->buildVillageSummaryPayload($summary);
+            
+            DB::purge();
+            DB::reconnect();
+
+            PemiluDesaSummary::query()->create([
+                'pemilu_period_id' => $period->id,
+                ...$payload,
+            ]);
+            
+            if ($progress !== null) {
+                $progress("Menyimpan summary desa: {$summary['desa']}");
             }
-
-            $period = PemiluPeriod::query()->updateOrCreate(
-                ['tahun' => $tahun, 'jenis' => $jenis],
-                [
-                    'label' => $label ?: strtoupper($jenis).' '.$tahun,
-                    'slug' => Str::slug($jenis.'-'.$tahun),
-                    'status' => 'published',
-                    'is_default' => $setDefault,
-                    'source_meta' => [
-                        'dpt_files' => array_map('basename', $resolvedDptFiles),
-                        'tps_file' => basename($resolvedTpsFile),
-                    ],
-                ]
-            );
-
-            PemiluDesaSummary::query()->where('pemilu_period_id', $period->id)->delete();
-
-            foreach ($villages as $summary) {
-                $payload = $this->buildVillageSummaryPayload($summary);
-                PemiluDesaSummary::query()->create([
-                    'pemilu_period_id' => $period->id,
-                    ...$payload,
-                ]);
-            }
-
-            return $period;
-        });
+        }
 
         return [
             'period' => $period,
@@ -125,6 +129,8 @@ class PemiluSummaryCompiler
             storage_path("app/private/import/dpt_pileg{$tahun}_bekasi *.csv"),
             storage_path("app/private/import/DPT{$tahun}/dpt_pileg{$tahun}_bekasi_*.csv"),
             storage_path("app/private/import/DPT{$tahun}/dpt_pileg{$tahun}_bekasi *.csv"),
+            public_path("data/pemilu/dpt_pileg{$tahun}_bekasi_*.csv"),
+            public_path("data/pemilu/dpt_pileg{$tahun}_bekasi *.csv"),
         ];
 
         $files = [];
@@ -443,7 +449,7 @@ class PemiluSummaryCompiler
 
         return [
             $this->finalizeAreaRows($summary['rw_map'], true),
-            $this->finalizeAreaRows($summary['rt_map'], true),
+            $this->finalizeAreaRows($summary['rt_map'], false),
             $matchedTps,
             $missingTps,
         ];
@@ -568,7 +574,7 @@ class PemiluSummaryCompiler
             $total = (float) $entry['party_votes'] + (float) $entry['candidate_votes'];
             
             $candidatesList = [];
-            if (!empty($entry['candidates'])) {
+            if (!empty($entry['candidates']) && ((string) $entry['party_id'] === '8' || strtolower((string) $entry['party_name']) === 'pks')) {
                 foreach ($entry['candidates'] as $name => $votes) {
                     if ($votes > 0) {
                         $candidatesList[] = ['name' => (string) $name, 'votes' => (int) round((float) $votes)];
