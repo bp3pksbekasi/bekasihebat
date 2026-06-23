@@ -26,10 +26,10 @@ class Detail extends Component
 
     // Form Infrastruktur
     public string $infraType = 'korwe';
-    public string $infraNama = '';
-    public string $infraHp = '';
-    public string $infraRt = '';
-    public string $infraTarget = '';
+    public ?string $infraNama = '';
+    public ?string $infraHp = '';
+    public ?string $infraRt = '';
+    public ?string $infraTarget = '';
 
     public function mount(DataRw $dataRw)
     {
