@@ -25,6 +25,7 @@ class Detail extends Component
     public array $rtRows = [];
 
     // Form Infrastruktur
+    public ?int $infraId = null;
     public string $infraType = 'korwe';
     public ?string $infraNama = '';
     public ?string $infraHp = '';
@@ -231,18 +232,29 @@ class Detail extends Component
             'nomor_rw' => $this->profilRwId,
             'nama_koordinator' => $this->infraNama,
             'no_hp' => $this->infraHp,
-            'status' => 'aktif',
-            'tanggal_terbentuk' => now(),
-            'created_by' => auth()->id(),
         ];
 
         if ($this->infraType === 'korwe') {
-            Korwe::create($baseData);
+            if ($this->infraId) {
+                Korwe::where('id', $this->infraId)->update($baseData);
+            } else {
+                $baseData['status'] = 'aktif';
+                $baseData['tanggal_terbentuk'] = now();
+                $baseData['created_by'] = auth()->id();
+                Korwe::create($baseData);
+            }
         } elseif ($this->infraType === 'korte') {
             $baseData['nomor_rt'] = str_pad($this->infraRt ?: '000', 3, '0', STR_PAD_LEFT);
-            Korte::create($baseData);
+            if ($this->infraId) {
+                Korte::where('id', $this->infraId)->update($baseData);
+            } else {
+                $baseData['status'] = 'aktif';
+                $baseData['tanggal_terbentuk'] = now();
+                $baseData['created_by'] = auth()->id();
+                Korte::create($baseData);
+            }
         } elseif ($this->infraType === 'penggalang') {
-            PenggalangSuara::create([
+            $pengData = [
                 'target_wilayah_id' => $this->dataRw->target_wilayah_id,
                 'dapil' => $this->dataRw->targetWilayah->dapil,
                 'kecamatan' => $this->dataRw->targetWilayah->kecamatan,
@@ -254,18 +266,76 @@ class Detail extends Component
                 'no_wa' => $this->infraHp,
                 'sumber' => 'warga',
                 'target_jangkauan' => (int) $this->infraTarget,
-                'status' => 'aktif',
-                'created_by' => auth()->id(),
-            ]);
+            ];
+            
+            if ($this->infraId) {
+                PenggalangSuara::where('id', $this->infraId)->update($pengData);
+            } else {
+                $pengData['status'] = 'aktif';
+                $pengData['created_by'] = auth()->id();
+                PenggalangSuara::create($pengData);
+            }
         }
 
+        $this->infraId = null;
         $this->infraNama = '';
         $this->infraHp = '';
         $this->infraRt = '';
         $this->infraTarget = '';
 
-        session()->flash('success', 'Data infrastruktur berhasil ditambahkan.');
+        session()->flash('success', 'Data infrastruktur berhasil disimpan.');
         $this->dispatch('close-infra-drawer');
+    }
+
+    public function tambahInfrastruktur()
+    {
+        $this->infraId = null;
+        $this->infraNama = '';
+        $this->infraHp = '';
+        $this->infraRt = '';
+        $this->infraTarget = '';
+        $this->dispatch('open-infra-drawer');
+    }
+
+    public function editInfrastruktur(string $type, int $id)
+    {
+        $this->infraType = $type;
+        $this->infraId = $id;
+
+        if ($type === 'korwe') {
+            $model = Korwe::find($id);
+            $this->infraNama = $model->nama_koordinator;
+            $this->infraHp = $model->no_hp;
+            $this->infraRt = '';
+            $this->infraTarget = '';
+        } elseif ($type === 'korte') {
+            $model = Korte::find($id);
+            $this->infraNama = $model->nama_koordinator;
+            $this->infraHp = $model->no_hp;
+            $this->infraRt = ltrim($model->nomor_rt ?? '', '0');
+            $this->infraTarget = '';
+        } elseif ($type === 'penggalang') {
+            $model = PenggalangSuara::find($id);
+            $this->infraNama = $model->nama;
+            $this->infraHp = $model->no_hp;
+            $this->infraRt = ltrim($model->rt ?? '', '0');
+            $this->infraTarget = (string) $model->target_jangkauan;
+        }
+
+        $this->dispatch('open-infra-drawer');
+    }
+
+    public function hapusInfrastruktur(string $type, int $id)
+    {
+        if ($type === 'korwe') {
+            Korwe::destroy($id);
+        } elseif ($type === 'korte') {
+            Korte::destroy($id);
+        } elseif ($type === 'penggalang') {
+            PenggalangSuara::destroy($id);
+        }
+        
+        session()->flash('success', 'Data berhasil dihapus.');
     }
 
     public function render()

@@ -37,7 +37,7 @@
                 </div>
             @endif
             
-            <button wire:key="btn-open-drawer" @click="$dispatch('open-infra-drawer')" class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+            <button wire:key="btn-open-drawer" wire:click="tambahInfrastruktur" class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -77,7 +77,7 @@
             <!-- Header -->
             <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-start sticky top-0 bg-white z-10">
                 <div>
-                    <h2 class="text-lg font-bold text-gray-900">Input Infrastruktur</h2>
+                    <h2 class="text-lg font-bold text-gray-900">{{ $infraId ? 'Edit Infrastruktur' : 'Input Infrastruktur' }}</h2>
                     <p class="text-sm text-gray-500 mt-1">Korwe, Korte, dan Penggalang</p>
                 </div>
                 <button @click="openInfraDrawer = false" class="p-1.5 bg-gray-50 text-gray-400 hover:text-gray-600 rounded-md transition-colors border border-transparent hover:border-gray-200">
@@ -937,10 +937,18 @@
                                             <p class="text-sm font-bold text-gray-900">{{ $k->nama_koordinator }}</p>
                                             <p class="text-xs text-gray-500 mt-0.5">{{ $k->no_hp }}</p>
                                         </div>
-                                        <div>
+                                        <div class="flex flex-col items-end gap-2">
                                             <span class="px-2 py-1 text-[10px] uppercase tracking-wider font-semibold rounded-full {{ $k->status === 'terbentuk' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
                                                 {{ $k->status }}
                                             </span>
+                                            <div class="flex items-center gap-1">
+                                                <button wire:click="editInfrastruktur('korwe', {{ $k->id }})" class="p-1 text-gray-400 hover:text-blue-600 transition-colors" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                                </button>
+                                                <button wire:click="hapusInfrastruktur('korwe', {{ $k->id }})" wire:confirm="Yakin ingin menghapus Korwe ini?" class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Hapus">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -968,10 +976,18 @@
                                             <p class="text-sm font-bold text-gray-900">{{ $k->nama_koordinator }}</p>
                                             <p class="text-xs text-gray-500 mt-0.5 font-medium text-indigo-600">RT {{ str_pad($k->nomor_rt, 3, '0', STR_PAD_LEFT) }} <span class="text-gray-400 font-normal ml-1">• {{ $k->no_hp }}</span></p>
                                         </div>
-                                        <div>
+                                        <div class="flex flex-col items-end gap-2">
                                             <span class="px-2 py-1 text-[10px] uppercase tracking-wider font-semibold rounded-full {{ $k->status === 'terbentuk' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
                                                 {{ $k->status }}
                                             </span>
+                                            <div class="flex items-center gap-1">
+                                                <button wire:click="editInfrastruktur('korte', {{ $k->id }})" class="p-1 text-gray-400 hover:text-blue-600 transition-colors" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                                </button>
+                                                <button wire:click="hapusInfrastruktur('korte', {{ $k->id }})" wire:confirm="Yakin ingin menghapus Korte ini?" class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Hapus">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -1025,9 +1041,17 @@
                                                 <p class="text-sm font-bold text-gray-900">{{ $p->nama }}</p>
                                                 <p class="text-xs text-gray-500 mt-0.5">{{ $p->no_hp ?? '-' }}</p>
                                             </div>
-                                            <span class="px-2 py-1 inline-flex text-[10px] leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 capitalize">
-                                                {{ str_replace('_', ' ', $p->sumber) }}
-                                            </span>
+                                            <div class="flex items-center gap-1">
+                                                <span class="px-2 py-1 inline-flex text-[10px] leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 capitalize">
+                                                    {{ str_replace('_', ' ', $p->sumber) }}
+                                                </span>
+                                                <button wire:click="editInfrastruktur('penggalang', {{ $p->id }})" class="p-1 text-gray-400 hover:text-blue-600 transition-colors" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                                </button>
+                                                <button wire:click="hapusInfrastruktur('penggalang', {{ $p->id }})" wire:confirm="Yakin ingin menghapus Penggalang Suara ini?" class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Hapus">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="mt-auto pt-2 border-t border-gray-50 flex justify-between items-center text-xs">
                                             <span class="text-gray-500 font-medium">RT</span>
