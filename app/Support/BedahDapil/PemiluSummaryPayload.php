@@ -14,6 +14,11 @@ class PemiluSummaryPayload
     /**
      * @return array{period:array<string,mixed>,villages:list<array<string,mixed>>}
      */
+    public function build(PemiluPeriod $period): array
+    {
+        return json_decode($this->buildJson($period), true);
+    }
+
     public function buildJson(PemiluPeriod $period): string
     {
         $query = \Illuminate\Support\Facades\DB::table('pemilu_desa_summaries')
