@@ -6,9 +6,9 @@
             <div class="h-3 w-full bg-orange-500"></div>
             <img src="{{ asset('images/form-header-rw.png') }}" alt="Form Header" class="w-full h-auto object-cover max-h-48">
             <div class="p-6 sm:p-8">
-                <h1 class="text-3xl font-medium text-gray-900 mb-2">Form Profil RW Publik</h1>
+                <h1 class="text-3xl font-medium text-gray-900 mb-2">Form Profil RW</h1>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    Pembaruan data profil RW untuk database Bekasi Hebat. Silakan lengkapi data di bawah ini sesuai dengan kondisi riil di lapangan. Pastikan nomor WhatsApp Anda aktif karena data akan diverifikasi.
+                    Pembaruan data profil RW untuk database Bekasi Hebat. Silakan lengkapi data di bawah ini sesuai dengan kondisi riil di lapangan.
                 </p>
                 <div class="mt-4 pt-4 border-t border-gray-100 text-xs text-red-500 font-medium">
                     * Menunjukkan pertanyaan yang wajib diisi
