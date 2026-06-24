@@ -264,6 +264,8 @@ class Detail extends Component
             'tipologi' => '', 'ekonomi_dominan' => '', 'profil_warga' => [],
             'suara_pks_2019' => 0, 'jumlah_kta' => 0, 'faktor_penyebab' => '',
             'afiliasi_rw_rt' => '', 'afiliasi_posyandu_dkm' => '',
+            'partai_dominan' => '', 'afiliasi_ketua_rw' => '', 'afiliasi_mayoritas_rt' => '',
+            'afiliasi_tomas' => '', 'afiliasi_toga' => '', 'afiliasi_pemuda' => '',
             'kompetitor_status' => 'tidak_tahu', 'kompetitor_detail' => '',
             'tim_sukses_status' => 'tidak_tahu', 'tim_sukses_detail' => '',
             'strategi' => '', 'penanggung_jawab' => '', 'keterangan_lain' => '',

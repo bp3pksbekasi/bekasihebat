@@ -1709,14 +1709,73 @@
 
                             <div style="font-size:12px;font-weight:600;color:#dc2626;border-bottom:1.5px solid #fee2e2;padding-bottom:4px;margin-top:8px;margin-bottom:4px;">PETA POLITIK LOKAL</div>
 
-                            <div>
-                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Afiliasi Ketua RW & RT</label>
-                                <textarea name="afiliasi_rw_rt" rows="3" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Ketua RW: Nama - Partai&#10;RT 1: Nama - Partai">${escapeHtml(p.afiliasi_rw_rt || '')}</textarea>
-                            </div>
-
-                            <div>
-                                <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Afiliasi Kader Posyandu & DKM</label>
-                                <textarea name="afiliasi_posyandu_dkm" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Nama - organisasi - partai">${escapeHtml(p.afiliasi_posyandu_dkm || '')}</textarea>
+                            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px;">
+                                <div>
+                                    <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">Partai Pemenang (Pemilu Lalu)</label>
+                                    <select name="partai_dominan" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;">
+                                        <option value="">- Pilih Partai -</option>
+                                        <option value="PKS" ${p.partai_dominan === 'PKS' ? 'selected' : ''}>PKS</option>
+                                        <option value="Gerindra" ${p.partai_dominan === 'Gerindra' ? 'selected' : ''}>Gerindra</option>
+                                        <option value="Golkar" ${p.partai_dominan === 'Golkar' ? 'selected' : ''}>Golkar</option>
+                                        <option value="PDIP" ${p.partai_dominan === 'PDIP' ? 'selected' : ''}>PDIP</option>
+                                        <option value="PKB" ${p.partai_dominan === 'PKB' ? 'selected' : ''}>PKB</option>
+                                        <option value="NasDem" ${p.partai_dominan === 'NasDem' ? 'selected' : ''}>NasDem</option>
+                                        <option value="Demokrat" ${p.partai_dominan === 'Demokrat' ? 'selected' : ''}>Demokrat</option>
+                                        <option value="PAN" ${p.partai_dominan === 'PAN' ? 'selected' : ''}>PAN</option>
+                                        <option value="Partai Lain" ${p.partai_dominan === 'Partai Lain' ? 'selected' : ''}>Partai Lain</option>
+                                        <option value="Tidak Tahu" ${p.partai_dominan === 'Tidak Tahu' ? 'selected' : ''}>Tidak Tahu</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">Afiliasi Ketua RW</label>
+                                    <select name="afiliasi_ketua_rw" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;">
+                                        <option value="">- Pilih -</option>
+                                        <option value="PKS" ${p.afiliasi_ketua_rw === 'PKS' ? 'selected' : ''}>PKS</option>
+                                        <option value="Partai Lain" ${p.afiliasi_ketua_rw === 'Partai Lain' ? 'selected' : ''}>Partai Lain</option>
+                                        <option value="Netral" ${p.afiliasi_ketua_rw === 'Netral' ? 'selected' : ''}>Netral</option>
+                                        <option value="Tidak Tahu" ${p.afiliasi_ketua_rw === 'Tidak Tahu' ? 'selected' : ''}>Tidak Tahu</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">Afiliasi Mayoritas RT</label>
+                                    <select name="afiliasi_mayoritas_rt" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;">
+                                        <option value="">- Pilih -</option>
+                                        <option value="PKS" ${p.afiliasi_mayoritas_rt === 'PKS' ? 'selected' : ''}>PKS</option>
+                                        <option value="Partai Lain" ${p.afiliasi_mayoritas_rt === 'Partai Lain' ? 'selected' : ''}>Partai Lain</option>
+                                        <option value="Netral" ${p.afiliasi_mayoritas_rt === 'Netral' ? 'selected' : ''}>Netral</option>
+                                        <option value="Tidak Tahu" ${p.afiliasi_mayoritas_rt === 'Tidak Tahu' ? 'selected' : ''}>Tidak Tahu</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">Afiliasi Tokoh Masyarakat</label>
+                                    <select name="afiliasi_tomas" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;">
+                                        <option value="">- Pilih -</option>
+                                        <option value="PKS" ${p.afiliasi_tomas === 'PKS' ? 'selected' : ''}>PKS</option>
+                                        <option value="Partai Lain" ${p.afiliasi_tomas === 'Partai Lain' ? 'selected' : ''}>Partai Lain</option>
+                                        <option value="Netral" ${p.afiliasi_tomas === 'Netral' ? 'selected' : ''}>Netral</option>
+                                        <option value="Tidak Tahu" ${p.afiliasi_tomas === 'Tidak Tahu' ? 'selected' : ''}>Tidak Tahu</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">Afiliasi Tokoh Agama</label>
+                                    <select name="afiliasi_toga" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;">
+                                        <option value="">- Pilih -</option>
+                                        <option value="PKS" ${p.afiliasi_toga === 'PKS' ? 'selected' : ''}>PKS</option>
+                                        <option value="Partai Lain" ${p.afiliasi_toga === 'Partai Lain' ? 'selected' : ''}>Partai Lain</option>
+                                        <option value="Netral" ${p.afiliasi_toga === 'Netral' ? 'selected' : ''}>Netral</option>
+                                        <option value="Tidak Tahu" ${p.afiliasi_toga === 'Tidak Tahu' ? 'selected' : ''}>Tidak Tahu</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">Afiliasi Tokoh Pemuda</label>
+                                    <select name="afiliasi_pemuda" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;color:#1f2937;">
+                                        <option value="">- Pilih -</option>
+                                        <option value="PKS" ${p.afiliasi_pemuda === 'PKS' ? 'selected' : ''}>PKS</option>
+                                        <option value="Partai Lain" ${p.afiliasi_pemuda === 'Partai Lain' ? 'selected' : ''}>Partai Lain</option>
+                                        <option value="Netral" ${p.afiliasi_pemuda === 'Netral' ? 'selected' : ''}>Netral</option>
+                                        <option value="Tidak Tahu" ${p.afiliasi_pemuda === 'Tidak Tahu' ? 'selected' : ''}>Tidak Tahu</option>
+                                    </select>
+                                </div>
                             </div>
 
                             ${(() => {
@@ -1935,8 +1994,12 @@
                                     <div>
                                         <div style="font-size:11px; font-weight:700; color:#dc2626; border-bottom:0.5px solid #fee2e2; padding-bottom:3px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">3. Peta Politik Lokal</div>
                                         <div style="display:grid; gap:6px;">
-                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Ketua RW & RT:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${escapeHtml(p.afiliasi_rw_rt || '-')}</strong></div>
-                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Kader Posyandu & DKM:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">${escapeHtml(p.afiliasi_posyandu_dkm || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Partai Pemenang (Pemilu Lalu):</span><strong style="color:#1f2937; font-weight:500;">${escapeHtml(p.partai_dominan || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Ketua RW:</span><strong style="color:#1f2937; font-weight:500;">${escapeHtml(p.afiliasi_ketua_rw || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Mayoritas RT:</span><strong style="color:#1f2937; font-weight:500;">${escapeHtml(p.afiliasi_mayoritas_rt || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Tokoh Masyarakat:</span><strong style="color:#1f2937; font-weight:500;">${escapeHtml(p.afiliasi_tomas || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Tokoh Agama:</span><strong style="color:#1f2937; font-weight:500;">${escapeHtml(p.afiliasi_toga || '-')}</strong></div>
+                                            <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Afiliasi Tokoh Pemuda:</span><strong style="color:#1f2937; font-weight:500;">${escapeHtml(p.afiliasi_pemuda || '-')}</strong></div>
                                             <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Pengurus Kompetitor:</span><strong style="color:#1f2937; text-align:right;">${statusKompetitor}</strong></div>
                                             <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Tim Sukses Lain:</span><strong style="color:#1f2937; text-align:right;">${statusTimsuk}</strong></div>
                                         </div>

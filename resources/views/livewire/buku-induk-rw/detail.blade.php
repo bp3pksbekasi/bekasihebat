@@ -488,13 +488,29 @@
 
                         <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="col-span-1 md:col-span-2 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Afiliasi Ketua RW & RT</span>
-                                    <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed whitespace-pre-line">{{ $profilRw->afiliasi_rw_rt ?: '-' }}</div>
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Partai Pemenang (Pemilu Lalu)</span>
+                                    <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->partai_dominan ?: '-' }}</div>
                                 </div>
-                                <div class="col-span-1 md:col-span-2 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Afiliasi Kader Posyandu & DKM</span>
-                                    <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed whitespace-pre-line">{{ $profilRw->afiliasi_posyandu_dkm ?: '-' }}</div>
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Afiliasi Ketua RW</span>
+                                    <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->afiliasi_ketua_rw ?: '-' }}</div>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Afiliasi Mayoritas RT</span>
+                                    <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->afiliasi_mayoritas_rt ?: '-' }}</div>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Afiliasi Tokoh Masyarakat</span>
+                                    <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->afiliasi_tomas ?: '-' }}</div>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Afiliasi Tokoh Agama (Toga)</span>
+                                    <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->afiliasi_toga ?: '-' }}</div>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Afiliasi Tokoh Pemuda</span>
+                                    <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->afiliasi_pemuda ?: '-' }}</div>
                                 </div>
                                 
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
@@ -1233,13 +1249,73 @@
 
                 <div style="border-top:0.5px solid #e5e5e5;padding-top:16px;display:grid;gap:12px;">
                     <div style="font-size:12px;font-weight:600;color:#dc2626;">Peta politik lokal</div>
-                    <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Ketua RW & RT</label>
-                        <textarea wire:model="profilData.afiliasi_rw_rt" rows="3" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Ketua RW: Nama - Partai&#10;RT 1: Nama - Partai"></textarea>
-                    </div>
-                    <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Kader Posyandu & DKM</label>
-                        <textarea wire:model="profilData.afiliasi_posyandu_dkm" rows="2" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Nama - organisasi - partai"></textarea>
+                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
+                        <div>
+                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Partai Pemenang (Pemilu Lalu)</label>
+                            <select wire:model="profilData.partai_dominan" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                                <option value="">- Pilih Partai -</option>
+                                <option value="PKS">PKS</option>
+                                <option value="Gerindra">Gerindra</option>
+                                <option value="Golkar">Golkar</option>
+                                <option value="PDIP">PDIP</option>
+                                <option value="PKB">PKB</option>
+                                <option value="NasDem">NasDem</option>
+                                <option value="Demokrat">Demokrat</option>
+                                <option value="PAN">PAN</option>
+                                <option value="Partai Lain">Partai Lain</option>
+                                <option value="Tidak Tahu">Tidak Tahu</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Ketua RW</label>
+                            <select wire:model="profilData.afiliasi_ketua_rw" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                                <option value="">- Pilih -</option>
+                                <option value="PKS">PKS</option>
+                                <option value="Partai Lain">Partai Lain</option>
+                                <option value="Netral">Netral</option>
+                                <option value="Tidak Tahu">Tidak Tahu</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Mayoritas RT</label>
+                            <select wire:model="profilData.afiliasi_mayoritas_rt" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                                <option value="">- Pilih -</option>
+                                <option value="PKS">PKS</option>
+                                <option value="Partai Lain">Partai Lain</option>
+                                <option value="Netral">Netral</option>
+                                <option value="Tidak Tahu">Tidak Tahu</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Tokoh Masyarakat</label>
+                            <select wire:model="profilData.afiliasi_tomas" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                                <option value="">- Pilih -</option>
+                                <option value="PKS">PKS</option>
+                                <option value="Partai Lain">Partai Lain</option>
+                                <option value="Netral">Netral</option>
+                                <option value="Tidak Tahu">Tidak Tahu</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Tokoh Agama</label>
+                            <select wire:model="profilData.afiliasi_toga" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                                <option value="">- Pilih -</option>
+                                <option value="PKS">PKS</option>
+                                <option value="Partai Lain">Partai Lain</option>
+                                <option value="Netral">Netral</option>
+                                <option value="Tidak Tahu">Tidak Tahu</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Tokoh Pemuda</label>
+                            <select wire:model="profilData.afiliasi_pemuda" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                                <option value="">- Pilih -</option>
+                                <option value="PKS">PKS</option>
+                                <option value="Partai Lain">Partai Lain</option>
+                                <option value="Netral">Netral</option>
+                                <option value="Tidak Tahu">Tidak Tahu</option>
+                            </select>
+                        </div>
                     </div>
                     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
                         <div>

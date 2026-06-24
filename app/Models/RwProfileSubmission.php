@@ -33,6 +33,7 @@ class RwProfileSubmission extends Model
         'anggota_pks', 'jumlah_kta', 'upa_rw_status', 'upa_rw_nama', 'rki_status', 'rki_nama',
         'senam_status', 'senam_nama', 'relawan_milenial_status', 'relawan_milenial_nama',
         'caleg_terpilih_ada', 'caleg_terpilih_nama', 'afiliasi_rw_rt', 'afiliasi_posyandu_dkm',
+        'partai_dominan', 'afiliasi_ketua_rw', 'afiliasi_mayoritas_rt', 'afiliasi_tomas', 'afiliasi_toga', 'afiliasi_pemuda',
         'kompetitor_status', 'kompetitor_detail', 'tim_sukses_status', 'tim_sukses_detail',
         'strategi', 'strategi_keterangan', 'penanggung_jawab', 'keterangan_lain',
         'status',
