@@ -105,13 +105,15 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Sumber Ekonomi Dominan (Bisa pilih > 1)</label>
-                                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    @foreach(\App\Models\ProfilRw::EKONOMI_OPTIONS as $ekoOption)
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" wire:model="ekonomi_dominan" value="{{ $ekoOption }}" class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
-                                            <span class="ml-2 text-sm text-gray-700">{{ $ekoOption }}</span>
-                                        </label>
-                                    @endforeach
+                                <div class="mt-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        @foreach(\App\Models\ProfilRw::EKONOMI_OPTIONS as $ekoOption)
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" wire:model="ekonomi_dominan" value="{{ $ekoOption }}" class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
+                                                <span class="ml-2 text-sm text-gray-700">{{ $ekoOption }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                             <div>
