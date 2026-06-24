@@ -56,21 +56,33 @@ class ProfilRw extends Model
     ];
 
     public const PROFIL_OPTIONS = [
-        'religius' => 'A. Religius-Komunal',
-        'nasionalis' => 'B. Nasionalis-Tradisional',
-        'rasional' => 'C. Rasional-Kritis',
-        'pragmatis' => 'D. Pragmatis-Ekonomi',
-        'urban' => 'E. Urban-Individual',
-        'pekerja' => 'F. Kelas Pekerja',
-    ];
-
-    public const PROFIL_DESCRIPTIONS = [
-        'A. Religius-Komunal' => 'Aktif pengajian, Tokoh agama berpengaruh, Mudah digerakkan secara kolektif',
-        'B. Nasionalis-Tradisional' => 'Menghormati tokoh lokal, Kedekatan sosial kuat, Loyalitas cukup tinggi',
-        'C. Rasional-Kritis' => 'Banyak ASN, guru, sarjana. Memerlukan data dan program nyata',
-        'D. Pragmatis-Ekonomi' => 'Isu lapangan kerja dan bantuan ekonomi dominan, Responsif terhadap manfaat langsung',
-        'E. Urban-Individual' => 'Pendatang tinggi, Interaksi sosial rendah, Komunikasi digital lebih efektif',
-        'F. Kelas Pekerja' => 'Buruh pabrik, pegawai, pekerja informal. Isu upah, kesehatan, pendidikan anak menjadi perhatian utama',
+        'A. Religius-Komunal' => [
+            'Aktif pengajian',
+            'Tokoh agama berpengaruh',
+            'Mudah digerakkan secara kolektif'
+        ],
+        'B. Nasionalis-Tradisional' => [
+            'Menghormati tokoh lokal',
+            'Kedekatan sosial kuat',
+            'Loyalitas cukup tinggi'
+        ],
+        'C. Rasional-Kritis' => [
+            'Banyak ASN, guru, sarjana',
+            'Memerlukan data dan program nyata'
+        ],
+        'D. Pragmatis-Ekonomi' => [
+            'Isu lapangan kerja dan bantuan ekonomi dominan',
+            'Responsif terhadap manfaat langsung'
+        ],
+        'E. Urban-Individual' => [
+            'Pendatang tinggi',
+            'Interaksi sosial rendah',
+            'Komunikasi digital lebih efektif'
+        ],
+        'F. Kelas Pekerja' => [
+            'Buruh pabrik, pegawai, pekerja informal',
+            'Isu upah, kesehatan, pendidikan anak menjadi perhatian utama'
+        ]
     ];
 
     public const FAKTOR_OPTIONS = [

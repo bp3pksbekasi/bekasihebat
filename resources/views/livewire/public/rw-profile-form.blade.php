@@ -114,15 +114,19 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Profil Umum Warga</label>
-                                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    @foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $label)
-                                        <label class="inline-flex items-start">
-                                            <input type="checkbox" wire:model="profil_warga" value="{{ $label }}" class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500 mt-0.5">
-                                            <div class="ml-2 flex flex-col">
-                                                <span class="text-sm font-semibold text-gray-800">{{ $label }}</span>
-                                                <span class="text-xs text-gray-500 leading-tight mt-0.5">{{ \App\Models\ProfilRw::PROFIL_DESCRIPTIONS[$label] ?? '' }}</span>
+                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    @foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $kategori => $options)
+                                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                            <h4 class="font-semibold text-sm text-gray-800 mb-2">{{ $kategori }}</h4>
+                                            <div class="flex flex-col space-y-2">
+                                                @foreach($options as $label)
+                                                    <label class="inline-flex items-start">
+                                                        <input type="checkbox" wire:model="profil_warga" value="{{ $label }}" class="form-checkbox h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500 mt-0.5">
+                                                        <span class="ml-2 text-xs text-gray-700 leading-snug">{{ $label }}</span>
+                                                    </label>
+                                                @endforeach
                                             </div>
-                                        </label>
+                                        </div>
                                     @endforeach
                                 </div>
                                 <textarea wire:model="profil_warga_keterangan" class="py-2.5 px-3 mt-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:border-orange-500 text-base sm:text-lg" rows="2" placeholder="Keterangan tambahan (opsional)"></textarea>

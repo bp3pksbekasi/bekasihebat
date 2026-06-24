@@ -143,12 +143,12 @@ class RwProfileForm extends Component
                     
                     $this->profil_warga = [];
                     $oldMapping = [
-                        'Agamis & Kondusif' => 'A. Religius-Komunal',
-                        'Pragmatis & Transaksional' => 'D. Pragmatis-Ekonomi',
-                        'Nasionalis & Abangan' => 'B. Nasionalis-Tradisional',
-                        'Heterogen & Individualis' => 'E. Urban-Individual',
-                        'Kritis & Akademis' => 'C. Rasional-Kritis',
-                        'Buruh & Pekerja' => 'F. Kelas Pekerja',
+                        'Agamis & Kondusif' => 'Aktif pengajian, Tokoh agama berpengaruh, Mudah digerakkan secara kolektif',
+                        'Pragmatis & Transaksional' => 'Isu lapangan kerja dan bantuan ekonomi dominan, Responsif terhadap manfaat langsung',
+                        'Nasionalis & Abangan' => 'Menghormati tokoh lokal, Kedekatan sosial kuat, Loyalitas cukup tinggi',
+                        'Heterogen & Individualis' => 'Pendatang tinggi, Interaksi sosial rendah, Komunikasi digital lebih efektif',
+                        'Kritis & Akademis' => 'Banyak ASN, guru, sarjana, Memerlukan data dan program nyata',
+                        'Buruh & Pekerja' => 'Buruh pabrik, pegawai, pekerja informal, Isu upah, kesehatan, pendidikan anak menjadi perhatian utama',
                     ];
                     
                     $dbValue = $profil->profil_warga ?? '';
@@ -160,9 +160,11 @@ class RwProfileForm extends Component
                         }
                     }
 
-                    foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $label) {
-                        if ($dbValue && str_contains($dbValue, $label)) {
-                            $this->profil_warga[] = $label;
+                    foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $kategori => $options) {
+                        foreach($options as $label) {
+                            if ($dbValue && str_contains($dbValue, $label)) {
+                                $this->profil_warga[] = $label;
+                            }
                         }
                     }
                     
