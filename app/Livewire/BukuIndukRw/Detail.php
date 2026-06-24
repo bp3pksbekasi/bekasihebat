@@ -115,6 +115,32 @@ class Detail extends Component
             ];
             $this->profilData['tipologi'] = $tipologiMap[$this->profilData['tipologi']] ?? $this->profilData['tipologi'];
             
+            $ekonomiMap = [
+                'pertanian' => 'Petani / Buruh Tani',
+                'pabrik' => 'Buruh / Pekerja Industri',
+                'informal' => 'Pekerja Informal / Harian',
+                'pedagang' => 'Pedagang / Wiraswasta / UMKM',
+                'pns' => 'ASN / TNI / Polri / BUMD',
+                'nelayan' => 'Nelayan / Petambak',
+                'campuran' => 'Pegawai Swasta / Perkantoran',
+            ];
+            
+            $ekonomiArray = [];
+            $dbEkonomi = $profil->ekonomi_dominan ?? '';
+            
+            // Old single value
+            if (isset($ekonomiMap[$dbEkonomi])) {
+                $ekonomiArray[] = $ekonomiMap[$dbEkonomi];
+            } else {
+                // Comma separated string mapping
+                foreach (\App\Models\ProfilRw::EKONOMI_OPTIONS as $ekoOption) {
+                    if ($dbEkonomi && str_contains($dbEkonomi, $ekoOption)) {
+                        $ekonomiArray[] = $ekoOption;
+                    }
+                }
+            }
+            $this->profilData['ekonomi_dominan'] = $ekonomiArray;
+            
             $wargaArray = [];
             $oldMapping = [
                 'Agamis & Kondusif' => 'Aktif pengajian, Tokoh agama berpengaruh, Mudah digerakkan secara kolektif',
@@ -166,8 +192,11 @@ class Detail extends Component
         }
         
         $profilDataToSave = $this->profilData;
-        if (is_array($profilDataToSave['profil_warga'])) {
+        if (isset($profilDataToSave['profil_warga']) && is_array($profilDataToSave['profil_warga'])) {
             $profilDataToSave['profil_warga'] = implode(', ', $profilDataToSave['profil_warga']);
+        }
+        if (isset($profilDataToSave['ekonomi_dominan']) && is_array($profilDataToSave['ekonomi_dominan'])) {
+            $profilDataToSave['ekonomi_dominan'] = implode(', ', $profilDataToSave['ekonomi_dominan']);
         }
 
         $dataToSave = array_merge($profilDataToSave, [

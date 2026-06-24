@@ -46,13 +46,13 @@ class ProfilRw extends Model
     ];
 
     public const EKONOMI_OPTIONS = [
-        'pertanian' => 'Pertanian',
-        'pabrik' => 'Pekerja Pabrik / Industri',
-        'informal' => 'Pekerja Informal (Ojol/Freelance)',
-        'pedagang' => 'Pedagang / Wiraswasta',
-        'pns' => 'PNS / Karyawan',
-        'nelayan' => 'Nelayan',
-        'campuran' => 'Campuran',
+        'Buruh / Pekerja Industri',
+        'Pedagang / Wiraswasta / UMKM',
+        'Pekerja Informal / Harian',
+        'Pegawai Swasta / Perkantoran',
+        'ASN / TNI / Polri / BUMD',
+        'Petani / Buruh Tani',
+        'Nelayan / Petambak',
     ];
 
     public const PROFIL_OPTIONS = [

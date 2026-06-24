@@ -46,8 +46,8 @@ class RwProfileForm extends Component
     public $rki_no_hp_input = '';
 
     // Profil RW Fields
-    public $tipologi = '';
-    public $ekonomi_dominan = '';
+    public $tipologi;
+    public array $ekonomi_dominan = [];
     public array $profil_warga = [];
     public $profil_warga_keterangan = '';
     public $suara_pks_2019;
@@ -144,11 +144,32 @@ class RwProfileForm extends Component
                         'pesisir' => 'pesisir_pertanian',
                         'industri' => 'kawasan_pekerja',
                     ];
-                    
                     $this->tipologi = $tipologiMap[$profil->tipologi] ?? $profil->tipologi;
-                    $this->ekonomi_dominan = $profil->ekonomi_dominan;
                     
-                    $this->profil_warga = [];
+                    $ekonomiMap = [
+                        'pertanian' => 'Petani / Buruh Tani',
+                        'pabrik' => 'Buruh / Pekerja Industri',
+                        'informal' => 'Pekerja Informal / Harian',
+                        'pedagang' => 'Pedagang / Wiraswasta / UMKM',
+                        'pns' => 'ASN / TNI / Polri / BUMD',
+                        'nelayan' => 'Nelayan / Petambak',
+                        'campuran' => 'Pegawai Swasta / Perkantoran',
+                    ];
+                    
+                    $this->ekonomi_dominan = [];
+                    $dbEkonomi = $profil->ekonomi_dominan ?? '';
+                    
+                    // Old single value
+                    if (isset($ekonomiMap[$dbEkonomi])) {
+                        $this->ekonomi_dominan[] = $ekonomiMap[$dbEkonomi];
+                    } else {
+                        // Comma separated string mapping
+                        foreach (\App\Models\ProfilRw::EKONOMI_OPTIONS as $ekoOption) {
+                            if ($dbEkonomi && str_contains($dbEkonomi, $ekoOption)) {
+                                $this->ekonomi_dominan[] = $ekoOption;
+                            }
+                        }
+                    }
                     $oldMapping = [
                         'Agamis & Kondusif' => 'Aktif pengajian, Tokoh agama berpengaruh, Mudah digerakkan secara kolektif',
                         'Pragmatis & Transaksional' => 'Isu lapangan kerja dan bantuan ekonomi dominan, Responsif terhadap manfaat langsung',
@@ -392,7 +413,7 @@ class RwProfileForm extends Component
                     'desa' => $rw->targetWilayah->desa,
                     'is_complete' => $isComplete,
                     'tipologi' => $this->tipologi,
-                    'ekonomi_dominan' => $this->ekonomi_dominan,
+                    'ekonomi_dominan' => is_array($this->ekonomi_dominan) ? implode(', ', $this->ekonomi_dominan) : $this->ekonomi_dominan,
                     'profil_warga' => trim(implode(', ', $this->profil_warga) . ($this->profil_warga_keterangan ? ' - ' . $this->profil_warga_keterangan : '')),
                     'suara_pks_2019' => (int) $this->suara_pks_2019,
                     'faktor_penyebab' => trim($this->faktor_penyebab . ($this->faktor_penyebab_keterangan ? ' - ' . $this->faktor_penyebab_keterangan : '')),

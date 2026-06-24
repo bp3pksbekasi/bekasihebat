@@ -1130,12 +1130,14 @@
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Sumber ekonomi dominan</label>
-                        <select wire:model="profilData.ekonomi_dominan" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;">
-                            <option value="">- Pilih -</option>
-                            @foreach (\App\Models\ProfilRw::EKONOMI_OPTIONS as $key => $label)
-                                <option value="{{ $key }}">{{ $label }}</option>
+                        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+                            @foreach (\App\Models\ProfilRw::EKONOMI_OPTIONS as $ekoOption)
+                                <label style="display:flex;align-items:center;font-size:13px;color:#333;">
+                                    <input type="checkbox" wire:model="profilData.ekonomi_dominan" value="{{ $ekoOption }}" style="margin-right:6px;width:16px;height:16px;border-radius:4px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
+                                    {{ $ekoOption }}
+                                </label>
                             @endforeach
-                        </select>
+                        </div>
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Profil umum warga</label>
