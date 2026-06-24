@@ -298,7 +298,7 @@
                                                     </button>
                                                 @endif
 
-                                                <button type="button" wire:click="resetPassword({{ $user->id }})" style="padding:6px 10px;border:none;border-radius:8px;background:#f5f3ff;color:#6d28d9;font-size:11px;font-weight:700;cursor:pointer;">
+                                                <button type="button" wire:confirm="Apakah Anda yakin ingin mereset password user ini?" wire:click="resetPassword({{ $user->id }})" style="padding:6px 10px;border:none;border-radius:8px;background:#f5f3ff;color:#6d28d9;font-size:11px;font-weight:700;cursor:pointer;">
                                                     Reset password
                                                 </button>
                                             </div>

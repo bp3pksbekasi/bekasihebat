@@ -358,7 +358,9 @@ class UserManagement extends Component
             'temporary_password' => $temporaryPassword,
         ]);
 
-        session()->flash('message', "Password sementara {$user->name}: {$temporaryPassword}");
+        $message = "Password sementara {$user->name}: {$temporaryPassword}";
+        session()->flash('message', $message);
+        $this->js("alert('".addslashes($message)."');");
     }
 
     public function simpanUser(): void
