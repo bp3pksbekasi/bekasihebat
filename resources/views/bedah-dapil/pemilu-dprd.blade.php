@@ -1668,10 +1668,10 @@
                             </div>
 
                             ${[
-                                ['upa_rw', 'UPA RW', 'upa_rw_nama', 'Nama pembina'],
-                                ['rki', 'RKI', 'rki_nama', 'Nama penggerak'],
+                                ['upa_rw', 'Pengajian RW', 'upa_rw_nama', 'Nama pembina'],
+                                ['rki', 'RKI (Rumah Keluarga Indonesia)', 'rki_nama', 'Nama penggerak'],
                                 ['senam', 'Titik Senam PKS', 'senam_nama', 'Nama instruktur'],
-                                ['relawan_milenial', 'Relawan Milenial / Geka', 'relawan_milenial_nama', 'Nama + jabatan']
+                                ['relawan_milenial', 'Relawan Muda', 'relawan_milenial_nama', 'Nama + jabatan']
                             ].map(([field, label, nameField, placeholder]) => {
                                 const status = p[field + '_status'] || 'belum';
                                 const { name, wa } = parseNameAndWa(p[nameField]);
@@ -1696,7 +1696,7 @@
 
                             <div style="border:0.5px solid #e5e5e5;border-radius:8px;padding:10px;background:#f9fafb;">
                                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
-                                    <span style="font-size:12px;font-weight:500;color:#374151;">Caleg terpilih di RW?</span>
+                                    <span style="font-size:12px;font-weight:500;color:#374151;">Aleg terpilih di RW (Bisa partai lain)</span>
                                     <select name="caleg_terpilih_ada" data-toggle-target="caleg_terpilih_input_container" style="height:30px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;background:white;font-size:12px;color:#1f2937;">
                                         <option value="false" ${!p.caleg_terpilih_ada ? 'selected' : ''}>Tidak</option>
                                         <option value="true" ${p.caleg_terpilih_ada ? 'selected' : ''}>Ya</option>

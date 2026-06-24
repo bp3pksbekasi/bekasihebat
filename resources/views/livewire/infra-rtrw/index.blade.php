@@ -1146,11 +1146,11 @@
                                     <div style="font-size:11px; font-weight:700; color:#16a34a; border-bottom:0.5px solid #dcfce7; padding-bottom:3px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">2. Infrastruktur Partai</div>
                                     <div style="display:grid; gap:6px;">
                                         <div style="display:flex; justify-content:space-between; color:#4b5563; flex-direction:column; gap:2px;"><span>Anggota PKS di RW:</span><strong style="color:#1f2937; font-weight:500; white-space:pre-line;">{{ $profilData['anggota_pks'] ?: '-' }}</strong></div>
-                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>UPA RW:</span><strong style="color:#1f2937; text-align:right;">{!! $statusUpa !!}</strong></div>
-                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>RKI:</span><strong style="color:#1f2937; text-align:right;">{!! $statusRki !!}</strong></div>
+                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Pengajian RW:</span><strong style="color:#1f2937; text-align:right;">{!! $statusUpa !!}</strong></div>
+                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>RKI (Rumah Keluarga Indonesia):</span><strong style="color:#1f2937; text-align:right;">{!! $statusRki !!}</strong></div>
                                         <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Titik Senam PKS:</span><strong style="color:#1f2937; text-align:right;">{!! $statusSenam !!}</strong></div>
-                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Relawan Milenial:</span><strong style="color:#1f2937; text-align:right;">{!! $statusRelawan !!}</strong></div>
-                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Caleg Terpilih di RW:</span><strong style="color:#1f2937; text-align:right;">{!! $statusCaleg !!}</strong></div>
+                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Relawan Muda:</span><strong style="color:#1f2937; text-align:right;">{!! $statusRelawan !!}</strong></div>
+                                        <div style="display:flex; justify-content:space-between; color:#4b5563;"><span>Aleg Terpilih di RW (Bisa partai lain):</span><strong style="color:#1f2937; text-align:right;">{!! $statusCaleg !!}</strong></div>
                                     </div>
                                 </div>
 
@@ -1292,10 +1292,10 @@
                     </div>
 
                     @foreach ([
-                        ['field' => 'upa_rw', 'label' => 'UPA RW', 'name_field' => 'upa_rw_nama', 'wa_field' => 'upa_rw_wa', 'placeholder' => 'Nama pembina'],
-                        ['field' => 'rki', 'label' => 'RKI', 'name_field' => 'rki_nama', 'wa_field' => 'rki_wa', 'placeholder' => 'Nama penggerak'],
+                        ['field' => 'upa_rw', 'label' => 'Pengajian RW', 'name_field' => 'upa_rw_nama', 'wa_field' => 'upa_rw_wa', 'placeholder' => 'Nama pembina'],
+                        ['field' => 'rki', 'label' => 'RKI (Rumah Keluarga Indonesia)', 'name_field' => 'rki_nama', 'wa_field' => 'rki_wa', 'placeholder' => 'Nama penggerak'],
                         ['field' => 'senam', 'label' => 'Titik Senam PKS', 'name_field' => 'senam_nama', 'wa_field' => 'senam_wa', 'placeholder' => 'Nama instruktur'],
-                        ['field' => 'relawan_milenial', 'label' => 'Relawan Milenial / Geka', 'name_field' => 'relawan_milenial_nama', 'wa_field' => 'relawan_milenial_wa', 'placeholder' => 'Nama + jabatan']
+                        ['field' => 'relawan_milenial', 'label' => 'Relawan Muda', 'name_field' => 'relawan_milenial_nama', 'wa_field' => 'relawan_milenial_wa', 'placeholder' => 'Nama + jabatan']
                     ] as $item)
                         <div style="border:0.5px solid #e5e5e5;border-radius:8px;padding:10px;background:#f9fafb;">
                             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
@@ -1316,7 +1316,7 @@
 
                     <div style="border:0.5px solid #e5e5e5;border-radius:8px;padding:10px;background:#f9fafb;">
                         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
-                            <span style="font-size:12px;font-weight:500;color:#374151;">Caleg terpilih di RW?</span>
+                            <span style="font-size:12px;font-weight:500;color:#374151;">Aleg terpilih di RW (Bisa partai lain)</span>
                             <select wire:model.live="profilData.caleg_terpilih_ada" style="height:30px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;background:white;font-size:12px;color:#1f2937;">
                                 <option value="0">Tidak</option>
                                 <option value="1">Ya</option>

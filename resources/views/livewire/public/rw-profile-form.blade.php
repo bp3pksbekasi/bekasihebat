@@ -170,7 +170,7 @@
 
                             <div class="rounded-lg border border-gray-200 p-4 bg-gray-50">
                                 <div class="flex items-center justify-between mb-2">
-                                    <label class="block text-sm font-medium text-gray-700">UPA RW</label>
+                                    <label class="block text-sm font-medium text-gray-700">Pengajian RW</label>
                                     <select wire:model.live="upa_rw_status" class="py-2.5 px-3 block w-32 border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none font-medium">
                                         <option value="belum">Belum</option>
                                         <option value="sudah">Sudah</option>
@@ -186,7 +186,7 @@
 
                             <div class="rounded-lg border border-gray-200 p-4 bg-gray-50">
                                 <div class="flex items-center justify-between mb-2">
-                                    <label class="block text-sm font-medium text-gray-700">RKI</label>
+                                    <label class="block text-sm font-medium text-gray-700">RKI (Rumah Keluarga Indonesia)</label>
                                     <select wire:model.live="rki_status" class="py-2.5 px-3 block w-32 border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none font-medium">
                                         <option value="belum">Belum</option>
                                         <option value="sudah">Sudah</option>
@@ -217,8 +217,8 @@
                             </div>
 
                             <div class="rounded-lg border border-gray-200 p-4 bg-gray-50">
-                                <div class="flex items-center justify-between">
-                                    <label class="block text-sm font-medium text-gray-700">Relawan Milenial / Geka</label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-sm font-medium text-gray-700">Relawan Muda</label>
                                     <select wire:model.live="relawan_milenial_status" class="py-2.5 px-3 block w-32 border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none font-medium">
                                         <option value="belum">Belum</option>
                                         <option value="sudah">Sudah</option>
@@ -233,8 +233,8 @@
                             </div>
 
                             <div class="rounded-lg border border-gray-200 p-4 bg-gray-50">
-                                <div class="flex items-center justify-between">
-                                    <label class="block text-sm font-medium text-gray-700">Caleg terpilih di RW?</label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-sm font-medium text-gray-700">Aleg terpilih di RW (Bisa partai lain)</label>
                                     <select wire:model.live="caleg_terpilih_ada" class="py-2.5 px-3 block w-32 border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none font-medium">
                                         <option value="0">Tidak</option>
                                         <option value="1">Ya</option>

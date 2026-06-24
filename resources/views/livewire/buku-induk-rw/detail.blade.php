@@ -1197,10 +1197,10 @@
                     </div>
                     @php
                         $infraItems = [
-                            ['field' => 'upa_rw', 'label' => 'UPA RW', 'name_field' => 'upa_rw_nama', 'placeholder' => 'Nama pembina'],
-                            ['field' => 'rki', 'label' => 'RKI', 'name_field' => 'rki_nama', 'placeholder' => 'Nama penggerak'],
+                            ['field' => 'upa_rw', 'label' => 'Pengajian RW', 'name_field' => 'upa_rw_nama', 'placeholder' => 'Nama pembina'],
+                            ['field' => 'rki', 'label' => 'RKI (Rumah Keluarga Indonesia)', 'name_field' => 'rki_nama', 'placeholder' => 'Nama penggerak'],
                             ['field' => 'senam', 'label' => 'Titik Senam PKS', 'name_field' => 'senam_nama', 'placeholder' => 'Nama instruktur'],
-                            ['field' => 'relawan_milenial', 'label' => 'Relawan Milenial / Geka', 'name_field' => 'relawan_milenial_nama', 'placeholder' => 'Nama + jabatan'],
+                            ['field' => 'relawan_milenial', 'label' => 'Relawan Muda', 'name_field' => 'relawan_milenial_nama', 'placeholder' => 'Nama + jabatan'],
                         ];
                     @endphp
                     @foreach ($infraItems as $item)
@@ -1219,7 +1219,7 @@
                     @endforeach
                     <div style="border:0.5px solid #e5e5e5;border-radius:10px;padding:10px;">
                         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
-                            <span style="font-size:12px;font-weight:500;color:#1f2937;">Caleg terpilih di RW?</span>
+                            <span style="font-size:12px;font-weight:500;color:#1f2937;">Aleg terpilih di RW (Bisa partai lain)</span>
                             <select wire:model.live="profilData.caleg_terpilih_ada" style="height:30px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
                                 <option value="0">Tidak</option>
                                 <option value="1">Ya</option>

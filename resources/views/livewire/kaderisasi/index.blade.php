@@ -703,8 +703,8 @@
                                     @empty
                                         <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#94a3b8;padding:40px 20px;border:1px dashed #cbd5e1;border-radius:10px;">
                                             <i class="ti ti-users-minus" style="font-size:28px;color:#cbd5e1;margin-bottom:6px;"></i>
-                                            <span style="font-weight:600;color:#475569;font-size:12px;margin-bottom:2px;">Belum Ada UPA RW</span>
-                                            <span style="font-size:10px;color:#64748b;max-width:200px;line-height:1.4;">Belum ada kader di RW ini yang ditandai sebagai anggota/pengurus UPA.</span>
+                                            <span style="font-weight:600;color:#475569;font-size:12px;margin-bottom:2px;">Belum Ada Pengajian RW</span>
+                                            <span style="font-size:10px;color:#64748b;max-width:200px;line-height:1.4;">Belum ada kader di RW ini yang ditandai sebagai anggota/pengurus Pengajian.</span>
                                         </div>
                                     @endforelse
                                 </div>

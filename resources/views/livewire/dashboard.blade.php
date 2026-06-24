@@ -339,9 +339,9 @@
                 <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 4px;">
                     @foreach ([
                         ['label' => 'Sisir RW', 'value' => $this->kpi['rwTersisir'], 'sub' => '/' . $this->kpi['totalRw'] . ' RW', 'icon' => 'ti-brush', 'color' => 'text-orange-500', 'bg' => 'bg-orange-50/30'],
-                        ['label' => 'UPA RW', 'value' => $this->kpi['upaRw'], 'sub' => $this->kpi['upaRwFormal'] . ' formal', 'icon' => 'ti-building-community', 'color' => 'text-green-600', 'bg' => 'bg-green-50/30'],
+                        ['label' => 'Pengajian RW', 'value' => $this->kpi['upaRw'], 'sub' => $this->kpi['upaRwFormal'] . ' formal', 'icon' => 'ti-building-community', 'color' => 'text-green-600', 'bg' => 'bg-green-50/30'],
                         ['label' => 'Profil RW', 'value' => $this->kpi['profilTerisi'], 'sub' => '/' . $this->kpi['totalRw'] . ' RW', 'icon' => 'ti-file-text', 'color' => 'text-blue-500', 'bg' => 'bg-blue-50/30'],
-                        ['label' => 'Relawan', 'value' => $this->kpi['relawan'], 'sub' => 'milenial', 'icon' => 'ti-heart-handshake', 'color' => 'text-purple-600', 'bg' => 'bg-purple-50/30'],
+                        ['label' => 'Relawan', 'value' => $this->kpi['relawan'], 'sub' => 'muda', 'icon' => 'ti-heart-handshake', 'color' => 'text-purple-600', 'bg' => 'bg-purple-50/30'],
                         ['label' => 'Saksi TPS', 'value' => $this->kpi['saksiTps'], 'sub' => '/' . $this->kpi['totalTps'] . ' TPS', 'icon' => 'ti-checkup-list', 'color' => 'text-teal-600', 'bg' => 'bg-teal-50/30'],
                         ['label' => 'Event Aktif', 'value' => $this->kpi['eventAktif'], 'sub' => $this->kpi['eventMenunggu'] . ' pending', 'icon' => 'ti-calendar-event', 'color' => $this->kpi['eventMenunggu'] > 0 ? 'text-amber-600' : 'text-zinc-500', 'bg' => 'bg-zinc-50/50'],
                     ] as $m)
@@ -518,7 +518,7 @@
                             'theme' => 'blue',
                             'value' => number_format($this->kpi['totalKader']) . ' kader aktif',
                             'meta' => '+' . number_format($this->kpi['kaderBulanIni']) . ' baru bulan ini',
-                            'detail' => 'Relawan milenial dan saksi TPS siap bergerak',
+                            'detail' => 'Relawan muda dan saksi TPS siap bergerak',
                         ]
                     ]);
                 @endphp
