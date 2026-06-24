@@ -106,6 +106,15 @@ class Detail extends Component
 
         if ($profil) {
             $this->profilData = $profil->toArray();
+            
+            $wargaArray = [];
+            foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $label) {
+                if ($profil->profil_warga && str_contains($profil->profil_warga, $label)) {
+                    $wargaArray[] = $label;
+                }
+            }
+            $this->profilData['profil_warga'] = $wargaArray;
+            
         } else {
             $this->emptyProfilData();
             $this->loadAutoFillData($this->profilRwId);
@@ -129,8 +138,13 @@ class Detail extends Component
                 break;
             }
         }
+        
+        $profilDataToSave = $this->profilData;
+        if (is_array($profilDataToSave['profil_warga'])) {
+            $profilDataToSave['profil_warga'] = implode(', ', $profilDataToSave['profil_warga']);
+        }
 
-        $dataToSave = array_merge($this->profilData, [
+        $dataToSave = array_merge($profilDataToSave, [
             'target_wilayah_id' => $tw->id,
             'nomor_rw' => $this->profilRwId,
             'dapil' => $tw->dapil,
@@ -163,7 +177,7 @@ class Detail extends Component
     private function emptyProfilData(): void
     {
         $this->profilData = [
-            'tipologi' => '', 'ekonomi_dominan' => '', 'profil_warga' => '',
+            'tipologi' => '', 'ekonomi_dominan' => '', 'profil_warga' => [],
             'suara_pks_2019' => 0, 'jumlah_kta' => 0, 'faktor_penyebab' => '',
             'afiliasi_rw_rt' => '', 'afiliasi_posyandu_dkm' => '',
             'kompetitor_status' => 'tidak_tahu', 'kompetitor_detail' => '',
@@ -306,7 +320,6 @@ class Detail extends Component
         $this->infraTarget = '';
 
         session()->flash('success', 'Data infrastruktur berhasil disimpan.');
-        $this->activeTab = 'struktur';
         $this->dispatch('close-infra-drawer');
     }
 

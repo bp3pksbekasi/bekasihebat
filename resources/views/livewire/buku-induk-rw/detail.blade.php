@@ -181,7 +181,7 @@
     <!-- Tab Contents -->
     <div class="space-y-6">
         @if(in_array($activeTab, ['profil_wilayah', 'peta_politik', 'strategi']))
-            <div wire:key="wrapper-{{ $activeTab }}" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div wire:key="wrapper-profil-tabs" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 @if(empty($profilRw->id))
                     <div class="text-center py-12">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -932,7 +932,7 @@
                         @else
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                 @foreach($korwes as $k)
-                                    <div class="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-blue-200 transition-colors">
+                                    <div wire:key="korwe-{{ $k->id }}" class="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-blue-200 transition-colors">
                                         <div>
                                             <p class="text-sm font-bold text-gray-900">{{ $k->nama_koordinator }}</p>
                                             <p class="text-xs text-gray-500 mt-0.5">{{ $k->no_hp }}</p>
@@ -942,10 +942,10 @@
                                                 {{ $k->status }}
                                             </span>
                                             <div class="flex items-center gap-1">
-                                                <button wire:click="editInfrastruktur('korwe', '{{ $k->id }}')" class="p-1.5 text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors" title="Edit">
+                                                <button wire:click="editInfrastruktur('korwe', '{{ $k->id }}')" class="p-1.5 text-blue-600 hover:text-blue-800 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors" title="Edit">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                                 </button>
-                                                <button wire:click="hapusInfrastruktur('korwe', '{{ $k->id }}')" wire:confirm="Yakin ingin menghapus Korwe ini?" class="p-1.5 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-md transition-colors" title="Hapus">
+                                                <button wire:click="hapusInfrastruktur('korwe', '{{ $k->id }}')" wire:confirm="Yakin ingin menghapus Korwe ini?" class="p-1.5 text-red-600 hover:text-red-800 bg-red-100 hover:bg-red-200 rounded-md transition-colors" title="Hapus">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                 </button>
                                             </div>
@@ -971,7 +971,7 @@
                         @else
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                 @foreach($kortes as $k)
-                                    <div class="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-indigo-200 transition-colors">
+                                    <div wire:key="korte-{{ $k->id }}" class="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-indigo-200 transition-colors">
                                         <div>
                                             <p class="text-sm font-bold text-gray-900">{{ $k->nama_koordinator }}</p>
                                             <p class="text-xs text-gray-500 mt-0.5 font-medium text-indigo-600">RT {{ str_pad($k->nomor_rt, 3, '0', STR_PAD_LEFT) }} <span class="text-gray-400 font-normal ml-1">• {{ $k->no_hp }}</span></p>
@@ -981,10 +981,10 @@
                                                 {{ $k->status }}
                                             </span>
                                             <div class="flex items-center gap-1">
-                                                <button wire:click="editInfrastruktur('korte', '{{ $k->id }}')" class="p-1.5 text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors" title="Edit">
+                                                <button wire:click="editInfrastruktur('korte', '{{ $k->id }}')" class="p-1.5 text-blue-600 hover:text-blue-800 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors" title="Edit">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                                 </button>
-                                                <button wire:click="hapusInfrastruktur('korte', '{{ $k->id }}')" wire:confirm="Yakin ingin menghapus Korte ini?" class="p-1.5 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-md transition-colors" title="Hapus">
+                                                <button wire:click="hapusInfrastruktur('korte', '{{ $k->id }}')" wire:confirm="Yakin ingin menghapus Korte ini?" class="p-1.5 text-red-600 hover:text-red-800 bg-red-100 hover:bg-red-200 rounded-md transition-colors" title="Hapus">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                 </button>
                                             </div>
@@ -1035,7 +1035,7 @@
                         @else
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                 @foreach($penggalangs as $p)
-                                    <div class="flex flex-col p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-emerald-200 transition-colors">
+                                    <div wire:key="penggalang-{{ $p->id }}" class="flex flex-col p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-emerald-200 transition-colors">
                                         <div class="flex justify-between items-start mb-2">
                                             <div>
                                                 <p class="text-sm font-bold text-gray-900">{{ $p->nama }}</p>
@@ -1045,10 +1045,10 @@
                                                 <span class="px-2 py-1 inline-flex text-[10px] leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 capitalize">
                                                     {{ str_replace('_', ' ', $p->sumber) }}
                                                 </span>
-                                                <button wire:click="editInfrastruktur('penggalang', '{{ $p->id }}')" class="p-1.5 text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors" title="Edit">
+                                                <button wire:click="editInfrastruktur('penggalang', '{{ $p->id }}')" class="p-1.5 text-blue-600 hover:text-blue-800 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors" title="Edit">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                                 </button>
-                                                <button wire:click="hapusInfrastruktur('penggalang', '{{ $p->id }}')" wire:confirm="Yakin ingin menghapus Penggalang Suara ini?" class="p-1.5 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-md transition-colors" title="Hapus">
+                                                <button wire:click="hapusInfrastruktur('penggalang', '{{ $p->id }}')" wire:confirm="Yakin ingin menghapus Penggalang Suara ini?" class="p-1.5 text-red-600 hover:text-red-800 bg-red-100 hover:bg-red-200 rounded-md transition-colors" title="Hapus">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                 </button>
                                             </div>
@@ -1139,7 +1139,14 @@
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Profil umum warga</label>
-                        <textarea wire:model="profilData.profil_warga" rows="2" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Agama, kebiasaan, pragmatisme pemilih..."></textarea>
+                        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+                            @foreach (\App\Models\ProfilRw::PROFIL_OPTIONS as $label)
+                                <label style="display:flex;align-items:center;font-size:13px;color:#333;">
+                                    <input type="checkbox" wire:model="profilData.profil_warga" value="{{ $label }}" style="margin-right:6px;width:16px;height:16px;border-radius:4px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
+                                    {{ $label }}
+                                </label>
+                            @endforeach
+                        </div>
                     </div>
                     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
                         <div>

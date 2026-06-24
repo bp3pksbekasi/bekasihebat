@@ -557,26 +557,58 @@
                         rwPartyMap: new Map(),
                     };
 
+                    // Hydrate villagePartyMap
+                    Object.entries(dapilData.villagePartyMap || {}).forEach(([key, val]) => {
+                        const newPartyTotals = new Map();
+                        Object.entries(val.partyTotals || {}).forEach(([party, data]) => {
+                            newPartyTotals.set(party, data);
+                        });
+                        val.partyTotals = newPartyTotals;
+                        dapilObj.villagePartyMap.set(key, val);
+                    });
+
+                    // Hydrate rwPartyMap
+                    Object.entries(dapilData.rwPartyMap || {}).forEach(([key, val]) => {
+                        const newPartyTotals = new Map();
+                        Object.entries(val.partyTotals || {}).forEach(([party, data]) => {
+                            newPartyTotals.set(party, data);
+                        });
+                        val.partyTotals = newPartyTotals;
+                        dapilObj.rwPartyMap.set(key, val);
+                    });
+
                     (dapilData.calegs || []).forEach(caleg => {
                         caleg.dapil = dapilData.dapil;
                         
                         const newDesaMap = new Map();
-                        Object.entries(caleg.desaMap || {}).forEach(([key, suara]) => {
-                            const parts = String(key).split('__');
-                            const kec = parts[1] || '';
-                            const desa = parts[2] || parts[0] || '';
-                            newDesaMap.set(key, { desa: toTitleCase(desa), kecamatan: toTitleCase(kec), suara: Number(suara) });
+                        Object.entries(caleg.desaMap || {}).forEach(([key, val]) => {
+                            if (typeof val === 'object' && val !== null) {
+                                newDesaMap.set(key, val);
+                            } else {
+                                const parts = String(key).split('__');
+                                const kec = parts[1] || '';
+                                const desa = parts[2] || parts[0] || '';
+                                newDesaMap.set(key, { desa: toTitleCase(desa), kecamatan: toTitleCase(kec), suara: Number(val) });
+                            }
                         });
                         caleg.desaMap = newDesaMap;
                         
                         const newKecMap = new Map();
-                        Object.entries(caleg.kecamatanMap || {}).forEach(([key, suara]) => {
-                            newKecMap.set(key, { kecamatan: toTitleCase(key), suara: Number(suara) });
+                        Object.entries(caleg.kecamatanMap || {}).forEach(([key, val]) => {
+                            if (typeof val === 'object' && val !== null) {
+                                newKecMap.set(key, val);
+                            } else {
+                                newKecMap.set(key, { kecamatan: toTitleCase(key), suara: Number(val) });
+                            }
                         });
                         caleg.kecamatanMap = newKecMap;
                         
-                        caleg.rwMap = new Map();
-                        caleg.tpsSet = new Set();
+                        const newRwMap = new Map();
+                        Object.entries(caleg.rwMap || {}).forEach(([key, val]) => {
+                            newRwMap.set(key, val);
+                        });
+                        caleg.rwMap = newRwMap;
+                        caleg.tpsSet = new Set(caleg.tpsSet || []);
                         
                         dapilObj.calegMap.set(caleg.key, caleg);
                     });

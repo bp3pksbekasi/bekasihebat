@@ -318,9 +318,9 @@ Route::middleware('auth')->group(function () {
         if ($selectedPeriod) {
             $payload = $payloadBuilder->build($selectedPeriod);
             foreach ($payload['villages'] ?? [] as $v) {
-                $dapil = str_replace(' ', '', mb_strtoupper((string) ($v['dapil'] ?? '')));
-                $kec = str_replace(' ', '', mb_strtoupper((string) ($v['kecamatan'] ?? '')));
-                $desa = str_replace(' ', '', mb_strtoupper((string) ($v['desa'] ?? '')));
+                $dapil = trim(preg_replace('/[^a-zA-Z0-9]+/', ' ', mb_strtoupper((string) ($v['dapil'] ?? ''))));
+                $kec = trim(preg_replace('/[^a-zA-Z0-9]+/', ' ', mb_strtoupper((string) ($v['kecamatan'] ?? ''))));
+                $desa = trim(preg_replace('/[^a-zA-Z0-9]+/', ' ', mb_strtoupper((string) ($v['desa'] ?? ''))));
                 $villageKey = "{$dapil}__{$kec}__{$desa}";
                 $tpsMap = [];
                 foreach ($v['rw_rows'] ?? [] as $rwRow) {

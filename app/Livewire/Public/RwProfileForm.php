@@ -48,7 +48,7 @@ class RwProfileForm extends Component
     // Profil RW Fields
     public $tipologi = '';
     public $ekonomi_dominan = '';
-    public $profil_warga = '';
+    public array $profil_warga = [];
     public $profil_warga_keterangan = '';
     public $suara_pks_2019;
     public $faktor_penyebab = '';
@@ -140,7 +140,14 @@ class RwProfileForm extends Component
                 if ($profil) {
                     $this->tipologi = $profil->tipologi;
                     $this->ekonomi_dominan = $profil->ekonomi_dominan;
-                    $this->profil_warga = $profil->profil_warga;
+                    
+                    $this->profil_warga = [];
+                    foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $label) {
+                        if ($profil->profil_warga && str_contains($profil->profil_warga, $label)) {
+                            $this->profil_warga[] = $label;
+                        }
+                    }
+                    
                     $this->profil_warga_keterangan = $profil->profil_warga_keterangan;
                     $this->suara_pks_2019 = $profil->suara_pks_2019;
                     $this->faktor_penyebab = $profil->faktor_penyebab;
@@ -216,7 +223,7 @@ class RwProfileForm extends Component
 
         $this->tipologi = '';
         $this->ekonomi_dominan = '';
-        $this->profil_warga = '';
+        $this->profil_warga = [];
         $this->profil_warga_keterangan = '';
         $this->suara_pks_2019 = null;
         $this->faktor_penyebab = '';
@@ -277,7 +284,7 @@ class RwProfileForm extends Component
             // Validation for Profil RW
             'tipologi' => 'nullable|string',
             'ekonomi_dominan' => 'nullable|string',
-            'profil_warga' => 'nullable|string',
+            'profil_warga' => 'nullable|array',
             'profil_warga_keterangan' => 'nullable|string',
             'suara_pks_2019' => 'nullable|integer',
             'faktor_penyebab' => 'nullable|string',
@@ -359,7 +366,7 @@ class RwProfileForm extends Component
                     'is_complete' => $isComplete,
                     'tipologi' => $this->tipologi,
                     'ekonomi_dominan' => $this->ekonomi_dominan,
-                    'profil_warga' => trim($this->profil_warga . ($this->profil_warga_keterangan ? ' - ' . $this->profil_warga_keterangan : '')),
+                    'profil_warga' => trim(implode(', ', $this->profil_warga) . ($this->profil_warga_keterangan ? ' - ' . $this->profil_warga_keterangan : '')),
                     'suara_pks_2019' => (int) $this->suara_pks_2019,
                     'faktor_penyebab' => trim($this->faktor_penyebab . ($this->faktor_penyebab_keterangan ? ' - ' . $this->faktor_penyebab_keterangan : '')),
                     'anggota_pks' => $this->anggota_pks,

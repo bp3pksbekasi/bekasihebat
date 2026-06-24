@@ -114,12 +114,14 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Profil Umum Warga</label>
-                                <select wire:model="profil_warga" class="py-2.5 px-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:border-orange-500 text-base sm:text-lg">
-                                    <option value="">- Pilih Profil -</option>
+                                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     @foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $label)
-                                        <option value="{{ $label }}">{{ $label }}</option>
+                                        <label class="inline-flex items-center">
+                                            <input type="checkbox" wire:model="profil_warga" value="{{ $label }}" class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
+                                            <span class="ml-2 text-sm text-gray-700">{{ $label }}</span>
+                                        </label>
                                     @endforeach
-                                </select>
+                                </div>
                                 <textarea wire:model="profil_warga_keterangan" class="py-2.5 px-3 mt-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:border-orange-500 text-base sm:text-lg" rows="2" placeholder="Keterangan tambahan (opsional)"></textarea>
                             </div>
                             <div>
