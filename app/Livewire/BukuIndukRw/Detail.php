@@ -107,6 +107,14 @@ class Detail extends Component
         if ($profil) {
             $this->profilData = $profil->toArray();
             
+            $tipologiMap = [
+                'perkampungan' => 'kampung_tradisional',
+                'perkotaan' => 'pusat_perdagangan',
+                'pesisir' => 'pesisir_pertanian',
+                'industri' => 'kawasan_pekerja',
+            ];
+            $this->profilData['tipologi'] = $tipologiMap[$this->profilData['tipologi']] ?? $this->profilData['tipologi'];
+            
             $wargaArray = [];
             $oldMapping = [
                 'Agamis & Kondusif' => 'Aktif pengajian, Tokoh agama berpengaruh, Mudah digerakkan secara kolektif',

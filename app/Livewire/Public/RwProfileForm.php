@@ -138,7 +138,14 @@ class RwProfileForm extends Component
                     ->first();
                     
                 if ($profil) {
-                    $this->tipologi = $profil->tipologi;
+                    $tipologiMap = [
+                        'perkampungan' => 'kampung_tradisional',
+                        'perkotaan' => 'pusat_perdagangan',
+                        'pesisir' => 'pesisir_pertanian',
+                        'industri' => 'kawasan_pekerja',
+                    ];
+                    
+                    $this->tipologi = $tipologiMap[$profil->tipologi] ?? $profil->tipologi;
                     $this->ekonomi_dominan = $profil->ekonomi_dominan;
                     
                     $this->profil_warga = [];

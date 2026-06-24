@@ -37,12 +37,12 @@ class ProfilRw extends Model
     }
 
     public const TIPOLOGI_OPTIONS = [
-        'perkampungan' => 'Perkampungan',
-        'campuran' => 'Campuran (Kampung + Perumahan)',
+        'kampung_tradisional' => 'Kampung Tradisional',
         'perumahan' => 'Perumahan',
-        'perkotaan' => 'Perkotaan',
-        'pesisir' => 'Pesisir / Tambak',
-        'industri' => 'Industri',
+        'campuran' => 'Campuran',
+        'kawasan_pekerja' => 'Kawasan Pekerja / Industri',
+        'pusat_perdagangan' => 'Pusat Perdagangan',
+        'pesisir_pertanian' => 'Pesisir / Pertanian',
     ];
 
     public const EKONOMI_OPTIONS = [
