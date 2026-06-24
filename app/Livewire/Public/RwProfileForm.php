@@ -373,11 +373,11 @@ class RwProfileForm extends Component
             
             // Validation for Profil RW
             'tipologi' => 'nullable|string',
-            'ekonomi_dominan' => 'nullable|string',
+            'ekonomi_dominan' => 'nullable|array',
             'profil_warga' => 'nullable|array',
             'profil_warga_keterangan' => 'nullable|string',
             'suara_pks_2019' => 'nullable|integer',
-            'faktor_penyebab' => 'nullable|string',
+            'faktor_penyebab' => 'nullable|array',
             'faktor_penyebab_keterangan' => 'nullable|string',
             'anggota_pks' => 'nullable|string',
             'jumlah_kta' => 'nullable|integer',
