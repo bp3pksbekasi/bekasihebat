@@ -108,8 +108,24 @@ class Detail extends Component
             $this->profilData = $profil->toArray();
             
             $wargaArray = [];
+            $oldMapping = [
+                'Agamis & Kondusif' => 'A. Religius-Komunal',
+                'Pragmatis & Transaksional' => 'D. Pragmatis-Ekonomi',
+                'Nasionalis & Abangan' => 'B. Nasionalis-Tradisional',
+                'Heterogen & Individualis' => 'E. Urban-Individual',
+                'Kritis & Akademis' => 'C. Rasional-Kritis',
+                'Buruh & Pekerja' => 'F. Kelas Pekerja',
+            ];
+            
+            $dbValue = $profil->profil_warga ?? '';
+            foreach ($oldMapping as $old => $new) {
+                if (str_contains($dbValue, $old)) {
+                    $dbValue = str_replace($old, $new, $dbValue);
+                }
+            }
+
             foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $label) {
-                if ($profil->profil_warga && str_contains($profil->profil_warga, $label)) {
+                if ($dbValue && str_contains($dbValue, $label)) {
                     $wargaArray[] = $label;
                 }
             }

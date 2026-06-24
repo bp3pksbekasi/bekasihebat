@@ -116,9 +116,12 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Profil Umum Warga</label>
                                 <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     @foreach(\App\Models\ProfilRw::PROFIL_OPTIONS as $label)
-                                        <label class="inline-flex items-center">
-                                            <input type="checkbox" wire:model="profil_warga" value="{{ $label }}" class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
-                                            <span class="ml-2 text-sm text-gray-700">{{ $label }}</span>
+                                        <label class="inline-flex items-start">
+                                            <input type="checkbox" wire:model="profil_warga" value="{{ $label }}" class="form-checkbox h-5 w-5 text-orange-600 rounded border-gray-300 focus:ring-orange-500 mt-0.5">
+                                            <div class="ml-2 flex flex-col">
+                                                <span class="text-sm font-semibold text-gray-800">{{ $label }}</span>
+                                                <span class="text-xs text-gray-500 leading-tight mt-0.5">{{ \App\Models\ProfilRw::PROFIL_DESCRIPTIONS[$label] ?? '' }}</span>
+                                            </div>
                                         </label>
                                     @endforeach
                                 </div>

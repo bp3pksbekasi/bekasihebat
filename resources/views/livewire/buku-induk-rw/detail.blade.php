@@ -1141,9 +1141,12 @@
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Profil umum warga</label>
                         <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
                             @foreach (\App\Models\ProfilRw::PROFIL_OPTIONS as $label)
-                                <label style="display:flex;align-items:center;font-size:13px;color:#333;">
-                                    <input type="checkbox" wire:model="profilData.profil_warga" value="{{ $label }}" style="margin-right:6px;width:16px;height:16px;border-radius:4px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
-                                    {{ $label }}
+                                <label style="display:flex;align-items:flex-start;font-size:13px;color:#333;">
+                                    <input type="checkbox" wire:model="profilData.profil_warga" value="{{ $label }}" style="margin-top:2px;margin-right:6px;width:16px;height:16px;border-radius:4px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
+                                    <div style="display:flex;flex-direction:column;">
+                                        <span style="font-weight:600;">{{ $label }}</span>
+                                        <span style="font-size:10px;color:#6b7280;line-height:1.2;margin-top:2px;">{{ \App\Models\ProfilRw::PROFIL_DESCRIPTIONS[$label] ?? '' }}</span>
+                                    </div>
                                 </label>
                             @endforeach
                         </div>
