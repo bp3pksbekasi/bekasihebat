@@ -1193,7 +1193,7 @@
                     <div style="font-size:12px;font-weight:600;color:#16a34a;">Infrastruktur partai</div>
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Anggota PKS di RW</label>
-                        <textarea wire:model="profilData.anggota_pks" rows="2" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Nama + jenjang keanggotaan"></textarea>
+                        <textarea wire:model="profilData.anggota_pks" rows="2" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Nama anggota"></textarea>
                     </div>
                     @php
                         $infraItems = [
@@ -1275,7 +1275,7 @@
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Penanggung jawab dakwah di RW</label>
-                        <input wire:model="profilData.penanggung_jawab" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;" placeholder="Nama + jenjang">
+                        <input wire:model="profilData.penanggung_jawab" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;" placeholder="Nama penanggung jawab">
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Keterangan lain</label>

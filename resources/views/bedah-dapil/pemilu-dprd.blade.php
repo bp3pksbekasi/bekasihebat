@@ -1664,7 +1664,7 @@
                             
                             <div>
                                 <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Anggota PKS di RW</label>
-                                <textarea name="anggota_pks" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Nama + jenjang keanggotaan">${escapeHtml(p.anggota_pks || '')}</textarea>
+                                <textarea name="anggota_pks" rows="2" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:8px 10px;background:white;font-size:13px;color:#1f2937;resize:vertical;" placeholder="Nama anggota">${escapeHtml(p.anggota_pks || '')}</textarea>
                             </div>
 
                             ${[
@@ -1783,7 +1783,7 @@
 
                             <div>
                                 <label style="display:block;font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:500;">Penanggung Jawab Dakwah di RW</label>
-                                <input type="text" name="penanggung_jawab" value="${escapeHtml(p.penanggung_jawab || '')}" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;" placeholder="Nama + jenjang">
+                                <input type="text" name="penanggung_jawab" value="${escapeHtml(p.penanggung_jawab || '')}" style="width:100%;height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:13px;color:#1f2937;" placeholder="Nama penanggung jawab">
                             </div>
 
                             <div>

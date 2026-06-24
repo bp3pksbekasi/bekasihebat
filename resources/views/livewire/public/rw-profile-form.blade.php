@@ -165,7 +165,7 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Anggota PKS di RW</label>
-                                <textarea wire:model="anggota_pks" class="py-2.5 px-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none" rows="2" placeholder="Nama + jenjang keanggotaan"></textarea>
+                                <textarea wire:model="anggota_pks" class="py-2.5 px-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none" rows="2" placeholder="Nama anggota"></textarea>
                             </div>
 
                             <div class="rounded-lg border border-gray-200 p-4 bg-gray-50">
@@ -313,7 +313,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Penanggung Jawab Dakwah di RW</label>
-                                <input type="text" wire:model="penanggung_jawab" class="py-2.5 px-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none" placeholder="Nama + jenjang">
+                                <input type="text" wire:model="penanggung_jawab" class="py-2.5 px-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:ring-0 focus:border-orange-500 focus:outline-none text-base sm:text-lg focus:outline-none" placeholder="Nama penanggung jawab">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan Lain</label>
