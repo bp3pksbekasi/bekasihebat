@@ -4,6 +4,7 @@
         <!-- Header Banner (Google Form Style) -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
             <div class="h-3 w-full bg-orange-500"></div>
+            <img src="{{ asset('images/form-header-rw.png') }}" alt="Form Header" class="w-full h-auto object-cover max-h-48">
             <div class="p-6 sm:p-8">
                 <h1 class="text-3xl font-medium text-gray-900 mb-2">Form Profil RW Publik</h1>
                 <p class="text-gray-600 text-sm leading-relaxed">
