@@ -166,6 +166,32 @@ class Detail extends Component
                 }
             }
             $this->profilData['profil_warga'] = $wargaArray;
+        
+        
+        $faktorArray = [];
+        $dbFaktor = $profil->faktor_penyebab ?? '';
+        $faktorMap = [
+            'Kekuatan Caleg Lokal' => 'Figur Caleg Lokal (Putra Daerah)',
+            'Ketokohan Tokoh Agama/Masyarakat' => 'Ketokohan Agama/Masyarakat yang Mendukung',
+            'Program Kerja & Bantuan Nyata' => 'Program Kerja & Advokasi Nyata (Bansos, Fogging, dll)',
+            'Pragmatisme Politik Uang' => 'Pragmatisme / Serangan Fajar (Politik Uang Lawan)',
+            'Keaktifan Kader & Relawan' => 'Jejaring Struktur / Kader PKS yang Solid', // Approximated
+            'Kurangnya Sosialisasi/Kehadiran' => 'Kurangnya Sosialisasi Caleg PKS',
+            'Dominasi Partai Lain' => 'Dominasi / Basis Kuat Partai Lain',
+        ];
+        
+        if (isset($faktorMap[$dbFaktor])) {
+            $faktorArray[] = $faktorMap[$dbFaktor];
+        } else {
+            foreach (\App\Models\ProfilRw::FAKTOR_OPTIONS as $kategori => $options) {
+                foreach ($options as $label) {
+                    if ($dbFaktor && str_contains($dbFaktor, $label)) {
+                        $faktorArray[] = $label;
+                    }
+                }
+            }
+        }
+        $this->profilData['faktor_penyebab'] = $faktorArray;
             
         } else {
             $this->emptyProfilData();
@@ -197,6 +223,9 @@ class Detail extends Component
         }
         if (isset($profilDataToSave['ekonomi_dominan']) && is_array($profilDataToSave['ekonomi_dominan'])) {
             $profilDataToSave['ekonomi_dominan'] = implode(', ', $profilDataToSave['ekonomi_dominan']);
+        }
+        if (isset($profilDataToSave['faktor_penyebab']) && is_array($profilDataToSave['faktor_penyebab'])) {
+            $profilDataToSave['faktor_penyebab'] = implode(', ', $profilDataToSave['faktor_penyebab']);
         }
 
         $dataToSave = array_merge($profilDataToSave, [

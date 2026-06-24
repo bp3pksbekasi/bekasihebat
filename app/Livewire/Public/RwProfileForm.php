@@ -51,7 +51,7 @@ class RwProfileForm extends Component
     public array $profil_warga = [];
     public $profil_warga_keterangan = '';
     public $suara_pks_2019;
-    public $faktor_penyebab = '';
+    public array $faktor_penyebab = [];
     public $faktor_penyebab_keterangan = '';
     public $anggota_pks = '';
     public $jumlah_kta;
@@ -198,7 +198,31 @@ class RwProfileForm extends Component
                     
                     $this->profil_warga_keterangan = $profil->profil_warga_keterangan;
                     $this->suara_pks_2019 = $profil->suara_pks_2019;
-                    $this->faktor_penyebab = $profil->faktor_penyebab;
+                    
+                    $this->faktor_penyebab = [];
+                    $dbFaktor = $profil->faktor_penyebab ?? '';
+                    $faktorMap = [
+                        'Kekuatan Caleg Lokal' => 'Figur Caleg Lokal (Putra Daerah)',
+                        'Ketokohan Tokoh Agama/Masyarakat' => 'Ketokohan Agama/Masyarakat yang Mendukung',
+                        'Program Kerja & Bantuan Nyata' => 'Program Kerja & Advokasi Nyata (Bansos, Fogging, dll)',
+                        'Pragmatisme Politik Uang' => 'Pragmatisme / Serangan Fajar (Politik Uang Lawan)',
+                        'Keaktifan Kader & Relawan' => 'Jejaring Struktur / Kader PKS yang Solid', // Approximated
+                        'Kurangnya Sosialisasi/Kehadiran' => 'Kurangnya Sosialisasi Caleg PKS',
+                        'Dominasi Partai Lain' => 'Dominasi / Basis Kuat Partai Lain',
+                    ];
+                    
+                    if (isset($faktorMap[$dbFaktor])) {
+                        $this->faktor_penyebab[] = $faktorMap[$dbFaktor];
+                    } else {
+                        foreach (\App\Models\ProfilRw::FAKTOR_OPTIONS as $kategori => $options) {
+                            foreach ($options as $label) {
+                                if ($dbFaktor && str_contains($dbFaktor, $label)) {
+                                    $this->faktor_penyebab[] = $label;
+                                }
+                            }
+                        }
+                    }
+                    
                     $this->faktor_penyebab_keterangan = $profil->faktor_penyebab_keterangan;
                     $this->anggota_pks = $profil->anggota_pks;
                     $this->jumlah_kta = $profil->jumlah_kta;
@@ -416,7 +440,7 @@ class RwProfileForm extends Component
                     'ekonomi_dominan' => is_array($this->ekonomi_dominan) ? implode(', ', $this->ekonomi_dominan) : $this->ekonomi_dominan,
                     'profil_warga' => trim(implode(', ', $this->profil_warga) . ($this->profil_warga_keterangan ? ' - ' . $this->profil_warga_keterangan : '')),
                     'suara_pks_2019' => (int) $this->suara_pks_2019,
-                    'faktor_penyebab' => trim($this->faktor_penyebab . ($this->faktor_penyebab_keterangan ? ' - ' . $this->faktor_penyebab_keterangan : '')),
+                    'faktor_penyebab' => trim((is_array($this->faktor_penyebab) ? implode(', ', $this->faktor_penyebab) : $this->faktor_penyebab) . ($this->faktor_penyebab_keterangan ? ' - ' . $this->faktor_penyebab_keterangan : '')),
                     'anggota_pks' => $this->anggota_pks,
                     'jumlah_kta' => (int) $this->jumlah_kta,
                     'upa_rw_status' => $this->upa_rw_status,

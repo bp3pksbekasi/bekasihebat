@@ -1171,7 +1171,21 @@
                     </div>
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Faktor penyebab menang/kalah</label>
-                        <textarea wire:model="profilData.faktor_penyebab" rows="2" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Caleg lokal, tokoh kuat, pragmatisme..."></textarea>
+                        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+                            @foreach (\App\Models\ProfilRw::FAKTOR_OPTIONS as $kategori => $options)
+                                <div style="background:#f9fafb;padding:12px;border-radius:8px;border:1px solid #e5e7eb;">
+                                    <div style="font-weight:600;font-size:12px;color:#374151;margin-bottom:8px;">{{ $kategori }}</div>
+                                    <div style="display:flex;flex-direction:column;gap:6px;">
+                                        @foreach($options as $label)
+                                            <label style="display:flex;align-items:flex-start;font-size:11px;color:#4b5563;">
+                                                <input type="checkbox" wire:model="profilData.faktor_penyebab" value="{{ $label }}" style="margin-top:1px;margin-right:6px;width:14px;height:14px;border-radius:3px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
+                                                <span style="line-height:1.3;">{{ $label }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
 

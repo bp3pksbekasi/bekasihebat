@@ -137,12 +137,21 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Faktor Penyebab Menang/Kalah</label>
-                                <select wire:model="faktor_penyebab" class="py-2.5 px-3 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:border-orange-500 text-base sm:text-lg">
-                                    <option value="">- Pilih Faktor Utama -</option>
-                                    @foreach(\App\Models\ProfilRw::FAKTOR_OPTIONS as $label)
-                                        <option value="{{ $label }}">{{ $label }}</option>
+                                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    @foreach(\App\Models\ProfilRw::FAKTOR_OPTIONS as $kategori => $options)
+                                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                            <h4 class="font-semibold text-sm text-gray-800 mb-2">{{ $kategori }}</h4>
+                                            <div class="flex flex-col space-y-2">
+                                                @foreach($options as $label)
+                                                    <label class="inline-flex items-start">
+                                                        <input type="checkbox" wire:model="faktor_penyebab" value="{{ $label }}" class="form-checkbox h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500 mt-0.5">
+                                                        <span class="ml-2 text-xs text-gray-700 leading-snug">{{ $label }}</span>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     @endforeach
-                                </select>
+                                </div>
                                 <textarea wire:model="faktor_penyebab_keterangan" class="py-2.5 px-3 mt-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:outline-none focus:border-orange-500 text-base sm:text-lg" rows="2" placeholder="Keterangan tambahan (opsional)"></textarea>
                             </div>
                         </div>

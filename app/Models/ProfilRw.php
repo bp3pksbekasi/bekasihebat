@@ -86,13 +86,20 @@ class ProfilRw extends Model
     ];
 
     public const FAKTOR_OPTIONS = [
-        'caleg_lokal' => 'Kekuatan Caleg Lokal',
-        'tokoh_agama' => 'Ketokohan Tokoh Agama/Masyarakat',
-        'program_kerja' => 'Program Kerja & Bantuan Nyata',
-        'politik_uang' => 'Pragmatisme Politik Uang',
-        'keaktifan_kader' => 'Keaktifan Kader & Relawan',
-        'kurang_sosialisasi' => 'Kurangnya Sosialisasi/Kehadiran',
-        'dominasi_partai_lain' => 'Dominasi Partai Lain',
+        'A. Faktor Pendorong Suara (Kekuatan Kita)' => [
+            'Figur Caleg Lokal (Putra Daerah)',
+            'Ketokohan Agama/Masyarakat yang Mendukung',
+            'Jejaring Struktur / Kader PKS yang Solid',
+            'Gerakan Relawan yang Masif',
+            'Program Kerja & Advokasi Nyata (Bansos, Fogging, dll)'
+        ],
+        'B. Faktor Penghambat Suara (Kelemahan/Tantangan)' => [
+            'Pragmatisme / Serangan Fajar (Politik Uang Lawan)',
+            'Dominasi / Basis Kuat Partai Lain',
+            'Kurangnya Sosialisasi Caleg PKS',
+            'Mesin Partai / Struktur PKS Tidak Jalan',
+            'Intimidasi / Tekanan Pihak Tertentu (Aparat/Preman)'
+        ]
     ];
 
     public const STRATEGI_OPTIONS = [
