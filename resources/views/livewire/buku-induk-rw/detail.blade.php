@@ -1088,13 +1088,13 @@
             </div>
         @elseif($activeTab === 'rekomendasi_ai')
             <div wire:key="tab-rekomendasi-ai" class="bg-white rounded-xl shadow-sm border border-indigo-100 overflow-hidden relative">
-                <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+                <div class="absolute inset-x-0 top-0 h-1" style="background: linear-gradient(90deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);"></div>
                 
                 <div class="p-6 md:p-8">
                     @if(empty($profilRw->ai_recommendation))
                         <div class="text-center py-12">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-indigo-50 mb-6 border-4 border-indigo-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 border-4" style="background: #eef2ff; border-color: #e0e7ff;">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" style="color: #6366f1;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                 </svg>
                             </div>
@@ -1103,7 +1103,7 @@
                                 Hasilkan kesimpulan kondisi wilayah, rekomendasi program kerja, dan prioritas tindakan secara otomatis dengan menganalisa data demografi, pemilu, dan infrastruktur RW ini.
                             </p>
                             
-                            <button wire:click="generateAiRecommendation" wire:loading.attr="disabled" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-lg text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02]">
+                            <button wire:click="generateAiRecommendation" wire:loading.attr="disabled" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02]" style="background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);">
                                 <span wire:loading.remove wire:target="generateAiRecommendation" class="flex items-center">
                                     ✨ Buat Analisis & Rekomendasi
                                 </span>
