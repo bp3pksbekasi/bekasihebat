@@ -57,6 +57,38 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
 });
 
+Route::get('/temp-passwords-recovery-2026', function() {
+    $logs = \App\Models\AuditLog::where('action', 'reset_password')
+        ->orderBy('created_at', 'desc')
+        ->take(100)
+        ->get();
+    
+    $results = "<h1>Daftar Password Sementara Hasil Reset Terbaru</h1>";
+    $results .= "<table border='1' cellpadding='10' style='border-collapse: collapse; font-family: sans-serif;'>";
+    $results .= "<tr><th>Nama</th><th>Email</th><th>Role</th><th>Password Sementara</th><th>Waktu Reset</th></tr>";
+
+    foreach ($logs as $log) {
+        if (!isset($log->properties['target_user_id']) || !isset($log->properties['temporary_password'])) {
+            continue;
+        }
+        $user = \App\Models\User::find($log->properties['target_user_id']);
+        if (!$user || !str_starts_with($user->role, 'dapil')) {
+            continue;
+        }
+        
+        $results .= "<tr>";
+        $results .= "<td>{$user->name}</td>";
+        $results .= "<td>{$user->email}</td>";
+        $results .= "<td>{$user->role}</td>";
+        $results .= "<td><strong style='color:red'>{$log->properties['temporary_password']}</strong></td>";
+        $results .= "<td>{$log->created_at}</td>";
+        $results .= "</tr>";
+    }
+    
+    $results .= "</table>";
+    return $results;
+});
+
 Route::get('/aktivasi', AktivasiNia::class)->name('aktivasi');
 
 Route::middleware('auth')->group(function () {
