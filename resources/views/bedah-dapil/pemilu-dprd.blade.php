@@ -288,7 +288,7 @@
                     ],
                 },
             };
-            const state = { dataset: new Map(), dptDatasets: {}, currentDapil: DEFAULT_FOCUS_DAPIL, currentKecamatan: DEFAULT_FOCUS_KECAMATAN, currentDesa: DEFAULT_FOCUS_DESA, currentStatus: '', currentTpsStatus: 'JAGA KUAT', searchKeyword: '', searchDebounceId: null, activeVillageTab: 'summary', detailDrawer: null, sourceMode: 'csv', selectedPeriodId, rwPage: 1, rtPage: 1, tpsPage: 1, rwStatusFilter: '', rtStatusFilter: '', currentProfilRw: null, isEditingProfilRw: false, wilayahId: null, currentRwNum: null, isLoadingProfilRw: false, hasLoadedProfilRwKey: null, profilRwMap: initialProfilRwMap };
+            const state = { dataset: new Map(), dptDatasets: {}, currentDapil: DEFAULT_FOCUS_DAPIL, currentKecamatan: DEFAULT_FOCUS_KECAMATAN, currentDesa: DEFAULT_FOCUS_DESA, currentStatus: '', currentTpsStatus: 'JAGA KUAT', searchKeyword: '', searchDebounceId: null, activeVillageTab: 'rw', detailDrawer: null, sourceMode: 'csv', selectedPeriodId, rwPage: 1, rtPage: 1, tpsPage: 1, rwStatusFilter: '', rtStatusFilter: '', currentProfilRw: null, isEditingProfilRw: false, wilayahId: null, currentRwNum: null, isLoadingProfilRw: false, hasLoadedProfilRwKey: null, profilRwMap: initialProfilRwMap };
             const dom = {};
 
             let initializedForThisScope = false;
@@ -1204,7 +1204,7 @@
                         </div>
                     </div>
                     <div style="display:flex;gap:4px;flex-wrap:wrap;flex:0 0 auto;">
-                        ${['summary','rw','rt','demography','program'].map((tab) => `<button type="button" class="tab-btn ${state.activeVillageTab === tab ? 'active' : ''}" data-village-tab="${tab}">${tab === 'summary' ? 'Ringkasan' : (tab === 'rw' ? 'RW' : (tab === 'rt' ? 'RT' : (tab === 'demography' ? 'Demografi' : 'Program')))}</button>`).join('')}
+                        ${['rw','rt','demography'].map((tab) => `<button type="button" class="tab-btn ${state.activeVillageTab === tab ? 'active' : ''}" data-village-tab="${tab}">${tab === 'rw' ? 'RW' : (tab === 'rt' ? 'RT' : 'Demografi')}</button>`).join('')}
                     </div>
                     <div style="flex:1 1 auto;overflow-y:auto;min-height:0;padding-right:4px;">
                         <div class="tab-pane ${state.activeVillageTab === 'summary' ? 'active' : ''}" style="display:${state.activeVillageTab === 'summary' ? 'block' : 'none'};">
@@ -2382,8 +2382,8 @@
              }
             function estimateSeats(pksVotes, totalVotes, totalSeats) { if (!totalVotes) return 0; return Math.max(0, Math.round((pksVotes / totalVotes) * totalSeats)); }
             function normalizePartyName(name) { return String(name || '').trim() === 'NasDem' ? 'Nasdem' : String(name || '').trim(); }
-            function selectVillage(village) { state.currentDapil = village.dapil; state.currentKecamatan = village.district; state.currentDesa = village.key; state.activeVillageTab = 'summary'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = village.dapil; dom.kecamatanSelect.value = village.district; if (dom.desaSelect) dom.desaSelect.value = village.key; render(); }
-            function resetScope() { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = DEFAULT_FOCUS_DESA; state.activeVillageTab = 'summary'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = DEFAULT_FOCUS_DAPIL; populateKecamatanOptions(); populateDesaOptions(); render(); }
+            function selectVillage(village) { state.currentDapil = village.dapil; state.currentKecamatan = village.district; state.currentDesa = village.key; state.activeVillageTab = 'rw'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = village.dapil; dom.kecamatanSelect.value = village.district; if (dom.desaSelect) dom.desaSelect.value = village.key; render(); }
+            function resetScope() { state.currentDapil = DEFAULT_FOCUS_DAPIL; state.currentKecamatan = DEFAULT_FOCUS_KECAMATAN; state.currentDesa = DEFAULT_FOCUS_DESA; state.activeVillageTab = 'rw'; state.detailDrawer = null; state.rwPage = 1; state.rtPage = 1; state.tpsPage = 1; state.rwStatusFilter = ''; state.rtStatusFilter = ''; dom.dapilSelect.value = DEFAULT_FOCUS_DAPIL; populateKecamatanOptions(); populateDesaOptions(); render(); }
             window.resetScope = resetScope;
             function slugifyLabel(value) { return String(value || '').toLowerCase().replace(/\s+/g, '-'); }
             function formatRwRt(value) { const raw = String(value ?? '').trim(); if (!raw) return '-'; const number = Number(raw); return Number.isFinite(number) ? String(number).padStart(3, '0') : raw; }
