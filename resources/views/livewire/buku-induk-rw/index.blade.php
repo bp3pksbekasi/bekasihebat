@@ -53,6 +53,48 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="flex-[0.5]">
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Tahun</label>
+                <select wire:model.live="selectedTahun" class="w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
+                    @foreach ([2026, 2027, 2028, 2029] as $tahun)
+                        <option value="{{ $tahun }}">{{ $tahun }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-sm">
+            <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Korwe {{ $selectedTahun }}</div>
+            <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korwe']) }}</div>
+            <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korwe']) }}</div>
+        </div>
+        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-sm">
+            <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Korte {{ $selectedTahun }}</div>
+            <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korte']) }}</div>
+            <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korte']) }}</div>
+        </div>
+        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-sm">
+            <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Penggalang {{ $selectedTahun }}</div>
+            <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_penggalang']) }}</div>
+            <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_penggalang']) }}</div>
+        </div>
+        @php
+            $profilPct = $summary['total_rw'] > 0 ? round(($summary['profil_terisi'] / $summary['total_rw']) * 100) : 0;
+        @endphp
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Profil RW Terisi</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['profil_terisi']) }} <span class="text-lg text-gray-400 font-normal">/ {{ number_format($summary['total_rw']) }}</span></div>
+            <div class="flex items-center gap-2">
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: {{ $profilPct }}%"></div>
+                </div>
+                <div class="text-xs text-gray-500 font-medium">{{ $profilPct }}%</div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1.5">{{ number_format($summary['profil_lengkap']) }} profil lengkap</div>
         </div>
     </div>
 

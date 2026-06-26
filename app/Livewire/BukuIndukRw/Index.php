@@ -30,6 +30,9 @@ class Index extends Component
     #[Url]
     public string $selectedStatus = '';
 
+    #[Url]
+    public int $selectedTahun = 2026;
+
     public function mount()
     {
         // Restore from session
@@ -38,6 +41,7 @@ class Index extends Component
         $this->selectedDesa = session('birw_desa', '');
         $this->selectedStatus = session('birw_status', '');
         $this->search = session('birw_search', '');
+        $this->selectedTahun = (int) session('birw_tahun', date('Y') >= 2026 ? 2026 : 2026);
 
         $scope = $this->accessScope;
         if (($scope['mode'] ?? 'global') === 'dapil') {
@@ -77,6 +81,12 @@ class Index extends Component
     {
         $this->resetPage();
         session(['birw_status' => $this->selectedStatus]);
+    }
+
+    public function updatedSelectedTahun()
+    {
+        $this->resetPage();
+        session(['birw_tahun' => $this->selectedTahun]);
     }
 
     public function updatedSearch()
@@ -148,6 +158,57 @@ class Index extends Component
             ->orderBy('data_rws.nomor_rw')
             ->paginate(20);
 
+        // Calculate summary based on current filters (unpaginated)
+        $summaryQuery = clone $query;
+        $summaryQuery->selectRaw('COUNT(DISTINCT target_wilayahs.id) as total_desa')
+            ->selectRaw('COUNT(data_rws.id) as total_rw')
+            ->selectRaw('SUM(data_rws.jumlah_rt) as total_rt')
+            ->selectRaw("COALESCE(SUM(target_wilayahs.target_korwe_{$this->selectedTahun}), 0) as total_target_korwe")
+            ->selectRaw("COALESCE(SUM(target_wilayahs.target_korte_{$this->selectedTahun}), 0) as total_target_korte")
+            ->selectRaw("COALESCE(SUM(target_wilayahs.target_penggalang_{$this->selectedTahun}), 0) as total_target_penggalang");
+        
+        $summaryData = $summaryQuery->first();
+
+        // Calculate achieved
+        $achievedQuery = clone $query;
+        $achievedQuery->selectRaw('
+            (SELECT COUNT(*) FROM korwes k WHERE k.target_wilayah_id = data_rws.target_wilayah_id AND TRIM(LEADING "0" FROM k.nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)) as total_korwe
+        ')->selectRaw('
+            (SELECT COUNT(*) FROM kortes k WHERE k.target_wilayah_id = data_rws.target_wilayah_id AND TRIM(LEADING "0" FROM k.nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)) as total_korte
+        ')->selectRaw('
+            (SELECT COUNT(*) FROM penggalang_suaras p WHERE p.target_wilayah_id = data_rws.target_wilayah_id AND TRIM(LEADING "0" FROM p.nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)) as total_penggalang
+        ');
+        $achievedTotals = $achievedQuery->get();
+        $totalKorwe = $achievedTotals->sum('total_korwe');
+        $totalKorte = $achievedTotals->sum('total_korte');
+        $totalPenggalang = $achievedTotals->sum('total_penggalang');
+
+        // Profil completion
+        $profilRwsIds = $achievedTotals->pluck('target_wilayah_id')->unique();
+        $profilCompleted = \App\Models\ProfilRw::whereIn('target_wilayah_id', $profilRwsIds)
+            ->where('is_complete', true)
+            ->count();
+        $profilTerisi = \App\Models\ProfilRw::whereIn('target_wilayah_id', $profilRwsIds)
+            ->count();
+
+        $summary = [
+            'total_desa' => $summaryData->total_desa ?? 0,
+            'total_rw' => $summaryData->total_rw ?? 0,
+            'total_rt' => $summaryData->total_rt ?? 0,
+            
+            'target_korwe' => $summaryData->total_target_korwe ?? 0,
+            'tercapai_korwe' => $totalKorwe,
+            
+            'target_korte' => $summaryData->total_target_korte ?? 0,
+            'tercapai_korte' => $totalKorte,
+            
+            'target_penggalang' => $summaryData->total_target_penggalang ?? 0,
+            'tercapai_penggalang' => $totalPenggalang,
+            
+            'profil_terisi' => $profilTerisi,
+            'profil_lengkap' => $profilCompleted,
+        ];
+
         $profilRws = \App\Models\ProfilRw::whereIn('target_wilayah_id', $rws->pluck('target_wilayah_id'))
             ->get()
             ->keyBy(function($item) {
@@ -161,6 +222,7 @@ class Index extends Component
             'kecamatans' => TargetWilayah::when($this->selectedDapil, fn($q) => $q->where('dapil', $this->selectedDapil))->select('kecamatan')->distinct()->orderBy('kecamatan')->pluck('kecamatan'),
             'desas' => TargetWilayah::when($this->selectedKecamatan, fn($q) => $q->where('kecamatan', $this->selectedKecamatan))->select('desa')->distinct()->orderBy('desa')->pluck('desa'),
             'statuses' => TargetWilayah::STATUS_CONFIG,
+            'summary' => $summary,
         ])->layout('components.layouts.app', ['title' => 'Peta Kekuatan RW']);
     }
 }
