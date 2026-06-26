@@ -1137,7 +1137,15 @@
                             </button>
                         </div>
                         
-                        <div class="prose prose-indigo max-w-none prose-h3:text-indigo-800 prose-h3:text-lg prose-h3:font-bold prose-h3:mt-6 prose-h3:mb-3 prose-p:text-gray-600 prose-li:text-gray-600 prose-strong:text-gray-900 prose-ul:my-2 prose-li:my-1">
+                        <style>
+                            .ai-recommendation-content { color: #374151; font-size: 14px; line-height: 1.6; }
+                            .ai-recommendation-content h3 { font-size: 16px; font-weight: 700; color: #4338ca; margin-top: 20px; margin-bottom: 10px; }
+                            .ai-recommendation-content p { margin-bottom: 12px; }
+                            .ai-recommendation-content ul, .ai-recommendation-content ol { margin-bottom: 12px; padding-left: 20px; list-style-type: disc; }
+                            .ai-recommendation-content li { margin-bottom: 6px; }
+                            .ai-recommendation-content strong { font-weight: 700; color: #111827; }
+                        </style>
+                        <div class="ai-recommendation-content">
                             {!! \Illuminate\Support\Str::markdown($profilRw->ai_recommendation) !!}
                         </div>
                     @endif
