@@ -500,14 +500,15 @@ class Detail extends Component
 
         $prompt = "Kamu adalah Konsultan Politik Senior dan Pakar Pemenangan Pemilu. Berdasarkan data pemetaan tingkat RW di atas, buatkan analisis strategis bergaya \"Resume Resmi Eksekutif\".\n\n";
         $prompt .= "Instruksi Khusus:\n";
-        $prompt .= "- Lakukan analisis mendalam (deep dive) dengan mengasumsikan kondisi riil di lapangan. Berdasarkan tipologi dan status ekonomi warga, sebutkan/gali potensi fasilitas umum yang biasanya ada di lingkungan tersebut (misalnya: masjid/musholla, pasar/warung, lapangan warga, sekolah/TK, posyandu) dan jadikan itu sebagai basis pijakan strategi.\n";
-        $prompt .= "- Sajikan dalam format laporan resmi yang elegan dan deskriptif, JANGAN menggunakan format angka (1, 2, 3) yang terkesan kaku. Gunakan sub-judul (heading), paragraf naratif, dan bullet points (untuk rincian) yang mengalir secara natural.\n";
-        $prompt .= "- Gunakan bahasa profesional, tajam, dan aplikatif.\n\n";
-        $prompt .= "Struktur Laporan (Gunakan Sub-Judul yang Menarik, bukan sekadar urutan angka):\n";
-        $prompt .= "- **Tinjauan Kondisi Lapangan & Demografi:** (Jabarkan analisis tipologi, asumsi fasilitas riil yang ada, dan potret kekuatan/kelemahan politik secara naratif)\n";
-        $prompt .= "- **Strategi & Program Taktis:** (Sebutkan rekomendasi program yang sangat spesifik memanfaatkan fasilitas/komunitas riil tadi, bukan program ngawang)\n";
-        $prompt .= "- **Prioritas Tindakan Infrastruktur:** (Instruksi konkrit untuk Korwe/Korte dalam 1 bulan ke depan terkait pemenuhan target struktur dan penggalangan)\n\n";
-        $prompt .= "Format langsung sebagai isi laporan Markdown (tanpa kata pembuka/penutup seperti 'Berikut adalah laporannya').";
+        $prompt .= "- Lakukan analisis mendalam (deep dive) dengan mengasumsikan kondisi riil di lapangan. Berdasarkan tipologi dan status ekonomi warga, berikan **contoh asumsi nama fasilitas umum yang riil** (misalnya: 'Masjid Jami Al-Ikhlas', 'Pasar Tradisional [Nama Desa]', 'SDN [Nama Desa] 01', 'Posyandu Melati') agar resume terasa sangat nyata dan meyakinkan, lalu jadikan itu sebagai pijakan strategi.\n";
+        $prompt .= "- Sajikan dalam format laporan resmi yang elegan dan deskriptif, JANGAN menggunakan format angka (1, 2, 3). Gunakan sub-judul (heading H2 dan H3), paragraf naratif, dan bullet points (untuk rincian).\n";
+        $prompt .= "- Gunakan bahasa profesional, meyakinkan, tajam, dan aplikatif.\n\n";
+        $prompt .= "Struktur Laporan WAJIB (Gunakan Markdown):\n";
+        $prompt .= "- **Header Laporan (Gunakan Heading H1 dan H3):** Di bagian paling atas, tuliskan judul laporan, lalu di bawahnya sertakan rincian spesifik: Kecamatan {$tw->kecamatan}, Desa/Kelurahan {$tw->desa}, RW {$this->profilRwId}, Total RT: " . ($this->dataRw->jumlah_rt ?? 0) . ".\n";
+        $prompt .= "- **Tinjauan Kondisi Lapangan & Demografi (H2):** (Jabarkan analisis tipologi, sebutkan nama-nama fasilitas riil yang diasumsikan ada, dan potret kekuatan/kelemahan secara naratif)\n";
+        $prompt .= "- **Strategi & Program Taktis (H2):** (Sebutkan rekomendasi program yang sangat spesifik memanfaatkan masjid/sekolah/fasilitas yang disebut di atas)\n";
+        $prompt .= "- **Prioritas Tindakan Infrastruktur (H2):** (Instruksi konkrit untuk Korwe/Korte dalam 1 bulan ke depan terkait pemenuhan target)\n\n";
+        $prompt .= "Format langsung sebagai isi laporan Markdown (tanpa kata pembuka/penutup).";
 
         try {
             $apiKey = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'openai_api_key')->value('value');

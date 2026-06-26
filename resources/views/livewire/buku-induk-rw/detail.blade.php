@@ -1138,12 +1138,15 @@
                         </div>
                         
                         <style>
-                            .ai-recommendation-content { color: #374151; font-size: 14px; line-height: 1.6; }
-                            .ai-recommendation-content h3 { font-size: 16px; font-weight: 700; color: #4338ca; margin-top: 20px; margin-bottom: 10px; }
-                            .ai-recommendation-content p { margin-bottom: 12px; }
-                            .ai-recommendation-content ul, .ai-recommendation-content ol { margin-bottom: 12px; padding-left: 20px; list-style-type: disc; }
-                            .ai-recommendation-content li { margin-bottom: 6px; }
-                            .ai-recommendation-content strong { font-weight: 700; color: #111827; }
+                            .ai-recommendation-content { color: #1f2937; font-size: 16px; line-height: 1.7; }
+                            .ai-recommendation-content h1 { font-size: 24px; font-weight: 800; color: #312e81; margin-top: 28px; margin-bottom: 16px; text-align: center; }
+                            .ai-recommendation-content h2 { font-size: 22px; font-weight: 800; color: #3730a3; margin-top: 24px; margin-bottom: 14px; border-bottom: 2px solid #e0e7ff; padding-bottom: 6px; }
+                            .ai-recommendation-content h3 { font-size: 18px; font-weight: 700; color: #4338ca; margin-top: 20px; margin-bottom: 12px; }
+                            .ai-recommendation-content p { margin-bottom: 16px; }
+                            .ai-recommendation-content ul, .ai-recommendation-content ol { margin-bottom: 16px; padding-left: 24px; list-style-type: disc; }
+                            .ai-recommendation-content li { margin-bottom: 8px; }
+                            .ai-recommendation-content strong { font-weight: 800; color: #111827; }
+                            .ai-recommendation-content blockquote { border-left: 4px solid #4f46e5; padding-left: 16px; font-style: italic; color: #4b5563; background: #f5f3ff; padding: 12px 16px; border-radius: 0 8px 8px 0; }
                         </style>
                         <div class="ai-recommendation-content">
                             {!! \Illuminate\Support\Str::markdown($profilRw->ai_recommendation) !!}
