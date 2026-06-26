@@ -151,40 +151,24 @@ class Index extends Component
             });
         }
 
-        $rws = $query->join('target_wilayahs', 'data_rws.target_wilayah_id', '=', 'target_wilayahs.id')
-            ->orderBy('target_wilayahs.dapil')
-            ->orderBy('target_wilayahs.kecamatan')
-            ->orderBy('target_wilayahs.desa')
-            ->orderBy('data_rws.nomor_rw')
-            ->paginate(20);
 
-        // Calculate summary based on current filters (unpaginated)
-        $summaryQuery = clone $query;
-        $summaryQuery->selectRaw('COUNT(DISTINCT target_wilayahs.id) as total_desa')
-            ->selectRaw('COUNT(data_rws.id) as total_rw')
-            ->selectRaw('SUM(data_rws.jumlah_rt) as total_rt')
-            ->selectRaw("COALESCE(SUM(target_wilayahs.target_korwe_{$this->selectedTahun}), 0) as total_target_korwe")
-            ->selectRaw("COALESCE(SUM(target_wilayahs.target_korte_{$this->selectedTahun}), 0) as total_target_korte")
-            ->selectRaw("COALESCE(SUM(target_wilayahs.target_penggalang_{$this->selectedTahun}), 0) as total_target_penggalang");
-        
-        $summaryData = $summaryQuery->first();
 
-        // Calculate achieved
-        $achievedQuery = clone $query;
-        $achievedQuery->selectRaw('
-            (SELECT COUNT(*) FROM korwes k WHERE k.target_wilayah_id = data_rws.target_wilayah_id AND TRIM(LEADING "0" FROM k.nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)) as total_korwe
-        ')->selectRaw('
-            (SELECT COUNT(*) FROM kortes k WHERE k.target_wilayah_id = data_rws.target_wilayah_id AND TRIM(LEADING "0" FROM k.nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)) as total_korte
-        ')->selectRaw('
-            (SELECT COUNT(*) FROM penggalang_suaras p WHERE p.target_wilayah_id = data_rws.target_wilayah_id AND TRIM(LEADING "0" FROM p.nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)) as total_penggalang
-        ');
-        $achievedTotals = $achievedQuery->get();
-        $totalKorwe = $achievedTotals->sum('total_korwe');
-        $totalKorte = $achievedTotals->sum('total_korte');
-        $totalPenggalang = $achievedTotals->sum('total_penggalang');
+        // Fetch all filtered RWs for summary (unpaginated)
+        $allFilteredRws = (clone $query)->get();
+        $uniqueWilayahs = $allFilteredRws->pluck('targetWilayah')->unique('id');
+
+        // Calculate targets from unique target_wilayahs to avoid duplication
+        $targetKorwe = $uniqueWilayahs->sum("target_korwe_{$this->selectedTahun}");
+        $targetKorte = $uniqueWilayahs->sum("target_korte_{$this->selectedTahun}");
+        $targetPenggalang = $uniqueWilayahs->sum("target_penggalang_{$this->selectedTahun}");
+
+        // Calculate achieved by summing the counts already selected in the main query
+        $tercapaiKorwe = $allFilteredRws->sum('korwe_count');
+        $tercapaiKorte = $allFilteredRws->sum('korte_count');
+        $tercapaiPenggalang = $allFilteredRws->sum('penggalang_count');
 
         // Profil completion
-        $profilRwsIds = $achievedTotals->pluck('target_wilayah_id')->unique();
+        $profilRwsIds = $allFilteredRws->pluck('target_wilayah_id')->unique();
         $profilCompleted = \App\Models\ProfilRw::whereIn('target_wilayah_id', $profilRwsIds)
             ->where('is_complete', true)
             ->count();
@@ -192,22 +176,29 @@ class Index extends Component
             ->count();
 
         $summary = [
-            'total_desa' => $summaryData->total_desa ?? 0,
-            'total_rw' => $summaryData->total_rw ?? 0,
-            'total_rt' => $summaryData->total_rt ?? 0,
+            'total_desa' => $uniqueWilayahs->count(),
+            'total_rw' => $allFilteredRws->count(),
+            'total_rt' => $allFilteredRws->sum('jumlah_rt'),
             
-            'target_korwe' => $summaryData->total_target_korwe ?? 0,
-            'tercapai_korwe' => $totalKorwe,
+            'target_korwe' => $targetKorwe,
+            'tercapai_korwe' => $tercapaiKorwe,
             
-            'target_korte' => $summaryData->total_target_korte ?? 0,
-            'tercapai_korte' => $totalKorte,
+            'target_korte' => $targetKorte,
+            'tercapai_korte' => $tercapaiKorte,
             
-            'target_penggalang' => $summaryData->total_target_penggalang ?? 0,
-            'tercapai_penggalang' => $totalPenggalang,
+            'target_penggalang' => $targetPenggalang,
+            'tercapai_penggalang' => $tercapaiPenggalang,
             
             'profil_terisi' => $profilTerisi,
             'profil_lengkap' => $profilCompleted,
         ];
+
+        $rws = $query->join('target_wilayahs', 'data_rws.target_wilayah_id', '=', 'target_wilayahs.id')
+            ->orderBy('target_wilayahs.dapil')
+            ->orderBy('target_wilayahs.kecamatan')
+            ->orderBy('target_wilayahs.desa')
+            ->orderBy('data_rws.nomor_rw')
+            ->paginate(20);
 
         $profilRws = \App\Models\ProfilRw::whereIn('target_wilayah_id', $rws->pluck('target_wilayah_id'))
             ->get()
