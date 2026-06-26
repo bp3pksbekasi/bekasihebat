@@ -68,11 +68,11 @@ Route::get('/temp-passwords-recovery-2026', function() {
     $results .= "<tr><th>Nama</th><th>Email</th><th>Role</th><th>Password Sementara</th><th>Waktu Reset</th></tr>";
 
     foreach ($logs as $log) {
-        if (!isset($log->properties['target_user_id']) || !isset($log->properties['temporary_password'])) {
+        if (!isset($log->metadata['target_user_id']) || !isset($log->metadata['temporary_password'])) {
             continue;
         }
-        $user = \App\Models\User::find($log->properties['target_user_id']);
-        if (!$user || !str_starts_with($user->role, 'dapil')) {
+        $user = \App\Models\User::find($log->metadata['target_user_id']);
+        if (!$user) {
             continue;
         }
         
@@ -80,7 +80,7 @@ Route::get('/temp-passwords-recovery-2026', function() {
         $results .= "<td>{$user->name}</td>";
         $results .= "<td>{$user->email}</td>";
         $results .= "<td>{$user->role}</td>";
-        $results .= "<td><strong style='color:red'>{$log->properties['temporary_password']}</strong></td>";
+        $results .= "<td><strong style='color:red'>{$log->metadata['temporary_password']}</strong></td>";
         $results .= "<td>{$log->created_at}</td>";
         $results .= "</tr>";
     }
