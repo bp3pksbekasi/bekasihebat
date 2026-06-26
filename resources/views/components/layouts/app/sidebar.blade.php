@@ -87,7 +87,7 @@
                 ['route' => 'aspirasi.index', 'slug' => 'aspirasi', 'label' => 'Aspirasi & POKIR', 'icon' => 'message-chatbot', 'active' => ['aspirasi.*']],
 
                 ['section' => 'ORGANISASI'],
-                ['route' => 'events.index', 'slug' => 'event', 'access_slugs' => ['event', 'event-view'], 'label' => 'Program', 'icon' => 'calendar-event', 'active' => ['events.*']],
+                ['route' => 'events.index', 'slug' => 'event', 'label' => 'Program', 'icon' => 'calendar-event', 'active' => ['events.*']],
 
                 ['section' => 'MANAJEMEN'],
                 ['route' => 'settings.profile', 'slug' => 'profil', 'label' => 'Profil', 'icon' => 'user-circle', 'active' => ['settings.profile', 'settings.password', 'settings.appearance']],

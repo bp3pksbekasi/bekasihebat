@@ -228,9 +228,7 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
             return true;
         }
 
-        if ($menuSlug === 'event' && $this->isBidang()) {
-            return true;
-        }
+
 
         if ($this->isBidang() && $this->bidang_slug) {
             $allowedMenus = self::BIDANG_MENUS[$this->bidang_slug] ?? [];
