@@ -81,6 +81,15 @@ class DataRw extends Model
         ];
     }
 
+    public function getTargetPenggalangAttribute(): int
+    {
+        if ($this->targetWilayah && $this->targetWilayah->target_suara_2029 > 0) {
+            $ratio = $this->target_suara_per_rw / $this->targetWilayah->target_suara_2029;
+            return (int) ceil($ratio * $this->targetWilayah->target_penggalang);
+        }
+        return (int) ceil($this->target_suara_per_rw / 10); // Fallback to 1:10 ratio if kelurahan target is missing
+    }
+
     public function scopeByDesa(Builder $query, string $targetWilayahId): Builder
     {
         return $query->where('target_wilayah_id', $targetWilayahId);
