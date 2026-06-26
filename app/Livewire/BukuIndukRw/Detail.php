@@ -498,11 +498,16 @@ class Detail extends Component
         $context .= "- Korte (Koordinator RT): Terbentuk {$korteCount} dari target {$targetKorte}\n";
         $context .= "- Penggalang Suara: Terbentuk {$penggalangCount} dari target {$targetPenggalang}\n\n";
 
-        $prompt = "Kamu adalah Konsultan Politik Senior dan Pakar Pemenangan Pemilu untuk PKS. Berdasarkan data pemetaan politik tingkat RW di atas, buatkan analisis strategis dengan struktur berikut:\n";
-        $prompt .= "1. **Kesimpulan Kondisi Wilayah:** Analisis singkat tentang kekuatan/kelemahan PKS di RW ini berdasarkan data.\n";
-        $prompt .= "2. **Rekomendasi Strategi & Program:** Minimal 3 program kerja atau pendekatan kampanye yang paling cocok dengan tipologi dan karakter ekonomi/warga RW ini.\n";
-        $prompt .= "3. **Langkah Mendesak & Prioritas:** Instruksi apa yang harus segera dilakukan oleh Korwe/Korte dalam 1 bulan ke depan.\n\n";
-        $prompt .= "Format dalam Markdown yang rapi (gunakan bullet points, teks tebal yang menarik, dan sapaan profesional). Jangan gunakan penjelasan pembuka/penutup yang tidak perlu, langsung berikan outputnya.";
+        $prompt = "Kamu adalah Konsultan Politik Senior dan Pakar Pemenangan Pemilu. Berdasarkan data pemetaan tingkat RW di atas, buatkan analisis strategis bergaya \"Resume Resmi Eksekutif\".\n\n";
+        $prompt .= "Instruksi Khusus:\n";
+        $prompt .= "- Lakukan analisis mendalam (deep dive) dengan mengasumsikan kondisi riil di lapangan. Berdasarkan tipologi dan status ekonomi warga, sebutkan/gali potensi fasilitas umum yang biasanya ada di lingkungan tersebut (misalnya: masjid/musholla, pasar/warung, lapangan warga, sekolah/TK, posyandu) dan jadikan itu sebagai basis pijakan strategi.\n";
+        $prompt .= "- Sajikan dalam format laporan resmi yang elegan dan deskriptif, JANGAN menggunakan format angka (1, 2, 3) yang terkesan kaku. Gunakan sub-judul (heading), paragraf naratif, dan bullet points (untuk rincian) yang mengalir secara natural.\n";
+        $prompt .= "- Gunakan bahasa profesional, tajam, dan aplikatif.\n\n";
+        $prompt .= "Struktur Laporan (Gunakan Sub-Judul yang Menarik, bukan sekadar urutan angka):\n";
+        $prompt .= "- **Tinjauan Kondisi Lapangan & Demografi:** (Jabarkan analisis tipologi, asumsi fasilitas riil yang ada, dan potret kekuatan/kelemahan politik secara naratif)\n";
+        $prompt .= "- **Strategi & Program Taktis:** (Sebutkan rekomendasi program yang sangat spesifik memanfaatkan fasilitas/komunitas riil tadi, bukan program ngawang)\n";
+        $prompt .= "- **Prioritas Tindakan Infrastruktur:** (Instruksi konkrit untuk Korwe/Korte dalam 1 bulan ke depan terkait pemenuhan target struktur dan penggalangan)\n\n";
+        $prompt .= "Format langsung sebagai isi laporan Markdown (tanpa kata pembuka/penutup seperti 'Berikut adalah laporannya').";
 
         try {
             $apiKey = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'openai_api_key')->value('value');
