@@ -117,7 +117,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/bedah-dapil', function () {
         return view('bedah-dapil.index');
-    })->middleware('menu:bedah-dapil')->name('bedah-dapil.index');
+    })->middleware('menu:pemilu-dprd,analisa-caleg,peta-kekuatan-rw')->name('bedah-dapil.index');
 
     Route::get('/bedah-dapil/pemilu-dprd', function (Request $request, PemiluSummaryPayload $payloadBuilder) {
         if (app()->environment('local') && (bool) config('app.debug')) {
@@ -208,7 +208,7 @@ Route::middleware('auth')->group(function () {
             'profilRwMap' => $profilRwMap,
             'userScope' => $userScope,
         ]);
-    })->middleware('menu:bedah-dapil')->name('bedah-dapil.pemilu-dprd');
+    })->middleware('menu:pemilu-dprd')->name('bedah-dapil.pemilu-dprd');
 
     Route::get('/bedah-dapil/pemilu-dprd/get-profil-rw', function (Request $request) {
         $kecamatan = $request->string('kecamatan')->toString();
@@ -233,7 +233,7 @@ Route::middleware('auth')->group(function () {
             'profil' => $profil,
             'wilayah_id' => $wilayah->id
         ]);
-    })->middleware('menu:bedah-dapil');
+    })->middleware('menu:pemilu-dprd');
 
     Route::post('/bedah-dapil/pemilu-dprd/save-profil-rw', function (Request $request) {
         $wilayahId = $request->string('wilayah_id')->toString();
@@ -282,11 +282,11 @@ Route::middleware('auth')->group(function () {
             'success' => true,
             'profil' => $profil
         ]);
-    })->middleware('menu:bedah-dapil');
+    })->middleware('menu:pemilu-dprd');
 
     Route::get('/bedah-dapil/peta-wilayah', function () {
         return view('bedah-dapil.peta-wilayah');
-    })->middleware('menu:bedah-dapil')->name('bedah-dapil.peta-wilayah');
+    })->middleware('menu:peta-kekuatan-rw')->name('bedah-dapil.peta-wilayah');
 
     Route::get('/bedah-dapil/analisa-caleg', function (Request $request, PemiluSummaryPayload $payloadBuilder) {
         $periods = PemiluPeriod::query()
@@ -377,11 +377,11 @@ Route::middleware('auth')->group(function () {
             'tpsToRwMap' => $tpsToRwMap,
             'userScope' => $userScope,
         ]);
-    })->middleware('menu:bedah-dapil')->name('bedah-dapil.analisa-caleg');
+    })->middleware('menu:analisa-caleg')->name('bedah-dapil.analisa-caleg');
 
     Route::get('/bedah-dapil/rencana-aksi', function () {
         return view('bedah-dapil.rencana-aksi');
-    })->middleware('menu:bedah-dapil')->name('bedah-dapil.rencana-aksi');
+    })->middleware('menu:pemilu-dprd,analisa-caleg,peta-kekuatan-rw')->name('bedah-dapil.rencana-aksi');
 
     Route::get('/sisir-rw', BedahDapilSisirRw::class)->middleware('menu:sisir-rw')->name('sisir-rw.index');
     Route::get('/kaderisasi', KaderisasiIndex::class)->middleware('menu:kaderisasi')->name('kaderisasi.index');

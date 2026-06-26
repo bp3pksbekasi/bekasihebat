@@ -57,8 +57,8 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
     ];
 
     public const BIDANG_MENUS = [
-        'relawan' => ['infra-rtrw', 'sapa-warga', 'sisir-rw', 'kaderisasi', 'bedah-dapil', 'aspirasi'],
-        'polhukam' => ['bedah-dapil', 'aspirasi'],
+        'relawan' => ['infra-rtrw', 'sapa-warga', 'sisir-rw', 'kaderisasi', 'pemilu-dprd', 'analisa-caleg', 'peta-kekuatan-rw', 'aspirasi'],
+        'polhukam' => ['pemilu-dprd', 'analisa-caleg', 'peta-kekuatan-rw', 'aspirasi'],
         'dakwah' => ['sisir-rw', 'event', 'aspirasi'],
         'perempuan' => [],
         'pemuda' => ['kaderisasi'],
@@ -239,7 +239,7 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
         }
 
         if ($this->isDpc() || $this->isDpra() || $this->isDapil()) {
-            $defaultStrukturMenus = ['infra-rtrw', 'dashboard', 'sisir-rw', 'sapa-warga', 'bedah-dapil', 'kaderisasi'];
+            $defaultStrukturMenus = ['infra-rtrw', 'dashboard', 'sisir-rw', 'sapa-warga', 'pemilu-dprd', 'analisa-caleg', 'peta-kekuatan-rw', 'kaderisasi'];
             if (in_array($menuSlug, $defaultStrukturMenus, true)) {
                 return true;
             }
