@@ -66,7 +66,12 @@
     </div>
 
     <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Total Wilayah</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_rw']) }} <span class="text-lg text-gray-400 font-normal">RW</span></div>
+            <div class="text-xs text-gray-400 mt-1.5">{{ number_format($summary['total_rt']) }} RT · {{ number_format($summary['total_desa']) }} Desa</div>
+        </div>
         <div class="rounded-xl p-5 shadow-sm" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Korwe {{ $selectedTahun }}</div>
             <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korwe']) }}</div>
