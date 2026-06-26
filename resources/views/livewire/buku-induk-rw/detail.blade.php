@@ -175,6 +175,12 @@
                 </svg>
                 Target & Realisasi
             </button>
+            <button wire:click="setActiveTab('rekomendasi_ai')" class="{{ $activeTab === 'rekomendasi_ai' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer" style="background: linear-gradient(90deg, rgba(79,70,229,0.05) 0%, rgba(147,51,234,0.05) 100%);">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'rekomendasi_ai' ? 'text-indigo-500' : 'text-indigo-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                ✨ Rekomendasi AI
+            </button>
         </nav>
     </div>
 
@@ -1078,6 +1084,63 @@
                             </div>
                         @endif
                     </div>
+                </div>
+            </div>
+        @elseif($activeTab === 'rekomendasi_ai')
+            <div wire:key="tab-rekomendasi-ai" class="bg-white rounded-xl shadow-sm border border-indigo-100 overflow-hidden relative">
+                <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+                
+                <div class="p-6 md:p-8">
+                    @if(empty($profilRw->ai_recommendation))
+                        <div class="text-center py-12">
+                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-indigo-50 mb-6 border-4 border-indigo-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Analisis Strategi AI</h3>
+                            <p class="text-gray-500 max-w-lg mx-auto mb-8 leading-relaxed">
+                                Hasilkan kesimpulan kondisi wilayah, rekomendasi program kerja, dan prioritas tindakan secara otomatis dengan menganalisa data demografi, pemilu, dan infrastruktur RW ini.
+                            </p>
+                            
+                            <button wire:click="generateAiRecommendation" wire:loading.attr="disabled" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-lg text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02]">
+                                <span wire:loading.remove wire:target="generateAiRecommendation" class="flex items-center">
+                                    ✨ Buat Analisis & Rekomendasi
+                                </span>
+                                <span wire:loading wire:target="generateAiRecommendation" class="flex items-center">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Menganalisa Data (membutuhkan beberapa detik)...
+                                </span>
+                            </button>
+                        </div>
+                    @else
+                        <div class="flex justify-between items-start mb-8 pb-6 border-b border-gray-100">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                    <span class="text-2xl">✨</span> Rekomendasi Strategi AI
+                                </h3>
+                                <p class="text-sm text-gray-500 mt-1">Dihasilkan berdasarkan data peta kekuatan RW terkini.</p>
+                            </div>
+                            <button wire:click="generateAiRecommendation" wire:loading.attr="disabled" class="inline-flex items-center px-3 py-1.5 border border-indigo-200 shadow-sm text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                <span wire:loading.remove wire:target="generateAiRecommendation" class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    Perbarui Analisis
+                                </span>
+                                <span wire:loading wire:target="generateAiRecommendation" class="flex items-center">
+                                    Memperbarui...
+                                </span>
+                            </button>
+                        </div>
+                        
+                        <div class="prose prose-indigo max-w-none prose-h3:text-indigo-800 prose-h3:text-lg prose-h3:font-bold prose-h3:mt-6 prose-h3:mb-3 prose-p:text-gray-600 prose-li:text-gray-600 prose-strong:text-gray-900 prose-ul:my-2 prose-li:my-1">
+                            {!! \Illuminate\Support\Str::markdown($profilRw->ai_recommendation) !!}
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif

@@ -13,7 +13,7 @@ class Detail extends Component
 {
     public DataRw $dataRw;
     public ?ProfilRw $profilRw = null;
-    public string $activeTab = 'profil_wilayah'; // profil_wilayah, peta_politik, strategi, struktur, realisasi
+    public string $activeTab = 'profil_wilayah'; // profil_wilayah, peta_politik, strategi, struktur, realisasi, rekomendasi_ai
     
     public bool $showProfilDrawer = false;
     public array $profilData = [];
@@ -302,7 +302,7 @@ class Detail extends Component
 
     public function setActiveTab(string $tab)
     {
-        if (in_array($tab, ['profil_wilayah', 'peta_politik', 'strategi', 'struktur', 'realisasi'])) {
+        if (in_array($tab, ['profil_wilayah', 'peta_politik', 'strategi', 'struktur', 'realisasi', 'rekomendasi_ai'])) {
             $this->activeTab = $tab;
         }
     }
@@ -458,6 +458,85 @@ class Detail extends Component
         }
         
         session()->flash('success', 'Data berhasil dihapus.');
+    }
+
+    public function generateAiRecommendation()
+    {
+        $tw = $this->dataRw->targetWilayah;
+        $profil = $this->profilRw;
+        
+        // Count infrastructure
+        $korweCount = Korwe::where('target_wilayah_id', $tw->id)->where('nomor_rw', $this->profilRwId)->count();
+        $korteCount = Korte::where('target_wilayah_id', $tw->id)->where('nomor_rw', $this->profilRwId)->count();
+        $penggalangCount = PenggalangSuara::where('target_wilayah_id', $tw->id)->where('nomor_rw', $this->profilRwId)->count();
+
+        // Target (general)
+        $targetKorwe = 1;
+        $targetKorte = $this->dataRw->jumlah_rt ?? 0;
+        $targetPenggalang = $tw->target_penggalang ?? 0;
+
+        // Build prompt context
+        $context = "DATA WILAYAH:\n";
+        $context .= "- Desa: {$tw->desa}, Kecamatan: {$tw->kecamatan}, Dapil: {$tw->dapil}\n";
+        $context .= "- RW: {$this->profilRwId}, Jumlah RT: " . ($this->dataRw->jumlah_rt ?? 0) . ", DPT: " . ($this->dataRw->dpt ?? 0) . "\n\n";
+        
+        $context .= "PROFIL DEMOGRAFI & SOSIAL:\n";
+        $context .= "- Tipologi: " . ($profil->tipologi ?? 'Tidak diketahui') . "\n";
+        $context .= "- Ekonomi Mayoritas: " . ($profil->ekonomi_dominan ?? 'Tidak diketahui') . "\n";
+        $context .= "- Karakter Warga: " . ($profil->profil_warga ?? 'Tidak diketahui') . "\n\n";
+
+        $context .= "PETA POLITIK:\n";
+        $context .= "- Suara PKS 2019: " . ($profil->suara_pks_2019 ?? 0) . "\n";
+        $context .= "- Estimasi Suara PKS 2024: " . ($this->dataRw->estimasi_pks ?? 0) . "\n";
+        $context .= "- Status Wilayah (2024): " . ($this->dataRw->status_wilayah ?? 'Tidak diketahui') . "\n";
+        $context .= "- Partai Dominan Saat Ini: " . ($profil->partai_dominan ?? 'Tidak diketahui') . "\n";
+        $context .= "- Status Tim Sukses Lawan: " . ($profil->tim_sukses_status ?? 'Tidak diketahui') . "\n";
+        $context .= "- Faktor Utama Penyebab: " . ($profil->faktor_penyebab ?? 'Tidak diketahui') . "\n\n";
+
+        $context .= "INFRASTRUKTUR PEMENANGAN:\n";
+        $context .= "- Korwe (Koordinator RW): Terbentuk {$korweCount} dari target {$targetKorwe}\n";
+        $context .= "- Korte (Koordinator RT): Terbentuk {$korteCount} dari target {$targetKorte}\n";
+        $context .= "- Penggalang Suara: Terbentuk {$penggalangCount} dari target {$targetPenggalang}\n\n";
+
+        $prompt = "Kamu adalah Konsultan Politik Senior dan Pakar Pemenangan Pemilu untuk PKS. Berdasarkan data pemetaan politik tingkat RW di atas, buatkan analisis strategis dengan struktur berikut:\n";
+        $prompt .= "1. **Kesimpulan Kondisi Wilayah:** Analisis singkat tentang kekuatan/kelemahan PKS di RW ini berdasarkan data.\n";
+        $prompt .= "2. **Rekomendasi Strategi & Program:** Minimal 3 program kerja atau pendekatan kampanye yang paling cocok dengan tipologi dan karakter ekonomi/warga RW ini.\n";
+        $prompt .= "3. **Langkah Mendesak & Prioritas:** Instruksi apa yang harus segera dilakukan oleh Korwe/Korte dalam 1 bulan ke depan.\n\n";
+        $prompt .= "Format dalam Markdown yang rapi (gunakan bullet points, teks tebal yang menarik, dan sapaan profesional). Jangan gunakan penjelasan pembuka/penutup yang tidak perlu, langsung berikan outputnya.";
+
+        try {
+            $apiKey = env('OPENAI_API_KEY');
+            if (empty($apiKey)) {
+                session()->flash('error', 'API Key OpenAI belum dikonfigurasi di server (.env).');
+                return;
+            }
+
+            $response = \Illuminate\Support\Facades\Http::withToken($apiKey)
+                ->timeout(60)
+                ->post('https://api.openai.com/v1/chat/completions', [
+                    'model' => 'gpt-4o-mini',
+                    'messages' => [
+                        ['role' => 'system', 'content' => 'Anda adalah konsultan ahli strategi politik.'],
+                        ['role' => 'user', 'content' => $context . $prompt],
+                    ],
+                    'temperature' => 0.7,
+                ]);
+
+            if ($response->successful()) {
+                $result = $response->json('choices.0.message.content');
+                if ($result) {
+                    $this->profilRw->ai_recommendation = $result;
+                    $this->profilRw->save();
+                    session()->flash('success', 'Rekomendasi AI berhasil diperbarui!');
+                } else {
+                    session()->flash('error', 'Format respon dari OpenAI tidak valid.');
+                }
+            } else {
+                session()->flash('error', 'Gagal memanggil API OpenAI: ' . $response->body());
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
     }
 
     public function render()
