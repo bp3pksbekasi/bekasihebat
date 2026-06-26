@@ -67,17 +67,17 @@
 
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-sm">
+        <div class="rounded-xl p-5 shadow-sm" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Korwe {{ $selectedTahun }}</div>
             <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korwe']) }}</div>
             <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korwe']) }}</div>
         </div>
-        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-sm">
+        <div class="rounded-xl p-5 shadow-sm" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Korte {{ $selectedTahun }}</div>
             <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korte']) }}</div>
             <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korte']) }}</div>
         </div>
-        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-sm">
+        <div class="rounded-xl p-5 shadow-sm" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Penggalang {{ $selectedTahun }}</div>
             <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_penggalang']) }}</div>
             <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_penggalang']) }}</div>
@@ -90,7 +90,7 @@
             <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['profil_terisi']) }} <span class="text-lg text-gray-400 font-normal">/ {{ number_format($summary['total_rw']) }}</span></div>
             <div class="flex items-center gap-2">
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: {{ $profilPct }}%"></div>
+                    <div class="h-1.5 rounded-full" style="background:#3b82f6; width: {{ $profilPct }}%"></div>
                 </div>
                 <div class="text-xs text-gray-500 font-medium">{{ $profilPct }}%</div>
             </div>
