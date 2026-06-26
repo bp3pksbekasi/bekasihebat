@@ -68,11 +68,23 @@ class RuleManagement extends Component
             Permission::create(['name' => $permName, 'guard_name' => 'web']);
         }
 
+        if ($menuSlug === 'event') {
+            if (!Permission::where('name', 'menu.event-view')->exists()) {
+                Permission::create(['name' => 'menu.event-view', 'guard_name' => 'web']);
+            }
+        }
+
         if ($role->hasPermissionTo($permName)) {
             $role->revokePermissionTo($permName);
+            if ($menuSlug === 'event') {
+                $role->revokePermissionTo('menu.event-view');
+            }
             $this->rolePermissions[$roleId][$menuSlug] = false;
         } else {
             $role->givePermissionTo($permName);
+            if ($menuSlug === 'event') {
+                $role->givePermissionTo('menu.event-view');
+            }
             $this->rolePermissions[$roleId][$menuSlug] = true;
         }
     }
