@@ -95,6 +95,7 @@
                 ['route' => 'pengaturan.users', 'slug' => 'pengaturan-users', 'label' => 'Kelola User', 'icon' => 'users-cog', 'active' => ['pengaturan.users']],
                 ['route' => 'pengaturan.whatsapp', 'slug' => 'pengaturan-whatsapp', 'label' => 'Setting WhatsApp', 'icon' => 'brand-whatsapp', 'active' => ['pengaturan.whatsapp']],
                 ['route' => 'pengaturan.rule', 'slug' => 'pengaturan-rule', 'label' => 'Pengaturan Rule', 'icon' => 'shield-lock', 'active' => ['pengaturan.rule']],
+                ['route' => 'pengaturan.api', 'slug' => 'pengaturan-api', 'label' => 'Pengaturan API', 'icon' => 'api-app', 'active' => ['pengaturan.api']],
                 ['route' => 'kartu-anggota.admin', 'slug' => 'kartu-anggota', 'label' => 'Kartu Anggota', 'icon' => 'id-badge-2', 'active' => ['kartu-anggota.*']],
             ];
 

@@ -505,9 +505,9 @@ class Detail extends Component
         $prompt .= "Format dalam Markdown yang rapi (gunakan bullet points, teks tebal yang menarik, dan sapaan profesional). Jangan gunakan penjelasan pembuka/penutup yang tidak perlu, langsung berikan outputnya.";
 
         try {
-            $apiKey = env('OPENAI_API_KEY');
+            $apiKey = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'openai_api_key')->value('value');
             if (empty($apiKey)) {
-                session()->flash('error', 'API Key OpenAI belum dikonfigurasi di server (.env).');
+                session()->flash('error', 'API Key OpenAI belum dikonfigurasi. Silakan atur di menu Pengaturan API.');
                 return;
             }
 

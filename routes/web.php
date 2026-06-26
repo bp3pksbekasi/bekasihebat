@@ -445,6 +445,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/rule', \App\Livewire\Pengaturan\RuleManagement::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.rule');
+        
+    Route::get('/pengaturan/api', \App\Livewire\Pengaturan\Api::class)
+        ->middleware('role:admin_dpd')
+        ->name('pengaturan.api');
 });
 
 Route::middleware(['auth'])->group(function () {
