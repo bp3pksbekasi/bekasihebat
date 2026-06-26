@@ -238,7 +238,7 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
             return in_array($menuSlug, $allowedMenus, true);
         }
 
-        if ($this->isDpc() || $this->isDpra() || $this->isDapil()) {
+        if ($this->isDpc() || $this->isDpra()) {
             $defaultStrukturMenus = ['infra-rtrw', 'dashboard', 'sisir-rw', 'sapa-warga', 'pemilu-dprd', 'analisa-caleg', 'peta-kekuatan-rw', 'kaderisasi'];
             if (in_array($menuSlug, $defaultStrukturMenus, true)) {
                 return true;
