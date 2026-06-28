@@ -1011,9 +1011,9 @@ class SisirRw extends Component
             return;
         }
 
-        if ($user->org_level === \App\Models\User::ORG_LEVEL_DPC && ! empty($user->kecamatan)) {
+        if ($user->isDpc() && ! empty($user->kecamatan)) {
             $query->where('kecamatan', $user->kecamatan);
-        } elseif ($user->org_level === \App\Models\User::ORG_LEVEL_DPRA && ! empty($user->desa)) {
+        } elseif ($user->isDpra() && ! empty($user->desa)) {
             $query->where('desa', $user->desa);
         } elseif ($user->isDapil() && ! empty($user->dapil)) {
             $query->where('dapil', $user->dapil);
