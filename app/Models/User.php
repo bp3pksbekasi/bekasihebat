@@ -191,12 +191,12 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
 
     public function isDpc(): bool
     {
-        return $this->org_level === self::ORG_LEVEL_DPC;
+        return $this->org_level === self::ORG_LEVEL_DPC || mb_strtolower((string) $this->role) === self::ROLE_DPC;
     }
 
     public function isDpra(): bool
     {
-        return $this->org_level === self::ORG_LEVEL_DPRA;
+        return $this->org_level === self::ORG_LEVEL_DPRA || mb_strtolower((string) $this->role) === self::ROLE_DPRA;
     }
 
     public function isDapil(): bool

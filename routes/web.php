@@ -426,8 +426,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('buku-induk-rw')->middleware(['auth'])->group(function () {
-        Route::get('/', \App\Livewire\BukuIndukRw\Index::class)->middleware('menu:infra-rtrw')->name('buku-induk-rw.index');
-        Route::get('/{dataRw}', \App\Livewire\BukuIndukRw\Detail::class)->middleware('menu:infra-rtrw')->name('buku-induk-rw.detail');
+        Route::get('/', \App\Livewire\BukuIndukRw\Index::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.index');
+        Route::get('/{dataRw}', \App\Livewire\BukuIndukRw\Detail::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.detail');
     });
 
     Route::get('/pengaturan/users', UserManagementIndex::class)
