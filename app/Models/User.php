@@ -254,10 +254,30 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
             $menuSlug,
         ]);
 
-        return $this->getAllPermissions()
+        $hasSpatiePermission = $this->getAllPermissions()
             ->pluck('name')
             ->intersect($permissionNames)
             ->isNotEmpty();
+            
+        if ($hasSpatiePermission) {
+            return true;
+        }
+        
+        if (!empty($this->role)) {
+            try {
+                $spatieRole = \Spatie\Permission\Models\Role::findByName($this->role);
+                if ($spatieRole) {
+                    return $spatieRole->permissions
+                        ->pluck('name')
+                        ->intersect($permissionNames)
+                        ->isNotEmpty();
+                }
+            } catch (\Exception $e) {
+                // Role doesn't exist in Spatie tables, ignore
+            }
+        }
+
+        return false;
     }
 
     /**
