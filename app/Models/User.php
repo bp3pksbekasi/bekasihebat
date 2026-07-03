@@ -317,7 +317,7 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
 
     public function landingRouteName(): string
     {
-        if ($this->isAdmin() || $this->isBidang() || $this->isDapil()) {
+        if ($this->isAdmin() || $this->isBidang() || $this->isDapil() || $this->isDpc() || $this->isDpra()) {
             return 'dashboard';
         }
 

@@ -51,6 +51,9 @@ class Login extends Component
 
     private function dashboardRoute(): string
     {
+        if (auth()->check() && method_exists(auth()->user(), 'landingRouteName')) {
+            return route(auth()->user()->landingRouteName());
+        }
         return route('member.dashboard');
     }
 

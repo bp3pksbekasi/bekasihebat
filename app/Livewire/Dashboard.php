@@ -801,6 +801,8 @@ class Dashboard extends Component
         $isAdminRole = (method_exists($user, 'isAdmin') && $user->isAdmin()) || 
                        (method_exists($user, 'isBidang') && $user->isBidang()) || 
                        (method_exists($user, 'isDapil') && $user->isDapil()) ||
+                       (method_exists($user, 'isDpc') && $user->isDpc()) ||
+                       (method_exists($user, 'isDpra') && $user->isDpra()) ||
                        (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['admin', 'pengurus', 'pengurus_dpd', 'dpd', 'super-admin', 'super admin', 'dapil']));
 
         if ($isAdminRole) {
