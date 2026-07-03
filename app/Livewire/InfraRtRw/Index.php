@@ -1554,7 +1554,7 @@ class Index extends Component
             'ekonomi_dominan' => '',
             'profil_warga' => '',
             'suara_pks_2019' => 0,
-            'faktor_penyebab' => '',
+            'faktor_penyebab' => [],
             'anggota_pks' => '',
             'jumlah_kta' => 0,
             'upa_rw_status' => 'belum',

@@ -310,7 +310,7 @@ class RwProfileForm extends Component
         $this->profil_warga = [];
         $this->profil_warga_keterangan = '';
         $this->suara_pks_2019 = null;
-        $this->faktor_penyebab = '';
+        $this->faktor_penyebab = [];
         $this->faktor_penyebab_keterangan = '';
         $this->anggota_pks = '';
         $this->jumlah_kta = null;
