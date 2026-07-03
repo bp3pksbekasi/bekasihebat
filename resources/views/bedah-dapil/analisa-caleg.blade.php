@@ -582,13 +582,26 @@
                         
                         const newDesaMap = new Map();
                         Object.entries(caleg.desaMap || {}).forEach(([key, val]) => {
-                            if (typeof val === 'object' && val !== null) {
-                                newDesaMap.set(key, val);
+                            const parts = String(key).split('__');
+                            let normalizedKey = key;
+                            let kec = '';
+                            let desa = '';
+                            
+                            if (parts.length === 3) {
+                                kec = parts[1];
+                                desa = parts[2];
+                            } else if (parts.length === 2) {
+                                normalizedKey = `${dapilData.dapil}__${key}`;
+                                kec = parts[0];
+                                desa = parts[1];
                             } else {
-                                const parts = String(key).split('__');
-                                const kec = parts[1] || '';
-                                const desa = parts[2] || parts[0] || '';
-                                newDesaMap.set(key, { desa: toTitleCase(desa), kecamatan: toTitleCase(kec), suara: Number(val) });
+                                desa = parts[0];
+                            }
+                            
+                            if (typeof val === 'object' && val !== null) {
+                                newDesaMap.set(normalizedKey, val);
+                            } else {
+                                newDesaMap.set(normalizedKey, { desa: toTitleCase(desa), kecamatan: toTitleCase(kec), suara: Number(val) });
                             }
                         });
                         caleg.desaMap = newDesaMap;
@@ -652,7 +665,15 @@
 
             function getScopedCalegVotes(caleg) {
                 if (state.currentDesa) {
-                    const desaObj = caleg.desaMap.get(state.currentDesa);
+                    let desaObj = caleg.desaMap.get(state.currentDesa);
+                    if (!desaObj) {
+                        for (const [k, v] of caleg.desaMap.entries()) {
+                            if (k.endsWith(state.currentDesa) || state.currentDesa.endsWith(k)) {
+                                desaObj = v;
+                                break;
+                            }
+                        }
+                    }
                     return desaObj ? desaObj.suara : 0;
                 }
                 if (state.currentKecamatan) {
