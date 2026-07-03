@@ -209,9 +209,9 @@ class Index extends Component
         return view('livewire.buku-induk-rw.index', [
             'rws' => $rws,
             'profilRws' => $profilRws,
-            'dapils' => TargetWilayah::select('dapil')->distinct()->orderBy('dapil')->pluck('dapil'),
-            'kecamatans' => TargetWilayah::when($this->selectedDapil, fn($q) => $q->where('dapil', $this->selectedDapil))->select('kecamatan')->distinct()->orderBy('kecamatan')->pluck('kecamatan'),
-            'desas' => TargetWilayah::when($this->selectedKecamatan, fn($q) => $q->where('kecamatan', $this->selectedKecamatan))->select('desa')->distinct()->orderBy('desa')->pluck('desa'),
+            'dapils' => TargetWilayah::tap(fn($q) => $this->applyUserScope($q))->select('dapil')->distinct()->orderBy('dapil')->pluck('dapil'),
+            'kecamatans' => TargetWilayah::tap(fn($q) => $this->applyUserScope($q))->when($this->selectedDapil, fn($q) => $q->where('dapil', $this->selectedDapil))->select('kecamatan')->distinct()->orderBy('kecamatan')->pluck('kecamatan'),
+            'desas' => TargetWilayah::tap(fn($q) => $this->applyUserScope($q))->when($this->selectedKecamatan, fn($q) => $q->where('kecamatan', $this->selectedKecamatan))->select('desa')->distinct()->orderBy('desa')->pluck('desa'),
             'statuses' => TargetWilayah::STATUS_CONFIG,
             'summary' => $summary,
         ])->layout('components.layouts.app', ['title' => 'Peta Kekuatan RW']);
