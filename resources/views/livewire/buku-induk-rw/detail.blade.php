@@ -350,7 +350,9 @@
                                 </div>
                             </div>
                         </div>
-                    @elseif($activeTab === 'peta_politik')
+                    @endif
+                    
+                    @if($activeTab === 'peta_politik')
                         <div wire:key="tab-peta" x-data="{ 
                             showTpsModal: false, 
                             showRtModal: false,
@@ -455,7 +457,7 @@
                                                 $isPks = strtoupper($partyName) === 'PKS';
                                                 $barHeight = $maxShare > 0 ? max(2, ($share / $maxShare) * 100) : 2;
                                             @endphp
-                                            <div class="flex flex-col items-center justify-end h-full min-w-[70px] group relative">
+                                            <div wire:key="party-bar-{{ $idx }}" class="flex flex-col items-center justify-end h-full min-w-[70px] group relative">
                                                 
                                                 <!-- Tooltip above bar -->
                                                 <div class="absolute bottom-[calc({{ $barHeight }}%+4rem)] flex flex-col items-center transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 z-10 bg-gray-900 text-white px-2 py-1.5 rounded-md shadow-lg pointer-events-none whitespace-nowrap">
@@ -644,7 +646,7 @@
                                                                             default => '#64748b'
                                                                         };
                                                                     @endphp
-                                                                    <tr class="hover:bg-gray-50 transition-colors">
+                                                                    <tr wire:key="tps-{{ $tpsRow['label'] ?? $loop->index }}" class="hover:bg-gray-50 transition-colors">
                                                                         <td class="py-3 px-4 text-xs font-bold text-gray-900">{{ str_starts_with(strtoupper($tpsRow['label'] ?? ''), 'TPS') ? $tpsRow['label'] : 'TPS ' . ($tpsRow['label'] ?? '-') }}</td>
                                                                         <td class="py-3 px-4 text-xs text-gray-600">{{ number_format($tpsRow['total_votes'] ?? 0, 0, ',', '.') }}</td>
                                                                         <td class="py-3 px-4 text-xs font-bold text-orange-600 text-right">{{ number_format($tpsRow['pks_votes'] ?? 0, 0, ',', '.') }}</td>
@@ -916,8 +918,9 @@
                                 @endif
                             </div>
                         </div>
-                        </div>
-                    @elseif($activeTab === 'strategi')
+                    @endif
+                    
+                    @if($activeTab === 'strategi')
                         <div wire:key="tab-strategi" class="bg-gray-50 p-6 rounded-xl border border-gray-100">
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
@@ -939,7 +942,9 @@
                     @endif
                 @endif
             </div>
-        @elseif($activeTab === 'struktur')
+        @endif
+        
+        @if($activeTab === 'struktur')
             <div wire:key="tab-struktur" class="flex flex-col gap-6">
                 <!-- Korwe Section -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -1019,8 +1024,9 @@
                     </div>
                 </div>
             </div>
+        @endif
             
-        @elseif($activeTab === 'realisasi')
+        @if($activeTab === 'realisasi')
             <div wire:key="tab-realisasi" class="flex flex-col gap-6">
                 <!-- Target Overview -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1087,7 +1093,9 @@
                     </div>
                 </div>
             </div>
-        @elseif($activeTab === 'rekomendasi_ai')
+        @endif
+        
+        @if($activeTab === 'rekomendasi_ai')
             <div wire:key="tab-rekomendasi-ai" class="bg-white rounded-xl shadow-sm border border-indigo-100 overflow-hidden relative">
                 <div class="absolute inset-x-0 top-0 h-1" style="background: linear-gradient(90deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);"></div>
                 
