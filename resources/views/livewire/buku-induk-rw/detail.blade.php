@@ -220,8 +220,9 @@
                     </div>
 
                     @if($activeTab === 'profil_wilayah')
-                        <!-- Data Demografi -->
-                        <div wire:key="tab-profil" class="mb-8">
+                        <div wire:key="tab-profil">
+                            <!-- Data Demografi -->
+                            <div class="mb-8">
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
                                 <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                                     <div class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1">DPT Wilayah</div>
