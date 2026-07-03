@@ -336,14 +336,14 @@
                                     <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Profil Umum Warga</span>
                                     <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed">{{ $profilRw->profil_warga ?: '-' }}</div>
                                 </div>
-                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                {{-- <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                     <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Suara PKS 2019</span>
                                     <div class="font-bold text-orange-600 text-base sm:text-lg">{{ number_format($profilRw->suara_pks_2019 ?? 0) }}</div>
                                 </div>
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                     <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Jumlah KTA</span>
                                     <div class="font-medium text-gray-900 text-sm sm:text-base">{{ number_format($profilRw->jumlah_kta ?? 0) }}</div>
-                                </div>
+                                </div> --}}
                                 <div class="col-span-1 md:col-span-2 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                     <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Faktor Penyebab Menang/Kalah</span>
                                     <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed">{{ $profilRw->faktor_penyebab ?: '-' }}</div>
@@ -1258,7 +1258,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
+                    {{-- <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
                         <div>
                             <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Suara PKS 2019</label>
                             <input wire:model="profilData.suara_pks_2019" type="number" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;" placeholder="0">
@@ -1267,7 +1267,7 @@
                             <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Jumlah KTA</label>
                             <input wire:model="profilData.jumlah_kta" type="number" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;" placeholder="0">
                         </div>
-                    </div>
+                    </div> --}}
                     <div>
                         <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Faktor penyebab menang/kalah</label>
                         <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
