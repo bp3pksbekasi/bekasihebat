@@ -954,7 +954,7 @@ class Detail extends Component
     {
         return [
             'tipologi' => '',
-            'ekonomi_dominan' => '',
+            'ekonomi_dominan' => [],
             'profil_warga' => '',
             'suara_pks_2019' => 0,
             'faktor_penyebab' => [],

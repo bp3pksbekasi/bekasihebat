@@ -306,7 +306,7 @@ class RwProfileForm extends Component
         $this->target_suara_per_rw = null;
 
         $this->tipologi = '';
-        $this->ekonomi_dominan = '';
+        $this->ekonomi_dominan = [];
         $this->profil_warga = [];
         $this->profil_warga_keterangan = '';
         $this->suara_pks_2019 = null;
