@@ -47,8 +47,9 @@
     </div>
 
     <!-- Drawer Input Infrastruktur (Korwe/Korte/Penggalang) -->
-    <div x-data="{ openInfraDrawer: false }" 
+    <div x-data="{ openInfraDrawer: false, showToast: false, toastMessage: '' }" 
          @open-infra-drawer.window="openInfraDrawer = true" 
+         @close-infra-drawer.window="openInfraDrawer = false; toastMessage = 'Data infrastruktur berhasil disimpan.'; showToast = true; setTimeout(() => showToast = false, 3000);" 
          @keydown.escape.window="openInfraDrawer = false" 
          x-effect="if(openInfraDrawer) document.body.style.overflow = 'hidden'; else document.body.style.overflow = '';"
          x-show="openInfraDrawer" 
@@ -57,6 +58,15 @@
          aria-labelledby="slide-over-title" 
          role="dialog" 
          aria-modal="true">
+        
+        <!-- Success Toast -->
+        <div x-show="showToast" 
+             x-transition.opacity.duration.300ms
+             class="fixed bottom-4 right-4 z-[70] bg-green-50 text-green-800 border border-green-200 px-4 py-3 rounded-lg shadow-lg flex items-center gap-3"
+             style="display: none;">
+            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <span x-text="toastMessage" class="text-sm font-medium"></span>
+        </div>
         
         <!-- Backdrop -->
         <div x-show="openInfraDrawer" 
