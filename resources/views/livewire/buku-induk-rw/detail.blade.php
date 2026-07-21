@@ -191,6 +191,12 @@
                 </svg>
                 ✨ Rekomendasi AI
             </button>
+            <button wire:click="setActiveTab('program_arahan')" class="{{ $activeTab === 'program_arahan' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'program_arahan' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                Program Arahan
+            </button>
         </nav>
     </div>
 
@@ -1169,6 +1175,70 @@
                         </style>
                         <div class="ai-recommendation-content">
                             {!! \Illuminate\Support\Str::markdown($profilRw->ai_recommendation) !!}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @endif
+        @if($activeTab === 'program_arahan')
+            <div wire:key="tab-program-arahan" class="bg-white rounded-xl shadow-sm border border-orange-100 overflow-hidden relative">
+                <div class="p-6 md:p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Program Arahan</h3>
+                            <p class="text-sm text-gray-500 mt-1">Daftar program penugasan di wilayah RW ini.</p>
+                        </div>
+                        <a href="{{ route('program-arahan.create', ['target_wilayah_id' => $targetWilayah->id, 'nomor_rw' => $dataRw->nomor_rw]) }}" wire:navigate class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Buat Program
+                        </a>
+                    </div>
+
+                    @if($programArahans->isEmpty())
+                        <div class="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada program</h3>
+                            <p class="mt-1 text-sm text-gray-500">Mulai rencanakan program pemenangan di RW ini.</p>
+                        </div>
+                    @else
+                        <div class="grid gap-4 md:grid-cols-2">
+                            @foreach($programArahans as $program)
+                                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div class="flex items-center gap-2">
+                                            @php
+                                                $statusCfg = \App\Models\ProgramArahan::STATUS_CONFIG[$program->status] ?? \App\Models\ProgramArahan::STATUS_CONFIG['belum_mulai'];
+                                            @endphp
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" style="background-color: {{ $statusCfg['bg'] }}; color: {{ $statusCfg['color'] }}; border: 1px solid {{ $statusCfg['color'] }}33;">
+                                                {{ $statusCfg['label'] }}
+                                            </span>
+                                            <span class="text-xs text-gray-500">{{ $program->created_at->format('d M Y') }}</span>
+                                        </div>
+                                        <div class="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                            {{ \App\Models\ProgramArahan::JENIS_PROGRAM[$program->jenis_program] ?? $program->jenis_program }}
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="text-base font-bold text-gray-900 mb-1">{{ $program->judul }}</h4>
+                                    <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ $program->deskripsi ?: 'Tidak ada deskripsi' }}</p>
+                                    
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                                        <div>
+                                            <div class="text-xs text-gray-500 mb-1">Target: <span class="font-medium text-gray-900">{{ $program->target_angka }} {{ $program->satuan }}</span></div>
+                                            <div class="text-xs text-gray-500">Progres: <span class="font-medium {{ $program->progress_pct >= 100 ? 'text-green-600' : 'text-orange-600' }}">{{ $program->progress_pct }}%</span></div>
+                                        </div>
+                                        @if($program->status === 'berjalan' || $program->status === 'selesai')
+                                            <a href="{{ route('program-arahan.report', $program->id) }}" wire:navigate class="text-sm font-medium text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-lg transition-colors">
+                                                {{ $program->status === 'selesai' ? 'Lihat Laporan' : 'Buat Laporan' }} &rarr;
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
                 </div>

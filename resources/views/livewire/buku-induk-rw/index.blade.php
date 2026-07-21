@@ -66,7 +66,7 @@
     </div>
 
     <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
             <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Total Wilayah</div>
             <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_rw']) }} <span class="text-lg text-gray-400 font-normal">RW</span></div>
@@ -86,6 +86,11 @@
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Penggalang {{ $selectedTahun }}</div>
             <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_penggalang']) }}</div>
             <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_penggalang']) }}</div>
+        </div>
+        <div class="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+            <div class="text-xs font-medium text-orange-500 uppercase tracking-wider mb-1">Program Arahan</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_program']) }}</div>
+            <div class="text-xs text-gray-400 mt-1.5">Total Program Dibuat</div>
         </div>
         @php
             $profilPct = $summary['total_rw'] > 0 ? round(($summary['profil_terisi'] / $summary['total_rw']) * 100) : 0;
@@ -114,6 +119,7 @@
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Korwe</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Korte</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Penggalang</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
                         <th scope="col" class="relative px-6 py-3">
                             <span class="sr-only">Aksi</span>
                         </th>
@@ -169,6 +175,11 @@
                                 </div>
                                 <div class="text-xs text-gray-600">Target: {{ $rw->target_penggalang }}</div>
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full {{ $rw->program_arahan_count > 0 ? 'bg-orange-100 text-orange-800' : 'bg-gray-200 text-gray-800' }} font-bold text-sm">
+                                    {{ $rw->program_arahan_count }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
                                     Buka Peta Kekuatan
@@ -180,7 +191,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                 </svg>

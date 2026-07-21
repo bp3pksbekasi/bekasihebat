@@ -430,6 +430,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/{dataRw}', \App\Livewire\BukuIndukRw\Detail::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.detail');
     });
 
+    Route::prefix('program-arahan')->middleware(['auth'])->group(function () {
+        Route::get('/create', \App\Livewire\ProgramArahan\Create::class)->middleware('menu:peta-kekuatan-rw')->name('program-arahan.create');
+        Route::get('/{program}/report', \App\Livewire\ProgramArahan\Report::class)->middleware('menu:peta-kekuatan-rw')->name('program-arahan.report');
+    });
+
     Route::get('/pengaturan/users', UserManagementIndex::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.users');

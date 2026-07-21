@@ -302,7 +302,7 @@ class Detail extends Component
 
     public function setActiveTab(string $tab)
     {
-        if (in_array($tab, ['profil_wilayah', 'peta_politik', 'strategi', 'struktur', 'realisasi', 'rekomendasi_ai'])) {
+        if (in_array($tab, ['profil_wilayah', 'peta_politik', 'strategi', 'struktur', 'realisasi', 'rekomendasi_ai', 'program_arahan'])) {
             $this->activeTab = $tab;
         }
     }
@@ -555,6 +555,8 @@ class Detail extends Component
                            ->where('nomor_rw', $this->dataRw->nomor_rw)
                            ->count();
 
+        $programArahans = [];
+
         if ($this->activeTab === 'struktur' || $this->activeTab === 'realisasi') {
             $korwes = Korwe::where('target_wilayah_id', $this->dataRw->target_wilayah_id)
                            ->where('nomor_rw', $this->dataRw->nomor_rw)
@@ -568,11 +570,19 @@ class Detail extends Component
                                           ->get();
         }
 
+        if ($this->activeTab === 'program_arahan') {
+            $programArahans = \App\Models\ProgramArahan::where('target_wilayah_id', $this->dataRw->target_wilayah_id)
+                ->where('nomor_rw', $this->dataRw->nomor_rw)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
         return view('livewire.buku-induk-rw.detail', [
             'korweCount' => $korweCount,
             'korwes' => $korwes,
             'kortes' => $kortes,
             'penggalangs' => $penggalangs,
+            'programArahans' => $programArahans,
             'targetWilayah' => $this->dataRw->targetWilayah,
         ])->layout('components.layouts.app', ['title' => 'Peta Kekuatan RW - Detail']);
     }
