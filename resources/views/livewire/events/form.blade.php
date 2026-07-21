@@ -101,17 +101,9 @@
                 <div x-show="infoStep === 1">
                     <div style="display:grid;gap:14px;">
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Judul program *</label>
+                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Nama Program *</label>
                             <input wire:model="judul" type="text" placeholder="Contoh: Pengajian RW 08" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
                             @error('judul') <div style="font-size:10px;color:#dc2626;margin-top:3px;">{{ $message }}</div> @enderror
-                        </div>
-                        <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Deskripsi</label>
-                            <textarea wire:model="deskripsi" rows="5" placeholder="Agenda, tujuan, target peserta..." style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
-                        </div>
-                        <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Persyaratan peserta (opsional)</label>
-                            <textarea wire:model="requirements" rows="3" placeholder="Contoh: Warga RW 08, membawa KTP, dll" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
                         </div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                             <div>
@@ -131,6 +123,14 @@
                                     <option value="sosialisasi_partai">Sosialisasi Partai</option>
                                 </select>
                             </div>
+                        </div>
+                        <div>
+                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Deskripsi</label>
+                            <textarea wire:model="deskripsi" rows="5" placeholder="Agenda, tujuan, target peserta..." style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                        </div>
+                        <div>
+                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Persyaratan peserta (opsional)</label>
+                            <textarea wire:model="requirements" rows="3" placeholder="Contoh: Warga RW 08, membawa KTP, dll" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
                         </div>
                     </div>
                     <div style="display:flex;justify-content:flex-end;margin-top:24px;padding-top:16px;border-top:0.5px solid #e5e5e5;">
