@@ -294,24 +294,24 @@
             {{-- Step 4 --}}
             @if($infoStep === 4)
             <div>
-                <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Review Program</div>
+                <div style="font-size:14px;font-weight:600;color:#1f2937;margin-bottom:12px;">Review Program</div>
                 <div style="background:#fafafa;padding:16px;border-radius:12px;font-size:13px;margin-bottom:20px;border:0.5px solid #e5e5e5;">
                     <table style="width:100%;">
                         <tr>
                             <td style="padding:4px 0;width:150px;color:#666;">Judul</td>
-                            <td style="padding:4px 0;font-weight:500;">{{ $judul }}</td>
+                            <td style="padding:4px 0;font-weight:500;color:#1f2937;">{{ $judul }}</td>
                         </tr>
                         <tr>
                             <td style="padding:4px 0;color:#666;">Wilayah</td>
-                            <td style="padding:4px 0;font-weight:500;">{{ $lokasiDesa ?: 'Semua' }} {{ $nomorRw ? 'RW '.$nomorRw : '' }}</td>
+                            <td style="padding:4px 0;font-weight:500;color:#1f2937;">{{ $lokasiDesa ?: 'Semua' }} {{ $nomorRw ? 'RW '.$nomorRw : '' }}</td>
                         </tr>
                         <tr>
                             <td style="padding:4px 0;color:#666;">Jenis Program</td>
-                            <td style="padding:4px 0;font-weight:500;">{{ \App\Models\ProgramArahan::JENIS_PROGRAM[$jenisProgram] ?? $jenisProgram }}</td>
+                            <td style="padding:4px 0;font-weight:500;color:#1f2937;">{{ \App\Models\ProgramArahan::JENIS_PROGRAM[$jenisProgram] ?? $jenisProgram }}</td>
                         </tr>
                         <tr>
                             <td style="padding:4px 0;color:#666;">Target Angka</td>
-                            <td style="padding:4px 0;font-weight:500;">{{ $targetAngka }} {{ $satuan }}</td>
+                            <td style="padding:4px 0;font-weight:500;color:#1f2937;">{{ $targetAngka }} {{ $satuan }}</td>
                         </tr>
                         <tr>
                             <td style="padding:4px 0;color:#666;">Total RAB</td>
@@ -320,7 +320,7 @@
                     </table>
                 </div>
 
-                <div style="font-size:14px;font-weight:600;margin-bottom:12px;">Alur Persetujuan (Approval)</div>
+                <div style="font-size:14px;font-weight:600;color:#1f2937;margin-bottom:12px;">Alur Persetujuan (Approval)</div>
                 <div style="display:flex;gap:12px;">
                     <div style="padding:8px 12px;background:#fff7ed;color:#c2410c;border:0.5px solid #fed7aa;border-radius:6px;font-size:12px;font-weight:600;">1. DPRa</div>
                     <div style="padding:8px 12px;background:#fff7ed;color:#c2410c;border:0.5px solid #fed7aa;border-radius:6px;font-size:12px;font-weight:600;">2. DPC</div>
