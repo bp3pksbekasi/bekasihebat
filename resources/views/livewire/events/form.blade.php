@@ -255,7 +255,7 @@
 
         {{-- ========== TAB: PERSIAPAN ========== --}}
         <div x-show="tab==='persiapan'" style="display:none;">
-            <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.8fr);gap:14px;" class="event-form-grid">
+            <div style="display:grid;grid-template-columns:1fr;gap:14px;" class="event-form-grid">
 
                 {{-- RAB --}}
                 <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
