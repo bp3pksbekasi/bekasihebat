@@ -1223,7 +1223,11 @@
                                         </div>
                                     </div>
                                     
-                                    <h4 class="text-base font-bold text-gray-900 mb-1">{{ $program->judul }}</h4>
+                                    <h4 class="text-base font-bold text-gray-900 mb-1">
+                                        <a href="{{ route('program-arahan.detail', $program->id) }}" wire:navigate class="hover:text-orange-600 transition-colors">
+                                            {{ $program->judul }}
+                                        </a>
+                                    </h4>
                                     <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ $program->deskripsi ?: 'Tidak ada deskripsi' }}</p>
                                     
                                     <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
@@ -1231,11 +1235,23 @@
                                             <div class="text-xs text-gray-500 mb-1">Target: <span class="font-medium text-gray-900">{{ $program->target_angka }} {{ $program->satuan }}</span></div>
                                             <div class="text-xs text-gray-500">Progres: <span class="font-medium {{ $program->progress_pct >= 100 ? 'text-green-600' : 'text-orange-600' }}">{{ $program->progress_pct }}%</span></div>
                                         </div>
-                                        @if($program->status === 'berjalan' || $program->status === 'selesai')
-                                            <a href="{{ route('program-arahan.report', $program->id) }}" wire:navigate class="text-sm font-medium text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-lg transition-colors">
-                                                {{ $program->status === 'selesai' ? 'Lihat Laporan' : 'Buat Laporan' }} &rarr;
+                                        <div class="flex gap-2">
+                                            @if($program->status !== 'selesai' && $program->status !== 'tertunda')
+                                                <a href="{{ route('program-arahan.edit', $program->id) }}" wire:navigate class="flex items-center text-gray-500 hover:text-gray-700 p-1.5 rounded-lg border border-gray-200 transition-colors" title="Edit">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                    </svg>
+                                                </a>
+                                            @endif
+                                            <a href="{{ route('program-arahan.detail', $program->id) }}" wire:navigate class="text-sm font-medium text-gray-700 hover:text-gray-900 bg-gray-100 px-3 py-1.5 rounded-lg transition-colors">
+                                                Detail
                                             </a>
-                                        @endif
+                                            @if($program->status === 'berjalan' || $program->status === 'selesai')
+                                                <a href="{{ route('program-arahan.report', $program->id) }}" wire:navigate class="text-sm font-medium text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-lg transition-colors">
+                                                    {{ $program->status === 'selesai' ? 'Lihat Laporan' : 'Buat Laporan' }}
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach

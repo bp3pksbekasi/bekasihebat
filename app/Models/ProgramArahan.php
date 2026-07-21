@@ -66,6 +66,16 @@ class ProgramArahan extends Model
         ];
     }
 
+    public function uniqueIds(): array
+    {
+        return ['id'];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'id';
+    }
+
     public function targetWilayah(): BelongsTo
     {
         return $this->belongsTo(TargetWilayah::class);

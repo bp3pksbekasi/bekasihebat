@@ -432,7 +432,9 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('program-arahan')->middleware(['auth'])->group(function () {
         Route::get('/create', \App\Livewire\ProgramArahan\Create::class)->middleware('menu:peta-kekuatan-rw')->name('program-arahan.create');
-        Route::get('/{program}/report', \App\Livewire\ProgramArahan\Report::class)->middleware('menu:peta-kekuatan-rw')->name('program-arahan.report');
+        Route::get('/{programArahan}', \App\Livewire\ProgramArahan\Detail::class)->middleware('menu:peta-kekuatan-rw')->name('program-arahan.detail');
+        Route::get('/{programArahan}/edit', \App\Livewire\ProgramArahan\Edit::class)->middleware('menu:peta-kekuatan-rw')->name('program-arahan.edit');
+        Route::get('/{programArahan}/report', \App\Livewire\ProgramArahan\Report::class)->middleware('menu:peta-kekuatan-rw')->name('program-arahan.report');
     });
 
     Route::get('/pengaturan/users', UserManagementIndex::class)
