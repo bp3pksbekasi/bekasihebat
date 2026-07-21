@@ -349,7 +349,7 @@
 
         {{-- ========== TAB: EVALUASI ========== --}}
         <div x-show="tab==='evaluasi'" style="display:none;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;" class="event-form-grid">
+            <div style="display:grid;grid-template-columns:1fr;gap:14px;align-items:stretch;" class="event-form-grid">
                 
                 {{-- Data Pelaksanaan --}}
                 <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
