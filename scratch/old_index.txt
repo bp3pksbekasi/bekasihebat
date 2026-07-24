@@ -1,4 +1,4 @@
-<div>
+﻿<div>
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Peta Kekuatan RW</h1>
         <p class="text-sm text-gray-500 mt-1">Manajemen terpadu profil dan struktur pemenangan di tingkat RW.</p>
@@ -68,9 +68,9 @@
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <div class="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Total Wilayah</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_rw']) }} <span class="text-lg text-gray-500 font-normal">RW</span></div>
-            <div class="text-xs text-gray-600 mt-1.5">{{ number_format($summary['total_rt']) }} RT · {{ number_format($summary['total_desa']) }} Desa</div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Total Wilayah</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_rw']) }} <span class="text-lg text-gray-400 font-normal">RW</span></div>
+            <div class="text-xs text-gray-500 mt-1.5">{{ number_format($summary['total_rt']) }} RT · {{ number_format($summary['total_desa']) }} Desa</div>
         </div>
         @php
             $pctKorwe = $summary['target_korwe'] > 0 ? round(($summary['tercapai_korwe'] / $summary['target_korwe']) * 100) : 0;
@@ -112,23 +112,23 @@
             </div>
         </div>
         <div class="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
-            <div class="text-xs font-semibold text-orange-600 uppercase tracking-wider mb-1">Program Arahan</div>
+            <div class="text-xs font-medium text-orange-500 uppercase tracking-wider mb-1">Program Arahan</div>
             <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_program']) }}</div>
-            <div class="text-xs text-gray-600 mt-1.5">Total Program Dibuat</div>
+            <div class="text-xs text-gray-500 mt-1.5">Total Program Dibuat</div>
         </div>
         @php
             $profilPct = $summary['total_rw'] > 0 ? round(($summary['profil_terisi'] / $summary['total_rw']) * 100) : 0;
         @endphp
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <div class="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Profil RW Terisi</div>
-            <div class="flex justify-between items-end mb-1">
-                <div class="text-3xl font-bold text-gray-900">{{ number_format($summary['profil_terisi']) }} <span class="text-lg text-gray-500 font-normal">/ {{ number_format($summary['total_rw']) }}</span></div>
-                <div class="text-2xl font-bold text-blue-600">{{ $profilPct }}%</div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Profil RW Terisi</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['profil_terisi']) }} <span class="text-lg text-gray-400 font-normal">/ {{ number_format($summary['total_rw']) }}</span></div>
+            <div class="flex items-center gap-2">
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                    <div class="h-1.5 rounded-full" style="background:#3b82f6; width: {{ $profilPct }}%"></div>
+                </div>
+                <div class="text-xs text-gray-500 font-medium">{{ $profilPct }}%</div>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1 mb-1.5">
-                <div class="h-1.5 rounded-full" style="background:#2563eb; width: {{ $profilPct }}%"></div>
-            </div>
-            <div class="text-xs text-gray-600">{{ number_format($summary['profil_lengkap']) }} profil lengkap</div>
+            <div class="text-xs text-gray-400 mt-1.5">{{ number_format($summary['profil_lengkap']) }} profil lengkap</div>
         </div>
     </div>
 
@@ -151,9 +151,8 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($rws as $rw)
-                        <tr class="hover:bg-gray-50 transition-colors" wire:key="desktop-row-{{ $rw->target_wilayah_id }}-{{ $rw->nomor_rw }}">
+                        <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-2">
                                     <div class="text-sm font-bold text-gray-900">RW {{ str_pad($rw->nomor_rw, 3, '0', STR_PAD_LEFT) }}</div>
@@ -208,13 +207,13 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim((string) $rw->nomor_rw, '0') }}' })" class="inline-flex items-center px-4 py-2 border border-blue-600 shadow-sm text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim($rw->nomor_rw, '0') }}' })" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                         Sisir RW
                                     </button>
-                                    <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none transition-colors bg-gray-900 hover:bg-gray-800">
+                                    <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
                                         Buka Peta Kekuatan
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -241,7 +240,7 @@
         <!-- Mobile Cards -->
         <div class="md:hidden divide-y divide-gray-100">
             @forelse($rws as $rw)
-                <div class="p-4 space-y-4" wire:key="mobile-card-{{ $rw->target_wilayah_id }}-{{ $rw->nomor_rw }}">
+                <div class="p-4 space-y-4">
                     <div class="flex justify-between items-start">
                         <div>
                             <div class="flex items-center gap-2">
@@ -304,7 +303,7 @@
                     </div>
 
                     <div class="flex gap-2 mt-4">
-                        <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim((string) $rw->nomor_rw, '0') }}' })" class="flex flex-1 items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                        <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim($rw->nomor_rw, '0') }}' })" class="flex flex-1 items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
