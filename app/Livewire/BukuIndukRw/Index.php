@@ -110,7 +110,7 @@ class Index extends Component
                 'penggalang_count' => \App\Models\PenggalangSuara::selectRaw('count(*)')
                     ->whereColumn('target_wilayah_id', 'data_rws.target_wilayah_id')
                     ->whereRaw('TRIM(LEADING "0" FROM nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)'),
-                'program_arahan_count' => \App\Models\ProgramArahan::selectRaw('count(*)')
+                'sisir_rw_count' => \App\Models\KegiatanRw::selectRaw('count(*)')
                     ->whereColumn('target_wilayah_id', 'data_rws.target_wilayah_id')
                     ->whereRaw('TRIM(LEADING "0" FROM nomor_rw) = TRIM(LEADING "0" FROM data_rws.nomor_rw)'),
                 'target_penggalang' => \App\Models\TargetWilayah::select('target_penggalang')
@@ -169,7 +169,7 @@ class Index extends Component
         $tercapaiKorwe = $allFilteredRws->sum('korwe_count');
         $tercapaiKorte = $allFilteredRws->sum('korte_count');
         $tercapaiPenggalang = $allFilteredRws->sum('penggalang_count');
-        $totalProgram = $allFilteredRws->sum('program_arahan_count');
+        $totalSisirRw = $allFilteredRws->sum('sisir_rw_count');
 
         // Profil completion
         $profilRwsIds = $allFilteredRws->pluck('target_wilayah_id')->unique();
@@ -193,7 +193,7 @@ class Index extends Component
             'target_penggalang' => $targetPenggalang,
             'tercapai_penggalang' => $tercapaiPenggalang,
 
-            'total_program' => $totalProgram,
+            'total_sisir_rw' => $totalSisirRw,
             
             'profil_terisi' => $profilTerisi,
             'profil_lengkap' => $profilCompleted,

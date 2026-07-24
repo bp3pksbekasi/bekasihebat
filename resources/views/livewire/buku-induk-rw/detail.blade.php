@@ -191,12 +191,12 @@
                 </svg>
                 ✨ Rekomendasi AI
             </button>
-            <button wire:click="setActiveTab('program_arahan')" class="{{ $activeTab === 'program_arahan' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
+            {{-- <button wire:click="setActiveTab('program_arahan')" class="{{ $activeTab === 'program_arahan' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'program_arahan' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                 </svg>
                 Program Arahan
-            </button>
+            </button> --}}
         </nav>
     </div>
 
@@ -1180,7 +1180,7 @@
                 </div>
             </div>
         @endif
-        @if($activeTab === 'program_arahan')
+        {{-- @if($activeTab === 'program_arahan')
             <div wire:key="tab-program-arahan" class="bg-white rounded-xl shadow-sm border border-orange-100 overflow-hidden relative">
                 <div class="p-6 md:p-8">
                     <div class="flex justify-between items-center mb-6">
@@ -1259,7 +1259,7 @@
                     @endif
                 </div>
             </div>
-        @endif
+        @endif --}}
     </div>
 
     @if ($showProfilDrawer && $profilRwId)

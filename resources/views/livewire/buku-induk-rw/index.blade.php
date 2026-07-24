@@ -112,9 +112,9 @@
             </div>
         </div>
         <div class="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
-            <div class="text-xs font-medium text-orange-500 uppercase tracking-wider mb-1">Program Arahan</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_program']) }}</div>
-            <div class="text-xs text-gray-500 mt-1.5">Total Program Dibuat</div>
+            <div class="text-xs font-medium text-orange-500 uppercase tracking-wider mb-1">Sisir RW</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_sisir_rw']) }}</div>
+            <div class="text-xs text-gray-500 mt-1.5">Total Kegiatan Diinput</div>
         </div>
         @php
             $profilPct = $summary['total_rw'] > 0 ? round(($summary['profil_terisi'] / $summary['total_rw']) * 100) : 0;
