@@ -17,18 +17,35 @@ class KegiatanRw extends Model
     use HasUuids;
 
     public const JENIS_KEGIATAN = [
-        'silaturahmi' => ['label' => 'Silaturahmi tokoh', 'icon' => 'heart-handshake', 'color' => '#16a34a'],
-        'door_to_door' => ['label' => 'Door-to-door', 'icon' => 'door', 'color' => '#2563eb'],
-        'baksos' => ['label' => 'Bakti sosial', 'icon' => 'heart', 'color' => '#2563eb'],
-        'pengajian' => ['label' => 'Pengajian / kajian', 'icon' => 'book', 'color' => '#d97706'],
-        'senam' => ['label' => 'Senam PKS', 'icon' => 'stretching', 'color' => '#ec4899'],
-        'diskusi' => ['label' => 'Diskusi warga', 'icon' => 'messages', 'color' => '#8b5cf6'],
-        'bedah_rumah' => ['label' => 'Bedah rumah', 'icon' => 'home-cog', 'color' => '#0891b2'],
-        'pendidikan' => ['label' => 'Bantuan pendidikan', 'icon' => 'school', 'color' => '#0d9488'],
-        'kesehatan' => ['label' => 'Layanan kesehatan', 'icon' => 'stethoscope', 'color' => '#dc2626'],
-        'rekrutmen' => ['label' => 'Rekrutmen kader', 'icon' => 'user-plus', 'color' => '#fe5000'],
-        'konsolidasi' => ['label' => 'Konsolidasi internal', 'icon' => 'users-group', 'color' => '#64748b'],
-        'lainnya' => ['label' => 'Lainnya', 'icon' => 'dots', 'color' => '#888888'],
+        'upa_rw' => ['label' => 'UPA RW', 'icon' => 'users', 'color' => '#f97316'],
+        'senam_pks' => ['label' => 'SENAM PKS', 'icon' => 'heart', 'color' => '#ec4899'],
+        'pertemuan_rki' => ['label' => 'PERTEMUAN RKI', 'icon' => 'users', 'color' => '#ec4899'],
+        'reses' => ['label' => 'RESES', 'icon' => 'microphone', 'color' => '#2563eb'],
+        'konsolidasi_struktur' => ['label' => 'KONSOLIDASI STRUKTUR', 'icon' => 'building', 'color' => '#64748b'],
+        'konsolidasi_korwe_korte' => ['label' => 'KONSOLIDASI KORWE KORTE', 'icon' => 'users-group', 'color' => '#0ea5e9'],
+        'konsolidasi_relawan' => ['label' => 'KONSOLIDASI RELAWAN', 'icon' => 'users-group', 'color' => '#14b8a6'],
+        'bantuan_posyandu' => ['label' => 'BANTUAN POSYANDU', 'icon' => 'stethoscope', 'color' => '#ef4444'],
+        'silaturrahim_tokoh' => ['label' => 'SILATURRAHIM TOKOH', 'icon' => 'heart-handshake', 'color' => '#22c55e'],
+        'layanan_ambulance' => ['label' => 'LAYANAN AMBULANCE', 'icon' => 'ambulance', 'color' => '#ef4444'],
+        'tatap_muka_warga' => ['label' => 'TATAP MUKA WARGA', 'icon' => 'messages', 'color' => '#8b5cf6'],
+        'sidak' => ['label' => 'SIDAK PEMBANGUNAN / ADVOKASI / ASPIRASI', 'icon' => 'alert-triangle', 'color' => '#eab308'],
+        'rapat_ranting' => ['label' => 'RAPAT RANTING', 'icon' => 'users', 'color' => '#6366f1'],
+        'pemberian_bantuan' => ['label' => 'PEMBERIAN BANTUAN / PROGRAM LAYANAN LAINNYA', 'icon' => 'gift', 'color' => '#10b981'],
+    ];
+
+    public const SEGMEN_KEGIATAN = [
+        'RELAWAN',
+        'IBU IBU',
+        'MAJELIS TAKLIM',
+        'PEMUDA',
+        'TOKOH MASYARAKAT',
+        'KOMUNITAS MASYARAKAT',
+        'STRUKTUR DPC',
+        'PENGURUS DPRA',
+        'KORWE / KORTE',
+        'ANGGOTA PKS (Pemilik KTA PKS)',
+        'WARGA UMUM',
+        'Other'
     ];
 
     protected $fillable = [
@@ -38,6 +55,7 @@ class KegiatanRw extends Model
         'desa',
         'nomor_rw',
         'jenis_kegiatan',
+        'segmen',
         'tanggal_kegiatan',
         'pelaksana',
         'jumlah_warga',

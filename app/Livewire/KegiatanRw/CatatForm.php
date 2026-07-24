@@ -20,6 +20,8 @@ class CatatForm extends Component
     public string $formDesaId = '';
     public string $formRw = '';
     public string $formJenis = '';
+    public string $formSegmen = '';
+    public string $formSegmenOther = '';
     public string $formPelaksana = '';
     public string $formJumlahWarga = '';
     public string $formCatatan = '';
@@ -70,7 +72,7 @@ class CatatForm extends Component
     public function resetForm(): void
     {
         $this->reset([
-            'formDesaId', 'formRw', 'formJenis', 'formPelaksana', 'formJumlahWarga',
+            'formDesaId', 'formRw', 'formJenis', 'formSegmen', 'formSegmenOther', 'formPelaksana', 'formJumlahWarga',
             'formCatatan', 'formTokoh', 'formTindakLanjut', 'formJadwalBerikutnya',
             'formJadikanEvent', 'formTampilGaleri', 'formFoto', 'existingFoto', 'editId'
         ]);
@@ -84,6 +86,12 @@ class CatatForm extends Component
         $this->formDesaId = $kegiatan->target_wilayah_id;
         $this->formRw = ltrim((string) $kegiatan->nomor_rw, '0');
         $this->formJenis = $kegiatan->jenis_kegiatan;
+        if (in_array($kegiatan->segmen, KegiatanRw::SEGMEN_KEGIATAN)) {
+            $this->formSegmen = $kegiatan->segmen;
+        } else if ($kegiatan->segmen) {
+            $this->formSegmen = 'Other';
+            $this->formSegmenOther = $kegiatan->segmen;
+        }
         $this->formTanggal = date('Y-m-d\TH:i', strtotime($kegiatan->tanggal_kegiatan));
         $this->formPelaksana = $kegiatan->pelaksana;
         $this->formJumlahWarga = (string) $kegiatan->jumlah_warga;
@@ -137,6 +145,8 @@ class CatatForm extends Component
             'formDesaId' => ['required', 'string'],
             'formRw' => ['required', 'string', 'max:10'],
             'formJenis' => ['required', 'string'],
+            'formSegmen' => ['required', 'string'],
+            'formSegmenOther' => ['required_if:formSegmen,Other', 'nullable', 'string', 'max:255'],
             'formTanggal' => ['required', 'date'],
             'formPelaksana' => ['required', 'string', 'max:255'],
             'formJumlahWarga' => ['nullable', 'integer', 'min:0'],
@@ -152,6 +162,8 @@ class CatatForm extends Component
             'formDesaId' => 'desa',
             'formRw' => 'RW',
             'formJenis' => 'jenis kegiatan',
+            'formSegmen' => 'segmen',
+            'formSegmenOther' => 'segmen lainnya',
             'formTanggal' => 'tanggal kegiatan',
             'formPelaksana' => 'pelaksana',
             'formJumlahWarga' => 'jumlah warga',
@@ -176,6 +188,7 @@ class CatatForm extends Component
             'desa' => $targetWilayah->desa,
             'nomor_rw' => str_pad($validated['formRw'], 3, '0', STR_PAD_LEFT),
             'jenis_kegiatan' => $validated['formJenis'],
+            'segmen' => $validated['formSegmen'] === 'Other' ? $validated['formSegmenOther'] : $validated['formSegmen'],
             'tanggal_kegiatan' => $validated['formTanggal'],
             'pelaksana' => $validated['formPelaksana'],
             'jumlah_warga' => (int) ($validated['formJumlahWarga'] ?? 0),
