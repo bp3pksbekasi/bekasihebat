@@ -8,11 +8,16 @@ use App\Models\Korwe;
 use App\Models\Korte;
 use App\Models\PenggalangSuara;
 use Livewire\Component;
+use Livewire\Attributes\Url;
 
 class Detail extends Component
 {
     public DataRw $dataRw;
     public ?ProfilRw $profilRw = null;
+    
+    #[Url]
+    public string $action = '';
+    
     public string $activeTab = 'profil_wilayah'; // profil_wilayah, peta_politik, strategi, struktur, realisasi, rekomendasi_ai
     
     public bool $showProfilDrawer = false;
@@ -91,6 +96,14 @@ class Detail extends Component
                     break;
                 }
             }
+        }
+        
+        if ($this->action === 'profil') {
+            $this->activeTab = 'profil_wilayah';
+            $this->openProfilDrawer();
+        } elseif ($this->action === 'struktur') {
+            $this->activeTab = 'struktur';
+            $this->tambahInfrastruktur();
         }
     }
 

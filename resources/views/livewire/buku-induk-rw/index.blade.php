@@ -213,10 +213,10 @@
                                         </svg>
                                         Sisir
                                     </button>
-                                    <a href="{{ route('public.rw-profile') }}" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                                    <a href="{{ route('buku-induk-rw.detail', ['targetWilayah' => $rw->id, 'action' => 'profil']) }}" wire:navigate class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
                                         Profil RW
                                     </a>
-                                    <a href="{{ route('public.input-infrastruktur') }}" target="_blank" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                                    <a href="{{ route('buku-induk-rw.detail', ['targetWilayah' => $rw->id, 'action' => 'struktur']) }}" wire:navigate class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
                                         Struktur
                                     </a>
                                     <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-3 py-2 border border-transparent text-xs font-medium rounded-md shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
@@ -315,10 +315,10 @@
                             </svg>
                             Sisir RW
                         </button>
-                        <a href="{{ route('public.rw-profile') }}" target="_blank" class="flex items-center justify-center px-3 py-2.5 border border-gray-300 text-xs font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                        <a href="{{ route('buku-induk-rw.detail', ['targetWilayah' => $rw->id, 'action' => 'profil']) }}" wire:navigate class="flex items-center justify-center px-3 py-2.5 border border-gray-300 text-xs font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
                             Profil RW
                         </a>
-                        <a href="{{ route('public.input-infrastruktur') }}" target="_blank" class="flex items-center justify-center px-3 py-2.5 border border-gray-300 text-xs font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                        <a href="{{ route('buku-induk-rw.detail', ['targetWilayah' => $rw->id, 'action' => 'struktur']) }}" wire:navigate class="flex items-center justify-center px-3 py-2.5 border border-gray-300 text-xs font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
                             Struktur
                         </a>
                         <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="flex items-center justify-center px-3 py-2.5 border border-transparent text-xs font-medium rounded-lg shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
