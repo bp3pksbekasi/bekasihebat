@@ -171,12 +171,7 @@
                 </svg>
                 Peta Politik Lokal
             </button>
-            <button wire:click="setActiveTab('strategi')" class="{{ $activeTab === 'strategi' ? 'bg-orange-50 text-orange-700 border-orange-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'strategi' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Strategi & PJ
-            </button>
+
             <button wire:click="setActiveTab('struktur')" class="{{ $activeTab === 'struktur' ? 'bg-orange-50 text-orange-700 border-orange-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'struktur' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -200,7 +195,7 @@
 
     <!-- Tab Contents -->
     <div class="space-y-6">
-        @if(in_array($activeTab, ['profil_wilayah', 'peta_politik', 'strategi']))
+        @if(in_array($activeTab, ['profil_wilayah', 'peta_politik']))
             <div wire:key="wrapper-profil-tabs" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 @if(empty($profilRw->id))
                     <div class="text-center py-12">
@@ -223,7 +218,6 @@
                         <h3 class="text-lg font-bold text-gray-900">
                             @if($activeTab === 'profil_wilayah') Profil Wilayah @endif
                             @if($activeTab === 'peta_politik') Peta Politik Lokal @endif
-                            @if($activeTab === 'strategi') Strategi & Penanggung Jawab @endif
                         </h3>
                         <button wire:click="openProfilDrawer" type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -361,6 +355,26 @@
                                 <div class="col-span-1 md:col-span-2 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                     <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Faktor Penyebab Menang/Kalah</span>
                                     <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed">{{ $profilRw->faktor_penyebab ?: '-' }}</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 pt-8 border-t border-gray-200">
+                                <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Strategi & Penanggung Jawab</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                        <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Strategi Mencapai Target Suara</span>
+                                        <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed whitespace-pre-line">{{ $profilRw->strategi ?: '-' }}</div>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                        <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Penanggung Jawab Dakwah di RW</span>
+                                        <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->penanggung_jawab ?: '-' }}</div>
+                                    </div>
+                                    @if($profilRw->keterangan_lain)
+                                        <div class="col-span-1 md:col-span-2 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                            <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Keterangan Lain</span>
+                                            <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed whitespace-pre-line">{{ $profilRw->keterangan_lain }}</div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -934,26 +948,7 @@
                         </div>
                     @endif
                     
-                    @if($activeTab === 'strategi')
-                        <div wire:key="tab-strategi" class="bg-gray-50 p-6 rounded-xl border border-gray-100">
-                            <div class="grid grid-cols-1 gap-4">
-                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Strategi Mencapai Target Suara</span>
-                                    <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed whitespace-pre-line">{{ $profilRw->strategi ?: '-' }}</div>
-                                </div>
-                                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                                    <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Penanggung Jawab Dakwah di RW</span>
-                                    <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->penanggung_jawab ?: '-' }}</div>
-                                </div>
-                                @if($profilRw->keterangan_lain)
-                                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                                        <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Keterangan Lain</span>
-                                        <div class="font-medium text-gray-900 text-sm sm:text-base leading-relaxed whitespace-pre-line">{{ $profilRw->keterangan_lain }}</div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
+
                 @endif
             </div>
         @endif
