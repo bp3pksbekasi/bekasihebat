@@ -413,27 +413,7 @@
                     >
                 </div>
 
-                {{-- Tindak Lanjut --}}
-                <div>
-                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Tindak Lanjut</label>
-                    <textarea
-                        wire:model="formTindakLanjut"
-                        rows="3"
-                        placeholder="Apa yang harus dilakukan selanjutnya"
-                        style="
-                            width:100%;
-                            border-radius:10px;
-                            border:1.5px solid #d1d5db;
-                            background:#fff;
-                            padding:12px 14px;
-                            font-size:15px;
-                            color:#111827;
-                            resize:vertical;
-                            line-height:1.5;
-                            box-sizing:border-box;
-                        "
-                    ></textarea>
-                </div>
+
 
 
 
