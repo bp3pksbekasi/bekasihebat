@@ -1,18 +1,18 @@
 <div>
     <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <div class="flex items-center gap-2 mb-1">
+            <div class="flex flex-wrap items-center gap-1 sm:gap-2 mb-1 text-xs sm:text-sm">
                 <a href="{{ route('buku-induk-rw.index') }}" wire:navigate class="text-sm font-medium text-gray-500 hover:text-gray-700">
                     &larr; Kembali
                 </a>
                 <span class="text-gray-300">/</span>
-                <span class="text-sm font-medium text-gray-500">{{ $dataRw->targetWilayah->dapil }}</span>
+                <span class="font-medium text-gray-500">{{ $dataRw->targetWilayah->dapil }}</span>
                 <span class="text-gray-300">/</span>
-                <span class="text-sm font-medium text-gray-500">{{ $dataRw->targetWilayah->kecamatan }}</span>
+                <span class="font-medium text-gray-500">{{ $dataRw->targetWilayah->kecamatan }}</span>
                 <span class="text-gray-300">/</span>
-                <span class="text-sm font-medium text-gray-500">{{ $dataRw->targetWilayah->desa }}</span>
+                <span class="font-medium text-gray-500">{{ $dataRw->targetWilayah->desa }}</span>
             </div>
-            <h1 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight flex flex-wrap items-center gap-2 sm:gap-3 mt-1">
                 Peta Kekuatan RW {{ str_pad($dataRw->nomor_rw, 3, '0', STR_PAD_LEFT) }}
                 @if($profilRw && $profilRw->is_complete)
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-green-100 text-green-800">
@@ -157,50 +157,44 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="mb-6 bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
-        <nav class="flex w-full px-2 sm:px-6 min-w-max" aria-label="Tabs">
-            <button wire:click="setActiveTab('profil_wilayah')" class="{{ $activeTab === 'profil_wilayah' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'profil_wilayah' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="mb-6 overflow-x-auto custom-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <nav class="flex gap-2 min-w-max" aria-label="Tabs">
+            <button wire:click="setActiveTab('profil_wilayah')" class="{{ $activeTab === 'profil_wilayah' ? 'bg-orange-50 text-orange-700 border-orange-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'profil_wilayah' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Profil Wilayah
             </button>
-            <button wire:click="setActiveTab('peta_politik')" class="{{ $activeTab === 'peta_politik' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'peta_politik' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button wire:click="setActiveTab('peta_politik')" class="{{ $activeTab === 'peta_politik' ? 'bg-orange-50 text-orange-700 border-orange-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'peta_politik' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 Peta Politik Lokal
             </button>
-            <button wire:click="setActiveTab('strategi')" class="{{ $activeTab === 'strategi' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'strategi' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button wire:click="setActiveTab('strategi')" class="{{ $activeTab === 'strategi' ? 'bg-orange-50 text-orange-700 border-orange-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'strategi' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Strategi & Penanggung Jawab
+                Strategi & PJ
             </button>
-            <button wire:click="setActiveTab('struktur')" class="{{ $activeTab === 'struktur' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'struktur' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button wire:click="setActiveTab('struktur')" class="{{ $activeTab === 'struktur' ? 'bg-orange-50 text-orange-700 border-orange-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'struktur' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                Infrastruktur Pemenangan
+                Infrastruktur
             </button>
-            <button wire:click="setActiveTab('realisasi')" class="{{ $activeTab === 'realisasi' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'realisasi' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button wire:click="setActiveTab('realisasi')" class="{{ $activeTab === 'realisasi' ? 'bg-orange-50 text-orange-700 border-orange-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'realisasi' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Target & Realisasi
             </button>
-            <button wire:click="setActiveTab('rekomendasi_ai')" class="{{ $activeTab === 'rekomendasi_ai' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer" style="background: linear-gradient(90deg, rgba(79,70,229,0.05) 0%, rgba(147,51,234,0.05) 100%);">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'rekomendasi_ai' ? 'text-indigo-500' : 'text-indigo-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button wire:click="setActiveTab('rekomendasi_ai')" class="{{ $activeTab === 'rekomendasi_ai' ? 'bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }} border px-4 py-2.5 rounded-full font-medium text-sm flex items-center transition-all cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 {{ $activeTab === 'rekomendasi_ai' ? 'text-indigo-600' : 'text-indigo-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
                 ✨ Rekomendasi AI
             </button>
-            {{-- <button wire:click="setActiveTab('program_arahan')" class="{{ $activeTab === 'program_arahan' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50' }} flex-1 whitespace-nowrap py-4 px-2 border-b-2 font-medium text-sm flex justify-center items-center transition-colors cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 {{ $activeTab === 'program_arahan' ? 'text-orange-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-                Program Arahan
-            </button> --}}
         </nav>
     </div>
 
@@ -243,7 +237,7 @@
                         <div wire:key="tab-profil">
                             <!-- Data Demografi -->
                             <div class="mb-8">
-                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
                                 <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                                     <div class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1">DPT Wilayah</div>
                                     <div class="text-xl font-bold text-gray-900">{{ number_format($dataRw->dpt ?? 0, 0, ',', '.') }}</div>
