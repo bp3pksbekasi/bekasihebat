@@ -1264,7 +1264,7 @@
 
     @if ($showProfilDrawer && $profilRwId)
         <div class="fixed inset-0 bg-black bg-opacity-30 z-40 transition-opacity" wire:click="closeProfilDrawer"></div>
-        <div class="fixed top-0 right-0 w-full md:w-[480px] max-w-[100vw] h-full bg-white shadow-[-8px_0_24px_rgba(0,0,0,0.16)] z-50 overflow-y-auto custom-scrollbar flex flex-col">
+        <div class="fixed top-0 right-0 h-full bg-white shadow-[-8px_0_24px_rgba(0,0,0,0.16)] z-50 overflow-y-auto custom-scrollbar flex flex-col" style="width: 100%; max-width: 480px;">
             <!-- Header -->
             <div class="sticky top-0 bg-white border-b border-gray-200 px-5 py-4 z-10 flex justify-between items-start">
                 <div>
@@ -1301,7 +1301,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 @foreach (\App\Models\ProfilRw::EKONOMI_OPTIONS as $ekoOption)
                                     <label class="flex items-center text-sm text-gray-700 cursor-pointer">
-                                        <input type="checkbox" wire:model="profilData.ekonomi_dominan" value="{{ $ekoOption }}" class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 mr-2.5">
+                                        <input type="checkbox" wire:model="profilData.ekonomi_dominan" value="{{ $ekoOption }}" class="w-4 h-4 text-orange-600 bg-white border-gray-300 rounded focus:ring-orange-500 mr-2.5">
                                         {{ $ekoOption }}
                                     </label>
                                 @endforeach
@@ -1317,7 +1317,7 @@
                                     <div class="flex flex-col gap-2.5">
                                         @foreach($options as $label)
                                             <label class="flex items-start text-sm text-gray-600 cursor-pointer">
-                                                <input type="checkbox" wire:model="profilData.profil_warga" value="{{ $label }}" class="mt-0.5 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 mr-2.5">
+                                                <input type="checkbox" wire:model="profilData.profil_warga" value="{{ $label }}" class="mt-0.5 w-4 h-4 text-orange-600 bg-white border-gray-300 rounded focus:ring-orange-500 mr-2.5">
                                                 <span class="leading-relaxed">{{ $label }}</span>
                                             </label>
                                         @endforeach
@@ -1335,7 +1335,7 @@
                                     <div class="flex flex-col gap-2.5">
                                         @foreach($options as $label)
                                             <label class="flex items-start text-sm text-gray-600 cursor-pointer">
-                                                <input type="checkbox" wire:model="profilData.faktor_penyebab" value="{{ $label }}" class="mt-0.5 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 mr-2.5">
+                                                <input type="checkbox" wire:model="profilData.faktor_penyebab" value="{{ $label }}" class="mt-0.5 w-4 h-4 text-orange-600 bg-white border-gray-300 rounded focus:ring-orange-500 mr-2.5">
                                                 <span class="leading-relaxed">{{ $label }}</span>
                                             </label>
                                         @endforeach
@@ -1503,11 +1503,11 @@
             
             <!-- Footer -->
             <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 grid grid-cols-2 gap-3 z-10">
-                <button wire:click="closeProfilDrawer" type="button" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
-                    Batal
-                </button>
                 <button wire:click="simpanProfil" type="button" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
                     Simpan Profil
+                </button>
+                <button wire:click="closeProfilDrawer" type="button" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
+                    Batal
                 </button>
             </div>
         </div>
