@@ -48,6 +48,36 @@ class KegiatanRw extends Model
         'Other'
     ];
 
+    public const DPR_RI_HADIR = [
+        'TIDAK ADA',
+        'HAJI JALAL ABDUL NASIR'
+    ];
+
+    public const DPRD_PROV_HADIR = [
+        'TIDAK ADA',
+        'DR. HJ. CUCU SUGIARTI, S.I.P., M.Pd'
+    ];
+
+    public const DPRD_KAB_HADIR = [
+        'TIDAK ADA',
+        'H. YUSUF FATHULLAH FAJRI, A.MD.',
+        'BUDI MUHAMMAD MUSTAFA',
+        'H. NURYASIN SUPARMIN, LC.',
+        'HJ. PUJI LESTARI, A.MD.',
+        'DRA. HJ. ANI RUKMINI, M.I.KOM.',
+        'ADE JENAH FAJARWATI, S.PD.I.',
+        'SAEFUL ISLAM, S.H.'
+    ];
+
+    public const TEMPAT_KEGIATAN = [
+        'BALAI PERTEMUAN',
+        'RUMAH WARGA',
+        'LAPANGAN',
+        'KANTOR PARTAI',
+        'JALAN LINGKUNGAN',
+        'Other'
+    ];
+
     protected $fillable = [
         'target_wilayah_id',
         'dapil',
@@ -60,6 +90,11 @@ class KegiatanRw extends Model
         'pelaksana',
         'jumlah_warga',
         'catatan',
+        'dpr_ri_hadir',
+        'dprd_prov_hadir',
+        'dprd_kab_hadir',
+        'tempat_kegiatan',
+        'keterangan_tambahan',
         'foto',
         'tampil_galeri',
         'tokoh_ditemui',

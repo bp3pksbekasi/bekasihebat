@@ -22,6 +22,12 @@ class CatatForm extends Component
     public string $formJenis = '';
     public string $formSegmen = '';
     public string $formSegmenOther = '';
+    public string $formDprRi = '';
+    public string $formDprdProv = '';
+    public string $formDprdKab = '';
+    public string $formTempat = '';
+    public string $formTempatOther = '';
+    public string $formKeteranganTambahan = '';
     public string $formPelaksana = '';
     public string $formJumlahWarga = '';
     public string $formCatatan = '';
@@ -73,6 +79,7 @@ class CatatForm extends Component
     {
         $this->reset([
             'formDesaId', 'formRw', 'formJenis', 'formSegmen', 'formSegmenOther', 'formPelaksana', 'formJumlahWarga',
+            'formDprRi', 'formDprdProv', 'formDprdKab', 'formTempat', 'formTempatOther', 'formKeteranganTambahan',
             'formCatatan', 'formTokoh', 'formTindakLanjut', 'formJadwalBerikutnya',
             'formJadikanEvent', 'formTampilGaleri', 'formFoto', 'existingFoto', 'editId'
         ]);
@@ -92,6 +99,16 @@ class CatatForm extends Component
             $this->formSegmen = 'Other';
             $this->formSegmenOther = $kegiatan->segmen;
         }
+        $this->formDprRi = $kegiatan->dpr_ri_hadir ?? '';
+        $this->formDprdProv = $kegiatan->dprd_prov_hadir ?? '';
+        $this->formDprdKab = $kegiatan->dprd_kab_hadir ?? '';
+        if (in_array($kegiatan->tempat_kegiatan, KegiatanRw::TEMPAT_KEGIATAN)) {
+            $this->formTempat = $kegiatan->tempat_kegiatan;
+        } else if ($kegiatan->tempat_kegiatan) {
+            $this->formTempat = 'Other';
+            $this->formTempatOther = $kegiatan->tempat_kegiatan;
+        }
+        $this->formKeteranganTambahan = $kegiatan->keterangan_tambahan ?? '';
         $this->formTanggal = date('Y-m-d\TH:i', strtotime($kegiatan->tanggal_kegiatan));
         $this->formPelaksana = $kegiatan->pelaksana;
         $this->formJumlahWarga = (string) $kegiatan->jumlah_warga;
@@ -147,6 +164,12 @@ class CatatForm extends Component
             'formJenis' => ['required', 'string'],
             'formSegmen' => ['required', 'string'],
             'formSegmenOther' => ['required_if:formSegmen,Other', 'nullable', 'string', 'max:255'],
+            'formDprRi' => ['required', 'string'],
+            'formDprdProv' => ['required', 'string'],
+            'formDprdKab' => ['required', 'string'],
+            'formTempat' => ['required', 'string'],
+            'formTempatOther' => ['required_if:formTempat,Other', 'nullable', 'string', 'max:255'],
+            'formKeteranganTambahan' => ['nullable', 'string'],
             'formTanggal' => ['required', 'date'],
             'formPelaksana' => ['required', 'string', 'max:255'],
             'formJumlahWarga' => ['nullable', 'integer', 'min:0'],
@@ -164,6 +187,12 @@ class CatatForm extends Component
             'formJenis' => 'jenis kegiatan',
             'formSegmen' => 'segmen',
             'formSegmenOther' => 'segmen lainnya',
+            'formDprRi' => 'anggota DPR RI hadir',
+            'formDprdProv' => 'anggota DPRD Provinsi hadir',
+            'formDprdKab' => 'anggota DPRD Kab/Kota hadir',
+            'formTempat' => 'tempat kegiatan',
+            'formTempatOther' => 'tempat kegiatan lainnya',
+            'formKeteranganTambahan' => 'keterangan tambahan',
             'formTanggal' => 'tanggal kegiatan',
             'formPelaksana' => 'pelaksana',
             'formJumlahWarga' => 'jumlah warga',
@@ -189,6 +218,11 @@ class CatatForm extends Component
             'nomor_rw' => str_pad($validated['formRw'], 3, '0', STR_PAD_LEFT),
             'jenis_kegiatan' => $validated['formJenis'],
             'segmen' => $validated['formSegmen'] === 'Other' ? $validated['formSegmenOther'] : $validated['formSegmen'],
+            'dpr_ri_hadir' => $validated['formDprRi'],
+            'dprd_prov_hadir' => $validated['formDprdProv'],
+            'dprd_kab_hadir' => $validated['formDprdKab'],
+            'tempat_kegiatan' => $validated['formTempat'] === 'Other' ? $validated['formTempatOther'] : $validated['formTempat'],
+            'keterangan_tambahan' => $validated['formKeteranganTambahan'] !== '' ? $validated['formKeteranganTambahan'] : null,
             'tanggal_kegiatan' => $validated['formTanggal'],
             'pelaksana' => $validated['formPelaksana'],
             'jumlah_warga' => (int) ($validated['formJumlahWarga'] ?? 0),

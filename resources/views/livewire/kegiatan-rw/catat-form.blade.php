@@ -237,6 +237,140 @@
                     >
                 </div>
 
+                {{-- Anggota DPR RI Hadir --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Anggota DPR RI Hadir <span style="color:#ef4444;">*</span></label>
+                    <select
+                        wire:model="formDprRi"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— Pilih Anggota DPR RI —</option>
+                        @foreach (\App\Models\KegiatanRw::DPR_RI_HADIR as $opt)
+                            <option value="{{ $opt }}">{{ $opt }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Anggota DPRD Provinsi Hadir --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Anggota DPRD Provinsi Hadir <span style="color:#ef4444;">*</span></label>
+                    <select
+                        wire:model="formDprdProv"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— Pilih Anggota DPRD Provinsi —</option>
+                        @foreach (\App\Models\KegiatanRw::DPRD_PROV_HADIR as $opt)
+                            <option value="{{ $opt }}">{{ $opt }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Anggota DPRD Kab/Kota Hadir --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Anggota DPRD Kab/Kota Hadir <span style="color:#ef4444;">*</span></label>
+                    <select
+                        wire:model="formDprdKab"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— Pilih Anggota DPRD Kab/Kota —</option>
+                        @foreach (\App\Models\KegiatanRw::DPRD_KAB_HADIR as $opt)
+                            <option value="{{ $opt }}">{{ $opt }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Tempat Kegiatan --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Tempat Kegiatan <span style="color:#ef4444;">*</span></label>
+                    <select
+                        wire:model.live="formTempat"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— Pilih Tempat Kegiatan —</option>
+                        @foreach (\App\Models\KegiatanRw::TEMPAT_KEGIATAN as $opt)
+                            <option value="{{ $opt }}">{{ $opt }}</option>
+                        @endforeach
+                    </select>
+
+                    @if($formTempat === 'Other')
+                        <div style="margin-top:10px;">
+                            <input
+                                wire:model="formTempatOther"
+                                type="text"
+                                placeholder="Tuliskan tempat lainnya..."
+                                style="
+                                    width:100%;height:48px;
+                                    border-radius:10px;
+                                    border:1.5px solid #d1d5db;
+                                    background:#fff;
+                                    padding:0 14px;
+                                    font-size:15px;
+                                    color:#111827;
+                                    box-sizing:border-box;
+                                "
+                            >
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Keterangan Tambahan --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Keterangan Tambahan</label>
+                    <textarea
+                        wire:model="formKeteranganTambahan"
+                        rows="3"
+                        placeholder="Tambahkan informasi lainnya untuk memperjelas jenis kegiatan ataupun detail program. Contoh: kelas tahsin RKI, perbaikan jalan, dll"
+                        style="
+                            width:100%;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:12px 14px;
+                            font-size:15px;
+                            color:#111827;
+                            resize:vertical;
+                            line-height:1.5;
+                            box-sizing:border-box;
+                        "
+                    ></textarea>
+                </div>
+
                 {{-- Catatan --}}
                 <div>
                     <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Catatan / Hasil Kegiatan</label>
