@@ -96,59 +96,63 @@
             </div>
 
             <!-- Content Placeholder -->
-            <div class="p-5">
-                <div class="bg-blue-50 text-blue-700 p-4 rounded-lg text-sm mb-5 border border-blue-100 font-medium">
-                    Formulir cepat untuk menambahkan data infrastruktur pemenangan di RW {{ str_pad($dataRw->nomor_rw, 3, '0', STR_PAD_LEFT) }}.
+            <form wire:submit.prevent="simpanInfrastruktur" class="flex flex-col min-h-[calc(100vh-68px)]" x-data="{ type: @entangle('infraType') }">
+                <div class="p-5 flex-1">
+                    <div class="bg-blue-50 text-blue-700 p-4 rounded-lg text-sm mb-5 border border-blue-100 font-medium">
+                        Formulir cepat untuk menambahkan data infrastruktur pemenangan di RW {{ str_pad($dataRw->nomor_rw, 3, '0', STR_PAD_LEFT) }}.
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Jenis Infrastruktur</label>
+                            <select wire:model="infraType" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
+                                <option value="korwe">Korwe (Koordinator RW)</option>
+                                <option value="korte">Korte (Koordinator RT)</option>
+                                <option value="penggalang">Penggalang Suara</option>
+                            </select>
+                            @error('infraType') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+                        
+                        <div x-show="type === 'korte' || type === 'penggalang'" x-cloak>
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nomor RT (Contoh: 001)</label>
+                            <input type="text" wire:model="infraRt" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="001">
+                            @error('infraRt') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nama Lengkap</label>
+                            <input type="text" wire:model="infraNama" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Contoh: Budi Santoso">
+                            @error('infraNama') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">No. HP / WhatsApp</label>
+                            <input type="text" wire:model="infraHp" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="08123456789">
+                            @error('infraHp') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+                        
+                        <div x-show="type === 'penggalang'" x-cloak>
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Target Pemilih (Opsional)</label>
+                            <input type="number" wire:model="infraTarget" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Jumlah target suara">
+                            @error('infraTarget') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
                 </div>
-
-                <form wire:submit.prevent="simpanInfrastruktur" class="space-y-4" x-data="{ type: @entangle('infraType') }">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Jenis Infrastruktur</label>
-                        <select wire:model="infraType" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
-                            <option value="korwe">Korwe (Koordinator RW)</option>
-                            <option value="korte">Korte (Koordinator RT)</option>
-                            <option value="penggalang">Penggalang Suara</option>
-                        </select>
-                        @error('infraType') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                    </div>
-                    
-                    <div x-show="type === 'korte' || type === 'penggalang'" x-cloak>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nomor RT (Contoh: 001)</label>
-                        <input type="text" wire:model="infraRt" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="001">
-                        @error('infraRt') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nama Lengkap</label>
-                        <input type="text" wire:model="infraNama" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Contoh: Budi Santoso">
-                        @error('infraNama') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">No. HP / WhatsApp</label>
-                        <input type="text" wire:model="infraHp" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="08123456789">
-                        @error('infraHp') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                    </div>
-                    
-                    <div x-show="type === 'penggalang'" x-cloak>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Target Pemilih (Opsional)</label>
-                        <input type="number" wire:model="infraTarget" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Jumlah target suara">
-                        @error('infraTarget') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                    </div>
-                    
-                    <div class="pt-4 mt-6 border-t border-gray-100">
-                        <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2" wire:loading.attr="disabled">
-                            <span wire:key="span-idle" wire:loading.remove wire:target="simpanInfrastruktur">
-                                <svg class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                Simpan Data
-                            </span>
-                            <span wire:key="span-loading" wire:loading wire:target="simpanInfrastruktur">
-                                Menyimpan...
-                            </span>
-                        </button>
-                    </div>
-                </form>
-            </div>
+                
+                <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 grid grid-cols-2 gap-3 z-10 mt-auto">
+                    <button type="submit" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center" wire:loading.attr="disabled">
+                        <span wire:key="span-idle" wire:loading.remove wire:target="simpanInfrastruktur">
+                            Simpan Data
+                        </span>
+                        <span wire:key="span-loading" wire:loading wire:target="simpanInfrastruktur">
+                            Menyimpan...
+                        </span>
+                    </button>
+                    <button wire:click="closeInfraDrawer" type="button" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
+                        Batal
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -214,7 +214,12 @@ class Detail extends Component
 
     public function closeProfilDrawer(): void
     {
-        $this->showProfilDrawer = false;
+        $this->redirect(route('buku-induk-rw.index'), navigate: true);
+    }
+
+    public function closeInfraDrawer(): void
+    {
+        $this->redirect(route('buku-induk-rw.index'), navigate: true);
     }
 
     public function simpanProfil(): void
