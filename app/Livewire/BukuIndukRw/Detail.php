@@ -261,14 +261,8 @@ class Detail extends Component
             $dataToSave
         );
 
-        $this->showProfilDrawer = false;
-        
-        // Reload profil data
-        $this->profilRw = ProfilRw::where('target_wilayah_id', $this->dataRw->target_wilayah_id)
-                                  ->where('nomor_rw', $this->profilRwId)
-                                  ->first();
-                                  
-        $this->dispatch('saved');
+        session()->flash('success', 'Profil RW berhasil disimpan.');
+        return $this->redirect(route('buku-induk-rw.index'), navigate: true);
     }
 
     private function emptyProfilData(): void
@@ -419,7 +413,7 @@ class Detail extends Component
         $this->infraTarget = '';
 
         session()->flash('success', 'Data infrastruktur berhasil disimpan.');
-        $this->dispatch('close-infra-drawer');
+        return $this->redirect(route('buku-induk-rw.index'), navigate: true);
     }
 
     public function tambahInfrastruktur()
