@@ -133,54 +133,67 @@
                 {{-- Jenis Kegiatan --}}
                 <div>
                     <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Jenis Kegiatan <span style="color:#ef4444;">*</span></label>
-                    <div style="display:grid;gap:10px;">
+                    <select
+                        wire:model="formJenis"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— Pilih Jenis Kegiatan —</option>
                         @foreach (\App\Models\KegiatanRw::JENIS_KEGIATAN as $key => $cfg)
-                            <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                                <input
-                                    wire:model="formJenis"
-                                    type="radio"
-                                    value="{{ $key }}"
-                                    style="width:20px;height:20px;accent-color:#ea580c;cursor:pointer;"
-                                >
-                                <span style="font-size:14px;color:#374151;text-transform:uppercase;">{{ $cfg['label'] }}</span>
-                            </label>
+                            <option value="{{ $key }}">{{ $cfg['label'] }}</option>
                         @endforeach
-                    </div>
+                    </select>
                 </div>
 
                 {{-- Segmen --}}
                 <div>
                     <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">SEGMEN <span style="color:#ef4444;">*</span></label>
-                    <div style="display:grid;gap:10px;">
+                    <select
+                        wire:model.live="formSegmen"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— Pilih Segmen —</option>
                         @foreach (\App\Models\KegiatanRw::SEGMEN_KEGIATAN as $seg)
-                            <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                                <input
-                                    wire:model.live="formSegmen"
-                                    type="radio"
-                                    value="{{ $seg }}"
-                                    style="width:20px;height:20px;accent-color:#ea580c;cursor:pointer;"
-                                >
-                                <span style="font-size:14px;color:#374151;text-transform:uppercase;">{{ $seg }}</span>
-                                @if($seg === 'Other' && $formSegmen === 'Other')
-                                    <input
-                                        wire:model="formSegmenOther"
-                                        type="text"
-                                        style="
-                                            flex:1;height:36px;
-                                            border-radius:6px;
-                                            border:1px solid #d1d5db;
-                                            border-bottom:1.5px solid #d1d5db;
-                                            background:#fff;
-                                            padding:0 10px;
-                                            font-size:14px;
-                                            color:#111827;
-                                            margin-left:8px;
-                                        "
-                                    >
-                                @endif
-                            </label>
+                            <option value="{{ $seg }}">{{ $seg }}</option>
                         @endforeach
-                    </div>
+                    </select>
+
+                    @if($formSegmen === 'Other')
+                        <div style="margin-top:10px;">
+                            <input
+                                wire:model="formSegmenOther"
+                                type="text"
+                                placeholder="Tuliskan segmen lainnya..."
+                                style="
+                                    width:100%;height:48px;
+                                    border-radius:10px;
+                                    border:1.5px solid #d1d5db;
+                                    background:#fff;
+                                    padding:0 14px;
+                                    font-size:15px;
+                                    color:#111827;
+                                    box-sizing:border-box;
+                                "
+                            >
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Pelaksana --}}
