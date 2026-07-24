@@ -262,7 +262,7 @@ class Detail extends Component
         );
 
         session()->flash('success', 'Profil RW berhasil disimpan.');
-        return $this->redirect(route('buku-induk-rw.index'), navigate: true);
+        $this->redirect(route('buku-induk-rw.index'), navigate: true);
     }
 
     private function emptyProfilData(): void
@@ -413,7 +413,7 @@ class Detail extends Component
         $this->infraTarget = '';
 
         session()->flash('success', 'Data infrastruktur berhasil disimpan.');
-        return $this->redirect(route('buku-induk-rw.index'), navigate: true);
+        $this->redirect(route('buku-induk-rw.index'), navigate: true);
     }
 
     public function tambahInfrastruktur()
