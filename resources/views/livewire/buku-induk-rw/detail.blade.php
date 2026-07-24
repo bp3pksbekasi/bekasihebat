@@ -1263,60 +1263,32 @@
     </div>
 
     @if ($showProfilDrawer && $profilRwId)
-        <div style="position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:40;" wire:click="closeProfilDrawer"></div>
-        <div style="position:fixed;top:0;right:0;width:440px;max-width:100%;height:100%;background:white;box-shadow:-8px 0 24px rgba(0,0,0,0.16);z-index:50;overflow-y:auto;">
-            <div style="position:sticky;top:0;background:white;border-bottom:0.5px solid #e5e5e5;padding:16px;z-index:10;">
-                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
-                    <div>
-                        <div style="font-size:14px;font-weight:600;color:#1a1a1a;">Profil RW {{ $profilRwId }} - {{ $targetWilayah->desa }}</div>
-                        <div style="font-size:11px;color:#888;margin-top:4px;">{{ $targetWilayah->kecamatan }} · {{ $targetWilayah->dapil }}</div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        @php
-                            $statusCfg = \App\Models\TargetWilayah::STATUS_CONFIG[$autoFillData['status_wilayah'] ?? 'ZONA BERAT'] ?? \App\Models\TargetWilayah::STATUS_CONFIG['ZONA BERAT'];
-                        @endphp
-                        <span style="padding:3px 8px;border-radius:999px;font-size:10px;font-weight:600;background:{{ $statusCfg['bg'] }};color:{{ $statusCfg['text'] }};">{{ $statusCfg['label'] }}</span>
-                        <button wire:click="closeProfilDrawer" type="button" style="width:28px;height:28px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#666;cursor:pointer;">x</button>
-                    </div>
+        <div class="fixed inset-0 bg-black bg-opacity-30 z-40 transition-opacity" wire:click="closeProfilDrawer"></div>
+        <div class="fixed top-0 right-0 w-full md:w-[480px] max-w-[100vw] h-full bg-white shadow-[-8px_0_24px_rgba(0,0,0,0.16)] z-50 overflow-y-auto custom-scrollbar flex flex-col">
+            <!-- Header -->
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-5 py-4 z-10 flex justify-between items-start">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-900">Profil RW {{ str_pad($profilRwId, 3, '0', STR_PAD_LEFT) }} - {{ $targetWilayah->desa }}</h2>
+                    <p class="text-xs text-gray-500 mt-1">{{ $targetWilayah->kecamatan }} &middot; {{ $targetWilayah->dapil }}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    @php
+                        $statusCfg = \App\Models\TargetWilayah::STATUS_CONFIG[$autoFillData['status_wilayah'] ?? 'ZONA BERAT'] ?? \App\Models\TargetWilayah::STATUS_CONFIG['ZONA BERAT'];
+                    @endphp
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold" style="background:{{ $statusCfg['bg'] }};color:{{ $statusCfg['text'] }};">{{ $statusCfg['label'] }}</span>
+                    <button wire:click="closeProfilDrawer" type="button" class="p-1.5 bg-gray-50 text-gray-400 hover:text-gray-600 rounded-md transition-colors border border-transparent hover:border-gray-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                 </div>
             </div>
 
-            <div style="padding:16px;display:grid;gap:16px;">
-                <div>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#2563eb;margin-bottom:10px;">Data otomatis <span style="font-size:10px;padding:2px 6px;border-radius:999px;background:#dbeafe;color:#2563eb;">auto-fill</span></div>
-                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:8px;">
-                        <div style="background:#fafafa;border-radius:10px;padding:10px;">
-                            <div style="font-size:10px;color:#888;">Jumlah RT</div>
-                            <div style="font-size:14px;font-weight:600;color:#1a1a1a;">{{ number_format($autoFillData['jumlah_rt'] ?? 0) }}</div>
-                        </div>
-                        <div style="background:#fafafa;border-radius:10px;padding:10px;">
-                            <div style="font-size:10px;color:#888;">DPT</div>
-                            <div style="font-size:14px;font-weight:600;color:#1a1a1a;">{{ number_format($autoFillData['dpt'] ?? 0) }}</div>
-                        </div>
-                        <div style="background:#fafafa;border-radius:10px;padding:10px;">
-                            <div style="font-size:10px;color:#888;">Est. Suara PKS</div>
-                            <div style="font-size:14px;font-weight:600;color:#ea580c;">~{{ number_format($autoFillData['estimasi_pks'] ?? 0) }}</div>
-                        </div>
-                        <div style="background:#fafafa;border-radius:10px;padding:10px;">
-                            <div style="font-size:10px;color:#888;">Target 2029</div>
-                            <div style="font-size:14px;font-weight:600;color:#ea580c;">{{ number_format($autoFillData['target_suara'] ?? 0) }}</div>
-                        </div>
-                    </div>
-                    <div style="font-size:11px;color:#666;background:#fafafa;border-radius:10px;padding:10px;line-height:1.6;">
-                        <strong>Caleg PKS tertinggi:</strong> {{ $autoFillData['caleg_pks_tertinggi'] ?? '-' }}<br>
-                        <strong>Partai pemenang:</strong> {{ $autoFillData['partai_pemenang'] ?? '-' }}<br>
-                        <strong>3 partai tertinggi:</strong> {{ $autoFillData['top_3_partai'] ?? '-' }}<br>
-                        @if ($autoFillData['korwe_nama'] ?? null)
-                            <strong>KORWE:</strong> {{ $autoFillData['korwe_nama'] }} ({{ $autoFillData['korwe_status'] }})
-                        @endif
-                    </div>
-                </div>
-
-                <div style="border-top:0.5px solid #e5e5e5;padding-top:16px;display:grid;gap:12px;">
-                    <div style="font-size:12px;font-weight:600;color:#d97706;">Profil wilayah</div>
+            <div class="flex-1 p-5 space-y-6">
+                <!-- Profil wilayah -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-orange-600 uppercase tracking-wider mb-2">Profil wilayah</h3>
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Tipologi RW</label>
-                        <select wire:model="profilData.tipologi" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;">
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Tipologi RW</label>
+                        <select wire:model="profilData.tipologi" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                             <option value="">- Pilih -</option>
                             @foreach (\App\Models\ProfilRw::TIPOLOGI_OPTIONS as $key => $label)
                                 <option value="{{ $key }}">{{ $label }}</option>
@@ -1324,12 +1296,12 @@
                         </select>
                     </div>
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Sumber ekonomi dominan</label>
-                        <div style="background:#f9fafb;padding:12px;border-radius:8px;border:1px solid #e5e7eb;">
-                            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Sumber ekonomi dominan</label>
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 @foreach (\App\Models\ProfilRw::EKONOMI_OPTIONS as $ekoOption)
-                                    <label style="display:flex;align-items:center;font-size:13px;color:#333;">
-                                        <input type="checkbox" wire:model="profilData.ekonomi_dominan" value="{{ $ekoOption }}" style="margin-right:6px;width:16px;height:16px;border-radius:4px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
+                                    <label class="flex items-center text-sm text-gray-700 cursor-pointer">
+                                        <input type="checkbox" wire:model="profilData.ekonomi_dominan" value="{{ $ekoOption }}" class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 mr-2.5">
                                         {{ $ekoOption }}
                                     </label>
                                 @endforeach
@@ -1337,16 +1309,16 @@
                         </div>
                     </div>
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Profil umum warga</label>
-                        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Profil umum warga</label>
+                        <div class="grid grid-cols-1 gap-4">
                             @foreach (\App\Models\ProfilRw::PROFIL_OPTIONS as $kategori => $options)
-                                <div style="background:#f9fafb;padding:12px;border-radius:8px;border:1px solid #e5e7eb;">
-                                    <div style="font-weight:600;font-size:12px;color:#374151;margin-bottom:8px;">{{ $kategori }}</div>
-                                    <div style="display:flex;flex-direction:column;gap:6px;">
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-800 mb-3">{{ $kategori }}</div>
+                                    <div class="flex flex-col gap-2.5">
                                         @foreach($options as $label)
-                                            <label style="display:flex;align-items:flex-start;font-size:11px;color:#4b5563;">
-                                                <input type="checkbox" wire:model="profilData.profil_warga" value="{{ $label }}" style="margin-top:1px;margin-right:6px;width:14px;height:14px;border-radius:3px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
-                                                <span style="line-height:1.3;">{{ $label }}</span>
+                                            <label class="flex items-start text-sm text-gray-600 cursor-pointer">
+                                                <input type="checkbox" wire:model="profilData.profil_warga" value="{{ $label }}" class="mt-0.5 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 mr-2.5">
+                                                <span class="leading-relaxed">{{ $label }}</span>
                                             </label>
                                         @endforeach
                                     </div>
@@ -1354,27 +1326,17 @@
                             @endforeach
                         </div>
                     </div>
-                    {{-- <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
-                        <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Suara PKS 2019</label>
-                            <input wire:model="profilData.suara_pks_2019" type="number" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;" placeholder="0">
-                        </div>
-                        <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Jumlah KTA</label>
-                            <input wire:model="profilData.jumlah_kta" type="number" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;" placeholder="0">
-                        </div>
-                    </div> --}}
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Faktor penyebab menang/kalah</label>
-                        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Faktor penyebab menang/kalah</label>
+                        <div class="grid grid-cols-1 gap-4">
                             @foreach (\App\Models\ProfilRw::FAKTOR_OPTIONS as $kategori => $options)
-                                <div style="background:#f9fafb;padding:12px;border-radius:8px;border:1px solid #e5e7eb;">
-                                    <div style="font-weight:600;font-size:12px;color:#374151;margin-bottom:8px;">{{ $kategori }}</div>
-                                    <div style="display:flex;flex-direction:column;gap:6px;">
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-800 mb-3">{{ $kategori }}</div>
+                                    <div class="flex flex-col gap-2.5">
                                         @foreach($options as $label)
-                                            <label style="display:flex;align-items:flex-start;font-size:11px;color:#4b5563;">
-                                                <input type="checkbox" wire:model="profilData.faktor_penyebab" value="{{ $label }}" style="margin-top:1px;margin-right:6px;width:14px;height:14px;border-radius:3px;border:1px solid #d4d4d8;color:#ea580c;accent-color:#ea580c;">
-                                                <span style="line-height:1.3;">{{ $label }}</span>
+                                            <label class="flex items-start text-sm text-gray-600 cursor-pointer">
+                                                <input type="checkbox" wire:model="profilData.faktor_penyebab" value="{{ $label }}" class="mt-0.5 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 mr-2.5">
+                                                <span class="leading-relaxed">{{ $label }}</span>
                                             </label>
                                         @endforeach
                                     </div>
@@ -1384,11 +1346,11 @@
                     </div>
                 </div>
 
-                <div style="border-top:0.5px solid #e5e5e5;padding-top:16px;display:grid;gap:12px;">
-                    <div style="font-size:12px;font-weight:600;color:#16a34a;">Infrastruktur partai</div>
+                <div class="border-t border-gray-200 pt-6 space-y-4">
+                    <h3 class="text-sm font-bold text-green-600 uppercase tracking-wider mb-2">Infrastruktur partai</h3>
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Anggota PKS di RW</label>
-                        <textarea wire:model="profilData.anggota_pks" rows="2" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Nama anggota"></textarea>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Anggota PKS di RW</label>
+                        <textarea wire:model="profilData.anggota_pks" rows="2" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3 resize-y" placeholder="Nama anggota"></textarea>
                     </div>
                     @php
                         $infraItems = [
@@ -1399,39 +1361,40 @@
                         ];
                     @endphp
                     @foreach ($infraItems as $item)
-                        <div style="border:0.5px solid #e5e5e5;border-radius:10px;padding:10px;">
-                            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
-                                <span style="font-size:12px;font-weight:500;color:#1f2937;">{{ $item['label'] }}</span>
-                                <select wire:model.live="profilData.{{ $item['field'] }}_status" style="height:30px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                        <div class="border border-gray-200 rounded-xl p-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                                <span class="text-sm font-bold text-gray-700">{{ $item['label'] }}</span>
+                                <select wire:model.live="profilData.{{ $item['field'] }}_status" class="border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 outline-none text-sm py-2 px-3 w-full sm:w-auto">
                                     <option value="belum">Belum</option>
                                     <option value="sudah">Sudah</option>
                                 </select>
                             </div>
                             @if (($profilData[$item['field'] . '_status'] ?? 'belum') === 'sudah')
-                                <input wire:model="profilData.{{ $item['name_field'] }}" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;" placeholder="{{ $item['placeholder'] }}">
+                                <input wire:model="profilData.{{ $item['name_field'] }}" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="{{ $item['placeholder'] }}">
                             @endif
                         </div>
                     @endforeach
-                    <div style="border:0.5px solid #e5e5e5;border-radius:10px;padding:10px;">
-                        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
-                            <span style="font-size:12px;font-weight:500;color:#1f2937;">Aleg terpilih di RW (Bisa partai lain)</span>
-                            <select wire:model.live="profilData.caleg_terpilih_ada" style="height:30px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                    <div class="border border-gray-200 rounded-xl p-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                            <span class="text-sm font-bold text-gray-700">Aleg terpilih di RW (Bisa partai lain)</span>
+                            <select wire:model.live="profilData.caleg_terpilih_ada" class="border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 outline-none text-sm py-2 px-3 w-full sm:w-auto">
                                 <option value="0">Tidak</option>
                                 <option value="1">Ya</option>
                             </select>
                         </div>
                         @if (($profilData['caleg_terpilih_ada'] ?? false))
-                            <input wire:model="profilData.caleg_terpilih_nama" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;" placeholder="Nama caleg">
+                            <input wire:model="profilData.caleg_terpilih_nama" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Nama caleg">
                         @endif
                     </div>
                 </div>
 
-                <div style="border-top:0.5px solid #e5e5e5;padding-top:16px;display:grid;gap:12px;">
-                    <div style="font-size:12px;font-weight:600;color:#dc2626;">Peta politik lokal</div>
-                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
+                <div class="border-t border-gray-200 pt-6 space-y-4">
+                    <h3 class="text-sm font-bold text-red-600 uppercase tracking-wider mb-2">Peta politik lokal</h3>
+                    
+                    <div class="grid grid-cols-1 gap-4">
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Partai Pemenang (Pemilu Lalu)</label>
-                            <select wire:model="profilData.partai_dominan" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Partai Pemenang (Pemilu Lalu)</label>
+                            <select wire:model="profilData.partai_dominan" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="">- Pilih Partai -</option>
                                 <option value="PKS">PKS</option>
                                 <option value="Gerindra">Gerindra</option>
@@ -1446,8 +1409,8 @@
                             </select>
                         </div>
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Ketua RW</label>
-                            <select wire:model="profilData.afiliasi_ketua_rw" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Afiliasi Ketua RW</label>
+                            <select wire:model="profilData.afiliasi_ketua_rw" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="">- Pilih -</option>
                                 <option value="PKS">PKS</option>
                                 <option value="Partai Lain">Partai Lain</option>
@@ -1456,8 +1419,8 @@
                             </select>
                         </div>
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Mayoritas RT</label>
-                            <select wire:model="profilData.afiliasi_mayoritas_rt" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Afiliasi Mayoritas RT</label>
+                            <select wire:model="profilData.afiliasi_mayoritas_rt" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="">- Pilih -</option>
                                 <option value="PKS">PKS</option>
                                 <option value="Partai Lain">Partai Lain</option>
@@ -1466,8 +1429,8 @@
                             </select>
                         </div>
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Tokoh Masyarakat</label>
-                            <select wire:model="profilData.afiliasi_tomas" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Afiliasi Tokoh Masyarakat</label>
+                            <select wire:model="profilData.afiliasi_tomas" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="">- Pilih -</option>
                                 <option value="PKS">PKS</option>
                                 <option value="Partai Lain">Partai Lain</option>
@@ -1476,8 +1439,8 @@
                             </select>
                         </div>
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Tokoh Agama</label>
-                            <select wire:model="profilData.afiliasi_toga" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Afiliasi Tokoh Agama</label>
+                            <select wire:model="profilData.afiliasi_toga" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="">- Pilih -</option>
                                 <option value="PKS">PKS</option>
                                 <option value="Partai Lain">Partai Lain</option>
@@ -1486,8 +1449,8 @@
                             </select>
                         </div>
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Afiliasi Tokoh Pemuda</label>
-                            <select wire:model="profilData.afiliasi_pemuda" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Afiliasi Tokoh Pemuda</label>
+                            <select wire:model="profilData.afiliasi_pemuda" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="">- Pilih -</option>
                                 <option value="PKS">PKS</option>
                                 <option value="Partai Lain">Partai Lain</option>
@@ -1495,52 +1458,57 @@
                                 <option value="Tidak Tahu">Tidak Tahu</option>
                             </select>
                         </div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;" class="detail-form-grid">
+                        
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Pengurus kompetitor?</label>
-                            <select wire:model.live="profilData.kompetitor_status" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Pengurus kompetitor?</label>
+                            <select wire:model.live="profilData.kompetitor_status" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="tidak_tahu">Tidak tahu</option>
                                 <option value="ada">Ada</option>
                                 <option value="tidak">Tidak ada</option>
                             </select>
                             @if (($profilData['kompetitor_status'] ?? '') === 'ada')
-                                <input wire:model="profilData.kompetitor_detail" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;margin-top:6px;" placeholder="Nama + partai">
+                                <input wire:model="profilData.kompetitor_detail" class="mt-3 w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Nama + partai">
                             @endif
                         </div>
                         <div>
-                            <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Tim sukses lain?</label>
-                            <select wire:model.live="profilData.tim_sukses_status" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;">
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Tim sukses lain?</label>
+                            <select wire:model.live="profilData.tim_sukses_status" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">
                                 <option value="tidak_tahu">Tidak tahu</option>
                                 <option value="ada">Ada</option>
                                 <option value="tidak">Tidak ada</option>
                             </select>
                             @if (($profilData['tim_sukses_status'] ?? '') === 'ada')
-                                <input wire:model="profilData.tim_sukses_detail" style="width:100%;height:32px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;background:white;font-size:12px;margin-top:6px;" placeholder="Nama + partai">
+                                <input wire:model="profilData.tim_sukses_detail" class="mt-3 w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Nama + partai">
                             @endif
                         </div>
                     </div>
                 </div>
 
-                <div style="border-top:0.5px solid #e5e5e5;padding-top:16px;display:grid;gap:12px;">
-                    <div style="font-size:12px;font-weight:600;color:#ea580c;">Strategi & penanggung jawab</div>
+                <div class="border-t border-gray-200 pt-6 space-y-4 pb-6">
+                    <h3 class="text-sm font-bold text-orange-600 uppercase tracking-wider mb-2">Strategi & penanggung jawab</h3>
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Strategi mencapai target suara</label>
-                        <textarea wire:model="profilData.strategi" rows="3" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Rencana aksi untuk meningkatkan suara"></textarea>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Strategi mencapai target suara</label>
+                        <textarea wire:model="profilData.strategi" rows="3" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3 resize-y" placeholder="Rencana aksi untuk meningkatkan suara"></textarea>
                     </div>
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Penanggung jawab dakwah di RW</label>
-                        <input wire:model="profilData.penanggung_jawab" style="width:100%;height:36px;border-radius:10px;border:0.5px solid #d4d4d8;padding:0 12px;background:white;font-size:13px;" placeholder="Nama penanggung jawab">
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Penanggung jawab dakwah di RW</label>
+                        <input wire:model="profilData.penanggung_jawab" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Nama penanggung jawab">
                     </div>
                     <div>
-                        <label style="display:block;font-size:11px;color:#666;margin-bottom:6px;">Keterangan lain</label>
-                        <textarea wire:model="profilData.keterangan_lain" rows="2" style="width:100%;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;background:white;font-size:13px;resize:vertical;" placeholder="Catatan tambahan"></textarea>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Keterangan lain</label>
+                        <textarea wire:model="profilData.keterangan_lain" rows="2" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3 resize-y" placeholder="Catatan tambahan"></textarea>
                     </div>
                 </div>
             </div>
-            <div style="position:sticky;bottom:0;background:white;border-top:0.5px solid #e5e5e5;padding:16px;display:flex;gap:8px;">
-                <button wire:click="simpanProfil" type="button" style="flex:1;height:40px;border:none;border-radius:10px;background:#ea580c;color:white;font-size:13px;font-weight:600;cursor:pointer;">Simpan Profil</button>
-                <button wire:click="closeProfilDrawer" type="button" style="height:40px;padding:0 16px;border-radius:10px;border:0.5px solid #d4d4d8;background:white;color:#444;font-size:13px;cursor:pointer;">Batal</button>
+            
+            <!-- Footer -->
+            <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 grid grid-cols-2 gap-3 z-10">
+                <button wire:click="closeProfilDrawer" type="button" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
+                    Batal
+                </button>
+                <button wire:click="simpanProfil" type="button" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
+                    Simpan Profil
+                </button>
             </div>
         </div>
     @endif
