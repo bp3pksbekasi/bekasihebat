@@ -70,7 +70,7 @@
                     </label>
                     <input
                         wire:model="formTanggal"
-                        type="datetime-local"
+                        type="date"
                         style="
                             width:100%;height:48px;
                             border-radius:10px;
@@ -84,50 +84,50 @@
                     >
                 </div>
 
-                {{-- Desa & RW --}}
-                <div style="display:grid;grid-template-columns:1fr 120px;gap:12px;">
-                    <div>
-                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Desa / Kelurahan</label>
-                        <select
-                            wire:model.live="formDesaId"
-                            style="
-                                width:100%;height:48px;
-                                border-radius:10px;
-                                border:1.5px solid #d1d5db;
-                                background:#fff;
-                                padding:0 14px;
-                                font-size:15px;
-                                color:#111827;
-                                box-sizing:border-box;
-                            "
-                        >
-                            <option value="">— Pilih Desa —</option>
-                            @foreach ($this->desaOptions as $desa)
-                                <option value="{{ $desa['id'] }}">{{ $desa['label'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">RW</label>
-                        <select
-                            wire:model="formRw"
-                            style="
-                                width:100%;height:48px;
-                                border-radius:10px;
-                                border:1.5px solid #d1d5db;
-                                background:#fff;
-                                padding:0 14px;
-                                font-size:15px;
-                                color:#111827;
-                                box-sizing:border-box;
-                            "
-                        >
-                            <option value="">— RW —</option>
-                            @foreach ($this->rwOptions as $rw)
-                                <option value="{{ $rw }}">RW {{ $rw }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                {{-- Desa --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Desa / Kelurahan</label>
+                    <select
+                        wire:model.live="formDesaId"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— Pilih Desa —</option>
+                        @foreach ($this->desaOptions as $desa)
+                            <option value="{{ $desa['id'] }}">{{ $desa['label'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- RW --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">RW</label>
+                    <select
+                        wire:model="formRw"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                        <option value="">— RW —</option>
+                        @foreach ($this->rwOptions as $rw)
+                            <option value="{{ $rw }}">RW {{ $rw }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 {{-- Jenis Kegiatan --}}
@@ -152,45 +152,45 @@
                     </select>
                 </div>
 
-                {{-- Pelaksana & Jumlah Warga --}}
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Pelaksana / PIC</label>
-                        <input
-                            wire:model="formPelaksana"
-                            type="text"
-                            placeholder="Nama pelaksana"
-                            style="
-                                width:100%;height:48px;
-                                border-radius:10px;
-                                border:1.5px solid #d1d5db;
-                                background:#fff;
-                                padding:0 14px;
-                                font-size:15px;
-                                color:#111827;
-                                box-sizing:border-box;
-                            "
-                        >
-                    </div>
-                    <div>
-                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Jumlah Warga</label>
-                        <input
-                            wire:model="formJumlahWarga"
-                            type="number"
-                            placeholder="0"
-                            inputmode="numeric"
-                            style="
-                                width:100%;height:48px;
-                                border-radius:10px;
-                                border:1.5px solid #d1d5db;
-                                background:#fff;
-                                padding:0 14px;
-                                font-size:15px;
-                                color:#111827;
-                                box-sizing:border-box;
-                            "
-                        >
-                    </div>
+                {{-- Pelaksana --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Pelaksana / PIC</label>
+                    <input
+                        wire:model="formPelaksana"
+                        type="text"
+                        placeholder="Nama pelaksana"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                </div>
+
+                {{-- Jumlah Warga --}}
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Jumlah Warga</label>
+                    <input
+                        wire:model="formJumlahWarga"
+                        type="number"
+                        placeholder="0"
+                        inputmode="numeric"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
                 </div>
 
                 {{-- Catatan --}}
@@ -257,24 +257,7 @@
                     ></textarea>
                 </div>
 
-                {{-- Jadwal Berikutnya --}}
-                <div>
-                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Jadwal Kunjungan Berikutnya</label>
-                    <input
-                        wire:model="formJadwalBerikutnya"
-                        type="date"
-                        style="
-                            width:100%;height:48px;
-                            border-radius:10px;
-                            border:1.5px solid #d1d5db;
-                            background:#fff;
-                            padding:0 14px;
-                            font-size:15px;
-                            color:#111827;
-                            box-sizing:border-box;
-                        "
-                    >
-                </div>
+
 
                 {{-- Foto --}}
                 <div>
@@ -328,10 +311,6 @@
 
                     {{-- Checkboxes --}}
                     <div style="display:grid;gap:12px;margin-top:16px;">
-                        <label style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:12px 14px;border-radius:10px;background:#f9fafb;border:1px solid #e5e7eb;">
-                            <input wire:model="formJadikanEvent" type="checkbox" style="width:20px;height:20px;accent-color:#ea580c;cursor:pointer;flex-shrink:0;">
-                            <span style="font-size:14px;color:#374151;line-height:1.4;">Langsung jadikan <strong>event</strong> setelah simpan</span>
-                        </label>
                         <label style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:12px 14px;border-radius:10px;background:#f9fafb;border:1px solid #e5e7eb;">
                             <input wire:model="formTampilGaleri" type="checkbox" style="width:20px;height:20px;accent-color:#ea580c;cursor:pointer;flex-shrink:0;">
                             <span style="font-size:14px;color:#374151;line-height:1.4;">Tampilkan foto di <strong>galeri website publik</strong></span>
