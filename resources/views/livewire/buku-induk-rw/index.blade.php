@@ -132,9 +132,10 @@
         </div>
     </div>
 
-    <!-- Table -->
+    <!-- Table & Mobile List -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -226,6 +227,89 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Mobile Cards -->
+        <div class="md:hidden divide-y divide-gray-100">
+            @forelse($rws as $rw)
+                <div class="p-4 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <div class="text-base font-bold text-gray-900">RW {{ str_pad($rw->nomor_rw, 3, '0', STR_PAD_LEFT) }}</div>
+                                @php $statusConfig = $rw->status_config; @endphp
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider" style="background-color: {{ $statusConfig['bg'] }}; color: {{ $statusConfig['text'] }};">
+                                    {{ $statusConfig['label'] }}
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-500 mt-1">{{ $rw->targetWilayah->desa }}, {{ $rw->targetWilayah->kecamatan }}</div>
+                            <div class="text-[10px] text-gray-500 font-semibold mt-0.5 uppercase tracking-wide">{{ $rw->targetWilayah->dapil }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Profil Status -->
+                    <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-xs text-gray-500 font-medium">Status Profil</span>
+                            @php
+                                $profil = $profilRws[$rw->target_wilayah_id . '_' . ltrim((string) $rw->nomor_rw, '0')] ?? null;
+                            @endphp
+                            @if($profil && $profil->completion_percent > 0)
+                                <span class="text-[10px] font-bold {{ $profil->is_complete ? 'text-green-600' : 'text-orange-500' }}">
+                                    {{ $profil->is_complete ? 'Lengkap' : 'Belum Lengkap' }}
+                                </span>
+                            @else
+                                <span class="text-[10px] font-medium text-gray-500">Belum Diisi</span>
+                            @endif
+                        </div>
+                        
+                        @if($profil && $profil->completion_percent > 0)
+                            <div class="flex items-center">
+                                <div class="w-full bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-green-600 h-2 rounded-full" style="width: {{ $profil->completion_percent }}%"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-700">{{ $profil->completion_percent }}%</span>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="bg-blue-50 rounded-lg p-2 border border-blue-100">
+                            <div class="text-[10px] text-blue-600 uppercase font-bold mb-1">Korwe</div>
+                            <div class="text-sm font-bold text-blue-800">{{ $rw->korwe_count }}</div>
+                        </div>
+                        <div class="bg-indigo-50 rounded-lg p-2 border border-indigo-100">
+                            <div class="text-[10px] text-indigo-600 uppercase font-bold mb-1">Korte</div>
+                            <div class="text-sm font-bold text-indigo-800">{{ $rw->korte_count }}</div>
+                        </div>
+                        <div class="bg-emerald-50 rounded-lg p-2 border border-emerald-100">
+                            <div class="text-[10px] text-emerald-600 uppercase font-bold mb-1">P.Suara</div>
+                            <div class="text-sm font-bold text-emerald-800">{{ $rw->penggalang_count }}</div>
+                            <div class="text-[8px] text-emerald-600 mt-0.5">T: {{ $rw->target_penggalang }}</div>
+                        </div>
+                        <div class="bg-orange-50 rounded-lg p-2 border border-orange-100">
+                            <div class="text-[10px] text-orange-600 uppercase font-bold mb-1">Program</div>
+                            <div class="text-sm font-bold text-orange-800">{{ $rw->program_arahan_count }}</div>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="flex items-center justify-center w-full px-4 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                        Buka Peta Kekuatan
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+            @empty
+                <div class="px-6 py-12 text-center text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span class="block text-base font-medium text-gray-900">Tidak ada data RW</span>
+                    <span class="block mt-1 text-sm">Gunakan filter pencarian di atas untuk menemukan wilayah.</span>
+                </div>
+            @endforelse
         </div>
         
         @if($rws->hasPages())
