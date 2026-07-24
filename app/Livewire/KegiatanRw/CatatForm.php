@@ -22,9 +22,9 @@ class CatatForm extends Component
     public string $formJenis = '';
     public string $formSegmen = '';
     public string $formSegmenOther = '';
-    public string $formDprRi = '';
-    public string $formDprdProv = '';
-    public string $formDprdKab = '';
+    public string $formDprRi = 'TIDAK ADA';
+    public string $formDprdProv = 'TIDAK ADA';
+    public string $formDprdKab = 'TIDAK ADA';
     public string $formTempat = '';
     public string $formTempatOther = '';
     public string $formKeteranganTambahan = '';
@@ -44,6 +44,9 @@ class CatatForm extends Component
     public function mount()
     {
         $this->formTanggal = now()->format('Y-m-d\TH:i');
+        $this->formDprRi = 'TIDAK ADA';
+        $this->formDprdProv = 'TIDAK ADA';
+        $this->formDprdKab = 'TIDAK ADA';
     }
 
     #[On('open-catat-kegiatan-form')]
@@ -79,10 +82,13 @@ class CatatForm extends Component
     {
         $this->reset([
             'formDesaId', 'formRw', 'formJenis', 'formSegmen', 'formSegmenOther', 'formPelaksana', 'formJumlahWarga',
-            'formDprRi', 'formDprdProv', 'formDprdKab', 'formTempat', 'formTempatOther', 'formKeteranganTambahan',
-            'formCatatan', 'formTokoh', 'formTindakLanjut', 'formJadwalBerikutnya',
+            'formTempat', 'formTempatOther', 'formKeteranganTambahan',
+            'formCatatan', 'formTokoh', 'formJadwalBerikutnya',
             'formJadikanEvent', 'formTampilGaleri', 'formFoto', 'existingFoto', 'editId'
         ]);
+        $this->formDprRi = 'TIDAK ADA';
+        $this->formDprdProv = 'TIDAK ADA';
+        $this->formDprdKab = 'TIDAK ADA';
         $this->formTanggal = now()->format('Y-m-d\TH:i');
     }
 

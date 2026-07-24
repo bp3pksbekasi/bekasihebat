@@ -253,7 +253,6 @@
                             box-sizing:border-box;
                         "
                     >
-                        <option value="">— Pilih Anggota DPR RI —</option>
                         @foreach (\App\Models\KegiatanRw::DPR_RI_HADIR as $opt)
                             <option value="{{ $opt }}">{{ $opt }}</option>
                         @endforeach
@@ -276,7 +275,6 @@
                             box-sizing:border-box;
                         "
                     >
-                        <option value="">— Pilih Anggota DPRD Provinsi —</option>
                         @foreach (\App\Models\KegiatanRw::DPRD_PROV_HADIR as $opt)
                             <option value="{{ $opt }}">{{ $opt }}</option>
                         @endforeach
@@ -299,7 +297,6 @@
                             box-sizing:border-box;
                         "
                     >
-                        <option value="">— Pilih Anggota DPRD Kab/Kota —</option>
                         @foreach (\App\Models\KegiatanRw::DPRD_KAB_HADIR as $opt)
                             <option value="{{ $opt }}">{{ $opt }}</option>
                         @endforeach
