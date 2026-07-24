@@ -206,12 +206,20 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
-                                    Buka Peta Kekuatan
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </a>
+                                <div class="flex items-center justify-end gap-2">
+                                    <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim($rw->nomor_rw, '0') }}' })" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Sisir RW
+                                    </button>
+                                    <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
+                                        Buka Peta Kekuatan
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -294,12 +302,20 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="flex items-center justify-center w-full px-4 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
-                        Buka Peta Kekuatan
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>
+                    <div class="flex gap-2 mt-4">
+                        <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim($rw->nomor_rw, '0') }}' })" class="flex flex-1 items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Sisir RW
+                        </button>
+                        <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="flex flex-1 items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
+                            Buka Peta
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             @empty
                 <div class="px-6 py-12 text-center text-gray-500">
@@ -318,4 +334,6 @@
             </div>
         @endif
     </div>
+    
+    <livewire:kegiatan-rw.catat-form />
 </div>
