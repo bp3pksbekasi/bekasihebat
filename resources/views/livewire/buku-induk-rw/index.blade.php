@@ -144,7 +144,7 @@
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Korwe</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Korte</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Penggalang</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Sisir RW</th>
                         <th scope="col" class="relative px-6 py-3">
                             <span class="sr-only">Aksi</span>
                         </th>
@@ -201,8 +201,8 @@
                                 <div class="text-xs text-gray-600">Target: {{ $rw->target_penggalang }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full {{ $rw->program_arahan_count > 0 ? 'bg-orange-100 text-orange-800' : 'bg-gray-200 text-gray-800' }} font-bold text-sm">
-                                    {{ $rw->program_arahan_count }}
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full {{ $rw->sisir_rw_count > 0 ? 'bg-orange-100 text-orange-800' : 'bg-gray-200 text-gray-800' }} font-bold text-sm">
+                                    {{ $rw->sisir_rw_count }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -303,8 +303,8 @@
                             <div class="text-[8px] text-emerald-600 mt-0.5">T: {{ $rw->target_penggalang }}</div>
                         </div>
                         <div class="bg-orange-50 rounded-lg p-2 border border-orange-100">
-                            <div class="text-[10px] text-orange-600 uppercase font-bold mb-1">Program</div>
-                            <div class="text-sm font-bold text-orange-800">{{ $rw->program_arahan_count }}</div>
+                            <div class="text-[10px] text-orange-600 uppercase font-bold mb-1">Sisir RW</div>
+                            <div class="text-sm font-bold text-orange-800">{{ $rw->sisir_rw_count }}</div>
                         </div>
                     </div>
 
