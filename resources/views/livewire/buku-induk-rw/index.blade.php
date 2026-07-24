@@ -70,27 +70,51 @@
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
             <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Total Wilayah</div>
             <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_rw']) }} <span class="text-lg text-gray-400 font-normal">RW</span></div>
-            <div class="text-xs text-gray-400 mt-1.5">{{ number_format($summary['total_rt']) }} RT · {{ number_format($summary['total_desa']) }} Desa</div>
+            <div class="text-xs text-gray-500 mt-1.5">{{ number_format($summary['total_rt']) }} RT · {{ number_format($summary['total_desa']) }} Desa</div>
         </div>
-        <div class="rounded-xl p-5 shadow-sm" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
+        @php
+            $pctKorwe = $summary['target_korwe'] > 0 ? round(($summary['tercapai_korwe'] / $summary['target_korwe']) * 100) : 0;
+        @endphp
+        <div class="rounded-xl p-5 shadow-sm flex flex-col justify-between" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Korwe {{ $selectedTahun }}</div>
-            <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korwe']) }}</div>
-            <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korwe']) }}</div>
+            <div class="flex justify-between items-end mt-auto">
+                <div>
+                    <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korwe']) }}</div>
+                    <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korwe']) }}</div>
+                </div>
+                <div class="text-2xl font-bold opacity-90">{{ $pctKorwe }}%</div>
+            </div>
         </div>
-        <div class="rounded-xl p-5 shadow-sm" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
+        @php
+            $pctKorte = $summary['target_korte'] > 0 ? round(($summary['tercapai_korte'] / $summary['target_korte']) * 100) : 0;
+        @endphp
+        <div class="rounded-xl p-5 shadow-sm flex flex-col justify-between" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Korte {{ $selectedTahun }}</div>
-            <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korte']) }}</div>
-            <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korte']) }}</div>
+            <div class="flex justify-between items-end mt-auto">
+                <div>
+                    <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_korte']) }}</div>
+                    <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_korte']) }}</div>
+                </div>
+                <div class="text-2xl font-bold opacity-90">{{ $pctKorte }}%</div>
+            </div>
         </div>
-        <div class="rounded-xl p-5 shadow-sm" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
+        @php
+            $pctPenggalang = $summary['target_penggalang'] > 0 ? round(($summary['tercapai_penggalang'] / $summary['target_penggalang']) * 100) : 0;
+        @endphp
+        <div class="rounded-xl p-5 shadow-sm flex flex-col justify-between" style="background:linear-gradient(135deg,#fe5000,#d94400);color:white;">
             <div class="text-xs font-medium uppercase tracking-wider opacity-90 mb-1">Target Penggalang {{ $selectedTahun }}</div>
-            <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_penggalang']) }}</div>
-            <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_penggalang']) }}</div>
+            <div class="flex justify-between items-end mt-auto">
+                <div>
+                    <div class="text-3xl font-bold mb-1">{{ number_format($summary['target_penggalang']) }}</div>
+                    <div class="text-xs opacity-85">Tercapai: {{ number_format($summary['tercapai_penggalang']) }}</div>
+                </div>
+                <div class="text-2xl font-bold opacity-90">{{ $pctPenggalang }}%</div>
+            </div>
         </div>
         <div class="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
             <div class="text-xs font-medium text-orange-500 uppercase tracking-wider mb-1">Program Arahan</div>
             <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_program']) }}</div>
-            <div class="text-xs text-gray-400 mt-1.5">Total Program Dibuat</div>
+            <div class="text-xs text-gray-500 mt-1.5">Total Program Dibuat</div>
         </div>
         @php
             $profilPct = $summary['total_rw'] > 0 ? round(($summary['profil_terisi'] / $summary['total_rw']) * 100) : 0;
