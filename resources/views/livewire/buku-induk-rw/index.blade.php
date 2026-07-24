@@ -68,9 +68,9 @@
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Total Wilayah</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_rw']) }} <span class="text-lg text-gray-400 font-normal">RW</span></div>
-            <div class="text-xs text-gray-500 mt-1.5">{{ number_format($summary['total_rt']) }} RT · {{ number_format($summary['total_desa']) }} Desa</div>
+            <div class="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Total Wilayah</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_rw']) }} <span class="text-lg text-gray-500 font-normal">RW</span></div>
+            <div class="text-xs text-gray-600 mt-1.5">{{ number_format($summary['total_rt']) }} RT · {{ number_format($summary['total_desa']) }} Desa</div>
         </div>
         @php
             $pctKorwe = $summary['target_korwe'] > 0 ? round(($summary['tercapai_korwe'] / $summary['target_korwe']) * 100) : 0;
@@ -112,23 +112,23 @@
             </div>
         </div>
         <div class="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
-            <div class="text-xs font-medium text-orange-500 uppercase tracking-wider mb-1">Program Arahan</div>
+            <div class="text-xs font-semibold text-orange-600 uppercase tracking-wider mb-1">Program Arahan</div>
             <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['total_program']) }}</div>
-            <div class="text-xs text-gray-500 mt-1.5">Total Program Dibuat</div>
+            <div class="text-xs text-gray-600 mt-1.5">Total Program Dibuat</div>
         </div>
         @php
             $profilPct = $summary['total_rw'] > 0 ? round(($summary['profil_terisi'] / $summary['total_rw']) * 100) : 0;
         @endphp
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Profil RW Terisi</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ number_format($summary['profil_terisi']) }} <span class="text-lg text-gray-400 font-normal">/ {{ number_format($summary['total_rw']) }}</span></div>
-            <div class="flex items-center gap-2">
-                <div class="w-full bg-gray-200 rounded-full h-1.5">
-                    <div class="h-1.5 rounded-full" style="background:#3b82f6; width: {{ $profilPct }}%"></div>
-                </div>
-                <div class="text-xs text-gray-500 font-medium">{{ $profilPct }}%</div>
+            <div class="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Profil RW Terisi</div>
+            <div class="flex justify-between items-end mb-1">
+                <div class="text-3xl font-bold text-gray-900">{{ number_format($summary['profil_terisi']) }} <span class="text-lg text-gray-500 font-normal">/ {{ number_format($summary['total_rw']) }}</span></div>
+                <div class="text-2xl font-bold text-blue-600">{{ $profilPct }}%</div>
             </div>
-            <div class="text-xs text-gray-400 mt-1.5">{{ number_format($summary['profil_lengkap']) }} profil lengkap</div>
+            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1 mb-1.5">
+                <div class="h-1.5 rounded-full" style="background:#2563eb; width: {{ $profilPct }}%"></div>
+            </div>
+            <div class="text-xs text-gray-600">{{ number_format($summary['profil_lengkap']) }} profil lengkap</div>
         </div>
     </div>
 
@@ -152,7 +152,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($rws as $rw)
-                        <tr class="hover:bg-gray-50 transition-colors">
+                        <tr class="hover:bg-gray-50 transition-colors" wire:key="desktop-row-{{ $rw->id }}">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-2">
                                     <div class="text-sm font-bold text-gray-900">RW {{ str_pad($rw->nomor_rw, 3, '0', STR_PAD_LEFT) }}</div>
@@ -207,13 +207,13 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim($rw->nomor_rw, '0') }}' })" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim((string) $rw->nomor_rw, '0') }}' })" class="inline-flex items-center px-4 py-2 border border-blue-600 shadow-sm text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                         Sisir RW
                                     </button>
-                                    <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
+                                    <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none transition-colors bg-gray-900 hover:bg-gray-800">
                                         Buka Peta Kekuatan
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -240,7 +240,7 @@
         <!-- Mobile Cards -->
         <div class="md:hidden divide-y divide-gray-100">
             @forelse($rws as $rw)
-                <div class="p-4 space-y-4">
+                <div class="p-3 space-y-3" wire:key="mobile-card-{{ $rw->id }}">
                     <div class="flex justify-between items-start">
                         <div>
                             <div class="flex items-center gap-2">
@@ -250,68 +250,65 @@
                                     {{ $statusConfig['label'] }}
                                 </span>
                             </div>
-                            <div class="text-sm text-gray-500 mt-1">{{ $rw->targetWilayah->desa }}, {{ $rw->targetWilayah->kecamatan }}</div>
-                            <div class="text-[10px] text-gray-500 font-semibold mt-0.5 uppercase tracking-wide">{{ $rw->targetWilayah->dapil }}</div>
+                            <div class="text-sm text-gray-500 mt-0.5">{{ $rw->targetWilayah->desa }}, {{ $rw->targetWilayah->kecamatan }}</div>
+                        </div>
+                        <div class="text-right text-xs">
+                            <span class="inline-flex items-center px-2 py-1 rounded bg-gray-100 text-gray-700 font-semibold uppercase tracking-wider">{{ $rw->targetWilayah->dapil }}</span>
                         </div>
                     </div>
 
-                    <!-- Profil Status -->
-                    <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                        <div class="flex justify-between items-center mb-1.5">
-                            <span class="text-xs text-gray-500 font-medium">Status Profil</span>
-                            @php
-                                $profil = $profilRws[$rw->target_wilayah_id . '_' . ltrim((string) $rw->nomor_rw, '0')] ?? null;
-                            @endphp
-                            @if($profil && $profil->completion_percent > 0)
-                                <span class="text-[10px] font-bold {{ $profil->is_complete ? 'text-green-600' : 'text-orange-500' }}">
-                                    {{ $profil->is_complete ? 'Lengkap' : 'Belum Lengkap' }}
-                                </span>
-                            @else
-                                <span class="text-[10px] font-medium text-gray-500">Belum Diisi</span>
-                            @endif
-                        </div>
-                        
-                        @if($profil && $profil->completion_percent > 0)
-                            <div class="flex items-center">
-                                <div class="w-full bg-gray-200 rounded-full h-2 mr-2">
-                                    <div class="bg-green-600 h-2 rounded-full" style="width: {{ $profil->completion_percent }}%"></div>
-                                </div>
-                                <span class="text-xs font-bold text-gray-700">{{ $profil->completion_percent }}%</span>
+                    @php
+                        $profil = $profilRws[$rw->target_wilayah_id . '_' . ltrim((string) $rw->nomor_rw, '0')] ?? null;
+                    @endphp
+                    @if($profil && $profil->completion_percent > 0)
+                        <div>
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="text-gray-600 font-medium">Profil RW</span>
+                                <span class="{{ $profil->is_complete ? 'text-green-600 font-bold' : 'text-orange-600 font-bold' }}">{{ $profil->completion_percent }}%</span>
                             </div>
-                        @endif
+                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                <div class="bg-green-600 h-1.5 rounded-full" style="width: {{ $profil->completion_percent }}%"></div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="text-xs text-gray-500 flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Profil RW belum diisi
+                        </div>
+                    @endif
+
+                    <div class="flex flex-wrap gap-2">
+                        <div class="flex items-center gap-1.5 bg-blue-50 text-blue-800 rounded px-2 py-1 border border-blue-100 text-xs">
+                            <span class="font-bold">KORWE</span>
+                            <span class="font-bold bg-white text-blue-900 rounded-sm px-1.5">{{ $rw->korwe_count }}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-indigo-50 text-indigo-800 rounded px-2 py-1 border border-indigo-100 text-xs">
+                            <span class="font-bold">KORTE</span>
+                            <span class="font-bold bg-white text-indigo-900 rounded-sm px-1.5">{{ $rw->korte_count }}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 rounded px-2 py-1 border border-emerald-100 text-xs">
+                            <span class="font-bold">P.SUARA</span>
+                            <span class="font-bold bg-white text-emerald-900 rounded-sm px-1.5">{{ $rw->penggalang_count }}</span>
+                            <span class="text-[9px] text-emerald-600 ml-0.5">/ {{ $rw->target_penggalang }}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-orange-50 text-orange-800 rounded px-2 py-1 border border-orange-100 text-xs">
+                            <span class="font-bold">PROG.</span>
+                            <span class="font-bold bg-white text-orange-900 rounded-sm px-1.5">{{ $rw->program_arahan_count }}</span>
+                        </div>
                     </div>
 
-                    <!-- Stats Grid -->
-                    <div class="grid grid-cols-4 gap-2 text-center">
-                        <div class="bg-blue-50 rounded-lg p-2 border border-blue-100">
-                            <div class="text-[10px] text-blue-600 uppercase font-bold mb-1">Korwe</div>
-                            <div class="text-sm font-bold text-blue-800">{{ $rw->korwe_count }}</div>
-                        </div>
-                        <div class="bg-indigo-50 rounded-lg p-2 border border-indigo-100">
-                            <div class="text-[10px] text-indigo-600 uppercase font-bold mb-1">Korte</div>
-                            <div class="text-sm font-bold text-indigo-800">{{ $rw->korte_count }}</div>
-                        </div>
-                        <div class="bg-emerald-50 rounded-lg p-2 border border-emerald-100">
-                            <div class="text-[10px] text-emerald-600 uppercase font-bold mb-1">P.Suara</div>
-                            <div class="text-sm font-bold text-emerald-800">{{ $rw->penggalang_count }}</div>
-                            <div class="text-[8px] text-emerald-600 mt-0.5">T: {{ $rw->target_penggalang }}</div>
-                        </div>
-                        <div class="bg-orange-50 rounded-lg p-2 border border-orange-100">
-                            <div class="text-[10px] text-orange-600 uppercase font-bold mb-1">Program</div>
-                            <div class="text-sm font-bold text-orange-800">{{ $rw->program_arahan_count }}</div>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-2 mt-4">
-                        <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim($rw->nomor_rw, '0') }}' })" class="flex flex-1 items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="flex gap-2 mt-2">
+                        <button wire:click="$dispatch('open-catat-kegiatan-form', { targetWilayahId: '{{ $rw->target_wilayah_id }}', nomorRw: '{{ ltrim((string) $rw->nomor_rw, '0') }}' })" class="flex flex-1 items-center justify-center px-3 py-2 border border-blue-600 text-xs font-bold rounded-lg shadow-sm text-blue-600 bg-white hover:bg-blue-50 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                             Sisir RW
                         </button>
-                        <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="flex flex-1 items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white focus:outline-none transition-colors" style="background-color: #111827;" onmouseover="this.style.backgroundColor='#1f2937'" onmouseout="this.style.backgroundColor='#111827'">
+                        <a href="{{ route('buku-induk-rw.detail', $rw->id) }}" wire:navigate class="flex flex-1 items-center justify-center px-3 py-2 border border-transparent text-xs font-bold rounded-lg shadow-sm text-white bg-gray-900 hover:bg-gray-800 transition-colors">
                             Buka Peta
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </a>
