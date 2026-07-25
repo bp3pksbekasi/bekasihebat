@@ -1495,12 +1495,12 @@
             </div>
             
             <!-- Footer -->
-            <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 grid grid-cols-2 gap-3 z-10">
-                <button wire:click="simpanProfil" type="button" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
-                    Simpan Profil
-                </button>
+            <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 flex gap-3 z-10">
                 <button wire:click="closeProfilDrawer" type="button" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
                     Batal
+                </button>
+                <button wire:click="simpanProfil" type="button" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-sm flex items-center justify-center">
+                    Simpan Profil
                 </button>
             </div>
         </div>

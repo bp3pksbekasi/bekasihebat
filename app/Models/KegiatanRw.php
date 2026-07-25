@@ -31,6 +31,7 @@ class KegiatanRw extends Model
         'sidak' => ['label' => 'SIDAK PEMBANGUNAN / ADVOKASI / ASPIRASI', 'icon' => 'alert-triangle', 'color' => '#eab308'],
         'rapat_ranting' => ['label' => 'RAPAT RANTING', 'icon' => 'users', 'color' => '#6366f1'],
         'pemberian_bantuan' => ['label' => 'PEMBERIAN BANTUAN / PROGRAM LAYANAN LAINNYA', 'icon' => 'gift', 'color' => '#10b981'],
+        'lainnya' => ['label' => 'KEGIATAN LAINNYA', 'icon' => 'calendar', 'color' => '#94a3b8'],
     ];
 
     public const SEGMEN_KEGIATAN = [
