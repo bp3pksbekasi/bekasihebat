@@ -313,6 +313,6 @@ class Dashboard extends Component
             'user'  => auth()->user(),
             'isDpd' => auth()->user()?->isAdmin() || auth()->user()?->isDpd(),
             'isDpc' => auth()->user()?->isDpc(),
-        ])->layout('components.layouts.app.sidebar');
+        ])->layout('components.layouts.app');
     }
 }
