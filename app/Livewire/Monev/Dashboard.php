@@ -10,6 +10,7 @@ use App\Support\Monev\MonevScorecardService;
 use App\Traits\WithWilayahScope;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -20,18 +21,21 @@ class Dashboard extends Component
     public string $filterStatus    = 'terbuka';
     public string $filterKecamatan = '';
 
+    // Lazy loading state — data tidak dimuat saat render pertama
+    public bool $loaded = false;
+
     // Form catat temuan
-    public bool   $showCatatForm = false;
-    public array  $selectedFlag  = [];
+    public bool   $showCatatForm     = false;
+    public array  $selectedFlag      = [];
     public string $formTemuan        = '';
     public string $formTindakLanjut  = '';
     public string $formPicNama       = '';
     public string $formLevel         = 'dpc';
 
     // Form tandai selesai
-    public string  $selesaiId           = '';
-    public string  $selesaiTindakLanjut = '';
-    public bool    $showSelesaiForm     = false;
+    public string $selesaiId           = '';
+    public string $selesaiTindakLanjut = '';
+    public bool   $showSelesaiForm     = false;
 
     public function mount(): void
     {
@@ -41,9 +45,24 @@ class Dashboard extends Component
         }
     }
 
+    /**
+     * Dipanggil via wire:init setelah halaman pertama render.
+     * Ini yang membuat halaman tidak freeze saat load pertama.
+     */
+    public function loadData(): void
+    {
+        $this->loaded = true;
+    }
+
+    // ─── Computed Properties (hanya dijalankan setelah $loaded = true) ────
+
     #[Computed]
     public function flags(): Collection
     {
+        if (! $this->loaded) {
+            return collect();
+        }
+
         $service = app(MonevScorecardService::class);
         $scope   = $this->accessScope();
 
@@ -54,15 +73,13 @@ class Dashboard extends Component
         if (! empty($scope['desa'])) {
             $scopeFilter['desa'] = $scope['desa'];
         }
-
-        // Override filter kecamatan kalau user DPD memilih filter
         if ($this->filterKecamatan !== '' && empty($scope['kecamatan'])) {
             $scopeFilter['kecamatan'] = $this->filterKecamatan;
         }
 
         $flags = $service->semuaFlag($scopeFilter);
 
-        // Tandai flag yang sudah punya catatan terbuka
+        // Tandai flag yang sudah punya catatan terbuka — satu query saja
         $openCatatans = CatatanMonev::query()
             ->where('status', CatatanMonev::STATUS_TERBUKA)
             ->get(['target_wilayah_id', 'nomor_rw', 'jenis_temuan'])
@@ -86,6 +103,10 @@ class Dashboard extends Component
     #[Computed]
     public function catatanList(): Collection
     {
+        if (! $this->loaded) {
+            return collect();
+        }
+
         $scope = $this->accessScope();
 
         $query = CatatanMonev::query()
@@ -106,37 +127,65 @@ class Dashboard extends Component
     #[Computed]
     public function akuntabilitasDpc(): Collection
     {
-        // Hitung per kecamatan: total flag 30 hari + % ditindaklanjuti + rata-rata umur selesai
+        if (! $this->loaded) {
+            return collect();
+        }
+
+        // Ambil semua flag (sudah di-cache)
         $semuaFlag     = app(MonevScorecardService::class)->semuaFlag();
         $kecamatanList = $semuaFlag->pluck('kecamatan')->unique()->filter()->sort()->values();
 
-        return $kecamatanList->map(function (string $kec) use ($semuaFlag): array {
-            $flagKec   = $semuaFlag->filter(fn ($f) => strtoupper($f['kecamatan']) === strtoupper($kec));
-            $totalFlag = $flagKec->count();
+        if ($kecamatanList->isEmpty()) {
+            return collect();
+        }
 
-            // Hitung catatan yang sudah ada (terbuka/selesai) untuk flag di kecamatan ini
-            $twIds = TargetWilayah::query()->where('kecamatan', $kec)->pluck('id');
+        // Hitung total flag per kecamatan dari collection (tidak perlu query DB)
+        $flagPerKec = $semuaFlag->groupBy('kecamatan')
+            ->map(fn ($items) => $items->count());
 
-            $totalCatatan = CatatanMonev::query()
-                ->whereIn('target_wilayah_id', $twIds)
-                ->count();
+        // Satu query untuk semua count catatan per kecamatan — tidak ada N+1
+        $twIdsByKec = TargetWilayah::query()
+            ->whereIn('kecamatan', $kecamatanList->toArray())
+            ->get(['id', 'kecamatan'])
+            ->groupBy('kecamatan')
+            ->map(fn ($rows) => $rows->pluck('id'));
+
+        // Semua catatan sekaligus, lalu group di PHP
+        $allCatatanKec = CatatanMonev::query()
+            ->whereIn(
+                'target_wilayah_id',
+                TargetWilayah::query()->whereIn('kecamatan', $kecamatanList->toArray())->pluck('id')
+            )
+            ->get(['target_wilayah_id', 'status', 'closed_at', 'created_at'])
+            ->groupBy(function ($c) use ($twIdsByKec) {
+                foreach ($twIdsByKec as $kec => $ids) {
+                    if ($ids->contains($c->target_wilayah_id)) {
+                        return $kec;
+                    }
+                }
+                return null;
+            })
+            ->filter(fn ($_, $k) => $k !== null);
+
+        return $kecamatanList->map(function (string $kec) use ($flagPerKec, $allCatatanKec): array {
+            $totalFlag    = $flagPerKec->get($kec, 0);
+            $catatanKec   = $allCatatanKec->get($kec, collect());
+            $totalCatatan = $catatanKec->count();
 
             $pctTindakLanjut = $totalFlag > 0
                 ? round(min(($totalCatatan / $totalFlag) * 100, 100))
                 : 0;
 
-            $avgUmurSelesai = CatatanMonev::query()
-                ->whereIn('target_wilayah_id', $twIds)
+            $avgUmurSelesai = $catatanKec
                 ->where('status', CatatanMonev::STATUS_SELESAI)
-                ->whereNotNull('closed_at')
-                ->get()
-                ->avg('umur_hari');
+                ->filter(fn ($c) => $c->closed_at !== null)
+                ->avg(fn ($c) => Carbon::parse($c->created_at)->diffInDays(Carbon::parse($c->closed_at)));
 
             return [
-                'kecamatan'          => $kec,
-                'total_flag'         => $totalFlag,
-                'pct_tindak_lanjut'  => $pctTindakLanjut,
-                'avg_umur_selesai'   => $avgUmurSelesai ? round((float) $avgUmurSelesai, 1) : null,
+                'kecamatan'         => $kec,
+                'total_flag'        => $totalFlag,
+                'pct_tindak_lanjut' => $pctTindakLanjut,
+                'avg_umur_selesai'  => $avgUmurSelesai ? round((float) $avgUmurSelesai, 1) : null,
             ];
         })->sortBy('pct_tindak_lanjut')->values();
     }
@@ -144,6 +193,7 @@ class Dashboard extends Component
     #[Computed]
     public function kecamatanOptions(): array
     {
+        // Query ringan — tidak perlu lazy load
         return TargetWilayah::query()
             ->distinct()
             ->orderBy('kecamatan')
@@ -156,10 +206,10 @@ class Dashboard extends Component
     {
         $flags = $this->flags;
         return [
-            'total'        => $flags->count(),
-            'merah'        => $flags->where('severity', 'merah')->count(),
-            'kuning'       => $flags->where('severity', 'kuning')->count(),
-            'sudah_dicatat'=> $flags->where('has_open_catatan', true)->count(),
+            'total'         => $flags->count(),
+            'merah'         => $flags->where('severity', 'merah')->count(),
+            'kuning'        => $flags->where('severity', 'kuning')->count(),
+            'sudah_dicatat' => $flags->where('has_open_catatan', true)->count(),
         ];
     }
 
@@ -194,20 +244,19 @@ class Dashboard extends Component
         $flag = $this->selectedFlag;
 
         CatatanMonev::create([
-            'target_wilayah_id'    => $flag['target_wilayah_id'],
-            'nomor_rw'             => $flag['nomor_rw'],
-            'jenis_temuan'         => $flag['jenis'],
-            'sumber'               => CatatanMonev::SUMBER_OTOMATIS,
-            'temuan'               => $this->formTemuan ?: $flag['detail'],
-            'tindak_lanjut'        => $this->formTindakLanjut ?: null,
-            'status'               => CatatanMonev::STATUS_TERBUKA,
+            'target_wilayah_id'      => $flag['target_wilayah_id'],
+            'nomor_rw'               => $flag['nomor_rw'],
+            'jenis_temuan'           => $flag['jenis'],
+            'sumber'                 => CatatanMonev::SUMBER_OTOMATIS,
+            'temuan'                 => $this->formTemuan ?: $flag['detail'],
+            'tindak_lanjut'          => $this->formTindakLanjut ?: null,
+            'status'                 => CatatanMonev::STATUS_TERBUKA,
             'level_penanggung_jawab' => $this->formLevel,
-            'pic_nama'             => $this->formPicNama ?: null,
-            'created_by'           => auth()->id(),
+            'pic_nama'               => $this->formPicNama ?: null,
+            'created_by'             => auth()->id(),
         ]);
 
         app(MonevScorecardService::class)->invalidateCache();
-
         $this->tutupFormCatat();
         unset($this->flags, $this->flagsGrouped, $this->catatanList, $this->ringkasan);
         $this->dispatch('notify', type: 'success', message: 'Catatan temuan berhasil disimpan.');
@@ -262,9 +311,9 @@ class Dashboard extends Component
     public function render()
     {
         return view('livewire.monev.dashboard', [
-            'user'    => auth()->user(),
-            'isDpd'   => auth()->user()?->isAdmin() || auth()->user()?->isDpd(),
-            'isDpc'   => auth()->user()?->isDpc(),
+            'user'  => auth()->user(),
+            'isDpd' => auth()->user()?->isAdmin() || auth()->user()?->isDpd(),
+            'isDpc' => auth()->user()?->isDpc(),
         ])->layout('components.layouts.app.sidebar');
     }
 }

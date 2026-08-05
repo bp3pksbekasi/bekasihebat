@@ -1,4 +1,5 @@
-<div class="min-h-screen bg-[#f5f5f5]">
+<div class="min-h-screen bg-[#f5f5f5]" wire:init="loadData">
+
     {{-- NOTIFY --}}
     <div
         x-data="{ show: false, message: '', type: 'success' }"
@@ -34,6 +35,33 @@
             @endif
         </div>
 
+        {{-- SKELETON atau KONTEN setelah loaded --}}
+        @if(! $loaded)
+            {{-- SKELETON LOADING --}}
+            <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                @for($i = 0; $i < 4; $i++)
+                <div class="rounded-xl bg-white p-4 shadow-sm border border-zinc-100 animate-pulse">
+                    <div class="h-7 w-16 rounded-md bg-zinc-200 mb-2"></div>
+                    <div class="h-3 w-24 rounded-md bg-zinc-100"></div>
+                </div>
+                @endfor
+            </div>
+            <div class="rounded-2xl bg-white shadow-sm border border-zinc-100 overflow-hidden">
+                <div class="border-b border-zinc-100 px-5 py-4">
+                    <div class="h-5 w-64 rounded bg-zinc-200 animate-pulse mb-2"></div>
+                    <div class="h-3 w-96 rounded bg-zinc-100 animate-pulse"></div>
+                </div>
+                <div class="flex flex-col items-center justify-center py-16 text-zinc-400 gap-3">
+                    <svg class="animate-spin h-8 w-8 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    <div class="text-sm font-medium">Menganalisa data lapangan…</div>
+                    <div class="text-xs">Sedang menghitung flag dari data sisir RW, Korwe/Korte, dan Profil RW</div>
+                </div>
+            </div>
+        @else
+
         {{-- RINGKASAN SCORECARD --}}
         @php $r = $this->ringkasan; @endphp
         <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -57,9 +85,17 @@
 
         {{-- SECTION 1: SCORECARD FLAG --}}
         <div class="mb-6 rounded-2xl bg-white shadow-sm border border-zinc-100 overflow-hidden">
-            <div class="border-b border-zinc-100 px-5 py-4">
-                <h2 class="font-semibold text-zinc-800">🚨 Deteksi Otomatis — Flag Wilayah Bermasalah</h2>
-                <p class="mt-0.5 text-xs text-zinc-400">Dihitung dari data sisir RW, Korwe/Korte, Penggalang Suara, dan Profil RW yang sudah ada</p>
+            <div class="border-b border-zinc-100 px-5 py-4 flex items-center justify-between">
+                <div>
+                    <h2 class="font-semibold text-zinc-800">🚨 Deteksi Otomatis — Flag Wilayah Bermasalah</h2>
+                    <p class="mt-0.5 text-xs text-zinc-400">Dihitung dari data sisir RW, Korwe/Korte, Penggalang Suara, dan Profil RW yang sudah ada</p>
+                </div>
+                <div wire:loading wire:target="updatedFilterKecamatan,loadData">
+                    <svg class="animate-spin h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                </div>
             </div>
 
             @if($this->flagsGrouped->isEmpty())
@@ -126,47 +162,56 @@
                 </div>
             </div>
 
-            @if($this->catatanList->isEmpty())
-                <div class="py-10 text-center text-sm text-zinc-400">Belum ada catatan {{ $filterStatus }}.</div>
-            @else
-                <div class="divide-y divide-zinc-50">
-                    @foreach($this->catatanList as $catatan)
-                        <div class="px-5 py-4">
-                            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-                                <div class="flex-1">
-                                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                                        <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-600">{{ $catatan->jenis_label }}</span>
-                                        <span class="text-xs font-medium text-zinc-700">{{ $catatan->targetWilayah?->kecamatan }} — {{ $catatan->targetWilayah?->desa }} RW {{ $catatan->nomor_rw }}</span>
-                                        @if($catatan->sumber === 'otomatis')
-                                            <span class="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-600">Auto</span>
+            <div wire:loading wire:target="updatedFilterStatus" class="px-5 py-8 text-center">
+                <svg class="animate-spin h-5 w-5 text-zinc-400 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+            </div>
+
+            <div wire:loading.remove wire:target="updatedFilterStatus">
+                @if($this->catatanList->isEmpty())
+                    <div class="py-10 text-center text-sm text-zinc-400">Belum ada catatan {{ $filterStatus }}.</div>
+                @else
+                    <div class="divide-y divide-zinc-50">
+                        @foreach($this->catatanList as $catatan)
+                            <div class="px-5 py-4">
+                                <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+                                    <div class="flex-1">
+                                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                                            <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-600">{{ $catatan->jenis_label }}</span>
+                                            <span class="text-xs font-medium text-zinc-700">{{ $catatan->targetWilayah?->kecamatan }} — {{ $catatan->targetWilayah?->desa }} RW {{ $catatan->nomor_rw }}</span>
+                                            @if($catatan->sumber === 'otomatis')
+                                                <span class="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-600">Auto</span>
+                                            @endif
+                                        </div>
+                                        <p class="text-sm text-zinc-700">{{ $catatan->temuan }}</p>
+                                        @if($catatan->tindak_lanjut)
+                                            <p class="mt-1 text-xs text-zinc-500">↳ <em>{{ $catatan->tindak_lanjut }}</em></p>
                                         @endif
+                                        <div class="mt-2 flex flex-wrap gap-3 text-[10px] text-zinc-400">
+                                            <span>PIC: {{ $catatan->pic_nama ?: '-' }}</span>
+                                            <span>Level: {{ strtoupper($catatan->level_penanggung_jawab ?? '-') }}</span>
+                                            <span>Umur: {{ $catatan->umur_hari }} hari</span>
+                                            <span>Oleh: {{ $catatan->creator?->name ?? '-' }}</span>
+                                        </div>
                                     </div>
-                                    <p class="text-sm text-zinc-700">{{ $catatan->temuan }}</p>
-                                    @if($catatan->tindak_lanjut)
-                                        <p class="mt-1 text-xs text-zinc-500">↳ <em>{{ $catatan->tindak_lanjut }}</em></p>
+                                    @if($catatan->isTerbuka())
+                                        <div class="mt-2 sm:mt-0 sm:ml-4">
+                                            <button wire:click="bukaFormSelesai('{{ $catatan->id }}')" class="rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 transition-colors whitespace-nowrap">
+                                                ✓ Tandai Selesai
+                                            </button>
+                                        </div>
                                     @endif
-                                    <div class="mt-2 flex flex-wrap gap-3 text-[10px] text-zinc-400">
-                                        <span>PIC: {{ $catatan->pic_nama ?: '-' }}</span>
-                                        <span>Level: {{ strtoupper($catatan->level_penanggung_jawab ?? '-') }}</span>
-                                        <span>Umur: {{ $catatan->umur_hari }} hari</span>
-                                        <span>Oleh: {{ $catatan->creator?->name ?? '-' }}</span>
-                                    </div>
                                 </div>
-                                @if($catatan->isTerbuka())
-                                    <div class="mt-2 sm:mt-0 sm:ml-4">
-                                        <button wire:click="bukaFormSelesai('{{ $catatan->id }}')" class="rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 transition-colors whitespace-nowrap">
-                                            ✓ Tandai Selesai
-                                        </button>
-                                    </div>
-                                @endif
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+                        @endforeach
+                    </div>
+                @endif
+            </div>
         </div>
 
-        {{-- SECTION 3: AKUNTABILITAS DPC (hanya DPD & DPC) --}}
+        {{-- SECTION 3: AKUNTABILITAS DPC --}}
         @if($isDpd || $isDpc)
         <div class="rounded-2xl bg-white shadow-sm border border-zinc-100 overflow-hidden">
             <div class="border-b border-zinc-100 px-5 py-4">
@@ -215,6 +260,8 @@
             @endif
         </div>
         @endif
+
+        @endif {{-- end @if($loaded) --}}
     </div>
 </div>
 
@@ -225,34 +272,25 @@
         <div class="flex items-center justify-between border-b border-zinc-100 px-5 py-4">
             <div>
                 <h3 class="font-bold text-zinc-800">Catat Temuan</h3>
-                <p class="text-xs text-zinc-400 mt-0.5">
-                    RW {{ $selectedFlag['nomor_rw'] ?? '' }} — {{ $selectedFlag['desa'] ?? '' }}, {{ $selectedFlag['kecamatan'] ?? '' }}
-                </p>
+                <p class="text-xs text-zinc-400 mt-0.5">RW {{ $selectedFlag['nomor_rw'] ?? '' }} — {{ $selectedFlag['desa'] ?? '' }}, {{ $selectedFlag['kecamatan'] ?? '' }}</p>
             </div>
             <button wire:click="tutupFormCatat" class="text-zinc-400 hover:text-zinc-600">✕</button>
         </div>
         <div class="p-5 space-y-4">
-            {{-- Info flag --}}
             <div class="rounded-lg bg-zinc-50 border border-zinc-200 px-4 py-3 text-xs text-zinc-600">
                 <div class="font-semibold text-zinc-700 mb-0.5">{{ \App\Models\CatatanMonev::JENIS_OPTIONS[$selectedFlag['jenis'] ?? ''] ?? '' }}</div>
                 <div>{{ $selectedFlag['detail'] ?? '' }}</div>
             </div>
-
-            {{-- Temuan --}}
             <div>
                 <label class="mb-1 block text-xs font-semibold text-zinc-600">Keterangan Temuan <span class="text-red-500">*</span></label>
                 <textarea wire:model="formTemuan" rows="3" placeholder="Jelaskan kondisi di lapangan..." class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"></textarea>
                 @error('formTemuan') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
             </div>
-
-            {{-- Tindak Lanjut --}}
             <div>
                 <label class="mb-1 block text-xs font-semibold text-zinc-600">Rencana Tindak Lanjut <span class="text-zinc-400">(opsional)</span></label>
                 <textarea wire:model="formTindakLanjut" rows="2" placeholder="Apa yang akan dilakukan?" class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"></textarea>
             </div>
-
             <div class="grid grid-cols-2 gap-3">
-                {{-- Level PJ --}}
                 <div>
                     <label class="mb-1 block text-xs font-semibold text-zinc-600">Level Penanggung Jawab</label>
                     <select wire:model="formLevel" class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
@@ -261,7 +299,6 @@
                         @endforeach
                     </select>
                 </div>
-                {{-- PIC --}}
                 <div>
                     <label class="mb-1 block text-xs font-semibold text-zinc-600">Nama PIC <span class="text-zinc-400">(opsional)</span></label>
                     <input wire:model="formPicNama" type="text" placeholder="Nama koordinator..." class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
@@ -289,7 +326,7 @@
         </div>
         <div class="p-5">
             <label class="mb-1 block text-xs font-semibold text-zinc-600">Tindak Lanjut yang Dilakukan <span class="text-zinc-400">(opsional)</span></label>
-            <textarea wire:model="selesaiTindakLanjut" rows="3" placeholder="Ceritakan apa yang sudah dilakukan untuk menyelesaikan masalah ini..." class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 resize-none"></textarea>
+            <textarea wire:model="selesaiTindakLanjut" rows="3" placeholder="Ceritakan apa yang sudah dilakukan..." class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 resize-none"></textarea>
         </div>
         <div class="flex gap-2 border-t border-zinc-100 px-5 py-4">
             <button wire:click="tutupFormSelesai" class="flex-1 rounded-lg border border-zinc-200 py-2.5 text-sm font-semibold text-zinc-600 hover:bg-zinc-50">Batal</button>
