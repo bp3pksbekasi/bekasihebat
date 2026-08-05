@@ -459,6 +459,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::prefix('monev')->group(function () {
+        Route::get('/', \App\Livewire\Monev\Dashboard::class)
+            ->middleware('menu:monev')
+            ->name('monev.dashboard');
+    });
+
     Route::redirect('settings', 'settings/profile');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');

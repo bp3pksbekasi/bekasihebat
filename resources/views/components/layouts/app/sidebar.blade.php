@@ -85,6 +85,7 @@
                     ],
                 ],
                 ['route' => 'aspirasi.index', 'slug' => 'aspirasi', 'label' => 'Aspirasi & POKIR', 'icon' => 'message-chatbot', 'active' => ['aspirasi.*']],
+                ['route' => 'monev.dashboard', 'slug' => 'monev', 'label' => 'Monev Lapangan', 'icon' => 'activity', 'active' => ['monev.*']],
 
                 ['section' => 'ORGANISASI'],
                 ['route' => 'events.index', 'slug' => 'event', 'label' => 'Program', 'icon' => 'calendar-event', 'active' => ['events.*']],

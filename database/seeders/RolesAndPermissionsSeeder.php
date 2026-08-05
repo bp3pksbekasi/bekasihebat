@@ -35,6 +35,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'menu.profil',
             'menu.rki',
             'menu.ksn',
+            'menu.monev',
         ];
 
         // Create permissions
@@ -79,6 +80,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'menu.rki',
             'menu.ksn',
             'menu.aspirasi',
+            'menu.monev',
         ];
         foreach ($dapilPermissions as $permissionName) {
             $dapilRole->givePermissionTo(Permission::findOrCreate($permissionName));
