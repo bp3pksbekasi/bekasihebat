@@ -245,11 +245,11 @@
                     </button>
 
                     <flux:menu class="w-[220px] !rounded-xl !border-zinc-800 !bg-[#1c1c1f] !text-zinc-200">
-                        <flux:menu.item href="{{ route('settings.profile') }}" icon="user-circle" wire:navigate>Profil</flux:menu.item>
+                        <flux:menu.item href="{{ route('settings.profile') }}" icon="user-circle" wire:navigate style="color:#e4e4e7;">Profil</flux:menu.item>
                         <flux:menu.separator />
                         <form method="POST" action="{{ route('logout') }}" class="w-full">
                             @csrf
-                            <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                            <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full" style="color:#e4e4e7;">
                                 {{ __('Log Out') }}
                             </flux:menu.item>
                         </form>
