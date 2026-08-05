@@ -40,18 +40,12 @@ class Dashboard extends Component
     public function mount(): void
     {
         $scope = $this->accessScope();
-        if (! empty($scope['kecamatan']) && $this->filterKecamatan === '') {
+        if (! empty($scope['kecamatan'])) {
+            // DPC/DPRA: kecamatan sudah fix, langsung load
             $this->filterKecamatan = $scope['kecamatan'];
+            $this->loaded = true;
         }
-    }
-
-    /**
-     * Dipanggil via wire:init setelah halaman pertama render.
-     * Ini yang membuat halaman tidak freeze saat load pertama.
-     */
-    public function loadData(): void
-    {
-        $this->loaded = true;
+        // DPD/admin: $loaded tetap false, tunggu user pilih kecamatan
     }
 
     // ─── Computed Properties (hanya dijalankan setelah $loaded = true) ────
@@ -305,7 +299,12 @@ class Dashboard extends Component
 
     public function updatedFilterKecamatan(): void
     {
-        unset($this->flags, $this->flagsGrouped, $this->ringkasan);
+        if ($this->filterKecamatan !== '') {
+            $this->loaded = true;
+        } else {
+            $this->loaded = false;
+        }
+        unset($this->flags, $this->flagsGrouped, $this->ringkasan, $this->akuntabilitasDpc);
     }
 
     public function render()

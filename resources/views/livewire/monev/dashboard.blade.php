@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[#f5f5f5]" wire:init="loadData">
+<div class="min-h-screen bg-[#f5f5f5]">
 
     {{-- NOTIFY --}}
     <div
@@ -24,40 +24,38 @@
             </div>
             @if($isDpd)
             <div class="flex items-center gap-2">
-                <label class="text-xs text-zinc-500">Filter Kecamatan:</label>
+                <label class="text-xs text-zinc-500 font-medium">Pilih Kecamatan:</label>
                 <select wire:model.live="filterKecamatan" class="rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
-                    <option value="">Semua Kecamatan</option>
+                    <option value="">— Pilih Kecamatan —</option>
                     @foreach($this->kecamatanOptions as $kec)
                         <option value="{{ $kec }}">{{ $kec }}</option>
                     @endforeach
                 </select>
+                <div wire:loading wire:target="filterKecamatan">
+                    <svg class="animate-spin h-4 w-4 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                </div>
             </div>
             @endif
         </div>
 
-        {{-- SKELETON atau KONTEN setelah loaded --}}
+        {{-- BELUM PILIH KECAMATAN (DPD/Admin) --}}
         @if(! $loaded)
-            {{-- SKELETON LOADING --}}
-            <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                @for($i = 0; $i < 4; $i++)
-                <div class="rounded-xl bg-white p-4 shadow-sm border border-zinc-100 animate-pulse">
-                    <div class="h-7 w-16 rounded-md bg-zinc-200 mb-2"></div>
-                    <div class="h-3 w-24 rounded-md bg-zinc-100"></div>
+            <div class="flex flex-col items-center justify-center rounded-2xl bg-white border border-zinc-100 shadow-sm py-20 text-center">
+                <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange-50">
+                    <svg class="h-8 w-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
                 </div>
-                @endfor
-            </div>
-            <div class="rounded-2xl bg-white shadow-sm border border-zinc-100 overflow-hidden">
-                <div class="border-b border-zinc-100 px-5 py-4">
-                    <div class="h-5 w-64 rounded bg-zinc-200 animate-pulse mb-2"></div>
-                    <div class="h-3 w-96 rounded bg-zinc-100 animate-pulse"></div>
-                </div>
-                <div class="flex flex-col items-center justify-center py-16 text-zinc-400 gap-3">
-                    <svg class="animate-spin h-8 w-8 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                    </svg>
-                    <div class="text-sm font-medium">Menganalisa data lapangan…</div>
-                    <div class="text-xs">Sedang menghitung flag dari data sisir RW, Korwe/Korte, dan Profil RW</div>
+                <h3 class="text-base font-bold text-zinc-800">Pilih kecamatan untuk mulai analisa</h3>
+                <p class="mt-1.5 text-sm text-zinc-400 max-w-xs">Data flag dihitung per kecamatan. Pilih dulu dari dropdown di atas agar tidak berat.</p>
+                <div class="mt-6">
+                    <select wire:model.live="filterKecamatan" class="rounded-xl border-2 border-orange-200 bg-orange-50 px-4 py-2.5 text-sm font-semibold text-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                        <option value="">— Pilih Kecamatan —</option>
+                        @foreach($this->kecamatanOptions as $kec)
+                            <option value="{{ $kec }}">{{ $kec }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         @else
@@ -90,7 +88,7 @@
                     <h2 class="font-semibold text-zinc-800">🚨 Deteksi Otomatis — Flag Wilayah Bermasalah</h2>
                     <p class="mt-0.5 text-xs text-zinc-400">Dihitung dari data sisir RW, Korwe/Korte, Penggalang Suara, dan Profil RW yang sudah ada</p>
                 </div>
-                <div wire:loading wire:target="updatedFilterKecamatan,loadData">
+                <div wire:loading wire:target="filterKecamatan">
                     <svg class="animate-spin h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
