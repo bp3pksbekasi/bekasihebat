@@ -71,7 +71,7 @@
         <!-- Backdrop -->
         <div x-show="openInfraDrawer" 
              x-transition.opacity 
-             class="fixed inset-0 bg-black bg-opacity-30 transition-opacity" 
+             class="fixed inset-0 bg-black/30 transition-opacity" 
              @click="openInfraDrawer = false"></div>
 
         <!-- Drawer Panel -->
@@ -1256,7 +1256,7 @@
     </div>
 
     @if ($showProfilDrawer && $profilRwId)
-        <div class="fixed inset-0 bg-black bg-opacity-30 z-40 transition-opacity" wire:click="closeProfilDrawer"></div>
+        <div class="fixed inset-0 bg-black/30 z-40 transition-opacity" wire:click="closeProfilDrawer"></div>
         <div class="fixed top-0 right-0 h-full bg-white shadow-[-8px_0_24px_rgba(0,0,0,0.16)] z-50 overflow-y-auto custom-scrollbar flex flex-col" style="width: 100%; max-width: 480px;">
             <!-- Header -->
             <div class="sticky top-0 bg-white border-b border-gray-200 px-5 py-4 z-10 flex justify-between items-start">
