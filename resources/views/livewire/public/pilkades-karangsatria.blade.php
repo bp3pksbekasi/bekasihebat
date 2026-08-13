@@ -43,7 +43,7 @@
                         <th colspan="2" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">IDENTITAS WILAYAH</th>
                         <th colspan="4" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">DATA DASAR</th>
                         <th colspan="4" style="background:#14532d; color:#bbf7d0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">SUARA PEMILU</th>
-                        <th colspan="1" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">3 PARTAI TERKUAT</th>
+                        <th colspan="2" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">PETA KEKUATAN</th>
                         <th colspan="1" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em;">3 CALEG PEMENANG</th>
                     </tr>
                     <tr>
@@ -60,7 +60,8 @@
                         <th style="min-width:80px; background:#1c1917; color:#60a5fa; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">Suara PAN</th>
                         <th style="min-width:80px; background:#1c1917; color:#34d399; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">PKS+PAN</th>
                         <th style="min-width:65px; background:#1c1917; color:#f8fafc; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Juara 1</th>
-                        {{-- 3 Partai Terkuat --}}
+                        {{-- Peta Kekuatan --}}
+                        <th style="min-width:65px; background:#1e293b; color:#22c55e; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">PILKADES<br>(UNO)</th>
                         <th style="min-width:220px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">3 Partai Terkuat di RW</th>
                         {{-- 3 Caleg --}}
                         <th style="min-width:260px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; text-transform:uppercase;">3 Caleg Pemenang di RW</th>
@@ -143,6 +144,15 @@
                                 @endif
                             </td>
 
+                            {{-- Pilkades UNO --}}
+                            <td style="background:{{ $row['dukungan_uno'] ? '#22c55e' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 6px; text-align:center;">
+                                @if($row['dukungan_uno'])
+                                    <span style="color:#ffffff; font-size:0.75rem; font-weight:800;">✓</span>
+                                @else
+                                    <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
+                                @endif
+                            </td>
+
                             {{-- 3 Partai Terkuat --}}
                             <td style="background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:6px 10px; vertical-align:top;">
                                 @if(count($row['top3_partai']) > 0)
@@ -198,6 +208,7 @@
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e40af; font-size:0.8rem;">{{ number_format($totalPan, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#14532d; font-size:0.85rem;">{{ number_format($totalSum, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px; text-align:center; color:#475569; font-size:0.7rem;">-</td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#22c55e; font-size:0.85rem; font-weight:800;">✓ {{ array_sum(array_column($rwData, 'dukungan_uno')) }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; padding:8px;"></td>
                     </tr>
