@@ -1,4 +1,4 @@
-<div class="h-full w-full flex flex-col bg-white">
+<div class="h-screen w-full flex flex-col bg-white overflow-hidden">
     <!-- Header -->
     <div class="flex-none bg-emerald-700 text-white p-4 shadow-md z-20 flex justify-between items-center">
         <div>
@@ -21,7 +21,7 @@
     </div>
 
     @if(!$targetWilayah)
-        <div class="flex-1 flex items-center justify-center bg-gray-50">
+        <div class="flex-1 flex items-center justify-center bg-gray-50 min-h-0">
             <div class="text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -32,7 +32,7 @@
         </div>
     @else
         <!-- Spreadsheet Table Container -->
-        <div class="flex-1 overflow-auto custom-scrollbar relative bg-gray-50">
+        <div class="flex-1 min-h-0 overflow-auto custom-scrollbar relative bg-gray-50">
             <table class="w-full text-left border-collapse table-fixed min-w-[2000px]">
                 <thead class="sticky top-0 z-10 bg-white shadow-sm">
                     <tr>
