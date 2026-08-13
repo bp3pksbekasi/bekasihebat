@@ -15,11 +15,7 @@ class PilkadesKarangsatria extends Component
 {
     public $targetWilayah;
     public $rwData = [];
-    /** Suara PKS total tingkat desa dari PemiluDesaSummary (untuk referensi footer) */
-    public int $desaPksVotes = 0;
     public int $desaPanVotes = 0;
-    public int $unmappedPksVotes = 0;
-    public int $unmappedPanVotes = 0;
     public string $electionLabel = '';
 
     public function mount()
@@ -78,17 +74,8 @@ class PilkadesKarangsatria extends Component
                 ->first();
 
             if ($summary) {
-                // Simpan total desa-level untuk referensi di footer
-                $this->desaPksVotes = (int) ($summary->pks_votes ?? 0);
-
-                // Hitung PAN dari party_rows level desa
-                foreach ($summary->party_rows ?? [] as $p) {
-                    $nama = strtoupper(trim($p['party_name'] ?? ''));
-                    if (str_contains($nama, 'PAN') || str_contains($nama, 'AMANAT')) {
-                        $this->desaPanVotes = (int) ($p['total_votes'] ?? 0);
-                        break;
-                    }
-                }
+                $this->desaPksVotes = 8621;
+                $this->desaPanVotes = 6579;
 
                 if (!empty($summary->rw_rows)) {
                     $hasElectionData = true;
@@ -149,6 +136,42 @@ class PilkadesKarangsatria extends Component
             }
         }
 
+        // Data validasi fix dari lapangan (Manual Override)
+        $validatedData = [
+            1  => ['pks' => 601, 'pan' => 76,  'dpt' => 1870],
+            2  => ['pks' => 210, 'pan' => 69,  'dpt' => 1358],
+            3  => ['pks' => 169, 'pan' => 68,  'dpt' => 1574],
+            4  => ['pks' => 236, 'pan' => 286, 'dpt' => 2707],
+            5  => ['pks' => 329, 'pan' => 181, 'dpt' => 3445],
+            6  => ['pks' => 324, 'pan' => 92,  'dpt' => 2167],
+            7  => ['pks' => 732, 'pan' => 99,  'dpt' => 3473],
+            8  => ['pks' => 629, 'pan' => 276, 'dpt' => 2123],
+            9  => ['pks' => 305, 'pan' => 113, 'dpt' => 1869],
+            10 => ['pks' => 324, 'pan' => 35,  'dpt' => 966],
+            11 => ['pks' => 201, 'pan' => 344, 'dpt' => 1182],
+            12 => ['pks' => 227, 'pan' => 444, 'dpt' => 1090],
+            13 => ['pks' => 306, 'pan' => 269, 'dpt' => 959],
+            14 => ['pks' => 410, 'pan' => 1323,'dpt' => 3457],
+            15 => ['pks' => 164, 'pan' => 423, 'dpt' => 1168],
+            16 => ['pks' => 401, 'pan' => 77,  'dpt' => 1385],
+            17 => ['pks' => 439, 'pan' => 64,  'dpt' => 1663],
+            18 => ['pks' => 352, 'pan' => 134, 'dpt' => 1845],
+            19 => ['pks' => 191, 'pan' => 145, 'dpt' => 871],
+            20 => ['pks' => 94,  'pan' => 126, 'dpt' => 852],
+            21 => ['pks' => 567, 'pan' => 594, 'dpt' => 2842],
+            22 => ['pks' => 206, 'pan' => 169, 'dpt' => 1076],
+            23 => ['pks' => 123, 'pan' => 69,  'dpt' => 806],
+            24 => ['pks' => 146, 'pan' => 46,  'dpt' => 520],
+            25 => ['pks' => 58,  'pan' => 40,  'dpt' => 273],
+            26 => ['pks' => 132, 'pan' => 34,  'dpt' => 819],
+            27 => ['pks' => 220, 'pan' => 258, 'dpt' => 1027],
+            28 => ['pks' => 179, 'pan' => 403, 'dpt' => 1214],
+            29 => ['pks' => 115, 'pan' => 100, 'dpt' => 495],
+            30 => ['pks' => 95,  'pan' => 98,  'dpt' => 515],
+            31 => ['pks' => 76,  'pan' => 81,  'dpt' => 535],
+            32 => ['pks' => 60,  'pan' => 43,  'dpt' => 487],
+        ];
+
         $formattedData = [];
 
         for ($i = 1; $i <= 32; $i++) {
@@ -158,21 +181,17 @@ class PilkadesKarangsatria extends Component
             $dataRw   = $dataRws->firstWhere('nomor_rw', $paddedRw);
             $profilRw = $profilRws->get($rwKey);
             $elec     = $rwElectionData[$rwKey] ?? null;
+            $valid    = $validatedData[$i] ?? null;
 
-            // Jika ada data pemilu 2024, gunakan itu. Fallback ke suara_pks_2019 hanya jika tidak ada summary sama sekali.
-            if ($hasElectionData) {
-                $suaraPks = $elec['suara_pks'] ?? 0;
-                $suaraPan = $elec['suara_pan'] ?? 0;
-            } else {
-                $suaraPks = $profilRw?->suara_pks_2019 ?? 0;
-                $suaraPan = 0;
-            }
+            $suaraPks = $valid['pks'] ?? 0;
+            $suaraPan = $valid['pan'] ?? 0;
+            $estimasiDpt = $valid['dpt'] ?? ($dataRw?->dpt ?? 0);
 
             $formattedData[] = [
                 'nomor_rw'    => $paddedRw,
                 'nama_wilayah'=> $profilRw?->nama_wilayah ?: '-',
                 'jumlah_rt'   => $dataRw?->jumlah_rt ?? 0,
-                'estimasi_dpt'=> $dataRw?->dpt ?? 0,
+                'estimasi_dpt'=> $estimasiDpt,
                 'korwe_count' => $korweByRw[$rwKey] ?? 0,
                 'korte_count' => $korteByRw[$rwKey] ?? 0,
                 'suara_pks'   => $suaraPks,
@@ -181,13 +200,6 @@ class PilkadesKarangsatria extends Component
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
             ];
-        }
-
-        if ($hasElectionData) {
-            $sumPks1to32 = array_sum(array_column($formattedData, 'suara_pks'));
-            $sumPan1to32 = array_sum(array_column($formattedData, 'suara_pan'));
-            $this->unmappedPksVotes = max(0, $this->desaPksVotes - $sumPks1to32);
-            $this->unmappedPanVotes = max(0, $this->desaPanVotes - $sumPan1to32);
         }
 
         $this->rwData = $formattedData;
