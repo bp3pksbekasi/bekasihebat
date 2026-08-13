@@ -136,6 +136,8 @@
                                     <span style="background:#fef3c7; border:1px solid #fbbf24; color:#92400e; font-size:0.62rem; font-weight:800; padding:2px 6px; border-radius:4px;">PKS #1</span>
                                 @elseif($row['juara_1'] === 'PAN')
                                     <span style="background:#eff6ff; border:1px solid #93c5fd; color:#1e40af; font-size:0.62rem; font-weight:800; padding:2px 6px; border-radius:4px;">PAN #1</span>
+                                @elseif($row['juara_1'] !== '')
+                                    <span style="background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; font-size:0.58rem; font-weight:700; padding:2px 4px; border-radius:4px; text-transform:uppercase;">{{ $row['juara_1'] }} #1</span>
                                 @else
                                     <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
                                 @endif

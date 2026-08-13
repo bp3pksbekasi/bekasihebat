@@ -199,6 +199,23 @@ class PilkadesKarangsatria extends Component
                     $juara1 = 'PKS';
                 } elseif (str_contains($partyName, 'PAN') || str_contains($partyName, 'AMANAT')) {
                     $juara1 = 'PAN';
+                } else {
+                    $shortName = str_replace('PARTAI ', '', $partyName);
+                    if (str_contains($shortName, 'GOLONGAN KARYA')) $shortName = 'GOLKAR';
+                    elseif (str_contains($shortName, 'GERAKAN INDONESIA RAYA')) $shortName = 'GERINDRA';
+                    elseif (str_contains($shortName, 'DEMOKRASI INDONESIA PERJUANGAN')) $shortName = 'PDIP';
+                    elseif (str_contains($shortName, 'KEBANGKITAN BANGSA')) $shortName = 'PKB';
+                    elseif (str_contains($shortName, 'NASDEM')) $shortName = 'NASDEM';
+                    elseif (str_contains($shortName, 'DEMOKRAT')) $shortName = 'DEMOKRAT';
+                    elseif (str_contains($shortName, 'PERSATUAN PEMBANGUNAN')) $shortName = 'PPP';
+                    elseif (str_contains($shortName, 'SOLIDARITAS INDONESIA')) $shortName = 'PSI';
+                    elseif (str_contains($shortName, 'GELOMBANG RAKYAT')) $shortName = 'GELORA';
+                    elseif (str_contains($shortName, 'PERINDO')) $shortName = 'PERINDO';
+                    elseif (str_contains($shortName, 'HATI NURANI RAKYAT')) $shortName = 'HANURA';
+                    elseif (str_contains($shortName, 'BURUH')) $shortName = 'BURUH';
+                    elseif (str_contains($shortName, 'UMMAT')) $shortName = 'UMMAT';
+                    
+                    $juara1 = trim(explode(' ', $shortName)[0]);
                 }
             }
 
