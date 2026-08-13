@@ -70,19 +70,19 @@ class PilkadesKarangsatria extends Component
 
             $formattedData[] = [
                 'nomor_rw' => $paddedRw,
-                'nama_wilayah' => $profilRw->nama_wilayah ?? '-',
-                'jumlah_rt' => $dataRw->jumlah_rt ?? 0,
-                'estimasi_dpt' => $dataRw->dpt ?? 0,
-                'suara_pks_2019' => $profilRw->suara_pks_2019 ?? 0,
-                'tipologi' => $profilRw->tipologi ? (\App\Models\ProfilRw::TIPOLOGI_OPTIONS[$profilRw->tipologi] ?? $profilRw->tipologi) : '-',
-                'ekonomi_dominan' => $profilRw->ekonomi_dominan ? (\App\Models\ProfilRw::EKONOMI_OPTIONS[$profilRw->ekonomi_dominan] ?? $profilRw->ekonomi_dominan) : '-',
-                'profil_warga' => $profilRw->profil_warga ?? '-',
-                'faktor_penyebab' => $profilRw->faktor_penyebab ?? '-',
-                'afiliasi_ketua_rw' => $profilRw->afiliasi_ketua_rw ?? '-',
-                'afiliasi_tomas' => $profilRw->afiliasi_tomas ?? '-',
+                'nama_wilayah' => $profilRw?->nama_wilayah ?: '-',
+                'jumlah_rt' => $dataRw?->jumlah_rt ?? 0,
+                'estimasi_dpt' => $dataRw?->dpt ?? 0,
+                'suara_pks_2019' => $profilRw?->suara_pks_2019 ?? 0,
+                'tipologi' => $profilRw?->tipologi ? (\App\Models\ProfilRw::TIPOLOGI_OPTIONS[$profilRw->tipologi] ?? $profilRw->tipologi) : '-',
+                'ekonomi_dominan' => $profilRw?->ekonomi_dominan ?: '-',
+                'profil_warga' => $profilRw?->profil_warga ?: '-',
+                'faktor_penyebab' => $profilRw?->faktor_penyebab ?: '-',
+                'afiliasi_ketua_rw' => $profilRw?->afiliasi_ketua_rw ?: '-',
+                'afiliasi_tomas' => $profilRw?->afiliasi_tomas ?: '-',
                 'korwe_count' => $korweCount,
                 'korte_count' => $korteCount,
-                'is_complete' => $profilRw->is_complete ?? false,
+                'is_complete' => $profilRw?->is_complete ?? false,
             ];
         }
         
