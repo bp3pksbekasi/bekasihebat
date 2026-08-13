@@ -106,24 +106,29 @@ class PilkadesKarangsatria extends Component
                         // 3 partai terkuat
                         $top3Partai = array_slice($partyRows, 0, 3);
 
-                        // Caleg — dari candidates array dalam party_rows
+                        // Caleg — top candidate dari masing-masing 3 partai terkuat
                         $top3Caleg = [];
-                        foreach (array_slice($partyRows, 0, 10) as $p) {
+                        foreach ($top3Partai as $p) {
                             if (!empty($p['candidates'])) {
+                                $bestCand = null;
+                                $maxVotes = -1;
                                 foreach ($p['candidates'] as $cand) {
-                                    if (($cand['votes'] ?? 0) > 0) {
-                                        $top3Caleg[] = [
-                                            'name'  => $cand['name'] ?? '-',
-                                            'votes' => (int) ($cand['votes'] ?? 0),
-                                            'party' => $p['party_name'] ?? '',
-                                        ];
+                                    $v = (int) ($cand['votes'] ?? 0);
+                                    if ($v > $maxVotes && $v > 0) {
+                                        $maxVotes = $v;
+                                        $bestCand = $cand;
                                     }
                                 }
+                                
+                                if ($bestCand) {
+                                    $top3Caleg[] = [
+                                        'name'  => $bestCand['name'] ?? '-',
+                                        'votes' => $maxVotes,
+                                        'party' => $p['party_name'] ?? '',
+                                    ];
+                                }
                             }
-                            if (count($top3Caleg) >= 3) break;
                         }
-                        usort($top3Caleg, fn($a, $b) => $b['votes'] <=> $a['votes']);
-                        $top3Caleg = array_slice($top3Caleg, 0, 3);
 
                         $rwElectionData[$rwKey] = [
                             'suara_pks'   => $suaraPks,
