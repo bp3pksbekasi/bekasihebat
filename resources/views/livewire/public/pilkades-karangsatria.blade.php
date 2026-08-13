@@ -32,6 +32,26 @@
         </div>
     @else
 
+        {{-- ===== DEBUG INFO (hapus setelah selesai diagnosa) ===== --}}
+        @if(!empty($debugInfo))
+        <div style="background:#1e1b4b; color:#c7d2fe; font-family:monospace; font-size:0.68rem; padding:8px 16px; border-bottom:2px solid #4f46e5; flex:none; overflow:auto; max-height:120px;">
+            <strong style="color:#818cf8;">🔍 DEBUG PERIOD INFO:</strong>
+            <span style="margin-left:10px; color:#a5b4fc;">Period terpilih: <strong style="color:#f0abfc;">{{ $debugInfo['selected_period'] ?? '-' }}</strong></span>
+            <span style="margin-left:16px; color:#a5b4fc;">Desa dicari: <strong style="color:#fde68a;">{{ $debugInfo['desa_query'] ?? '-' }}</strong></span>
+            <span style="margin-left:16px; color:#a5b4fc;">Summary ditemukan: <strong style="color:{{ ($debugInfo['summary_found'] ?? false) ? '#4ade80' : '#f87171' }}">{{ ($debugInfo['summary_found'] ?? false) ? 'YA' : 'TIDAK' }}</strong></span>
+            <span style="margin-left:16px; color:#a5b4fc;">rw_rows count: <strong style="color:#fb923c;">{{ $debugInfo['rw_rows_count'] ?? 0 }}</strong></span>
+            <span style="margin-left:16px; color:#a5b4fc;">pks_votes desa: <strong style="color:#4ade80;">{{ number_format($debugInfo['desa_pks_votes'] ?? 0, 0, ',', '.') }}</strong></span>
+            @if(!empty($debugInfo['any_summary_period']))
+            <br><strong style="color:#f87171;">⚠ Summary TIDAK ditemukan utk period tsb.</strong>
+            <span style="margin-left:8px;">Ada summary di: {{ $debugInfo['any_summary_period'] }}</span>
+            @endif
+            <br><strong style="color:#818cf8;">Semua period DPRD:</strong>
+            @foreach($debugInfo['all_periods'] ?? [] as $p)
+            <span style="margin-left:8px; color:#6ee7b7;">{{ $p }}</span>
+            @endforeach
+        </div>
+        @endif
+
         {{-- ===== TABEL AREA ===== --}}
         <div class="sheet-scroll" style="flex:1; overflow:auto; background:#f1f5f9;">
             <table style="border-collapse:collapse; white-space:nowrap; font-size:0.72rem; font-family:system-ui,-apple-system,sans-serif;">

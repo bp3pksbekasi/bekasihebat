@@ -15,6 +15,7 @@ class PilkadesKarangsatria extends Component
 {
     public $targetWilayah;
     public $rwData = [];
+    public $debugInfo = [];
 
     public function mount()
     {
@@ -58,16 +59,34 @@ class PilkadesKarangsatria extends Component
         // Gunakan logika yang sama persis dengan bedah-dapil:
         // Prioritas: jenis=dprd, tahun 2024 > is_default > first
         $rwElectionData = [];
-        $period = PemiluPeriod::forJenis('dprd')->ordered()->get()
-            ->pipe(function ($periods) {
-                return $periods->firstWhere('tahun', 2024)
-                    ?? $periods->firstWhere('is_default', true)
-                    ?? $periods->first();
-            });
+        $allPeriods = PemiluPeriod::forJenis('dprd')->ordered()->get();
+        $period = $allPeriods->firstWhere('tahun', 2024)
+            ?? $allPeriods->firstWhere('is_default', true)
+            ?? $allPeriods->first();
+
+        // DEBUG INFO — hapus setelah masalah teridentifikasi
+        $this->debugInfo = [
+            'all_periods'      => $allPeriods->map(fn($p) => "id={$p->id} tahun={$p->tahun} jenis={$p->jenis} default={$p->is_default} label={$p->label}")->toArray(),
+            'selected_period'  => $period ? "id={$period->id} tahun={$period->tahun} jenis={$period->jenis}" : 'TIDAK DITEMUKAN',
+            'desa_query'       => $this->targetWilayah->desa ?? 'NULL',
+            'summary_found'    => false,
+            'rw_rows_count'    => 0,
+            'desa_pks_votes'   => 0,
+        ];
+
         if ($period) {
             $summary = PemiluDesaSummary::where('pemilu_period_id', $period->id)
                 ->where('desa', $this->targetWilayah->desa)
                 ->first();
+
+            $this->debugInfo['summary_found'] = $summary !== null;
+            $this->debugInfo['rw_rows_count'] = $summary ? count($summary->rw_rows ?? []) : 0;
+            $this->debugInfo['desa_pks_votes'] = $summary?->pks_votes ?? 0;
+            if (!$summary) {
+                // Coba tanpa filter period untuk lihat apakah ada summary sama sekali
+                $anySummary = PemiluDesaSummary::where('desa', $this->targetWilayah->desa)->first();
+                $this->debugInfo['any_summary_period'] = $anySummary ? "period_id={$anySummary->pemilu_period_id}" : 'TIDAK ADA SAMA SEKALI';
+            }
 
             if ($summary && !empty($summary->rw_rows)) {
                 foreach ($summary->rw_rows as $rwRow) {
