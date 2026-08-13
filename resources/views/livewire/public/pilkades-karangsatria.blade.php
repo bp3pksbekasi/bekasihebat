@@ -163,14 +163,29 @@
                     @endforeach
                 </tbody>
 
+                {{-- ===== UNMAPPED ROW ===== --}}
+                @if($unmappedPksVotes > 0 || $unmappedPanVotes > 0)
+                <tbody style="border-top:2px solid #cbd5e1;">
+                    <tr style="background:#fefce8; font-weight:600; color:#854d0e;">
+                        <td style="position:sticky; left:0; z-index:5; background:#fefce8; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 6px; text-align:center;">?</td>
+                        <td style="position:sticky; left:52px; z-index:5; background:#fefce8; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 10px;">Luar Wilayah / RW Tidak Diketahui</td>
+                        <td colspan="4" style="border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:right; font-size:0.6rem;">(Suara yang tidak terpetakan ke RW 1-32)</td>
+                        <td style="border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; color:#92400e;">{{ number_format($unmappedPksVotes, 0, ',', '.') }}</td>
+                        <td style="border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; color:#1e40af;">{{ number_format($unmappedPanVotes, 0, ',', '.') }}</td>
+                        <td style="border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 10px; text-align:right; color:#14532d;">{{ number_format($unmappedPksVotes + $unmappedPanVotes, 0, ',', '.') }}</td>
+                        <td colspan="2" style="border-bottom:1px solid #e2e8f0; padding:7px 10px;"></td>
+                    </tr>
+                </tbody>
+                @endif
+
                 {{-- ===== TOTAL ROW ===== --}}
                 @php
                     $totalDpt   = array_sum(array_column($rwData, 'estimasi_dpt'));
                     $totalKorwe = array_sum(array_column($rwData, 'korwe_count'));
                     $totalKorte = array_sum(array_column($rwData, 'korte_count'));
-                    $totalPks   = array_sum(array_column($rwData, 'suara_pks'));
-                    $totalPan   = array_sum(array_column($rwData, 'suara_pan'));
-                    $totalSum   = array_sum(array_column($rwData, 'pks_pan'));
+                    $totalPks   = array_sum(array_column($rwData, 'suara_pks')) + $unmappedPksVotes;
+                    $totalPan   = array_sum(array_column($rwData, 'suara_pan')) + $unmappedPanVotes;
+                    $totalSum   = array_sum(array_column($rwData, 'pks_pan')) + ($unmappedPksVotes + $unmappedPanVotes);
                 @endphp
                 <tfoot>
                     <tr style="background:#f1f5f9; font-weight:700;">
@@ -194,9 +209,6 @@
         <div style="flex:none; background:#1e293b; border-top:1px solid #334155; padding:5px 16px; display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; color:#64748b;">
             <span>
                 Data level RW adalah proyeksi proporsional dari TPS.
-                @if($desaPksVotes > 0)
-                <span style="margin-left:12px; color:#cbd5e1;">(Validasi Total Desa — PKS: <strong style="color:#92400e;">{{ number_format($desaPksVotes, 0, ',', '.') }}</strong> | PAN: <strong style="color:#1e40af;">{{ number_format($desaPanVotes, 0, ',', '.') }}</strong>)</span>
-                @endif
             </span>
             <div style="display:flex; gap:14px; align-items:center;">
                 <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px;height:10px;background:#fef3c7;border:1px solid #fbbf24;border-radius:2px;display:inline-block;"></span> Suara PKS</span>

@@ -18,6 +18,8 @@ class PilkadesKarangsatria extends Component
     /** Suara PKS total tingkat desa dari PemiluDesaSummary (untuk referensi footer) */
     public int $desaPksVotes = 0;
     public int $desaPanVotes = 0;
+    public int $unmappedPksVotes = 0;
+    public int $unmappedPanVotes = 0;
     public string $electionLabel = '';
 
     public function mount()
@@ -179,6 +181,13 @@ class PilkadesKarangsatria extends Component
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
             ];
+        }
+
+        if ($hasElectionData) {
+            $sumPks1to32 = array_sum(array_column($formattedData, 'suara_pks'));
+            $sumPan1to32 = array_sum(array_column($formattedData, 'suara_pan'));
+            $this->unmappedPksVotes = max(0, $this->desaPksVotes - $sumPks1to32);
+            $this->unmappedPanVotes = max(0, $this->desaPanVotes - $sumPan1to32);
         }
 
         $this->rwData = $formattedData;
