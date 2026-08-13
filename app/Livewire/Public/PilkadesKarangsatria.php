@@ -20,6 +20,7 @@ class PilkadesKarangsatria extends Component
 
     // Modal State
     public bool $showAfiliasiModal = false;
+    public bool $showKorweModal = false;
     public ?string $editRwId = null;
     public ?string $formAfiliasi = null;
     public ?string $formCalonLain = null;
@@ -261,14 +262,30 @@ class PilkadesKarangsatria extends Component
         if ($profil) {
             $this->formAfiliasi = $profil->afiliasi_pilkades;
             $this->formCalonLain = $profil->afiliasi_calon_lain;
-            $this->formKorweNama = $profil->korwe_pilkades_nama;
         } else {
             $this->formAfiliasi = null;
             $this->formCalonLain = null;
-            $this->formKorweNama = null;
         }
 
         $this->showAfiliasiModal = true;
+    }
+
+    public function openKorweModal($rwId)
+    {
+        $this->editRwId = $rwId;
+        $paddedRw = str_pad($rwId, 3, '0', STR_PAD_LEFT);
+        
+        $profil = ProfilRw::where('target_wilayah_id', $this->targetWilayah->id)
+            ->where('nomor_rw', $paddedRw)
+            ->first();
+
+        if ($profil) {
+            $this->formKorweNama = $profil->korwe_pilkades_nama;
+        } else {
+            $this->formKorweNama = null;
+        }
+
+        $this->showKorweModal = true;
     }
 
     public function saveAfiliasi()
@@ -282,10 +299,29 @@ class PilkadesKarangsatria extends Component
 
         $profil->afiliasi_pilkades = $this->formAfiliasi;
         $profil->afiliasi_calon_lain = ($this->formAfiliasi === 'Ke calon lain') ? $this->formCalonLain : null;
-        $profil->korwe_pilkades_nama = $this->formKorweNama;
         $profil->save();
 
         $this->showAfiliasiModal = false;
+        $this->loadData(); // Reload table data
+    }
+
+    public function saveKorwe()
+    {
+        $paddedRw = str_pad($this->editRwId, 3, '0', STR_PAD_LEFT);
+
+        $profil = ProfilRw::firstOrCreate(
+            ['target_wilayah_id' => $this->targetWilayah->id, 'nomor_rw' => $paddedRw],
+            ['dapil' => $this->targetWilayah->dapil, 'kecamatan' => $this->targetWilayah->kecamatan, 'desa' => $this->targetWilayah->desa]
+        );
+
+        $profil->korwe_pilkades_nama = $this->formKorweNama;
+        if (!empty($this->formKorweNama)) {
+            $profil->afiliasi_pilkades = 'UNO';
+            $profil->afiliasi_calon_lain = null;
+        }
+        $profil->save();
+
+        $this->showKorweModal = false;
         $this->loadData(); // Reload table data
     }
 

@@ -108,7 +108,7 @@
                                     @endif
                                     
                                     {{-- Edit Icon --}}
-                                    <button wire:click="openAfiliasiModal({{ $row['nomor_rw'] }})" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Profil RW">
+                                    <button wire:click="openKorweModal({{ $row['nomor_rw'] }})" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Nama Ketua Tim">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
                                 </div>
@@ -246,22 +246,43 @@
 
     @endif
 
-    {{-- Modal Afiliasi & Korwe --}}
-    @if($showAfiliasiModal)
+    {{-- Modal Afiliasi & Korwe Terpisah --}}
+
+    {{-- Modal Korwe Khusus UNO --}}
+    @if($showKorweModal)
         <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center;">
-            <div style="background:#fff; width:360px; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; font-family:system-ui,-apple-system,sans-serif;">
-                <div style="background:#1e293b; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
+            <div style="background:#fff; width:340px; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; font-family:system-ui,-apple-system,sans-serif;">
+                <div style="background:#14532d; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:#fff; font-size:0.9rem; font-weight:600;">Profil RW {{ $editRwId }}</h3>
-                    <button wire:click="$set('showAfiliasiModal', false)" style="background:none; border:none; color:#cbd5e1; cursor:pointer; font-size:1.2rem; line-height:1;">&times;</button>
+                    <button wire:click="$set('showKorweModal', false)" style="background:none; border:none; color:#bbf7d0; cursor:pointer; font-size:1.2rem; line-height:1;">&times;</button>
                 </div>
                 <div style="padding:16px;">
                     <div style="margin-bottom:14px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Nama Ketua Tim Sukses (Korwe)</label>
-                        <input type="text" wire:model="formKorweNama" placeholder="Ketik nama koordinator..." style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.8rem; color:#1e293b; outline:none; box-sizing:border-box;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Nama Ketua Tim Sukses (Korwe)</label>
+                        <input type="text" wire:model="formKorweNama" placeholder="Ketik nama koordinator..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                        <p style="font-size:0.65rem; color:#64748b; margin-top:6px; line-height:1.3;">Mengisi nama Korwe akan otomatis menyetel status dukungan (Afiliasi) di RW ini menjadi <strong>UNO</strong>.</p>
                     </div>
 
+                    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
+                        <button wire:click="$set('showKorweModal', false)" style="padding:6px 12px; background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Batal</button>
+                        <button wire:click="saveKorwe" style="padding:6px 12px; background:#059669; border:none; color:#fff; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Modal Afiliasi --}}
+    @if($showAfiliasiModal)
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center;">
+            <div style="background:#fff; width:340px; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; font-family:system-ui,-apple-system,sans-serif;">
+                <div style="background:#1e293b; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0; color:#fff; font-size:0.9rem; font-weight:600;">Status Afiliasi RW {{ $editRwId }}</h3>
+                    <button wire:click="$set('showAfiliasiModal', false)" style="background:none; border:none; color:#cbd5e1; cursor:pointer; font-size:1.2rem; line-height:1;">&times;</button>
+                </div>
+                <div style="padding:16px;">
                     <div style="margin-bottom:12px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Afiliasi Pilkades</label>
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Status Dukungan (Afiliasi)</label>
                         <select wire:model.live="formAfiliasi" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.8rem; color:#1e293b; outline:none;">
                             <option value="">Belum Jelas</option>
                             <option value="UNO">UNO</option>
@@ -270,9 +291,9 @@
                     </div>
                     
                     @if($formAfiliasi === 'Ke calon lain')
-                        <div style="margin-bottom:12px;">
-                            <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Nama Calon Lain</label>
-                            <input type="text" wire:model="formCalonLain" placeholder="Masukkan nama calon..." style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.8rem; color:#1e293b; outline:none; box-sizing:border-box;">
+                        <div style="margin-bottom:12px; background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:6px;">
+                            <label style="display:block; font-size:0.75rem; font-weight:600; color:#991b1b; margin-bottom:6px;">Nama Calon Lain yang Didukung</label>
+                            <input type="text" wire:model="formCalonLain" placeholder="Masukkan nama calon..." style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
                         </div>
                     @endif
                     
