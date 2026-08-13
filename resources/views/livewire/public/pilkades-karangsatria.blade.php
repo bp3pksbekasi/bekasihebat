@@ -10,7 +10,7 @@
                 PETA STRATEGI PILKADES — DESA KARANGSATRIA
             </h1>
             <p style="margin:3px 0 0; font-size:0.7rem; color:#a7f3d0; letter-spacing:.04em;">
-                DAPIL 4 &bull; KEC. TAMBUN UTARA &bull; 32 RW &bull; Data Pemilu 2019/2024
+                DAPIL 4 &bull; KEC. TAMBUN UTARA &bull; 32 RW &bull; Data: {{ $electionLabel ?: 'Pemilu 2019' }}
             </p>
         </div>
         <div style="display:flex; gap:10px; align-items:center; flex-shrink:0;">
@@ -31,42 +31,6 @@
             </div>
         </div>
     @else
-
-        {{-- ===== DEBUG INFO (hapus setelah selesai diagnosa) ===== --}}
-        @if(!empty($debugInfo))
-        <div style="background:#1e1b4b; color:#c7d2fe; font-family:monospace; font-size:0.68rem; padding:8px 16px; border-bottom:2px solid #4f46e5; flex:none; overflow:auto; max-height:180px;">
-            <strong style="color:#818cf8;">🔍 DEBUG:</strong>
-            <span style="margin-left:8px; color:#a5b4fc;">Period: <strong style="color:#f0abfc;">{{ $debugInfo['selected_period'] ?? '-' }}</strong></span>
-            <span style="margin-left:12px;">Summary: <strong style="color:{{ ($debugInfo['summary_found'] ?? false) ? '#4ade80' : '#f87171' }}">{{ ($debugInfo['summary_found'] ?? false) ? 'ADA' : 'TIDAK' }}</strong></span>
-            <span style="margin-left:12px;">rw_rows: <strong style="color:#fb923c;">{{ $debugInfo['rw_rows_count'] ?? 0 }}</strong></span>
-            <span style="margin-left:12px;">pks_votes desa: <strong style="color:#4ade80;">{{ number_format($debugInfo['desa_pks_votes'] ?? 0, 0, ',', '.') }}</strong></span>
-
-            {{-- Sample rw_rows --}}
-            @if(!empty($debugInfo['sample_rw_rows']))
-            <br><strong style="color:#fde68a;">Sample rw_rows (4 baris pertama):</strong>
-            @foreach($debugInfo['sample_rw_rows'] as $s)
-            <span style="margin-left:8px; background:#312e81; padding:1px 6px; border-radius:3px;">
-                rw_raw="{{ $s['rw_raw'] }}" → ltrim="{{ $s['rw_ltrim'] }}" | pks_votes={{ $s['pks_votes'] }}
-            </span>
-            @endforeach
-            @endif
-
-            {{-- Election keys --}}
-            @if(!empty($debugInfo['election_keys']))
-            <br><strong style="color:#fde68a;">Keys di rwElectionData ({{ count($debugInfo['election_keys']) }} keys):</strong>
-            <span style="color:#6ee7b7;">{{ implode(', ', array_slice($debugInfo['election_keys'], 0, 10)) }}...</span>
-            @endif
-
-            {{-- Sample RW 1 --}}
-            <br><strong style="color:#fde68a;">election_data['1'] =</strong>
-            <span style="color:#6ee7b7;">{{ is_array($debugInfo['election_sample_rw1'] ?? null) ? 'suara_pks=' . ($debugInfo['election_sample_rw1']['suara_pks'] ?? '?') . ' suara_pan=' . ($debugInfo['election_sample_rw1']['suara_pan'] ?? '?') : ($debugInfo['election_sample_rw1'] ?? 'N/A') }}</span>
-
-            @if(!empty($debugInfo['any_summary_period']))
-            <br><strong style="color:#f87171;">⚠ {{ $debugInfo['any_summary_period'] }}</strong>
-            @endif
-        </div>
-        @endif
-
 
         {{-- ===== TABEL AREA ===== --}}
         <div class="sheet-scroll" style="flex:1; overflow:auto; background:#f1f5f9;">
@@ -228,7 +192,12 @@
 
         {{-- STATUS BAR --}}
         <div style="flex:none; background:#1e293b; border-top:1px solid #334155; padding:5px 16px; display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; color:#64748b;">
-            <span>Scroll kiri-kanan &amp; atas-bawah untuk melihat semua data &bull; Kolom RW &amp; Nama dibekukan</span>
+            <span>
+                Data level RW adalah proyeksi proporsional dari TPS.
+                @if($desaPksVotes > 0)
+                <span style="margin-left:12px; color:#cbd5e1;">(Validasi Total Desa — PKS: <strong style="color:#92400e;">{{ number_format($desaPksVotes, 0, ',', '.') }}</strong> | PAN: <strong style="color:#1e40af;">{{ number_format($desaPanVotes, 0, ',', '.') }}</strong>)</span>
+                @endif
+            </span>
             <div style="display:flex; gap:14px; align-items:center;">
                 <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px;height:10px;background:#fef3c7;border:1px solid #fbbf24;border-radius:2px;display:inline-block;"></span> Suara PKS</span>
                 <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px;height:10px;background:#eff6ff;border:1px solid #93c5fd;border-radius:2px;display:inline-block;"></span> Suara PAN</span>
