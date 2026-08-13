@@ -55,8 +55,15 @@ class PilkadesKarangsatria extends Component
         }
 
         // Ambil data pemilu per RW dari PemiluDesaSummary
-        $rwElectionData = []; // indexed by rwKey (int string, no padding)
-        $period = PemiluPeriod::where('is_default', true)->first();
+        // Gunakan logika yang sama persis dengan bedah-dapil:
+        // Prioritas: jenis=dprd, tahun 2024 > is_default > first
+        $rwElectionData = [];
+        $period = PemiluPeriod::forJenis('dprd')->ordered()->get()
+            ->pipe(function ($periods) {
+                return $periods->firstWhere('tahun', 2024)
+                    ?? $periods->firstWhere('is_default', true)
+                    ?? $periods->first();
+            });
         if ($period) {
             $summary = PemiluDesaSummary::where('pemilu_period_id', $period->id)
                 ->where('desa', $this->targetWilayah->desa)
@@ -68,41 +75,55 @@ class PilkadesKarangsatria extends Component
                     if ($rwKey === '') continue;
 
                     // Suara PKS & PAN dari party_rows
+                    // Field yang benar: total_votes (= party_votes + candidate_votes)
                     $suaraPks = 0;
                     $suaraPan = 0;
                     $partyRows = $rwRow['party_rows'] ?? [];
 
-                    // Sort party rows descending by votes
-                    usort($partyRows, fn($a, $b) => ($b['votes'] ?? 0) <=> ($a['votes'] ?? 0));
+                    // Sort descending by total_votes (field yang benar)
+                    usort($partyRows, fn($a, $b) => ($b['total_votes'] ?? 0) <=> ($a['total_votes'] ?? 0));
 
                     foreach ($partyRows as $p) {
                         $nama = strtoupper(trim($p['party_name'] ?? ''));
                         if (str_contains($nama, 'PKS') || str_contains($nama, 'KEADILAN')) {
-                            $suaraPks = (int) ($p['votes'] ?? 0);
+                            // total_votes = party_votes + candidate_votes (sama dengan pks_votes di level desa)
+                            $suaraPks = (int) ($p['total_votes'] ?? ($p['party_votes'] ?? 0) + ($p['candidate_votes'] ?? 0));
                         }
                         if (str_contains($nama, 'PAN') || str_contains($nama, 'AMANAT')) {
-                            $suaraPan = (int) ($p['votes'] ?? 0);
+                            $suaraPan = (int) ($p['total_votes'] ?? ($p['party_votes'] ?? 0) + ($p['candidate_votes'] ?? 0));
                         }
                     }
 
-                    // 3 partai terkuat
+                    // 3 partai terkuat (sudah sorted descending)
                     $top3Partai = array_slice($partyRows, 0, 3);
 
-                    // 3 caleg pemenang: kumpulkan semua kandidat dari semua partai, sort by votes
-                    $allCandidates = [];
-                    foreach ($partyRows as $p) {
-                        foreach ($p['candidates'] ?? [] as $cand) {
-                            if (($cand['votes'] ?? 0) > 0) {
-                                $allCandidates[] = [
-                                    'name'  => $cand['name'] ?? '-',
-                                    'votes' => (int) ($cand['votes'] ?? 0),
-                                    'party' => $p['party_name'] ?? '',
-                                ];
+                    // 3 caleg pemenang: ambil dari pks_votes & kandidat terbaik semua partai
+                    // Di level RW, kandidat disimpan di rw_rows[].top_candidate (satu saja)
+                    // atau tidak ada breakdown kandidat. Tampilkan partai terkuat sebagai caleg fallback.
+                    $top3Caleg = [];
+                    foreach (array_slice($partyRows, 0, 10) as $p) {
+                        // Cek apakah ada data kandidat per RW
+                        if (!empty($p['top_candidate'])) {
+                            $top3Caleg[] = [
+                                'name'  => $p['top_candidate']['name'] ?? $p['top_candidate'] ?? '-',
+                                'votes' => (int) ($p['top_candidate']['votes'] ?? ($p['total_votes'] ?? 0)),
+                                'party' => $p['party_name'] ?? '',
+                            ];
+                        } elseif (!empty($p['candidates'])) {
+                            foreach ($p['candidates'] as $cand) {
+                                if (($cand['votes'] ?? 0) > 0) {
+                                    $top3Caleg[] = [
+                                        'name'  => $cand['name'] ?? '-',
+                                        'votes' => (int) ($cand['votes'] ?? 0),
+                                        'party' => $p['party_name'] ?? '',
+                                    ];
+                                }
                             }
                         }
+                        if (count($top3Caleg) >= 3) break;
                     }
-                    usort($allCandidates, fn($a, $b) => $b['votes'] <=> $a['votes']);
-                    $top3Caleg = array_slice($allCandidates, 0, 3);
+                    usort($top3Caleg, fn($a, $b) => $b['votes'] <=> $a['votes']);
+                    $top3Caleg = array_slice($top3Caleg, 0, 3);
 
                     $rwElectionData[$rwKey] = [
                         'suara_pks'   => $suaraPks,
@@ -112,6 +133,7 @@ class PilkadesKarangsatria extends Component
                     ];
                 }
             }
+
         }
 
         $formattedData = [];
