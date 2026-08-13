@@ -23,6 +23,7 @@ class PilkadesKarangsatria extends Component
     public ?string $editRwId = null;
     public ?string $formAfiliasi = null;
     public ?string $formCalonLain = null;
+    public ?string $formKorweNama = null;
 
     public function mount()
     {
@@ -239,6 +240,7 @@ class PilkadesKarangsatria extends Component
                 'dukungan_uno'=> ($profilRw?->afiliasi_pilkades === 'UNO'),
                 'afiliasi'    => $profilRw?->afiliasi_pilkades ?? '',
                 'calon_lain'  => $profilRw?->afiliasi_calon_lain ?? '',
+                'korwe_nama'  => $profilRw?->korwe_pilkades_nama ?? '',
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
             ];
@@ -259,9 +261,11 @@ class PilkadesKarangsatria extends Component
         if ($profil) {
             $this->formAfiliasi = $profil->afiliasi_pilkades;
             $this->formCalonLain = $profil->afiliasi_calon_lain;
+            $this->formKorweNama = $profil->korwe_pilkades_nama;
         } else {
             $this->formAfiliasi = null;
             $this->formCalonLain = null;
+            $this->formKorweNama = null;
         }
 
         $this->showAfiliasiModal = true;
@@ -278,6 +282,7 @@ class PilkadesKarangsatria extends Component
 
         $profil->afiliasi_pilkades = $this->formAfiliasi;
         $profil->afiliasi_calon_lain = ($this->formAfiliasi === 'Ke calon lain') ? $this->formCalonLain : null;
+        $profil->korwe_pilkades_nama = $this->formKorweNama;
         $profil->save();
 
         $this->showAfiliasiModal = false;

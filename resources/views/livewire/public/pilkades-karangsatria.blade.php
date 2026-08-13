@@ -53,7 +53,7 @@
                         {{-- Data Dasar --}}
                         <th style="min-width:60px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Jml RT</th>
                         <th style="min-width:80px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Est. DPT</th>
-                        <th style="min-width:65px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
+                        <th style="min-width:140px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Ketua Tim (Korwe)</th>
                         <th style="min-width:85px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Afiliasi RW</th>
                         {{-- Suara --}}
                         <th style="min-width:80px; background:#1c1917; color:#fbbf24; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">Suara PKS</th>
@@ -99,12 +99,19 @@
                             </td>
 
                             {{-- Korwe --}}
-                            <td style="background:{{ $row['korwe_count'] > 0 ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
-                                @if($row['korwe_count'] > 0)
-                                    <span style="background:#bbf7d0; color:#14532d; font-weight:700; font-size:0.7rem; padding:2px 7px; border-radius:10px;">{{ $row['korwe_count'] }}</span>
-                                @else
-                                    <span style="color:#cbd5e1; font-size:1rem;">—</span>
-                                @endif
+                            <td style="background:{{ $row['korwe_nama'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                    @if($row['korwe_nama'])
+                                        <span style="color:#14532d; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100px;" title="{{ $row['korwe_nama'] }}">{{ $row['korwe_nama'] }}</span>
+                                    @else
+                                        <span style="color:#cbd5e1; font-size:0.7rem; font-style:italic;">-</span>
+                                    @endif
+                                    
+                                    {{-- Edit Icon --}}
+                                    <button wire:click="openAfiliasiModal({{ $row['nomor_rw'] }})" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Profil RW">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                </div>
                             </td>
 
                             {{-- Afiliasi RW --}}
@@ -211,7 +218,7 @@
                         <td style="position:sticky; left:52px; z-index:5; background:#e2e8f0; border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px 10px; font-size:0.68rem; color:#64748b;">32 RW</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#374151;">—</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e293b; font-size:0.78rem;">{{ number_format($totalDpt, 0, ',', '.') }}</td>
-                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#14532d;">{{ $totalKorwe }}</td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#14532d;">-</td>
                         <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px; text-align:center; color:#475569;">-</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#92400e; font-size:0.8rem;">{{ number_format($totalPks, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e40af; font-size:0.8rem;">{{ number_format($totalPan, 0, ',', '.') }}</td>
@@ -239,17 +246,22 @@
 
     @endif
 
-    {{-- Modal Afiliasi --}}
+    {{-- Modal Afiliasi & Korwe --}}
     @if($showAfiliasiModal)
         <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center;">
-            <div style="background:#fff; width:340px; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; font-family:system-ui,-apple-system,sans-serif;">
+            <div style="background:#fff; width:360px; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; font-family:system-ui,-apple-system,sans-serif;">
                 <div style="background:#1e293b; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="margin:0; color:#fff; font-size:0.9rem; font-weight:600;">Edit Afiliasi RW {{ $editRwId }}</h3>
+                    <h3 style="margin:0; color:#fff; font-size:0.9rem; font-weight:600;">Profil RW {{ $editRwId }}</h3>
                     <button wire:click="$set('showAfiliasiModal', false)" style="background:none; border:none; color:#cbd5e1; cursor:pointer; font-size:1.2rem; line-height:1;">&times;</button>
                 </div>
                 <div style="padding:16px;">
+                    <div style="margin-bottom:14px;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Nama Ketua Tim Sukses (Korwe)</label>
+                        <input type="text" wire:model="formKorweNama" placeholder="Ketik nama koordinator..." style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.8rem; color:#1e293b; outline:none; box-sizing:border-box;">
+                    </div>
+
                     <div style="margin-bottom:12px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Pilihan Afiliasi</label>
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Afiliasi Pilkades</label>
                         <select wire:model.live="formAfiliasi" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.8rem; color:#1e293b; outline:none;">
                             <option value="">Belum Jelas</option>
                             <option value="UNO">UNO</option>
