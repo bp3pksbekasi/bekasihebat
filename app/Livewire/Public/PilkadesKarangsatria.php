@@ -89,6 +89,13 @@ class PilkadesKarangsatria extends Component
             }
 
             if ($summary && !empty($summary->rw_rows)) {
+                // DEBUG: ambil sample rw_rows[0..2]
+                $this->debugInfo['sample_rw_rows'] = array_map(fn($r) => [
+                    'rw_raw'     => $r['rw'] ?? 'NULL',
+                    'pks_votes'  => $r['pks_votes'] ?? 'N/A',
+                    'rw_ltrim'   => ltrim((string)($r['rw'] ?? ''), '0'),
+                ], array_slice($summary->rw_rows, 0, 4));
+
                 foreach ($summary->rw_rows as $rwRow) {
                     $rwKey = ltrim((string) ($rwRow['rw'] ?? ''), '0');
                     if ($rwKey === '') continue;
@@ -149,6 +156,10 @@ class PilkadesKarangsatria extends Component
                         'top3_caleg'  => $top3Caleg,
                     ];
                 }
+
+                // DEBUG: tampilkan keys yang terbentuk
+                $this->debugInfo['election_keys'] = array_keys($rwElectionData);
+                $this->debugInfo['election_sample_rw1'] = $rwElectionData['1'] ?? 'KEY 1 TIDAK ADA';
             }
 
         }

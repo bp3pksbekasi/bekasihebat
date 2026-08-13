@@ -34,23 +34,39 @@
 
         {{-- ===== DEBUG INFO (hapus setelah selesai diagnosa) ===== --}}
         @if(!empty($debugInfo))
-        <div style="background:#1e1b4b; color:#c7d2fe; font-family:monospace; font-size:0.68rem; padding:8px 16px; border-bottom:2px solid #4f46e5; flex:none; overflow:auto; max-height:120px;">
-            <strong style="color:#818cf8;">🔍 DEBUG PERIOD INFO:</strong>
-            <span style="margin-left:10px; color:#a5b4fc;">Period terpilih: <strong style="color:#f0abfc;">{{ $debugInfo['selected_period'] ?? '-' }}</strong></span>
-            <span style="margin-left:16px; color:#a5b4fc;">Desa dicari: <strong style="color:#fde68a;">{{ $debugInfo['desa_query'] ?? '-' }}</strong></span>
-            <span style="margin-left:16px; color:#a5b4fc;">Summary ditemukan: <strong style="color:{{ ($debugInfo['summary_found'] ?? false) ? '#4ade80' : '#f87171' }}">{{ ($debugInfo['summary_found'] ?? false) ? 'YA' : 'TIDAK' }}</strong></span>
-            <span style="margin-left:16px; color:#a5b4fc;">rw_rows count: <strong style="color:#fb923c;">{{ $debugInfo['rw_rows_count'] ?? 0 }}</strong></span>
-            <span style="margin-left:16px; color:#a5b4fc;">pks_votes desa: <strong style="color:#4ade80;">{{ number_format($debugInfo['desa_pks_votes'] ?? 0, 0, ',', '.') }}</strong></span>
-            @if(!empty($debugInfo['any_summary_period']))
-            <br><strong style="color:#f87171;">⚠ Summary TIDAK ditemukan utk period tsb.</strong>
-            <span style="margin-left:8px;">Ada summary di: {{ $debugInfo['any_summary_period'] }}</span>
-            @endif
-            <br><strong style="color:#818cf8;">Semua period DPRD:</strong>
-            @foreach($debugInfo['all_periods'] ?? [] as $p)
-            <span style="margin-left:8px; color:#6ee7b7;">{{ $p }}</span>
+        <div style="background:#1e1b4b; color:#c7d2fe; font-family:monospace; font-size:0.68rem; padding:8px 16px; border-bottom:2px solid #4f46e5; flex:none; overflow:auto; max-height:180px;">
+            <strong style="color:#818cf8;">🔍 DEBUG:</strong>
+            <span style="margin-left:8px; color:#a5b4fc;">Period: <strong style="color:#f0abfc;">{{ $debugInfo['selected_period'] ?? '-' }}</strong></span>
+            <span style="margin-left:12px;">Summary: <strong style="color:{{ ($debugInfo['summary_found'] ?? false) ? '#4ade80' : '#f87171' }}">{{ ($debugInfo['summary_found'] ?? false) ? 'ADA' : 'TIDAK' }}</strong></span>
+            <span style="margin-left:12px;">rw_rows: <strong style="color:#fb923c;">{{ $debugInfo['rw_rows_count'] ?? 0 }}</strong></span>
+            <span style="margin-left:12px;">pks_votes desa: <strong style="color:#4ade80;">{{ number_format($debugInfo['desa_pks_votes'] ?? 0, 0, ',', '.') }}</strong></span>
+
+            {{-- Sample rw_rows --}}
+            @if(!empty($debugInfo['sample_rw_rows']))
+            <br><strong style="color:#fde68a;">Sample rw_rows (4 baris pertama):</strong>
+            @foreach($debugInfo['sample_rw_rows'] as $s)
+            <span style="margin-left:8px; background:#312e81; padding:1px 6px; border-radius:3px;">
+                rw_raw="{{ $s['rw_raw'] }}" → ltrim="{{ $s['rw_ltrim'] }}" | pks_votes={{ $s['pks_votes'] }}
+            </span>
             @endforeach
+            @endif
+
+            {{-- Election keys --}}
+            @if(!empty($debugInfo['election_keys']))
+            <br><strong style="color:#fde68a;">Keys di rwElectionData ({{ count($debugInfo['election_keys']) }} keys):</strong>
+            <span style="color:#6ee7b7;">{{ implode(', ', array_slice($debugInfo['election_keys'], 0, 10)) }}...</span>
+            @endif
+
+            {{-- Sample RW 1 --}}
+            <br><strong style="color:#fde68a;">election_data['1'] =</strong>
+            <span style="color:#6ee7b7;">{{ is_array($debugInfo['election_sample_rw1'] ?? null) ? 'suara_pks=' . ($debugInfo['election_sample_rw1']['suara_pks'] ?? '?') . ' suara_pan=' . ($debugInfo['election_sample_rw1']['suara_pan'] ?? '?') : ($debugInfo['election_sample_rw1'] ?? 'N/A') }}</span>
+
+            @if(!empty($debugInfo['any_summary_period']))
+            <br><strong style="color:#f87171;">⚠ {{ $debugInfo['any_summary_period'] }}</strong>
+            @endif
         </div>
         @endif
+
 
         {{-- ===== TABEL AREA ===== --}}
         <div class="sheet-scroll" style="flex:1; overflow:auto; background:#f1f5f9;">
