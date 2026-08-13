@@ -5,7 +5,8 @@ namespace App\Livewire\Public;
 use App\Models\TargetWilayah;
 use App\Models\DataRw;
 use App\Models\ProfilRw;
-use App\Models\InfraRtRw;
+use App\Models\Korwe;
+use App\Models\Korte;
 use Livewire\Component;
 
 class PilkadesKarangsatria extends Component
@@ -38,17 +39,26 @@ class PilkadesKarangsatria extends Component
                 return ltrim((string) $item->nomor_rw, '0');
             });
 
-        $infras = InfraRtRw::where('target_wilayah_id', $this->targetWilayah->id)
-            ->get();
+        $korwes = Korwe::where('target_wilayah_id', $this->targetWilayah->id)->get();
+        $kortes = Korte::where('target_wilayah_id', $this->targetWilayah->id)->get();
             
         // Group infras by RW
-        $infraByRw = [];
-        foreach ($infras as $infra) {
-            $rwKey = ltrim((string) $infra->nomor_rw, '0');
-            if (!isset($infraByRw[$rwKey])) {
-                $infraByRw[$rwKey] = collect();
+        $korweByRw = [];
+        foreach ($korwes as $korwe) {
+            $rwKey = ltrim((string) $korwe->nomor_rw, '0');
+            if (!isset($korweByRw[$rwKey])) {
+                $korweByRw[$rwKey] = collect();
             }
-            $infraByRw[$rwKey]->push($infra);
+            $korweByRw[$rwKey]->push($korwe);
+        }
+
+        $korteByRw = [];
+        foreach ($kortes as $korte) {
+            $rwKey = ltrim((string) $korte->nomor_rw, '0');
+            if (!isset($korteByRw[$rwKey])) {
+                $korteByRw[$rwKey] = collect();
+            }
+            $korteByRw[$rwKey]->push($korte);
         }
 
         $formattedData = [];
@@ -63,10 +73,11 @@ class PilkadesKarangsatria extends Component
             
             $dataRw = $dataRws->firstWhere('nomor_rw', $paddedRw);
             $profilRw = $profilRws->get($rwKey);
-            $rwInfras = $infraByRw[$rwKey] ?? collect();
+            $korwesInRw = $korweByRw[$rwKey] ?? collect();
+            $kortesInRw = $korteByRw[$rwKey] ?? collect();
             
-            $korweCount = $rwInfras->where('jenis_infrastruktur', 'korwe')->count();
-            $korteCount = $rwInfras->where('jenis_infrastruktur', 'korte')->count();
+            $korweCount = $korwesInRw->count();
+            $korteCount = $kortesInRw->count();
 
             $formattedData[] = [
                 'nomor_rw' => $paddedRw,
