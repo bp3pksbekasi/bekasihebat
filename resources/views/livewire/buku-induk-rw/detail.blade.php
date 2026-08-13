@@ -332,6 +332,12 @@
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @if($profilRw->nama_wilayah)
+                                    <div class="col-span-1 md:col-span-2 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                        <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Nama Wilayah</span>
+                                        <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->nama_wilayah }}</div>
+                                    </div>
+                                @endif
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                     <span class="text-gray-500 block text-[10px] sm:text-xs mb-1 uppercase tracking-wider font-bold">Tipologi Wilayah</span>
                                     <div class="font-medium text-gray-900 text-sm sm:text-base">{{ $profilRw->tipologi ? \App\Models\ProfilRw::TIPOLOGI_OPTIONS[$profilRw->tipologi] ?? $profilRw->tipologi : '-' }}</div>
@@ -1279,6 +1285,10 @@
                 <!-- Profil wilayah -->
                 <div class="space-y-4">
                     <h3 class="text-sm font-bold text-orange-600 uppercase tracking-wider mb-2">Profil wilayah</h3>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Nama Wilayah (Opsional)</label>
+                        <input type="text" wire:model="profilData.nama_wilayah" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3" placeholder="Contoh: Perumahan Alamanda, Kampung Karang Congok">
+                    </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Tipologi RW</label>
                         <select wire:model="profilData.tipologi" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-sm py-3 px-3">

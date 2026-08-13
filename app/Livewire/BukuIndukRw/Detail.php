@@ -273,7 +273,7 @@ class Detail extends Component
     private function emptyProfilData(): void
     {
         $this->profilData = [
-            'tipologi' => '', 'ekonomi_dominan' => [], 'profil_warga' => [],
+            'nama_wilayah' => '', 'tipologi' => '', 'ekonomi_dominan' => [], 'profil_warga' => [],
             'suara_pks_2019' => 0, 'jumlah_kta' => 0, 'faktor_penyebab' => [],
             'afiliasi_rw_rt' => '', 'afiliasi_posyandu_dkm' => '',
             'partai_dominan' => '', 'afiliasi_ketua_rw' => '', 'afiliasi_mayoritas_rt' => '',

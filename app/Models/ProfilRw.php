@@ -114,6 +114,7 @@ class ProfilRw extends Model
     protected $fillable = [
         'target_wilayah_id',
         'nomor_rw',
+        'nama_wilayah',
         'dapil',
         'kecamatan',
         'desa',
