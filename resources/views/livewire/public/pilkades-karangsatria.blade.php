@@ -42,7 +42,7 @@
                         {{-- Kelompok: Identitas --}}
                         <th colspan="2" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">IDENTITAS WILAYAH</th>
                         <th colspan="4" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">DATA DASAR</th>
-                        <th colspan="3" style="background:#14532d; color:#bbf7d0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">SUARA PEMILU</th>
+                        <th colspan="4" style="background:#14532d; color:#bbf7d0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">SUARA PEMILU</th>
                         <th colspan="1" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">3 PARTAI TERKUAT</th>
                         <th colspan="1" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em;">3 CALEG PEMENANG</th>
                     </tr>
@@ -58,7 +58,8 @@
                         {{-- Suara --}}
                         <th style="min-width:80px; background:#1c1917; color:#fbbf24; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">Suara PKS</th>
                         <th style="min-width:80px; background:#1c1917; color:#60a5fa; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">Suara PAN</th>
-                        <th style="min-width:80px; background:#1c1917; color:#34d399; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">PKS+PAN</th>
+                        <th style="min-width:80px; background:#1c1917; color:#34d399; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">PKS+PAN</th>
+                        <th style="min-width:65px; background:#1c1917; color:#f8fafc; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Juara 1</th>
                         {{-- 3 Partai Terkuat --}}
                         <th style="min-width:220px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">3 Partai Terkuat di RW</th>
                         {{-- 3 Caleg --}}
@@ -125,8 +126,19 @@
                             </td>
 
                             {{-- PKS + PAN --}}
-                            <td style="background:{{ $pksSum > 0 ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 10px; text-align:right; font-weight:800; color:{{ $pksSum > 0 ? '#14532d' : '#94a3b8' }}; font-size:0.82rem;">
+                            <td style="background:{{ $pksSum > 0 ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; font-weight:800; color:{{ $pksSum > 0 ? '#14532d' : '#94a3b8' }}; font-size:0.82rem;">
                                 {{ $pksSum > 0 ? number_format($pksSum, 0, ',', '.') : '—' }}
+                            </td>
+
+                            {{-- Juara 1 --}}
+                            <td style="background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 6px; text-align:center;">
+                                @if($row['juara_1'] === 'PKS')
+                                    <span style="background:#fef3c7; border:1px solid #fbbf24; color:#92400e; font-size:0.62rem; font-weight:800; padding:2px 6px; border-radius:4px;">PKS #1</span>
+                                @elseif($row['juara_1'] === 'PAN')
+                                    <span style="background:#eff6ff; border:1px solid #93c5fd; color:#1e40af; font-size:0.62rem; font-weight:800; padding:2px 6px; border-radius:4px;">PAN #1</span>
+                                @else
+                                    <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
+                                @endif
                             </td>
 
                             {{-- 3 Partai Terkuat --}}
@@ -182,7 +194,8 @@
                         <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px; text-align:center; color:#14532d;">{{ $totalKorte }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#92400e; font-size:0.8rem;">{{ number_format($totalPks, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e40af; font-size:0.8rem;">{{ number_format($totalPan, 0, ',', '.') }}</td>
-                        <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px; text-align:right; color:#14532d; font-size:0.85rem;">{{ number_format($totalSum, 0, ',', '.') }}</td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#14532d; font-size:0.85rem;">{{ number_format($totalSum, 0, ',', '.') }}</td>
+                        <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px; text-align:center; color:#475569; font-size:0.7rem;">-</td>
                         <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; padding:8px;"></td>
                     </tr>

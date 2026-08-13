@@ -192,6 +192,16 @@ class PilkadesKarangsatria extends Component
             $suaraPan = $valid['pan'] ?? 0;
             $estimasiDpt = $valid['dpt'] ?? ($dataRw?->dpt ?? 0);
 
+            $juara1 = '';
+            if (!empty($elec['top3_partai'][0])) {
+                $partyName = strtoupper(trim($elec['top3_partai'][0]['party_name'] ?? ''));
+                if (str_contains($partyName, 'PKS') || str_contains($partyName, 'KEADILAN')) {
+                    $juara1 = 'PKS';
+                } elseif (str_contains($partyName, 'PAN') || str_contains($partyName, 'AMANAT')) {
+                    $juara1 = 'PAN';
+                }
+            }
+
             $formattedData[] = [
                 'nomor_rw'    => $paddedRw,
                 'nama_wilayah'=> $profilRw?->nama_wilayah ?: '-',
@@ -202,6 +212,7 @@ class PilkadesKarangsatria extends Component
                 'suara_pks'   => $suaraPks,
                 'suara_pan'   => $suaraPan,
                 'pks_pan'     => $suaraPks + $suaraPan,
+                'juara_1'     => $juara1,
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
             ];
