@@ -1,4 +1,4 @@
-<div class="h-full flex flex-col bg-white">
+<div class="h-full w-full flex flex-col bg-white">
     <!-- Header -->
     <div class="flex-none bg-emerald-700 text-white p-4 shadow-md z-20 flex justify-between items-center">
         <div>
@@ -32,7 +32,7 @@
         </div>
     @else
         <!-- Spreadsheet Table Container -->
-        <div class="flex-1 overflow-auto custom-scrollbar relative bg-gray-50" style="height: calc(100vh - 76px);">
+        <div class="flex-1 overflow-auto custom-scrollbar relative bg-gray-50">
             <table class="w-full text-left border-collapse table-fixed min-w-[2000px]">
                 <thead class="sticky top-0 z-10 bg-white shadow-sm">
                     <tr>
