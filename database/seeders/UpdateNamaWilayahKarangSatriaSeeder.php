@@ -12,13 +12,13 @@ class UpdateNamaWilayahKarangSatriaSeeder extends Seeder
      */
     public function run(): void
     {
-        $targetWilayah = \App\Models\TargetWilayah::where('desa', 'KARANG SATRIA')
+        $targetWilayah = \App\Models\TargetWilayah::where('desa', 'KARANGSATRIA')
             ->where('kecamatan', 'TAMBUN UTARA')
             ->where('dapil', 'DAPIL 4') // Just to be safe
             ->first();
 
         if (!$targetWilayah) {
-            $this->command->error('Target Wilayah KARANG SATRIA tidak ditemukan.');
+            $this->command->error('Target Wilayah KARANGSATRIA tidak ditemukan.');
             return;
         }
 

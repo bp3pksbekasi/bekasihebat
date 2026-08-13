@@ -47,6 +47,7 @@ Route::get('/tentang', PublicTentang::class)->name('public.tentang');
 Route::get('/aspirasi-warga', PublicAspirasiWarga::class)->name('public.aspirasi');
 Route::get('/profil-rw', \App\Livewire\Public\RwProfileForm::class)->name('public.rw-profile');
 Route::get('/input-infrastruktur', \App\Livewire\Public\InputInfrastruktur::class)->name('public.input-infrastruktur');
+Route::get('/pilkades-karangsatria', \App\Livewire\Public\PilkadesKarangsatria::class)->name('public.pilkades-karangsatria');
 Route::get('/daftar', KartuAnggotaRegister::class)->name('member.register');
 Route::get('/ref/{code}', KartuAnggotaRegister::class)->name('member.register.referral');
 Route::redirect('/tentang-kami', '/tentang');
