@@ -137,6 +137,8 @@ class ProfilRw extends Model
         'relawan_milenial_nama',
         'caleg_terpilih_ada',
         'caleg_terpilih_nama',
+        'afiliasi_pilkades',
+        'afiliasi_calon_lain',
         'afiliasi_rw_rt',
         'afiliasi_posyandu_dkm',
         'partai_dominan',
