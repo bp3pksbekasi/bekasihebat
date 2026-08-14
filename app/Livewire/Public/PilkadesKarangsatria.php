@@ -337,7 +337,7 @@ class PilkadesKarangsatria extends Component
         );
 
         $profil->afiliasi_pilkades = $this->formAfiliasi;
-        $profil->afiliasi_calon_lain = ($this->formAfiliasi === 'Ke calon lain') ? $this->formCalonLain : null;
+        $profil->afiliasi_calon_lain = ($this->formAfiliasi === 'CALON LAIN') ? $this->formCalonLain : null;
         $profil->save();
 
         $this->showAfiliasiModal = false;
@@ -374,7 +374,7 @@ class PilkadesKarangsatria extends Component
         
         if ($field !== 'sosial_media') {
             $calonLainField = $field . '_calon_lain';
-            $profil->$calonLainField = ($this->formFieldValue === 'Ke calon lain') ? $this->formFieldValueCalonLain : null;
+            $profil->$calonLainField = ($this->formFieldValue === 'CALON LAIN') ? $this->formFieldValueCalonLain : null;
         }
 
         $profil->save();

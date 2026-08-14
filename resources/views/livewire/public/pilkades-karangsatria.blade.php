@@ -116,34 +116,32 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
                                 </div>
-                            </td>
-
                             {{-- Afiliasi RW --}}
-                            <td style="position:relative; background:{{ $row['afiliasi'] === 'UNO' ? '#dcfce7' : ($row['afiliasi'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
-                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-                                    @if($row['afiliasi'] === 'UNO')
-                                        <span style="color:#166534; font-weight:800; font-size:0.65rem;">UNO</span>
-                                    @elseif($row['afiliasi'] === 'Ke calon lain')
-                                        <span style="color:#b91c1c; font-size:0.75rem; font-weight:700;" title="Dukungan: {{ $row['calon_lain'] }}">{{ $row['calon_lain'] ?: 'LAINNYA' }}</span>
-                                    @else
-                                        <span style="color:#94a3b8; font-style:italic; font-size:0.6rem;">-</span>
-                                    @endif
-                                    
-                                    {{-- Edit Icon --}}
-                                    <button wire:click="openAfiliasiModal({{ $row['nomor_rw'] }})" style="position:absolute; top:2px; right:2px; background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi">
-                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                                    </button>
-                                </div>
+                            <td style="position:relative; background:{{ match($row['afiliasi']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                @if($row['afiliasi'] === 'UNO')
+                                    <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.65rem;">UNO</span>
+                                @elseif($row['afiliasi'] === 'CALON LAIN')
+                                    <span style="display:inline-block; color:#b91c1c; font-size:0.75rem; font-weight:700;" title="Dukungan: {{ $row['calon_lain'] }}">{{ $row['calon_lain'] ?: 'LAINNYA' }}</span>
+                                @elseif($row['afiliasi'] === 'NETRAL')
+                                    <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
+                                @else
+                                    <span style="display:inline-block; color:#94a3b8; font-style:italic; font-size:0.6rem;">-</span>
+                                @endif
+                                
+                                {{-- Edit Icon --}}
+                                <button wire:click="openAfiliasiModal({{ $row['nomor_rw'] }})" style="position:absolute; top:2px; right:2px; background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="width:10px; height:10px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                </button>
                             </td>
 
                             {{-- Afiliasi PKK --}}
-                            <td style="position:relative; background:{{ $row['afiliasi_pkk'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_pkk'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
-                                @if($row['afiliasi_pkk'] === 'Ke calon lain')
+                            <td style="position:relative; background:{{ match($row['afiliasi_pkk']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                @if($row['afiliasi_pkk'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_pkk_calon_lain'] }}">{{ $row['afiliasi_pkk_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_pkk'] === 'UNO')
                                     <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="UNO">UNO</span>
-                                @elseif($row['afiliasi_pkk'])
-                                    <span style="display:inline-block; color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_pkk'] }}">{{ $row['afiliasi_pkk'] }}</span>
+                                @elseif($row['afiliasi_pkk'] === 'NETRAL')
+                                    <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
                                     <span style="display:inline-block; color:#cbd5e1; font-size:0.7rem;">-</span>
                                 @endif
@@ -153,13 +151,13 @@
                             </td>
 
                             {{-- Afiliasi Karang Taruna --}}
-                            <td style="position:relative; background:{{ $row['afiliasi_karang_taruna'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_karang_taruna'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
-                                @if($row['afiliasi_karang_taruna'] === 'Ke calon lain')
+                            <td style="position:relative; background:{{ match($row['afiliasi_karang_taruna']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                @if($row['afiliasi_karang_taruna'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_karang_taruna_calon_lain'] }}">{{ $row['afiliasi_karang_taruna_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_karang_taruna'] === 'UNO')
                                     <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="UNO">UNO</span>
-                                @elseif($row['afiliasi_karang_taruna'])
-                                    <span style="display:inline-block; color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_karang_taruna'] }}">{{ $row['afiliasi_karang_taruna'] }}</span>
+                                @elseif($row['afiliasi_karang_taruna'] === 'NETRAL')
+                                    <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
                                     <span style="display:inline-block; color:#cbd5e1; font-size:0.7rem;">-</span>
                                 @endif
@@ -169,13 +167,13 @@
                             </td>
 
                             {{-- Afiliasi DKM --}}
-                            <td style="position:relative; background:{{ $row['afiliasi_dkm'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_dkm'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
-                                @if($row['afiliasi_dkm'] === 'Ke calon lain')
+                            <td style="position:relative; background:{{ match($row['afiliasi_dkm']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                @if($row['afiliasi_dkm'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_dkm_calon_lain'] }}">{{ $row['afiliasi_dkm_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_dkm'] === 'UNO')
                                     <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="UNO">UNO</span>
-                                @elseif($row['afiliasi_dkm'])
-                                    <span style="display:inline-block; color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_dkm'] }}">{{ $row['afiliasi_dkm'] }}</span>
+                                @elseif($row['afiliasi_dkm'] === 'NETRAL')
+                                    <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
                                     <span style="display:inline-block; color:#cbd5e1; font-size:0.7rem;">-</span>
                                 @endif
@@ -185,13 +183,13 @@
                             </td>
 
                             {{-- Afiliasi Tokoh --}}
-                            <td style="position:relative; background:{{ $row['afiliasi_tokoh'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_tokoh'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
-                                @if($row['afiliasi_tokoh'] === 'Ke calon lain')
+                            <td style="position:relative; background:{{ match($row['afiliasi_tokoh']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
+                                @if($row['afiliasi_tokoh'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_tokoh_calon_lain'] }}">{{ $row['afiliasi_tokoh_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_tokoh'] === 'UNO')
                                     <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="UNO">UNO</span>
-                                @elseif($row['afiliasi_tokoh'])
-                                    <span style="display:inline-block; color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_tokoh'] }}">{{ $row['afiliasi_tokoh'] }}</span>
+                                @elseif($row['afiliasi_tokoh'] === 'NETRAL')
+                                    <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
                                     <span style="display:inline-block; color:#cbd5e1; font-size:0.7rem;">-</span>
                                 @endif
@@ -355,13 +353,14 @@
                     <div style="margin-bottom:12px;">
                         <label style="display:block; font-size:0.75rem; font-weight:600; color:#475569; margin-bottom:6px;">Status Dukungan (Afiliasi)</label>
                         <select wire:model.live="formAfiliasi" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.8rem; color:#1e293b; outline:none;">
-                            <option value="">Belum Jelas</option>
+                            <option value="BELUM DIKETAHUI">BELUM DIKETAHUI</option>
+                            <option value="NETRAL">NETRAL</option>
                             <option value="UNO">UNO</option>
-                            <option value="Ke calon lain">Ke calon lain</option>
+                            <option value="CALON LAIN">CALON LAIN</option>
                         </select>
                     </div>
                     
-                    @if($formAfiliasi === 'Ke calon lain')
+                    @if($formAfiliasi === 'CALON LAIN')
                         <div style="margin-bottom:12px; background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:6px;">
                             <label style="display:block; font-size:0.75rem; font-weight:600; color:#991b1b; margin-bottom:6px;">Nama Calon Lain yang Didukung</label>
                             <select wire:model="formCalonLain" style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
@@ -399,12 +398,13 @@
                             <input type="text" wire:model="formFieldValue" placeholder="Ketik {{ strtolower($modalTitle) }}..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
                         @else
                             <select wire:model.live="formFieldValue" style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
-                                <option value="">Belum Jelas</option>
+                                <option value="BELUM DIKETAHUI">BELUM DIKETAHUI</option>
+                                <option value="NETRAL">NETRAL</option>
                                 <option value="UNO">UNO</option>
-                                <option value="Ke calon lain">Ke calon lain</option>
+                                <option value="CALON LAIN">CALON LAIN</option>
                             </select>
 
-                            @if($formFieldValue === 'Ke calon lain')
+                            @if($formFieldValue === 'CALON LAIN')
                                 <div style="margin-top:12px; background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:6px;">
                                     <label style="display:block; font-size:0.75rem; font-weight:600; color:#991b1b; margin-bottom:6px;">Nama Calon Lain</label>
                                     <select wire:model="formFieldValueCalonLain" style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
