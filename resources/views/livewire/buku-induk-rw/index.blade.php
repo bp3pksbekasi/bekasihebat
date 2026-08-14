@@ -1,7 +1,17 @@
 <div>
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Peta Kekuatan RW</h1>
-        <p class="text-sm text-gray-500 mt-1">Manajemen terpadu profil dan struktur pemenangan di tingkat RW.</p>
+    <div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Peta Kekuatan RW</h1>
+            <p class="text-sm text-gray-500 mt-1">Manajemen terpadu profil dan struktur pemenangan di tingkat RW.</p>
+        </div>
+        @if(($this->accessScope['mode'] ?? 'global') === 'dpd' || auth()->user()?->role === 'admin_dpd')
+        <div>
+            <a href="{{ route('buku-induk-rw.download-pdf', ['tahun' => $selectedTahun]) }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none transition ease-in-out duration-150 shadow-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Download PDF
+            </a>
+        </div>
+        @endif
     </div>
 
     <!-- Filters -->

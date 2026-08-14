@@ -428,6 +428,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('buku-induk-rw')->middleware(['auth'])->group(function () {
         Route::get('/', \App\Livewire\BukuIndukRw\Index::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.index');
+        Route::get('/download-pdf', [\App\Http\Controllers\ReportController::class, 'downloadKorwePdf'])->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.download-pdf');
         Route::get('/{dataRw}', \App\Livewire\BukuIndukRw\Detail::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.detail');
     });
 
