@@ -24,7 +24,10 @@ class PilkadesKarangsatria extends Component
     // Modal State
     public bool $showAfiliasiModal = false;
     public bool $showKorweModal = false;
+    public bool $showRtModal = false;
     public ?string $editRwId = null;
+    public int $rtCount = 0;
+    public array $formAfiliasiRtData = [];
     public ?string $formAfiliasi = null;
     public ?string $formCalonLain = null;
     public ?string $formKorweNama = null;
@@ -242,6 +245,7 @@ class PilkadesKarangsatria extends Component
                 'nomor_rw'    => $paddedRw,
                 'nama_wilayah'=> $profilRw?->nama_wilayah ?: '-',
                 'jumlah_rt'   => $dataRw?->jumlah_rt ?? 0,
+                'afiliasi_rt_terisi' => $this->calculateRtTerisi($profilRw?->afiliasi_rt_data ?? []),
                 'estimasi_dpt'=> $estimasiDpt,
                 'korwe_count' => $korweByRw[$rwKey] ?? 0,
                 'korte_count' => $korteByRw[$rwKey] ?? 0,
@@ -384,6 +388,55 @@ class PilkadesKarangsatria extends Component
         $this->showAfiliasiModal = true;
     }
 
+    private function calculateRtTerisi($rtData)
+    {
+        $terisi = 0;
+        if (is_array($rtData)) {
+            foreach ($rtData as $item) {
+                if (!empty($item['afiliasi']) && $item['afiliasi'] !== 'BELUM DIKETAHUI') {
+                    $terisi++;
+                }
+            }
+        }
+        return $terisi;
+    }
+
+    public function openRtModal($rwId, $jumlahRt)
+    {
+        $this->editRwId = $rwId;
+        $this->rtCount = $jumlahRt;
+        $paddedRw = str_pad($rwId, 3, '0', STR_PAD_LEFT);
+        
+        $profil = ProfilRw::where('target_wilayah_id', $this->targetWilayah->id)
+            ->where('nomor_rw', $paddedRw)
+            ->first();
+
+        $existingData = $profil?->afiliasi_rt_data ?? [];
+        $newData = [];
+
+        for ($i = 1; $i <= $jumlahRt; $i++) {
+            $rtStr = str_pad((string)$i, 2, '0', STR_PAD_LEFT);
+            $found = null;
+            if (is_array($existingData)) {
+                foreach ($existingData as $item) {
+                    if (($item['rt'] ?? '') === $rtStr) {
+                        $found = $item;
+                        break;
+                    }
+                }
+            }
+            
+            $newData[] = [
+                'rt' => $rtStr,
+                'afiliasi' => $found['afiliasi'] ?? null,
+                'calon_lain' => $found['calon_lain'] ?? null,
+            ];
+        }
+
+        $this->formAfiliasiRtData = $newData;
+        $this->showRtModal = true;
+    }
+
     public function openKorweModal($rwId)
     {
         $this->editRwId = $rwId;
@@ -448,6 +501,28 @@ class PilkadesKarangsatria extends Component
 
         $this->showAfiliasiModal = false;
         $this->loadData(); // Reload table data
+    }
+
+    public function saveRtData()
+    {
+        $paddedRw = str_pad($this->editRwId, 3, '0', STR_PAD_LEFT);
+
+        $profil = ProfilRw::firstOrCreate(
+            ['target_wilayah_id' => $this->targetWilayah->id, 'nomor_rw' => $paddedRw],
+            ['dapil' => $this->targetWilayah->dapil, 'kecamatan' => $this->targetWilayah->kecamatan, 'desa' => $this->targetWilayah->desa]
+        );
+
+        foreach ($this->formAfiliasiRtData as &$item) {
+            if (($item['afiliasi'] ?? '') !== 'CALON LAIN') {
+                $item['calon_lain'] = null;
+            }
+        }
+
+        $profil->afiliasi_rt_data = $this->formAfiliasiRtData;
+        $profil->save();
+
+        $this->showRtModal = false;
+        $this->loadData();
     }
 
     public function saveKorwe()

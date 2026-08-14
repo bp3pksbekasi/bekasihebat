@@ -55,6 +55,7 @@
                         <th style="min-width:80px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Est. DPT</th>
                         <th style="min-width:100px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">RW</th>
+                        <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">RT</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">PKK</th>
                         <th style="min-width:75px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">K. Taruna</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">DKM</th>
@@ -139,6 +140,18 @@
                                 <button wire:click="openAfiliasiModal({{ $row['nomor_rw'] }})" style="position:absolute; top:2px; right:2px; background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi">
                                     <svg xmlns="http://www.w3.org/2000/svg" style="width:10px; height:10px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                 </button>
+                            </td>
+
+                            {{-- Afiliasi RT --}}
+                            <td style="position:relative; background:{{ $row['jumlah_rt'] > 0 && $row['afiliasi_rt_terisi'] === $row['jumlah_rt'] ? '#dcfce7' : ($row['afiliasi_rt_terisi'] > 0 ? '#fef9c3' : $bg) }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                @if($row['jumlah_rt'] > 0)
+                                    <span style="font-size:0.7rem; font-weight:600; color:{{ $row['afiliasi_rt_terisi'] === $row['jumlah_rt'] ? '#166534' : '#64748b' }};">{{ $row['afiliasi_rt_terisi'] }} / {{ $row['jumlah_rt'] }}</span>
+                                    <button wire:click="openRtModal({{ $row['nomor_rw'] }}, {{ $row['jumlah_rt'] }})" style="position:absolute; top:2px; right:2px; background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi RT">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:10px; height:10px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                @else
+                                    <span style="font-size:0.6rem; color:#cbd5e1; font-style:italic;">-</span>
+                                @endif
                             </td>
 
                             {{-- Afiliasi PKK --}}
@@ -475,6 +488,72 @@
                         <button wire:click="$set('showEditModal', false)" style="padding:6px 12px; background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Batal</button>
                         <button wire:click="saveEditField" style="padding:6px 12px; background:#059669; border:none; color:#fff; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Simpan</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Modal Pemetaan RT --}}
+    @if($showRtModal)
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center;">
+            <div style="background:#fff; width:480px; max-height:85vh; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; font-family:system-ui,-apple-system,sans-serif; display:flex; flex-direction:column;">
+                <div style="background:#14532d; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+                    <h3 style="margin:0; color:#fff; font-size:0.9rem; font-weight:600;">Pemetaan RT (RW {{ ltrim($editRwId, '0') }})</h3>
+                    <button wire:click="$set('showRtModal', false)" style="background:none; border:none; color:#bbf7d0; cursor:pointer; font-size:1.2rem; line-height:1;">&times;</button>
+                </div>
+                
+                <div style="padding:16px; overflow-y:auto; flex-grow:1;">
+                    @if($rtCount > 0)
+                        <table style="width:100%; border-collapse:collapse; font-size:0.75rem;">
+                            <thead>
+                                <tr>
+                                    <th style="padding:6px; border-bottom:1px solid #cbd5e1; text-align:left; color:#475569;">RT</th>
+                                    <th style="padding:6px; border-bottom:1px solid #cbd5e1; text-align:left; color:#475569;">Afiliasi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($formAfiliasiRtData as $index => $rtItem)
+                                    <tr>
+                                        <td style="padding:8px 6px; border-bottom:1px solid #e2e8f0; font-weight:600; color:#0f172a; width:50px;">
+                                            {{ $rtItem['rt'] }}
+                                        </td>
+                                        <td style="padding:8px 6px; border-bottom:1px solid #e2e8f0;">
+                                            <select wire:model.live="formAfiliasiRtData.{{ $index }}.afiliasi" style="width:100%; padding:6px; border:1px solid #86efac; border-radius:4px; font-size:0.75rem; color:#14532d; outline:none; box-sizing:border-box;">
+                                                <option value="BELUM DIKETAHUI">BELUM DIKETAHUI</option>
+                                                <option value="NETRAL">NETRAL</option>
+                                                <option value="UNO">UNO</option>
+                                                <option value="CALON LAIN">CALON LAIN</option>
+                                            </select>
+                                            
+                                            @if(($formAfiliasiRtData[$index]['afiliasi'] ?? '') === 'CALON LAIN')
+                                                <div style="margin-top:6px;">
+                                                    <select wire:model="formAfiliasiRtData.{{ $index }}.calon_lain" style="width:100%; padding:6px; border:1px solid #fca5a5; border-radius:4px; font-size:0.75rem; color:#991b1b; outline:none; box-sizing:border-box;">
+                                                        <option value="">Pilih Calon...</option>
+                                                        <option value="UNO">UNO</option>
+                                                        <option value="EMON">EMON</option>
+                                                        <option value="RAHMAT">RAHMAT</option>
+                                                        <option value="EKO">EKO</option>
+                                                        <option value="MASPRI">MASPRI</option>
+                                                    </select>
+                                                </div>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div style="text-align:center; padding:20px; color:#64748b; font-size:0.8rem; font-style:italic;">
+                            Data jumlah RT belum diatur untuk RW ini.
+                        </div>
+                    @endif
+                </div>
+                
+                <div style="padding:16px; display:flex; justify-content:flex-end; gap:8px; border-top:1px solid #e2e8f0; flex-shrink:0;">
+                    <button wire:click="$set('showRtModal', false)" style="padding:6px 12px; background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Batal</button>
+                    @if($rtCount > 0)
+                        <button wire:click="saveRtData" style="padding:6px 12px; background:#059669; border:none; color:#fff; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Simpan RT</button>
+                    @endif
                 </div>
             </div>
         </div>

@@ -155,6 +155,7 @@ class ProfilRw extends Model
         'afiliasi_tokoh_bukti',
         'sosial_media',
         'afiliasi_rw_rt',
+        'afiliasi_rt_data',
         'afiliasi_posyandu_dkm',
         'partai_dominan',
         'afiliasi_ketua_rw',
@@ -186,6 +187,7 @@ class ProfilRw extends Model
             'jumlah_kta' => 'integer',
             'completion_percent' => 'integer',
             'filled_by' => 'integer',
+            'afiliasi_rt_data' => 'array',
         ];
     }
 
