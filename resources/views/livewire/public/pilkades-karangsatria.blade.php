@@ -53,7 +53,7 @@
                         {{-- Data Dasar --}}
                         <th style="min-width:60px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Jml RT</th>
                         <th style="min-width:80px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Est. DPT</th>
-                        <th style="min-width:80px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
+                        <th style="min-width:100px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">RW</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">PKK</th>
                         <th style="min-width:75px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">K. Taruna</th>
@@ -66,9 +66,9 @@
                         <th style="min-width:65px; background:#1c1917; color:#f8fafc; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Juara 1</th>
                         {{-- Peta Kekuatan --}}
                         <th style="min-width:65px; background:#1e293b; color:#22c55e; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">PILKADES<br>(UNO)</th>
-                        <th style="min-width:220px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">3 Partai Terkuat di RW</th>
+                        <th style="min-width:170px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">3 Partai Terkuat di RW</th>
                         {{-- 3 Caleg --}}
-                        <th style="min-width:260px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; text-transform:uppercase;">3 Caleg Pemenang di RW</th>
+                        <th style="min-width:210px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; text-transform:uppercase;">3 Caleg Pemenang di RW</th>
                     </tr>
                 </thead>
 
@@ -106,7 +106,7 @@
                             <td style="position:relative; background:{{ $row['korwe_nama'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['korwe_nama'])
-                                        <span style="color:#14532d; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:55px;" title="{{ $row['korwe_nama'] }}">{{ $row['korwe_nama'] }}</span>
+                                        <span style="color:#14532d; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:75px;" title="{{ $row['korwe_nama'] }}">{{ $row['korwe_nama'] }}</span>
                                     @else
                                         <span style="color:#cbd5e1; font-size:0.7rem; font-style:italic;">-</span>
                                     @endif
