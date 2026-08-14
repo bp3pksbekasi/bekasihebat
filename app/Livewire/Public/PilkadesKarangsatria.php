@@ -273,14 +273,14 @@ class PilkadesKarangsatria extends Component
                 'afiliasi_tokoh_bukti' => $profilRw?->afiliasi_tokoh_bukti ?? null,
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
-                'uno_score'   => $this->calculateUnoScore($profilRw),
+                'uno_score'   => $this->calculateUnoScore($profilRw, $dataRw?->jumlah_rt ?? 0),
             ];
         }
 
         $this->rwData = $formattedData;
     }
 
-    private function calculateUnoScore($profilRw)
+    private function calculateUnoScore($profilRw, $jumlahRt = 0)
     {
         if (!$profilRw) {
             return [
@@ -292,6 +292,7 @@ class PilkadesKarangsatria extends Component
             ];
         }
 
+        // LAPIS 1: SKOR TOKOH
         $fields = [
             'afiliasi_pilkades' => 1.5,
             'afiliasi_tokoh' => 1.5,
@@ -300,9 +301,9 @@ class PilkadesKarangsatria extends Component
             'afiliasi_karang_taruna' => 1.0
         ];
 
-        $totalWeightedPoints = 0;
-        $totalActiveWeight = 0;
-        $filledCount = 0;
+        $totalWeightedPointsTokoh = 0;
+        $totalActiveWeightTokoh = 0;
+        $filledCountTokoh = 0;
 
         foreach ($fields as $field => $weight) {
             $val = $profilRw->$field;
@@ -311,50 +312,99 @@ class PilkadesKarangsatria extends Component
                 continue;
             }
 
-            $filledCount++;
-            $totalActiveWeight += $weight;
+            $filledCountTokoh++;
+            $totalActiveWeightTokoh += $weight;
 
             if ($val === 'UNO') {
-                $totalWeightedPoints += (1 * $weight);
+                $totalWeightedPointsTokoh += (1 * $weight);
             } elseif ($val === 'CALON LAIN' || $val === 'Ke calon lain') {
-                $totalWeightedPoints += (-1 * $weight);
+                $totalWeightedPointsTokoh += (-1 * $weight);
             }
-            // NETRAL gives 0 points, so we don't add anything to $totalWeightedPoints
         }
 
-        if ($filledCount < 3 || $totalActiveWeight == 0) {
-            $rawScore = $totalActiveWeight > 0 ? ($totalWeightedPoints / $totalActiveWeight) * 100 : 0;
-            $normalizedScore = ($rawScore + 100) / 2;
-            
+        $skorTokoh = 0;
+        if ($totalActiveWeightTokoh > 0) {
+            $rawSkorTokoh = ($totalWeightedPointsTokoh / $totalActiveWeightTokoh) * 100;
+            $skorTokoh = ($rawSkorTokoh + 100) / 2;
+        }
+
+        // LAPIS 2: SKOR RT
+        $rtData = $profilRw->afiliasi_rt_data ?? [];
+        $rtTerisi = 0;
+        $poinRt = 0;
+
+        if (is_array($rtData)) {
+            foreach ($rtData as $item) {
+                $val = $item['afiliasi'] ?? '';
+                if (empty($val) || $val === 'BELUM DIKETAHUI') {
+                    continue;
+                }
+                
+                $rtTerisi++;
+                if ($val === 'UNO') {
+                    $poinRt += 1;
+                } elseif ($val === 'CALON LAIN') {
+                    $poinRt -= 1;
+                }
+            }
+        }
+
+        $skorRt = 0;
+        if ($rtTerisi > 0) {
+            $rawSkorRt = ($poinRt / $rtTerisi) * 100;
+            $skorRt = ($rawSkorRt + 100) / 2;
+        }
+
+        // PENGGABUNGAN
+        $w_tokoh = 4;
+        $w_rt_maks = 6;
+        $w_rt_efektif = $jumlahRt > 0 ? $w_rt_maks * ($rtTerisi / $jumlahRt) : 0;
+
+        if ($totalActiveWeightTokoh == 0 && $w_rt_efektif == 0) {
             return [
-                'score' => round($normalizedScore, 1),
+                'score' => 0,
                 'badge' => 'Belum Terpetakan',
                 'color' => '#f8fafc',
                 'text_color' => '#94a3b8',
-                'filled' => $filledCount
+                'filled' => 0
             ];
         }
 
-        $rawScore = ($totalWeightedPoints / $totalActiveWeight) * 100;
-        $normalizedScore = ($rawScore + 100) / 2;
-        $score = round($normalizedScore, 1);
+        if ($totalActiveWeightTokoh == 0 && $w_rt_efektif > 0) {
+            $skorAkhir = $skorRt;
+        } else {
+            $pembagi = $w_tokoh + $w_rt_efektif;
+            $skorAkhir = (($skorTokoh * $w_tokoh) + ($skorRt * $w_rt_efektif)) / $pembagi;
+        }
+
+        $score = round($skorAkhir, 1);
 
         if ($score >= 70) {
             $badge = 'UNO Unggul';
-            $color = '#dcfce7'; // green-100
-            $textColor = '#166534'; // green-800
+            $color = '#dcfce7'; 
+            $textColor = '#166534'; 
         } elseif ($score >= 50) {
             $badge = 'UNO Unggul Tipis';
-            $color = '#ecfccb'; // lime-100
-            $textColor = '#3f6212'; // lime-800
+            $color = '#ecfccb'; 
+            $textColor = '#3f6212'; 
         } elseif ($score >= 30) {
             $badge = 'Rawan';
-            $color = '#ffedd5'; // orange-100
-            $textColor = '#9a3412'; // orange-800
+            $color = '#ffedd5'; 
+            $textColor = '#9a3412'; 
         } else {
             $badge = 'UNO Tertinggal';
-            $color = '#fee2e2'; // red-100
-            $textColor = '#991b1b'; // red-800
+            $color = '#fee2e2'; 
+            $textColor = '#991b1b'; 
+        }
+
+        if ($filledCountTokoh < 3 && $rtTerisi == 0) {
+            return [
+                'score' => $score,
+                'badge' => 'Belum Terpetakan',
+                'color' => '#f8fafc',
+                'text_color' => '#94a3b8',
+                'filled' => $filledCountTokoh
+            ];
         }
 
         return [
@@ -362,7 +412,7 @@ class PilkadesKarangsatria extends Component
             'badge' => $badge,
             'color' => $color,
             'text_color' => $textColor,
-            'filled' => $filledCount
+            'filled' => $filledCountTokoh
         ];
     }
 

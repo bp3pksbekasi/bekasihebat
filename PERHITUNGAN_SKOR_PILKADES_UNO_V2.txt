@@ -1,0 +1,127 @@
+PERHITUNGAN SKOR "PILKADES (UNO)" — VERSI 2 (DENGAN LAPISAN RT)
+=================================================================
+Update dari PERHITUNGAN_SKOR_PILKADES_UNO.txt. Perbedaan utama versi ini:
+skor sekarang terdiri dari 2 lapisan (Skor Tokoh + Skor RT), bukan cuma
+5 kolom tokoh saja. DPT SEMENTARA TIDAK dimasukkan ke dalam skor
+(dipakai terpisah untuk penentuan prioritas wilayah, lihat bagian 5).
+
+Catatan: dokumen referensi/brainstorming saja. Tidak ada perubahan kode
+atau database aplikasi yang dilakukan.
+
+
+1. LAPIS 1 — SKOR TOKOH (dari versi 1, tidak berubah)
+--------------------------------------------------------
+Sumber: kolom RW, PKK, K. Taruna, DKM, Tokoh (per RW).
+
+Opsi nilai per kolom:
+  Opsi               Poin     Ikut dihitung di pembagi?
+  -----------------  -------  ---------------------------
+  UNO                +1       Ya
+  Calon lain         -1       Ya
+  Netral              0       Ya (sudah disurvei, memang tidak condong)
+  Belum diketahui     -       Tidak (dikeluarkan total)
+
+Bobot kolom:
+  RW           1.5
+  Tokoh        1.5
+  DKM          1.2
+  PKK          1.0
+  K. Taruna    1.0
+
+Rumus:
+  Skor_Tokoh_mentah (%) = [ Σ(poin x bobot) / Σ(bobot kolom terisi) ] x 100
+  Skor_Tokoh (0-100%)   = (Skor_Tokoh_mentah + 100) / 2
+
+Catatan: kolom KORWE TIDAK ikut dihitung di skor ini. KORWE adalah
+struktur internal tim (koordinator RW yang ditunjuk sendiri), bukan
+data afiliasi politik warga/tokoh setempat.
+
+
+2. LAPIS 2 — SKOR RT (BARU)
+------------------------------
+Sumber: hasil pemetaan per RT di dalam modal "Pemetaan RT" tiap RW.
+Opsi nilai sama seperti Lapis 1 (UNO=+1, Calon lain=-1, Netral=0,
+Belum diketahui=dikeluarkan).
+
+Rumus:
+  Skor_RT_mentah (%) = [ Σ poin_RT ] / (jumlah RT yang BUKAN "Belum diketahui") x 100
+  Skor_RT (0-100%)   = (Skor_RT_mentah + 100) / 2
+
+
+3. PENGGABUNGAN LAPIS 1 + LAPIS 2 (BOBOT DINAMIS)
+-----------------------------------------------------
+Bobot RT TIDAK tetap — mengikuti tingkat kelengkapan data RT di RW
+tersebut, supaya RW yang baru sedikit RT-nya terisi tidak langsung
+dianggap datanya solid.
+
+  W_tokoh      = 4   (tetap)
+  W_rt_maks    = 6   (RT dikasih bobot maksimal lebih besar karena lebih
+                       granular / lebih sulit dipengaruhi 1 orang saja)
+
+  W_rt_efektif = W_rt_maks x (RT_terisi / RT_total)
+
+  Skor Akhir (%) = [ (Skor_Tokoh x W_tokoh) + (Skor_RT x W_rt_efektif) ]
+                   / (W_tokoh + W_rt_efektif)
+
+Semakin banyak RT yang terisi, semakin besar pengaruh Skor_RT terhadap
+Skor Akhir. Kalau RT_terisi = 0, Skor Akhir = Skor_Tokoh sepenuhnya.
+
+
+4. CONTOH PERHITUNGAN (RW 001, KP. KARANG SAMBUNG)
+------------------------------------------------------
+Data tokoh: RW=Netral, PKK=UNO, K.Taruna=UNO, DKM=Belum diketahui,
+Tokoh=Calon lain (Emon). Kolom terisi (bukan "Belum diketahui"): 4/5.
+
+  Skor_Tokoh_mentah = [(0x1.5)+(1x1.0)+(1x1.0)+(-1x1.5)] / (1.5+1.0+1.0+1.5) x 100
+                     = 0.5 / 5.0 x 100 = 10%
+  Skor_Tokoh        = (10 + 100) / 2 = 55%
+
+Data RT: RT terisi 2 dari 8. RT 01 = UNO. (RT 03 datanya masih ada
+duplikasi/konflik di sistem — lihat Catatan Data di bagian 6, sebaiknya
+dibereskan dulu sebelum dipakai untuk perhitungan resmi.)
+
+  Asumsi sementara hanya RT 01 valid:
+  Skor_RT_mentah = (1) / 1 x 100 = 100%
+  Skor_RT        = (100 + 100) / 2 = 100%
+
+  W_rt_efektif = 6 x (2/8) = 1.5
+
+  Skor Akhir = [(55 x 4) + (100 x 1.5)] / (4 + 1.5)
+             = (220 + 150) / 5.5
+             = 67.3%
+
+Bandingkan dengan Skor_Tokoh saja (55%) — Skor Akhir naik jadi 67.3%
+karena RT yang sudah terisi menunjukkan dukungan kuat, tapi pengaruhnya
+masih dibatasi (bobot 1.5 dari maks 6) karena datanya baru 2/8.
+
+
+5. DPT — DIPAKAI TERPISAH, BUKAN BAGIAN DARI SKOR
+------------------------------------------------------
+DPT (jumlah pemilih) sengaja TIDAK dimasukkan ke dalam Skor Akhir.
+Skor Akhir mengukur KUALITAS dukungan; DPT mengukur SKALA/besaran
+wilayah. Keduanya dipakai bersama hanya untuk menentukan PRIORITAS
+GARAPAN, lewat matriks 4 kuadran:
+
+  DPT besar + Skor Akhir rendah  -> Prioritas Utama (paling menentukan)
+  DPT besar + Skor Akhir tinggi  -> Jaga & Gerakkan
+  DPT kecil + Skor Akhir tinggi  -> Pertahankan biaya minimal
+  DPT kecil + Skor Akhir rendah  -> Digarap belakangan
+
+Kalau butuh satu angka ringkasan tingkat desa (bukan per-RW), baru DPT
+dipakai sebagai pembobot rata-rata:
+
+  Skor Desa (%) = Σ (Skor Akhir_RW x DPT_RW) / Σ (DPT_RW)
+
+Ini tidak mengubah Skor Akhir per-RW, hanya dipakai untuk laporan level
+desa.
+
+
+6. CATATAN DATA (PERLU DICEK, BUKAN SOAL RUMUS)
+----------------------------------------------------
+- RT 03 di modal "Pemetaan RT (RW 1)" menampilkan dua entri tumpang
+  tindih ("Calon Lain" dan "UNO", salah satunya bergaris merah) —
+  kemungkinan bug tampilan/duplikat data. Sebaiknya dibersihkan dulu
+  supaya tidak terhitung dobel atau salah pada Skor_RT.
+- Badge kelengkapan sebaiknya tetap ditampilkan dua tingkat:
+  "Tokoh X/5" dan "RT Y/Z" — supaya jelas lapisan mana yang masih
+  perlu disurvei lebih lanjut.
