@@ -260,7 +260,6 @@
                     <div style="margin-bottom:14px;">
                         <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Nama Ketua Tim Sukses (Korwe)</label>
                         <input type="text" wire:model="formKorweNama" placeholder="Ketik nama koordinator..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
-                        <p style="font-size:0.65rem; color:#64748b; margin-top:6px; line-height:1.3;">Mengisi nama Korwe akan otomatis menyetel status dukungan (Afiliasi) di RW ini menjadi <strong>UNO</strong>.</p>
                     </div>
 
                     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">

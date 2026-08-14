@@ -315,10 +315,6 @@ class PilkadesKarangsatria extends Component
         );
 
         $profil->korwe_pilkades_nama = $this->formKorweNama;
-        if (!empty($this->formKorweNama)) {
-            $profil->afiliasi_pilkades = 'UNO';
-            $profil->afiliasi_calon_lain = null;
-        }
         $profil->save();
 
         $this->showKorweModal = false;
