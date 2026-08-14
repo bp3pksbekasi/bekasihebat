@@ -467,7 +467,6 @@
                                     <label style="display:block; font-size:0.75rem; font-weight:600; color:#991b1b; margin-bottom:6px;">Nama Calon Lain</label>
                                     <select wire:model="formFieldValueCalonLain" style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
                                         <option value="">Pilih Calon...</option>
-                                        <option value="UNO">UNO</option>
                                         <option value="EMON">EMON</option>
                                         <option value="RAHMAT">RAHMAT</option>
                                         <option value="EKO">EKO</option>
@@ -529,7 +528,6 @@
                                                 <div style="margin-top:6px;">
                                                     <select wire:model="formAfiliasiRtData.{{ $index }}.calon_lain" style="width:100%; padding:6px; border:1px solid #fca5a5; border-radius:4px; font-size:0.75rem; color:#991b1b; outline:none; box-sizing:border-box;">
                                                         <option value="">Pilih Calon...</option>
-                                                        <option value="UNO">UNO</option>
                                                         <option value="EMON">EMON</option>
                                                         <option value="RAHMAT">RAHMAT</option>
                                                         <option value="EKO">EKO</option>
