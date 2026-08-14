@@ -28,6 +28,7 @@ class PilkadesKarangsatria extends Component
     public bool $showEditModal = false;
     public ?string $editField = null;
     public ?string $formFieldValue = null;
+    public ?string $formFieldValueCalonLain = null;
     public string $modalTitle = '';
 
     public function mount()
@@ -247,9 +248,13 @@ class PilkadesKarangsatria extends Component
                 'calon_lain'  => $profilRw?->afiliasi_calon_lain ?? '',
                 'korwe_nama'  => $profilRw?->korwe_pilkades_nama ?? '',
                 'afiliasi_pkk' => $profilRw?->afiliasi_pkk ?? '',
+                'afiliasi_pkk_calon_lain' => $profilRw?->afiliasi_pkk_calon_lain ?? '',
                 'afiliasi_karang_taruna' => $profilRw?->afiliasi_karang_taruna ?? '',
+                'afiliasi_karang_taruna_calon_lain' => $profilRw?->afiliasi_karang_taruna_calon_lain ?? '',
                 'afiliasi_dkm' => $profilRw?->afiliasi_dkm ?? '',
+                'afiliasi_dkm_calon_lain' => $profilRw?->afiliasi_dkm_calon_lain ?? '',
                 'afiliasi_tokoh' => $profilRw?->afiliasi_tokoh ?? '',
+                'afiliasi_tokoh_calon_lain' => $profilRw?->afiliasi_tokoh_calon_lain ?? '',
                 'sosial_media' => $profilRw?->sosial_media ?? '',
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
@@ -309,6 +314,14 @@ class PilkadesKarangsatria extends Component
             ->first();
 
         $this->formFieldValue = $profil ? $profil->$field : null;
+        
+        if ($field !== 'sosial_media' && $profil) {
+            $calonLainField = $field . '_calon_lain';
+            $this->formFieldValueCalonLain = $profil->$calonLainField;
+        } else {
+            $this->formFieldValueCalonLain = null;
+        }
+
         $this->showEditModal = true;
     }
 
@@ -356,6 +369,12 @@ class PilkadesKarangsatria extends Component
 
         $field = $this->editField;
         $profil->$field = $this->formFieldValue;
+        
+        if ($field !== 'sosial_media') {
+            $calonLainField = $field . '_calon_lain';
+            $profil->$calonLainField = ($this->formFieldValue === 'Ke calon lain') ? $this->formFieldValueCalonLain : null;
+        }
+
         $profil->save();
 
         $this->showEditModal = false;

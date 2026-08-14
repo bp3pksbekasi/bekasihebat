@@ -140,7 +140,13 @@
                             {{-- Afiliasi PKK --}}
                             <td style="background:{{ $row['afiliasi_pkk'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-                                    <span style="color:{{ $row['afiliasi_pkk'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk'] }}">{{ $row['afiliasi_pkk'] ?: '-' }}</span>
+                                    @if($row['afiliasi_pkk'] === 'Ke calon lain')
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk_calon_lain'] }}">Lainnya ({{ $row['afiliasi_pkk_calon_lain'] }})</span>
+                                    @elseif($row['afiliasi_pkk'])
+                                        <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk'] }}">{{ $row['afiliasi_pkk'] }}</span>
+                                    @else
+                                        <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
+                                    @endif
                                     <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_pkk', 'Afiliasi PKK')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi PKK">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
@@ -150,7 +156,13 @@
                             {{-- Afiliasi Karang Taruna --}}
                             <td style="background:{{ $row['afiliasi_karang_taruna'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-                                    <span style="color:{{ $row['afiliasi_karang_taruna'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna'] }}">{{ $row['afiliasi_karang_taruna'] ?: '-' }}</span>
+                                    @if($row['afiliasi_karang_taruna'] === 'Ke calon lain')
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna_calon_lain'] }}">Lainnya ({{ $row['afiliasi_karang_taruna_calon_lain'] }})</span>
+                                    @elseif($row['afiliasi_karang_taruna'])
+                                        <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna'] }}">{{ $row['afiliasi_karang_taruna'] }}</span>
+                                    @else
+                                        <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
+                                    @endif
                                     <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_karang_taruna', 'Afiliasi Karang Taruna')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi Karang Taruna">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
@@ -160,7 +172,13 @@
                             {{-- Afiliasi DKM --}}
                             <td style="background:{{ $row['afiliasi_dkm'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-                                    <span style="color:{{ $row['afiliasi_dkm'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm'] }}">{{ $row['afiliasi_dkm'] ?: '-' }}</span>
+                                    @if($row['afiliasi_dkm'] === 'Ke calon lain')
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm_calon_lain'] }}">Lainnya ({{ $row['afiliasi_dkm_calon_lain'] }})</span>
+                                    @elseif($row['afiliasi_dkm'])
+                                        <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm'] }}">{{ $row['afiliasi_dkm'] }}</span>
+                                    @else
+                                        <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
+                                    @endif
                                     <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_dkm', 'Afiliasi DKM')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi DKM">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
@@ -170,7 +188,13 @@
                             {{-- Afiliasi Tokoh --}}
                             <td style="background:{{ $row['afiliasi_tokoh'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-                                    <span style="color:{{ $row['afiliasi_tokoh'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh'] }}">{{ $row['afiliasi_tokoh'] ?: '-' }}</span>
+                                    @if($row['afiliasi_tokoh'] === 'Ke calon lain')
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh_calon_lain'] }}">Lainnya ({{ $row['afiliasi_tokoh_calon_lain'] }})</span>
+                                    @elseif($row['afiliasi_tokoh'])
+                                        <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh'] }}">{{ $row['afiliasi_tokoh'] }}</span>
+                                    @else
+                                        <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
+                                    @endif
                                     <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_tokoh', 'Afiliasi Tokoh')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi Tokoh">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
@@ -379,11 +403,18 @@
                         @if($editField === 'sosial_media')
                             <input type="text" wire:model="formFieldValue" placeholder="Ketik {{ strtolower($modalTitle) }}..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
                         @else
-                            <select wire:model="formFieldValue" style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                            <select wire:model.live="formFieldValue" style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
                                 <option value="">Belum Jelas</option>
                                 <option value="UNO">UNO</option>
                                 <option value="Ke calon lain">Ke calon lain</option>
                             </select>
+
+                            @if($formFieldValue === 'Ke calon lain')
+                                <div style="margin-top:12px; background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:6px;">
+                                    <label style="display:block; font-size:0.75rem; font-weight:600; color:#991b1b; margin-bottom:6px;">Nama Calon Lain</label>
+                                    <input type="text" wire:model="formFieldValueCalonLain" placeholder="Masukkan nama calon..." style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
+                                </div>
+                            @endif
                         @endif
                     </div>
                     
