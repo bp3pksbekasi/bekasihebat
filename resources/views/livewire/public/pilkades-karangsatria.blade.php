@@ -119,7 +119,14 @@
                             {{-- Afiliasi RW --}}
                             <td style="position:relative; background:{{ match($row['afiliasi']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 @if($row['afiliasi'] === 'UNO')
-                                    <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.65rem;">UNO</span>
+                                    <div style="display:inline-flex; align-items:center; gap:4px;">
+                                        <span style="color:#166534; font-weight:800; font-size:0.65rem;">UNO</span>
+                                        @if($row['afiliasi_pilkades_bukti'])
+                                            <a href="{{ Storage::url($row['afiliasi_pilkades_bukti']) }}" target="_blank" style="color:#15803d; text-decoration:none; position:relative; z-index:10;" title="Lihat Bukti">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                            </a>
+                                        @endif
+                                    </div>
                                 @elseif($row['afiliasi'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-size:0.75rem; font-weight:700;" title="Dukungan: {{ $row['calon_lain'] }}">{{ $row['calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi'] === 'NETRAL')
@@ -139,7 +146,14 @@
                                 @if($row['afiliasi_pkk'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_pkk_calon_lain'] }}">{{ $row['afiliasi_pkk_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_pkk'] === 'UNO')
-                                    <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="UNO">UNO</span>
+                                    <div style="display:inline-flex; align-items:center; gap:4px;">
+                                        <span style="color:#166534; font-weight:800; font-size:0.7rem;">UNO</span>
+                                        @if($row['afiliasi_pkk_bukti'])
+                                            <a href="{{ Storage::url($row['afiliasi_pkk_bukti']) }}" target="_blank" style="color:#15803d; text-decoration:none; position:relative; z-index:10;" title="Lihat Bukti">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                            </a>
+                                        @endif
+                                    </div>
                                 @elseif($row['afiliasi_pkk'] === 'NETRAL')
                                     <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
@@ -155,7 +169,14 @@
                                 @if($row['afiliasi_karang_taruna'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_karang_taruna_calon_lain'] }}">{{ $row['afiliasi_karang_taruna_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_karang_taruna'] === 'UNO')
-                                    <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="UNO">UNO</span>
+                                    <div style="display:inline-flex; align-items:center; gap:4px;">
+                                        <span style="color:#166534; font-weight:800; font-size:0.7rem;">UNO</span>
+                                        @if($row['afiliasi_karang_taruna_bukti'])
+                                            <a href="{{ Storage::url($row['afiliasi_karang_taruna_bukti']) }}" target="_blank" style="color:#15803d; text-decoration:none; position:relative; z-index:10;" title="Lihat Bukti">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                            </a>
+                                        @endif
+                                    </div>
                                 @elseif($row['afiliasi_karang_taruna'] === 'NETRAL')
                                     <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
@@ -171,7 +192,14 @@
                                 @if($row['afiliasi_dkm'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_dkm_calon_lain'] }}">{{ $row['afiliasi_dkm_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_dkm'] === 'UNO')
-                                    <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="UNO">UNO</span>
+                                    <div style="display:inline-flex; align-items:center; gap:4px;">
+                                        <span style="color:#166534; font-weight:800; font-size:0.7rem;">UNO</span>
+                                        @if($row['afiliasi_dkm_bukti'])
+                                            <a href="{{ Storage::url($row['afiliasi_dkm_bukti']) }}" target="_blank" style="color:#15803d; text-decoration:none; position:relative; z-index:10;" title="Lihat Bukti">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                            </a>
+                                        @endif
+                                    </div>
                                 @elseif($row['afiliasi_dkm'] === 'NETRAL')
                                     <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
@@ -187,7 +215,14 @@
                                 @if($row['afiliasi_tokoh'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_tokoh_calon_lain'] }}">{{ $row['afiliasi_tokoh_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_tokoh'] === 'UNO')
-                                    <span style="display:inline-block; color:#166534; font-weight:800; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="UNO">UNO</span>
+                                    <div style="display:inline-flex; align-items:center; gap:4px;">
+                                        <span style="color:#166534; font-weight:800; font-size:0.7rem;">UNO</span>
+                                        @if($row['afiliasi_tokoh_bukti'])
+                                            <a href="{{ Storage::url($row['afiliasi_tokoh_bukti']) }}" target="_blank" style="color:#15803d; text-decoration:none; position:relative; z-index:10;" title="Lihat Bukti">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                                            </a>
+                                        @endif
+                                    </div>
                                 @elseif($row['afiliasi_tokoh'] === 'NETRAL')
                                     <span style="display:inline-block; color:#475569; font-weight:700; font-size:0.65rem;">NETRAL</span>
                                 @else
@@ -372,6 +407,12 @@
                                 <option value="MASPRI">MASPRI</option>
                             </select>
                         </div>
+                    @elseif($formAfiliasi === 'UNO')
+                        <div style="margin-bottom:12px; background:#f0fdf4; border:1px solid #bbf7d0; padding:10px; border-radius:6px;">
+                            <label style="display:block; font-size:0.75rem; font-weight:600; color:#166534; margin-bottom:6px;">Upload Bukti Dokumen</label>
+                            <input type="file" wire:model="formBukti" accept=".pdf,.doc,.docx,image/*" style="width:100%; font-size:0.8rem; color:#166534;">
+                            <div wire:loading wire:target="formBukti" style="font-size:0.7rem; color:#15803d; margin-top:4px;">Mengunggah...</div>
+                        </div>
                     @endif
                     
                     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
@@ -415,6 +456,12 @@
                                         <option value="EKO">EKO</option>
                                         <option value="MASPRI">MASPRI</option>
                                     </select>
+                                </div>
+                            @elseif($formFieldValue === 'UNO')
+                                <div style="margin-top:12px; background:#f0fdf4; border:1px solid #bbf7d0; padding:10px; border-radius:6px;">
+                                    <label style="display:block; font-size:0.75rem; font-weight:600; color:#166534; margin-bottom:6px;">Upload Bukti Dokumen</label>
+                                    <input type="file" wire:model="formBukti" accept=".pdf,.doc,.docx,image/*" style="width:100%; font-size:0.8rem; color:#166534;">
+                                    <div wire:loading wire:target="formBukti" style="font-size:0.7rem; color:#15803d; margin-top:4px;">Mengunggah...</div>
                                 </div>
                             @endif
                         @endif

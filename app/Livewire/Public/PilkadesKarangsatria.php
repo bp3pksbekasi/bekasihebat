@@ -10,9 +10,12 @@ use App\Models\Korte;
 use App\Models\PemiluDesaSummary;
 use App\Models\PemiluPeriod;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class PilkadesKarangsatria extends Component
 {
+    use WithFileUploads;
+
     public $targetWilayah;
     public $rwData = [];
     public int $desaPanVotes = 0;
@@ -31,6 +34,7 @@ class PilkadesKarangsatria extends Component
     public ?string $editField = null;
     public ?string $formFieldValue = null;
     public ?string $formFieldValueCalonLain = null;
+    public $formBukti = null;
     public string $modalTitle = '';
 
     public function mount()
@@ -258,6 +262,11 @@ class PilkadesKarangsatria extends Component
                 'afiliasi_tokoh' => $profilRw?->afiliasi_tokoh ?? '',
                 'afiliasi_tokoh_calon_lain' => $profilRw?->afiliasi_tokoh_calon_lain ?? '',
                 'sosial_media' => $profilRw?->sosial_media ?? '',
+                'afiliasi_pilkades_bukti' => $profilRw?->afiliasi_pilkades_bukti ?? null,
+                'afiliasi_pkk_bukti' => $profilRw?->afiliasi_pkk_bukti ?? null,
+                'afiliasi_karang_taruna_bukti' => $profilRw?->afiliasi_karang_taruna_bukti ?? null,
+                'afiliasi_dkm_bukti' => $profilRw?->afiliasi_dkm_bukti ?? null,
+                'afiliasi_tokoh_bukti' => $profilRw?->afiliasi_tokoh_bukti ?? null,
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
             ];
@@ -282,6 +291,8 @@ class PilkadesKarangsatria extends Component
             $this->formAfiliasi = null;
             $this->formCalonLain = null;
         }
+
+        $this->formBukti = null;
 
         $this->showAfiliasiModal = true;
     }
@@ -324,6 +335,8 @@ class PilkadesKarangsatria extends Component
             $this->formFieldValueCalonLain = null;
         }
 
+        $this->formBukti = null;
+
         $this->showEditModal = true;
     }
 
@@ -338,6 +351,12 @@ class PilkadesKarangsatria extends Component
 
         $profil->afiliasi_pilkades = $this->formAfiliasi;
         $profil->afiliasi_calon_lain = ($this->formAfiliasi === 'CALON LAIN') ? $this->formCalonLain : null;
+        
+        if ($this->formBukti && $this->formAfiliasi === 'UNO') {
+            $path = $this->formBukti->store('bukti_dukungan', 'public');
+            $profil->afiliasi_pilkades_bukti = $path;
+        }
+
         $profil->save();
 
         $this->showAfiliasiModal = false;
@@ -375,6 +394,12 @@ class PilkadesKarangsatria extends Component
         if ($field !== 'sosial_media') {
             $calonLainField = $field . '_calon_lain';
             $profil->$calonLainField = ($this->formFieldValue === 'CALON LAIN') ? $this->formFieldValueCalonLain : null;
+            
+            if ($this->formBukti && $this->formFieldValue === 'UNO') {
+                $path = $this->formBukti->store('bukti_dukungan', 'public');
+                $buktiField = $field . '_bukti';
+                $profil->$buktiField = $path;
+            }
         }
 
         $profil->save();
