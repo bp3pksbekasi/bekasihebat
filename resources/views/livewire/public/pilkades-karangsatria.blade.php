@@ -557,39 +557,39 @@
         </div>
     @endif
     @else
-        <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f1f5f9; width:100%;">
-            <div style="background:#fff; padding:32px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.1); width:100%; max-width:400px;">
+        <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:linear-gradient(135deg, #0D1B3D, #122B5A); width:100%;">
+            <div style="background:#122B5A; padding:32px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); width:100%; max-width:400px; border:1px solid rgba(255,193,7,0.3);">
                 <div style="text-align:center; margin-bottom:24px;">
-                    <div style="background:#122B5A; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                    <div style="background:#FF6A00; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; box-shadow:0 4px 10px rgba(255,106,0,0.4);">
                         <svg xmlns="http://www.w3.org/2000/svg" style="width:32px; height:32px; color:#fff;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
-                    <h2 style="margin:0 0 8px; font-size:1.5rem; color:#0f172a; font-weight:700;">Login Khusus</h2>
-                    <p style="margin:0; color:#64748b; font-size:0.875rem;">Pemetaan Pilkades Karangsatria</p>
+                    <h2 style="margin:0 0 8px; font-size:1.5rem; color:#FFFFFF; font-weight:700;">Login Khusus</h2>
+                    <p style="margin:0; color:#FFC107; font-size:0.875rem;">Pemetaan Pilkades Karangsatria</p>
                 </div>
                 
                 <form wire:submit.prevent="loginPilkades">
                     @if($loginError)
-                        <div style="background:#fee2e2; border-left:4px solid #ef4444; color:#991b1b; padding:12px; border-radius:4px; font-size:0.85rem; margin-bottom:16px;">
+                        <div style="background:rgba(239,68,68,0.1); border-left:4px solid #ef4444; color:#fca5a5; padding:12px; border-radius:4px; font-size:0.85rem; margin-bottom:16px;">
                             {{ $loginError }}
                         </div>
                     @endif
                     
                     <div style="margin-bottom:16px;">
-                        <label style="display:block; font-size:0.875rem; font-weight:600; color:#334155; margin-bottom:6px;">Username</label>
-                        <input type="text" wire:model="loginUsername" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.95rem; outline:none; box-sizing:border-box; transition:border-color 0.2s;" onfocus="this.style.borderColor='#FFC107'" onblur="this.style.borderColor='#cbd5e1'" required>
+                        <label style="display:block; font-size:0.875rem; font-weight:600; color:#e2e8f0; margin-bottom:6px;">Username</label>
+                        <input type="text" wire:model="loginUsername" style="width:100%; background:rgba(255,255,255,0.1); color:#fff; padding:10px 12px; border:1px solid rgba(255,255,255,0.2); border-radius:6px; font-size:0.95rem; outline:none; box-sizing:border-box; transition:border-color 0.2s;" onfocus="this.style.borderColor='#FFC107'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'" required>
                     </div>
                     
                     <div style="margin-bottom:24px;">
-                        <label style="display:block; font-size:0.875rem; font-weight:600; color:#334155; margin-bottom:6px;">Password</label>
-                        <input type="password" wire:model="loginPassword" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.95rem; outline:none; box-sizing:border-box; transition:border-color 0.2s;" onfocus="this.style.borderColor='#FFC107'" onblur="this.style.borderColor='#cbd5e1'" required>
+                        <label style="display:block; font-size:0.875rem; font-weight:600; color:#e2e8f0; margin-bottom:6px;">Password</label>
+                        <input type="password" wire:model="loginPassword" style="width:100%; background:rgba(255,255,255,0.1); color:#fff; padding:10px 12px; border:1px solid rgba(255,255,255,0.2); border-radius:6px; font-size:0.95rem; outline:none; box-sizing:border-box; transition:border-color 0.2s;" onfocus="this.style.borderColor='#FFC107'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'" required>
                     </div>
                     
-                    <button type="submit" style="width:100%; background:#FF6A00; color:#fff; border:none; padding:12px; border-radius:6px; font-size:1rem; font-weight:600; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#CC5500'" onmouseout="this.style.background='#FF6A00'">
+                    <button type="submit" style="width:100%; background:#FF6A00; color:#fff; border:none; padding:12px; border-radius:6px; font-size:1rem; font-weight:700; cursor:pointer; transition:background 0.2s; box-shadow:0 4px 6px rgba(255,106,0,0.3);" onmouseover="this.style.background='#CC5500'" onmouseout="this.style.background='#FF6A00'">
                         Masuk
                     </button>
-                    <div wire:loading wire:target="loginPilkades" style="text-align:center; width:100%; margin-top:12px; font-size:0.85rem; color:#FF6A00; font-weight:600;">
+                    <div wire:loading wire:target="loginPilkades" style="text-align:center; width:100%; margin-top:12px; font-size:0.85rem; color:#FFC107; font-weight:600;">
                         Memeriksa kredensial...
                     </div>
                 </form>
