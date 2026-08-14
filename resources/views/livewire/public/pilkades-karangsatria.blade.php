@@ -49,11 +49,11 @@
                     <tr>
                         {{-- Identitas --}}
                         <th style="position:sticky; left:0; z-index:20; width:52px; background:#1e293b; color:#94a3b8; padding:8px 6px; text-align:center; font-size:0.62rem; font-weight:700; letter-spacing:.05em; border-bottom:2px solid #0f172a; border-right:2px solid #0f172a; text-transform:uppercase;">RW</th>
-                        <th style="position:sticky; left:52px; z-index:20; min-width:190px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; letter-spacing:.05em; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Wilayah</th>
+                        <th style="position:sticky; left:52px; z-index:20; min-width:190px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; letter-spacing:.05em; border-bottom:2px solid #0f172a; border-right:2px solid #334155; box-shadow: inset -2px 0 0 #334155; text-transform:uppercase;">Wilayah</th>
                         {{-- Data Dasar --}}
-                        <th style="min-width:60px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-left:2px solid #334155; border-right:1px solid #334155; text-transform:uppercase;">Jml RT</th>
+                        <th style="min-width:60px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Jml RT</th>
                         <th style="min-width:80px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Est. DPT</th>
-                        <th style="min-width:100px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
+                        <th style="min-width:80px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">RW</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">PKK</th>
                         <th style="min-width:75px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">K. Taruna</th>
@@ -88,12 +88,12 @@
                             </td>
 
                             {{-- Nama Wilayah (sticky) --}}
-                            <td style="position:sticky; left:52px; z-index:5; background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 10px; font-weight:600; color:#1e293b; max-width:190px; overflow:hidden; text-overflow:ellipsis;" title="{{ $row['nama_wilayah'] }}">
+                            <td style="position:sticky; left:52px; z-index:5; background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; box-shadow: inset -2px 0 0 #cbd5e1; padding:7px 10px; font-weight:600; color:#1e293b; max-width:190px; overflow:hidden; text-overflow:ellipsis;" title="{{ $row['nama_wilayah'] }}">
                                 {{ $row['nama_wilayah'] }}
                             </td>
 
                             {{-- Jml RT --}}
-                            <td style="background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-left:2px solid #cbd5e1; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center; color:#475569; font-weight:500;">
+                            <td style="background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center; color:#475569; font-weight:500;">
                                 {{ $row['jumlah_rt'] > 0 ? $row['jumlah_rt'] : '—' }}
                             </td>
 
@@ -106,7 +106,7 @@
                             <td style="position:relative; background:{{ $row['korwe_nama'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['korwe_nama'])
-                                        <span style="color:#14532d; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['korwe_nama'] }}">{{ $row['korwe_nama'] }}</span>
+                                        <span style="color:#14532d; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:55px;" title="{{ $row['korwe_nama'] }}">{{ $row['korwe_nama'] }}</span>
                                     @else
                                         <span style="color:#cbd5e1; font-size:0.7rem; font-style:italic;">-</span>
                                     @endif
