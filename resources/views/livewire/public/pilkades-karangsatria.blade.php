@@ -41,7 +41,7 @@
                     <tr>
                         {{-- Kelompok: Identitas --}}
                         <th colspan="2" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">IDENTITAS WILAYAH</th>
-                        <th colspan="9" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">DATA DASAR</th>
+                        <th colspan="8" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">DATA DASAR</th>
                         <th colspan="4" style="background:#14532d; color:#bbf7d0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">SUARA PEMILU</th>
                         <th colspan="2" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">PETA KEKUATAN</th>
                         <th colspan="1" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em;">3 CALEG PEMENANG</th>
@@ -58,8 +58,7 @@
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">PKK</th>
                         <th style="min-width:75px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">K. Taruna</th>
                         <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">DKM</th>
-                        <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Tokoh</th>
-                        <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Sosmed</th>
+                        <th style="min-width:70px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Tokoh</th>
                         {{-- Suara --}}
                         <th style="min-width:65px; background:#1c1917; color:#fbbf24; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">PKS</th>
                         <th style="min-width:65px; background:#1c1917; color:#60a5fa; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">PAN</th>
@@ -120,7 +119,7 @@
                             </td>
 
                             {{-- Afiliasi RW --}}
-                            <td style="background:{{ $row['afiliasi'] === 'UNO' ? '#dcfce7' : ($row['afiliasi'] === 'Ke calon lain' ? '#fee2e2' : $bg) }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
+                            <td style="background:{{ $row['afiliasi'] === 'UNO' ? '#dcfce7' : ($row['afiliasi'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi'] === 'UNO')
                                         <span style="color:#166534; font-weight:800; font-size:0.65rem;">UNO</span>
@@ -138,7 +137,7 @@
                             </td>
 
                             {{-- Afiliasi PKK --}}
-                            <td style="background:{{ $row['afiliasi_pkk'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="background:{{ $row['afiliasi_pkk'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_pkk'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_pkk'] === 'Ke calon lain')
                                         <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk_calon_lain'] }}">{{ $row['afiliasi_pkk_calon_lain'] ?: 'LAINNYA' }}</span>
@@ -154,7 +153,7 @@
                             </td>
 
                             {{-- Afiliasi Karang Taruna --}}
-                            <td style="background:{{ $row['afiliasi_karang_taruna'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="background:{{ $row['afiliasi_karang_taruna'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_karang_taruna'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_karang_taruna'] === 'Ke calon lain')
                                         <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna_calon_lain'] }}">{{ $row['afiliasi_karang_taruna_calon_lain'] ?: 'LAINNYA' }}</span>
@@ -170,7 +169,7 @@
                             </td>
 
                             {{-- Afiliasi DKM --}}
-                            <td style="background:{{ $row['afiliasi_dkm'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="background:{{ $row['afiliasi_dkm'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_dkm'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_dkm'] === 'Ke calon lain')
                                         <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm_calon_lain'] }}">{{ $row['afiliasi_dkm_calon_lain'] ?: 'LAINNYA' }}</span>
@@ -186,7 +185,7 @@
                             </td>
 
                             {{-- Afiliasi Tokoh --}}
-                            <td style="background:{{ $row['afiliasi_tokoh'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="background:{{ $row['afiliasi_tokoh'] === 'UNO' ? '#dcfce7' : ($row['afiliasi_tokoh'] === 'Ke calon lain' ? '#fee2e2' : '#fef9c3') }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_tokoh'] === 'Ke calon lain')
                                         <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh_calon_lain'] }}">{{ $row['afiliasi_tokoh_calon_lain'] ?: 'LAINNYA' }}</span>
@@ -196,16 +195,6 @@
                                         <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
                                     @endif
                                     <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_tokoh', 'Afiliasi Tokoh')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi Tokoh">
-                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                                    </button>
-                                </div>
-                            </td>
-
-                            {{-- Sosial Media --}}
-                            <td style="background:{{ $row['sosial_media'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
-                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-                                    <span style="color:{{ $row['sosial_media'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['sosial_media'] }}">{{ $row['sosial_media'] ?: '-' }}</span>
-                                    <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'sosial_media', 'Sosial Media')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Sosial Media">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
                                 </div>
@@ -299,7 +288,6 @@
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e293b; font-size:0.78rem;">{{ number_format($totalDpt, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#14532d;">-</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#475569;">-</td>
-                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
