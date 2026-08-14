@@ -1,0 +1,104 @@
+PERHITUNGAN SKOR KOLOM "PILKADES (UNO)" — DESA KARANGSATRIA
+=============================================================
+Dokumen ini berisi rumus perhitungan skor dukungan calon "UNO" pada
+Pilkades Karangsatria, dihitung dari 5 kolom pemetaan tokoh kunci per RW:
+RW, PKK, K. Taruna, DKM, Tokoh.
+
+Catatan: ini dokumen referensi/brainstorming saja. Tidak ada perubahan
+kode atau database aplikasi yang dilakukan.
+
+
+1. OPSI NILAI PER KOLOM
+------------------------
+Setiap kolom (RW, PKK, K. Taruna, DKM, Tokoh) diisi salah satu dari 4 opsi:
+
+  Opsi               Poin     Ikut dihitung di pembagi (bobot)?
+  -----------------  -------  -----------------------------------
+  UNO                +1       Ya
+  Calon lain         -1       Ya
+  Netral              0       Ya (sudah disurvei, memang tidak condong)
+  Belum diketahui     -       Tidak (dikeluarkan total dari rumus)
+
+Perbedaan penting:
+  - "Netral"          = sudah disurvei, hasilnya memang tidak berpihak.
+                         Tetap dihitung sebagai data valid.
+  - "Belum diketahui" = belum ada datanya sama sekali.
+                         Dibuang dari pembilang maupun pembagi supaya
+                         tidak mengotori skor dengan ketidaktahuan.
+
+
+2. BOBOT PER KOLOM
+--------------------
+Pengaruh 5 posisi ini terhadap suara warga tidak setara, jadi diberi bobot:
+
+  Kolom        Bobot   Alasan
+  -----------  ------  --------------------------------------------
+  RW           1.5     Otoritas administratif langsung, paling
+                        sering berinteraksi dengan warga
+  Tokoh        1.5     Pengaruh sosial/moral, biasanya paling
+                        didengar warga
+  DKM          1.2     Pengaruh kuat di wilayah bertipologi
+                        religius-komunal
+  PKK          1.0     Jangkauan lebih sempit (ibu-ibu)
+  K. Taruna    1.0     Jangkauan lebih sempit (pemuda), tapi
+                        vokal di kanal digital
+
+
+3. RUMUS SKOR
+---------------
+  Skor mentah (-100% s/d +100%) =
+      [ Σ (poin_opsi x bobot_kolom) / Σ (bobot_kolom yang BUKAN "Belum diketahui") ] x 100
+
+  Normalisasi ke skala 0-100% =
+      (Skor mentah + 100) / 2
+
+
+4. BADGE KATEGORI HASIL
+--------------------------
+Dihitung hanya jika jumlah kolom terisi (bukan "Belum diketahui") >= 3 dari 5:
+
+  Skor (0-100%)     Badge
+  ----------------  -----------------------
+  >= 70%            UNO Unggul
+  50% - 69%          UNO Unggul Tipis
+  30% - 49%          Rawan
+  < 30%              UNO Tertinggal
+
+Jika kolom terisi < 3 dari 5:
+  Badge = "Belum Terpetakan" (skor tetap dihitung, tapi ditandai
+  low-confidence / perlu disurvei lebih lanjut)
+
+
+5. CONTOH PERHITUNGAN
+------------------------
+Contoh A — RW 001 (dari data awal, versi 3 warna: RW=Emon(rival),
+PKK=Emon(rival), K.Taruna=UNO, DKM=UNO, Tokoh=Emon; 5/5 kolom terisi):
+
+  Skor mentah = [(-1x1.5)+(-1x1.0)+(1x1.0)+(1x1.2)+(-1x1.5)] / (1.5+1.0+1.0+1.2+1.5) x 100
+              = (-1.8) / 6.2 x 100
+              ~= -29%
+  Skor normal = (-29 + 100) / 2 = 35.5%
+  Badge       = Rawan (5/5 kolom terisi -> confidence tinggi)
+
+
+Contoh B — versi 4 opsi (RW=UNO, PKK=Netral, K.Taruna=Belum diketahui,
+DKM=Calon lain, Tokoh=UNO; K.Taruna dibuang dari rumus):
+
+  Skor mentah = [(1x1.5)+(0x1.0)+(-1x1.2)+(1x1.5)] / (1.5+1.0+1.2+1.5) x 100
+              = 1.8 / 5.2 x 100
+              ~= 35%
+  Skor normal = (35 + 100) / 2 = 67.5%
+  Badge       = UNO Unggul Tipis (4/5 kolom terisi -> confidence cukup)
+
+
+6. CATATAN TAMBAHAN
+----------------------
+- Tampilkan juga indikator kelengkapan data di sebelah skor, misal:
+  "67.5% (4/5 terisi)" — supaya tim lapangan tahu seberapa bisa
+  diandalkan angka tersebut.
+- Untuk RW yang datanya masih banyak "Belum diketahui", bisa dipakai
+  sebagai daftar prioritas survei lapangan berikutnya.
+- Kolom PKS+PAN dan Juara 1 (data suara historis) bisa dipakai sebagai
+  data pembanding/fallback kalau kolom pemetaan tokoh masih kosong,
+  tapi sebaiknya ditandai berbeda (mis. "estimasi" vs "terverifikasi")
+  supaya tidak tercampur dengan data survei lapangan yang sebenarnya.

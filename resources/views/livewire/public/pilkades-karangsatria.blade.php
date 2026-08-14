@@ -65,7 +65,7 @@
                         <th style="min-width:80px; background:#1c1917; color:#34d399; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">PKS+PAN</th>
                         <th style="min-width:65px; background:#1c1917; color:#f8fafc; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Juara 1</th>
                         {{-- Peta Kekuatan --}}
-                        <th style="min-width:65px; background:#1e293b; color:#22c55e; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">PILKADES<br>(UNO)</th>
+                        <th style="min-width:110px; background:#1e293b; color:#22c55e; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">SCORE (%)</th>
                         <th style="min-width:170px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">3 Partai Terkuat di RW</th>
                         {{-- 3 Caleg --}}
                         <th style="min-width:210px; background:#1e293b; color:#94a3b8; padding:8px 10px; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; text-transform:uppercase;">3 Caleg Pemenang di RW</th>
@@ -261,13 +261,17 @@
                                 @endif
                             </td>
 
-                            {{-- Pilkades UNO --}}
-                            <td style="background:{{ $row['dukungan_uno'] ? '#22c55e' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 6px; text-align:center;">
-                                @if($row['dukungan_uno'])
-                                    <span style="color:#ffffff; font-size:0.75rem; font-weight:800;">✓</span>
-                                @else
-                                    <span style="color:#cbd5e1; font-size:0.7rem;">-</span>
-                                @endif
+                            {{-- UNO Score --}}
+                            <td style="background:{{ $row['uno_score']['color'] }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:6px; text-align:center;">
+                                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%;">
+                                    <span style="color:{{ $row['uno_score']['text_color'] }}; font-size:0.8rem; font-weight:800;">
+                                        {{ $row['uno_score']['score'] }}%
+                                    </span>
+                                    <span style="color:{{ $row['uno_score']['text_color'] }}; font-size:0.55rem; font-weight:600; text-transform:uppercase; margin-top:2px; text-align:center; line-height:1.1;">
+                                        {{ $row['uno_score']['badge'] }}<br>
+                                        <span style="opacity:0.8;">({{ $row['uno_score']['filled'] }}/5)</span>
+                                    </span>
+                                </div>
                             </td>
 
                             {{-- 3 Partai Terkuat --}}

@@ -269,10 +269,97 @@ class PilkadesKarangsatria extends Component
                 'afiliasi_tokoh_bukti' => $profilRw?->afiliasi_tokoh_bukti ?? null,
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
+                'uno_score'   => $this->calculateUnoScore($profilRw),
             ];
         }
 
         $this->rwData = $formattedData;
+    }
+
+    private function calculateUnoScore($profilRw)
+    {
+        if (!$profilRw) {
+            return [
+                'score' => 0,
+                'badge' => 'Belum Terpetakan',
+                'color' => '#f1f5f9',
+                'text_color' => '#64748b',
+                'filled' => 0
+            ];
+        }
+
+        $fields = [
+            'afiliasi_pilkades' => 1.5,
+            'afiliasi_tokoh' => 1.5,
+            'afiliasi_dkm' => 1.2,
+            'afiliasi_pkk' => 1.0,
+            'afiliasi_karang_taruna' => 1.0
+        ];
+
+        $totalWeightedPoints = 0;
+        $totalActiveWeight = 0;
+        $filledCount = 0;
+
+        foreach ($fields as $field => $weight) {
+            $val = $profilRw->$field;
+            
+            if (empty($val) || $val === 'BELUM DIKETAHUI' || $val === 'Belum Jelas') {
+                continue;
+            }
+
+            $filledCount++;
+            $totalActiveWeight += $weight;
+
+            if ($val === 'UNO') {
+                $totalWeightedPoints += (1 * $weight);
+            } elseif ($val === 'CALON LAIN' || $val === 'Ke calon lain') {
+                $totalWeightedPoints += (-1 * $weight);
+            }
+            // NETRAL gives 0 points, so we don't add anything to $totalWeightedPoints
+        }
+
+        if ($filledCount < 3 || $totalActiveWeight == 0) {
+            $rawScore = $totalActiveWeight > 0 ? ($totalWeightedPoints / $totalActiveWeight) * 100 : 0;
+            $normalizedScore = ($rawScore + 100) / 2;
+            
+            return [
+                'score' => round($normalizedScore, 1),
+                'badge' => 'Belum Terpetakan',
+                'color' => '#f8fafc',
+                'text_color' => '#94a3b8',
+                'filled' => $filledCount
+            ];
+        }
+
+        $rawScore = ($totalWeightedPoints / $totalActiveWeight) * 100;
+        $normalizedScore = ($rawScore + 100) / 2;
+        $score = round($normalizedScore, 1);
+
+        if ($score >= 70) {
+            $badge = 'UNO Unggul';
+            $color = '#dcfce7'; // green-100
+            $textColor = '#166534'; // green-800
+        } elseif ($score >= 50) {
+            $badge = 'UNO Unggul Tipis';
+            $color = '#ecfccb'; // lime-100
+            $textColor = '#3f6212'; // lime-800
+        } elseif ($score >= 30) {
+            $badge = 'Rawan';
+            $color = '#ffedd5'; // orange-100
+            $textColor = '#9a3412'; // orange-800
+        } else {
+            $badge = 'UNO Tertinggal';
+            $color = '#fee2e2'; // red-100
+            $textColor = '#991b1b'; // red-800
+        }
+
+        return [
+            'score' => $score,
+            'badge' => $badge,
+            'color' => $color,
+            'text_color' => $textColor,
+            'filled' => $filledCount
+        ];
     }
 
     public function openAfiliasiModal($rwId)
