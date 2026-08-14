@@ -41,7 +41,7 @@
                     <tr>
                         {{-- Kelompok: Identitas --}}
                         <th colspan="2" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">IDENTITAS WILAYAH</th>
-                        <th colspan="4" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">DATA DASAR</th>
+                        <th colspan="9" style="background:#1e3a5f; color:#e2e8f0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">DATA DASAR</th>
                         <th colspan="4" style="background:#14532d; color:#bbf7d0; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">SUARA PEMILU</th>
                         <th colspan="2" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em; border-right:2px solid #334155;">PETA KEKUATAN</th>
                         <th colspan="1" style="background:#1e3a5f; color:#bfdbfe; padding:7px 12px; text-align:center; font-size:0.6rem; font-weight:700; letter-spacing:.06em;">3 CALEG PEMENANG</th>
@@ -54,7 +54,12 @@
                         <th style="min-width:60px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Jml RT</th>
                         <th style="min-width:80px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Est. DPT</th>
                         <th style="min-width:140px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
-                        <th style="min-width:85px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Afiliasi RW</th>
+                        <th style="min-width:85px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Afiliasi RW</th>
+                        <th style="min-width:100px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Afil. PKK</th>
+                        <th style="min-width:110px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Afil. K.Taruna</th>
+                        <th style="min-width:100px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Afil. DKM</th>
+                        <th style="min-width:100px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Afil. Tokoh</th>
+                        <th style="min-width:100px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Sosmed</th>
                         {{-- Suara --}}
                         <th style="min-width:80px; background:#1c1917; color:#fbbf24; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">Suara PKS</th>
                         <th style="min-width:80px; background:#1c1917; color:#60a5fa; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">Suara PAN</th>
@@ -127,6 +132,56 @@
                                     
                                     {{-- Edit Icon --}}
                                     <button wire:click="openAfiliasiModal({{ $row['nomor_rw'] }})" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                </div>
+                            </td>
+
+                            {{-- Afiliasi PKK --}}
+                            <td style="background:{{ $row['afiliasi_pkk'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                    <span style="color:{{ $row['afiliasi_pkk'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk'] }}">{{ $row['afiliasi_pkk'] ?: '-' }}</span>
+                                    <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_pkk', 'Afiliasi PKK')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi PKK">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                </div>
+                            </td>
+
+                            {{-- Afiliasi Karang Taruna --}}
+                            <td style="background:{{ $row['afiliasi_karang_taruna'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                    <span style="color:{{ $row['afiliasi_karang_taruna'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna'] }}">{{ $row['afiliasi_karang_taruna'] ?: '-' }}</span>
+                                    <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_karang_taruna', 'Afiliasi Karang Taruna')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi Karang Taruna">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                </div>
+                            </td>
+
+                            {{-- Afiliasi DKM --}}
+                            <td style="background:{{ $row['afiliasi_dkm'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                    <span style="color:{{ $row['afiliasi_dkm'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm'] }}">{{ $row['afiliasi_dkm'] ?: '-' }}</span>
+                                    <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_dkm', 'Afiliasi DKM')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi DKM">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                </div>
+                            </td>
+
+                            {{-- Afiliasi Tokoh --}}
+                            <td style="background:{{ $row['afiliasi_tokoh'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                    <span style="color:{{ $row['afiliasi_tokoh'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh'] }}">{{ $row['afiliasi_tokoh'] ?: '-' }}</span>
+                                    <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'afiliasi_tokoh', 'Afiliasi Tokoh')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi Tokoh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    </button>
+                                </div>
+                            </td>
+
+                            {{-- Sosial Media --}}
+                            <td style="background:{{ $row['sosial_media'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                    <span style="color:{{ $row['sosial_media'] ? '#14532d' : '#cbd5e1' }}; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['sosial_media'] }}">{{ $row['sosial_media'] ?: '-' }}</span>
+                                    <button wire:click="openEditFieldModal({{ $row['nomor_rw'] }}, 'sosial_media', 'Sosial Media')" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Sosial Media">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
                                 </div>
@@ -219,7 +274,12 @@
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#374151;">—</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e293b; font-size:0.78rem;">{{ number_format($totalDpt, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#14532d;">-</td>
-                        <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px; text-align:center; color:#475569;">-</td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:center; color:#475569;">-</td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
+                        <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#92400e; font-size:0.8rem;">{{ number_format($totalPks, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e40af; font-size:0.8rem;">{{ number_format($totalPan, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#14532d; font-size:0.85rem;">{{ number_format($totalSum, 0, ',', '.') }}</td>
@@ -262,31 +322,6 @@
                         <input type="text" wire:model="formKorweNama" placeholder="Ketik nama koordinator..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
                     </div>
 
-                    <div style="margin-bottom:14px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi PKK</label>
-                        <input type="text" wire:model="formAfiliasiPkk" placeholder="Ketik afiliasi PKK..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
-                    </div>
-
-                    <div style="margin-bottom:14px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi Karang Taruna</label>
-                        <input type="text" wire:model="formAfiliasiKarangTaruna" placeholder="Ketik afiliasi karang taruna..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
-                    </div>
-
-                    <div style="margin-bottom:14px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi DKM</label>
-                        <input type="text" wire:model="formAfiliasiDkm" placeholder="Ketik afiliasi DKM..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
-                    </div>
-
-                    <div style="margin-bottom:14px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi Tokoh</label>
-                        <input type="text" wire:model="formAfiliasiTokoh" placeholder="Ketik afiliasi tokoh..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
-                    </div>
-
-                    <div style="margin-bottom:14px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Sosial Media</label>
-                        <input type="text" wire:model="formSosialMedia" placeholder="Ketik sosial media..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
-                    </div>
-
                     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
                         <button wire:click="$set('showKorweModal', false)" style="padding:6px 12px; background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Batal</button>
                         <button wire:click="saveKorwe" style="padding:6px 12px; background:#059669; border:none; color:#fff; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Simpan</button>
@@ -324,6 +359,29 @@
                     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
                         <button wire:click="$set('showAfiliasiModal', false)" style="padding:6px 12px; background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Batal</button>
                         <button wire:click="saveAfiliasi" style="padding:6px 12px; background:#059669; border:none; color:#fff; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Generic Edit Modal --}}
+    @if($showEditModal)
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center;">
+            <div style="background:#fff; width:340px; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; font-family:system-ui,-apple-system,sans-serif;">
+                <div style="background:#14532d; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0; color:#fff; font-size:0.9rem; font-weight:600;">Ubah {{ $modalTitle }} (RW {{ ltrim($editRwId, '0') }})</h3>
+                    <button wire:click="$set('showEditModal', false)" style="background:none; border:none; color:#bbf7d0; cursor:pointer; font-size:1.2rem; line-height:1;">&times;</button>
+                </div>
+                <div style="padding:16px;">
+                    <div style="margin-bottom:14px;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">{{ $modalTitle }}</label>
+                        <input type="text" wire:model="formFieldValue" placeholder="Ketik {{ strtolower($modalTitle) }}..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                    </div>
+                    
+                    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
+                        <button wire:click="$set('showEditModal', false)" style="padding:6px 12px; background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Batal</button>
+                        <button wire:click="saveEditField" style="padding:6px 12px; background:#059669; border:none; color:#fff; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Simpan</button>
                     </div>
                 </div>
             </div>

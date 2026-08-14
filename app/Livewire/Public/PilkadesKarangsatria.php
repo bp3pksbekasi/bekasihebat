@@ -22,14 +22,13 @@ class PilkadesKarangsatria extends Component
     public bool $showAfiliasiModal = false;
     public bool $showKorweModal = false;
     public ?string $editRwId = null;
-    public ?string $formAfiliasi = null;
-    public ?string $formCalonLain = null;
     public ?string $formKorweNama = null;
-    public ?string $formAfiliasiPkk = null;
-    public ?string $formAfiliasiKarangTaruna = null;
-    public ?string $formAfiliasiDkm = null;
-    public ?string $formAfiliasiTokoh = null;
-    public ?string $formSosialMedia = null;
+    
+    // Generic Edit Modal State
+    public bool $showEditModal = false;
+    public ?string $editField = null;
+    public ?string $formFieldValue = null;
+    public string $modalTitle = '';
 
     public function mount()
     {
@@ -291,21 +290,26 @@ class PilkadesKarangsatria extends Component
 
         if ($profil) {
             $this->formKorweNama = $profil->korwe_pilkades_nama;
-            $this->formAfiliasiPkk = $profil->afiliasi_pkk;
-            $this->formAfiliasiKarangTaruna = $profil->afiliasi_karang_taruna;
-            $this->formAfiliasiDkm = $profil->afiliasi_dkm;
-            $this->formAfiliasiTokoh = $profil->afiliasi_tokoh;
-            $this->formSosialMedia = $profil->sosial_media;
         } else {
             $this->formKorweNama = null;
-            $this->formAfiliasiPkk = null;
-            $this->formAfiliasiKarangTaruna = null;
-            $this->formAfiliasiDkm = null;
-            $this->formAfiliasiTokoh = null;
-            $this->formSosialMedia = null;
         }
 
         $this->showKorweModal = true;
+    }
+
+    public function openEditFieldModal($rwId, $field, $title)
+    {
+        $this->editRwId = $rwId;
+        $this->editField = $field;
+        $this->modalTitle = $title;
+        
+        $paddedRw = str_pad($rwId, 3, '0', STR_PAD_LEFT);
+        $profil = ProfilRw::where('target_wilayah_id', $this->targetWilayah->id)
+            ->where('nomor_rw', $paddedRw)
+            ->first();
+
+        $this->formFieldValue = $profil ? $profil->$field : null;
+        $this->showEditModal = true;
     }
 
     public function saveAfiliasi()
@@ -335,15 +339,27 @@ class PilkadesKarangsatria extends Component
         );
 
         $profil->korwe_pilkades_nama = $this->formKorweNama;
-        $profil->afiliasi_pkk = $this->formAfiliasiPkk;
-        $profil->afiliasi_karang_taruna = $this->formAfiliasiKarangTaruna;
-        $profil->afiliasi_dkm = $this->formAfiliasiDkm;
-        $profil->afiliasi_tokoh = $this->formAfiliasiTokoh;
-        $profil->sosial_media = $this->formSosialMedia;
         $profil->save();
 
         $this->showKorweModal = false;
         $this->loadData(); // Reload table data
+    }
+
+    public function saveEditField()
+    {
+        $paddedRw = str_pad($this->editRwId, 3, '0', STR_PAD_LEFT);
+
+        $profil = ProfilRw::firstOrCreate(
+            ['target_wilayah_id' => $this->targetWilayah->id, 'nomor_rw' => $paddedRw],
+            ['dapil' => $this->targetWilayah->dapil, 'kecamatan' => $this->targetWilayah->kecamatan, 'desa' => $this->targetWilayah->desa]
+        );
+
+        $field = $this->editField;
+        $profil->$field = $this->formFieldValue;
+        $profil->save();
+
+        $this->showEditModal = false;
+        $this->loadData();
     }
 
     public function render()
