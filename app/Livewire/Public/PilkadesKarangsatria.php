@@ -22,6 +22,8 @@ class PilkadesKarangsatria extends Component
     public bool $showAfiliasiModal = false;
     public bool $showKorweModal = false;
     public ?string $editRwId = null;
+    public ?string $formAfiliasi = null;
+    public ?string $formCalonLain = null;
     public ?string $formKorweNama = null;
     
     // Generic Edit Modal State
