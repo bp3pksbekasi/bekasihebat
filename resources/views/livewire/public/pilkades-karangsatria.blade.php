@@ -53,7 +53,7 @@
                         {{-- Data Dasar --}}
                         <th style="min-width:60px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Jml RT</th>
                         <th style="min-width:80px; background:#1e293b; color:#94a3b8; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #334155; text-transform:uppercase;">Est. DPT</th>
-                        <th style="min-width:140px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Ketua Tim (Korwe)</th>
+                        <th style="min-width:140px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #166534; text-transform:uppercase;">Korwe</th>
                         <th style="min-width:85px; background:#14532d; color:#86efac; padding:8px 8px; text-align:center; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:2px solid #334155; text-transform:uppercase;">Afiliasi RW</th>
                         {{-- Suara --}}
                         <th style="min-width:80px; background:#1c1917; color:#fbbf24; padding:8px 8px; text-align:right; font-size:0.62rem; font-weight:700; border-bottom:2px solid #0f172a; border-right:1px solid #292524; text-transform:uppercase;">Suara PKS</th>
@@ -108,7 +108,7 @@
                                     @endif
                                     
                                     {{-- Edit Icon --}}
-                                    <button wire:click="openKorweModal({{ $row['nomor_rw'] }})" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Nama Ketua Tim">
+                                    <button wire:click="openKorweModal({{ $row['nomor_rw'] }})" style="background:transparent; border:none; padding:2px; cursor:pointer; color:#94a3b8; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Data Korwe">
                                         <svg xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                     </button>
                                 </div>
@@ -258,8 +258,33 @@
                 </div>
                 <div style="padding:16px;">
                     <div style="margin-bottom:14px;">
-                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Nama Ketua Tim Sukses (Korwe)</label>
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Nama Korwe</label>
                         <input type="text" wire:model="formKorweNama" placeholder="Ketik nama koordinator..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                    </div>
+
+                    <div style="margin-bottom:14px;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi PKK</label>
+                        <input type="text" wire:model="formAfiliasiPkk" placeholder="Ketik afiliasi PKK..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                    </div>
+
+                    <div style="margin-bottom:14px;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi Karang Taruna</label>
+                        <input type="text" wire:model="formAfiliasiKarangTaruna" placeholder="Ketik afiliasi karang taruna..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                    </div>
+
+                    <div style="margin-bottom:14px;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi DKM</label>
+                        <input type="text" wire:model="formAfiliasiDkm" placeholder="Ketik afiliasi DKM..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                    </div>
+
+                    <div style="margin-bottom:14px;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Afiliasi Tokoh</label>
+                        <input type="text" wire:model="formAfiliasiTokoh" placeholder="Ketik afiliasi tokoh..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                    </div>
+
+                    <div style="margin-bottom:14px;">
+                        <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">Sosial Media</label>
+                        <input type="text" wire:model="formSosialMedia" placeholder="Ketik sosial media..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
                     </div>
 
                     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">

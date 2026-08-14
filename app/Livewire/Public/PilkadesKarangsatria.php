@@ -25,6 +25,11 @@ class PilkadesKarangsatria extends Component
     public ?string $formAfiliasi = null;
     public ?string $formCalonLain = null;
     public ?string $formKorweNama = null;
+    public ?string $formAfiliasiPkk = null;
+    public ?string $formAfiliasiKarangTaruna = null;
+    public ?string $formAfiliasiDkm = null;
+    public ?string $formAfiliasiTokoh = null;
+    public ?string $formSosialMedia = null;
 
     public function mount()
     {
@@ -242,6 +247,11 @@ class PilkadesKarangsatria extends Component
                 'afiliasi'    => $profilRw?->afiliasi_pilkades ?? '',
                 'calon_lain'  => $profilRw?->afiliasi_calon_lain ?? '',
                 'korwe_nama'  => $profilRw?->korwe_pilkades_nama ?? '',
+                'afiliasi_pkk' => $profilRw?->afiliasi_pkk ?? '',
+                'afiliasi_karang_taruna' => $profilRw?->afiliasi_karang_taruna ?? '',
+                'afiliasi_dkm' => $profilRw?->afiliasi_dkm ?? '',
+                'afiliasi_tokoh' => $profilRw?->afiliasi_tokoh ?? '',
+                'sosial_media' => $profilRw?->sosial_media ?? '',
                 'top3_partai' => $elec['top3_partai'] ?? [],
                 'top3_caleg'  => $elec['top3_caleg'] ?? [],
             ];
@@ -281,8 +291,18 @@ class PilkadesKarangsatria extends Component
 
         if ($profil) {
             $this->formKorweNama = $profil->korwe_pilkades_nama;
+            $this->formAfiliasiPkk = $profil->afiliasi_pkk;
+            $this->formAfiliasiKarangTaruna = $profil->afiliasi_karang_taruna;
+            $this->formAfiliasiDkm = $profil->afiliasi_dkm;
+            $this->formAfiliasiTokoh = $profil->afiliasi_tokoh;
+            $this->formSosialMedia = $profil->sosial_media;
         } else {
             $this->formKorweNama = null;
+            $this->formAfiliasiPkk = null;
+            $this->formAfiliasiKarangTaruna = null;
+            $this->formAfiliasiDkm = null;
+            $this->formAfiliasiTokoh = null;
+            $this->formSosialMedia = null;
         }
 
         $this->showKorweModal = true;
@@ -315,6 +335,11 @@ class PilkadesKarangsatria extends Component
         );
 
         $profil->korwe_pilkades_nama = $this->formKorweNama;
+        $profil->afiliasi_pkk = $this->formAfiliasiPkk;
+        $profil->afiliasi_karang_taruna = $this->formAfiliasiKarangTaruna;
+        $profil->afiliasi_dkm = $this->formAfiliasiDkm;
+        $profil->afiliasi_tokoh = $this->formAfiliasiTokoh;
+        $profil->sosial_media = $this->formSosialMedia;
         $profil->save();
 
         $this->showKorweModal = false;
