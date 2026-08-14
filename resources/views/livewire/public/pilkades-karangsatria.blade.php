@@ -125,7 +125,7 @@
                                     @if($row['afiliasi'] === 'UNO')
                                         <span style="color:#166534; font-weight:800; font-size:0.65rem;">UNO</span>
                                     @elseif($row['afiliasi'] === 'Ke calon lain')
-                                        <span style="color:#991b1b; font-weight:800; font-size:0.65rem;" title="{{ $row['calon_lain'] }}">LAINNYA</span>
+                                        <span style="color:#b91c1c; font-size:0.75rem; font-weight:700;" title="Dukungan: {{ $row['calon_lain'] }}">{{ $row['calon_lain'] ?: 'LAINNYA' }}</span>
                                     @else
                                         <span style="color:#94a3b8; font-style:italic; font-size:0.6rem;">-</span>
                                     @endif
@@ -141,7 +141,7 @@
                             <td style="background:{{ $row['afiliasi_pkk'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_pkk'] === 'Ke calon lain')
-                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk_calon_lain'] }}">Lainnya ({{ $row['afiliasi_pkk_calon_lain'] }})</span>
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk_calon_lain'] }}">{{ $row['afiliasi_pkk_calon_lain'] ?: 'LAINNYA' }}</span>
                                     @elseif($row['afiliasi_pkk'])
                                         <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_pkk'] }}">{{ $row['afiliasi_pkk'] }}</span>
                                     @else
@@ -157,7 +157,7 @@
                             <td style="background:{{ $row['afiliasi_karang_taruna'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_karang_taruna'] === 'Ke calon lain')
-                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna_calon_lain'] }}">Lainnya ({{ $row['afiliasi_karang_taruna_calon_lain'] }})</span>
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna_calon_lain'] }}">{{ $row['afiliasi_karang_taruna_calon_lain'] ?: 'LAINNYA' }}</span>
                                     @elseif($row['afiliasi_karang_taruna'])
                                         <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="{{ $row['afiliasi_karang_taruna'] }}">{{ $row['afiliasi_karang_taruna'] }}</span>
                                     @else
@@ -173,7 +173,7 @@
                             <td style="background:{{ $row['afiliasi_dkm'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_dkm'] === 'Ke calon lain')
-                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm_calon_lain'] }}">Lainnya ({{ $row['afiliasi_dkm_calon_lain'] }})</span>
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm_calon_lain'] }}">{{ $row['afiliasi_dkm_calon_lain'] ?: 'LAINNYA' }}</span>
                                     @elseif($row['afiliasi_dkm'])
                                         <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_dkm'] }}">{{ $row['afiliasi_dkm'] }}</span>
                                     @else
@@ -189,7 +189,7 @@
                             <td style="background:{{ $row['afiliasi_tokoh'] ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
                                     @if($row['afiliasi_tokoh'] === 'Ke calon lain')
-                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh_calon_lain'] }}">Lainnya ({{ $row['afiliasi_tokoh_calon_lain'] }})</span>
+                                        <span style="color:#b91c1c; font-weight:700; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh_calon_lain'] }}">{{ $row['afiliasi_tokoh_calon_lain'] ?: 'LAINNYA' }}</span>
                                     @elseif($row['afiliasi_tokoh'])
                                         <span style="color:#14532d; font-size:0.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_tokoh'] }}">{{ $row['afiliasi_tokoh'] }}</span>
                                     @else
@@ -376,7 +376,14 @@
                     @if($formAfiliasi === 'Ke calon lain')
                         <div style="margin-bottom:12px; background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:6px;">
                             <label style="display:block; font-size:0.75rem; font-weight:600; color:#991b1b; margin-bottom:6px;">Nama Calon Lain yang Didukung</label>
-                            <input type="text" wire:model="formCalonLain" placeholder="Masukkan nama calon..." style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
+                            <select wire:model="formCalonLain" style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
+                                <option value="">Pilih Calon...</option>
+                                <option value="UNO">UNO</option>
+                                <option value="EMON">EMON</option>
+                                <option value="RAHMAT">RAHMAT</option>
+                                <option value="EKO">EKO</option>
+                                <option value="MASPRI">MASPRI</option>
+                            </select>
                         </div>
                     @endif
                     
@@ -412,7 +419,14 @@
                             @if($formFieldValue === 'Ke calon lain')
                                 <div style="margin-top:12px; background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:6px;">
                                     <label style="display:block; font-size:0.75rem; font-weight:600; color:#991b1b; margin-bottom:6px;">Nama Calon Lain</label>
-                                    <input type="text" wire:model="formFieldValueCalonLain" placeholder="Masukkan nama calon..." style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
+                                    <select wire:model="formFieldValueCalonLain" style="width:100%; padding:8px; border:1px solid #fca5a5; border-radius:4px; font-size:0.8rem; color:#991b1b; outline:none; box-sizing:border-box;">
+                                        <option value="">Pilih Calon...</option>
+                                        <option value="UNO">UNO</option>
+                                        <option value="EMON">EMON</option>
+                                        <option value="RAHMAT">RAHMAT</option>
+                                        <option value="EKO">EKO</option>
+                                        <option value="MASPRI">MASPRI</option>
+                                    </select>
                                 </div>
                             @endif
                         @endif
