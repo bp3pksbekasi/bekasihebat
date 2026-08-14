@@ -33,8 +33,17 @@
     @else
 
         {{-- ===== TABEL AREA ===== --}}
+        <style>
+            .kbh-table td button[wire\:click^="open"] {
+                opacity: 0;
+                transition: opacity 0.2s, color 0.2s !important;
+            }
+            .kbh-table td:hover button[wire\:click^="open"] {
+                opacity: 1;
+            }
+        </style>
         <div class="sheet-scroll" style="flex:1; overflow:auto; background:#f1f5f9;">
-            <table style="border-collapse:collapse; white-space:nowrap; font-size:0.85rem; font-family:system-ui,-apple-system,sans-serif;">
+            <table class="kbh-table" style="border-collapse:collapse; white-space:nowrap; font-size:0.85rem; font-family:system-ui,-apple-system,sans-serif;">
 
                 {{-- ===== THEAD ===== --}}
                 <thead>
