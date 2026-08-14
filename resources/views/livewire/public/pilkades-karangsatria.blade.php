@@ -376,7 +376,15 @@
                 <div style="padding:16px;">
                     <div style="margin-bottom:14px;">
                         <label style="display:block; font-size:0.75rem; font-weight:600; color:#14532d; margin-bottom:6px;">{{ $modalTitle }}</label>
-                        <input type="text" wire:model="formFieldValue" placeholder="Ketik {{ strtolower($modalTitle) }}..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                        @if($editField === 'sosial_media')
+                            <input type="text" wire:model="formFieldValue" placeholder="Ketik {{ strtolower($modalTitle) }}..." style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                        @else
+                            <select wire:model="formFieldValue" style="width:100%; padding:8px; border:1px solid #86efac; border-radius:4px; font-size:0.8rem; color:#14532d; outline:none; box-sizing:border-box;">
+                                <option value="">Belum Jelas</option>
+                                <option value="UNO">UNO</option>
+                                <option value="Ke calon lain">Ke calon lain</option>
+                            </select>
+                        @endif
                     </div>
                     
                     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
