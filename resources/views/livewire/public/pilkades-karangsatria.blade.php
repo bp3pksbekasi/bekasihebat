@@ -77,7 +77,7 @@
                 <tbody>
                     @foreach($rwData as $index => $row)
                         @php
-                            $bg     = $index % 2 === 0 ? '#ffffff' : '#f8fafc';
+                            $bg     = '#ffffff';
                             $pksSum = $row['pks_pan'];
                             $pksBg  = $row['suara_pks'] > 0 ? '#fefce8' : $bg;
                         @endphp
