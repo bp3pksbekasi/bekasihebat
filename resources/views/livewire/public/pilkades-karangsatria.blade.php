@@ -1,5 +1,5 @@
 <div style="display:flex; flex-direction:column; height:100%; background:#fff;">
-
+    @if($isAuthenticated)
     {{-- ===== HEADER ===== --}}
     <div style="flex:none; background:linear-gradient(135deg,#065f46,#047857); color:#fff; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.25);">
         <div>
@@ -553,6 +553,46 @@
                         <button wire:click="saveRtData" style="padding:6px 12px; background:#059669; border:none; color:#fff; border-radius:4px; font-size:0.75rem; font-weight:600; cursor:pointer;">Simpan RT</button>
                     @endif
                 </div>
+            </div>
+        </div>
+    @endif
+    @else
+        <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; background:#f1f5f9; width:100%;">
+            <div style="background:#fff; padding:32px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.1); width:100%; max-width:400px;">
+                <div style="text-align:center; margin-bottom:24px;">
+                    <div style="background:#14532d; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="width:32px; height:32px; color:#fff;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <h2 style="margin:0 0 8px; font-size:1.5rem; color:#0f172a; font-weight:700;">Login Khusus</h2>
+                    <p style="margin:0; color:#64748b; font-size:0.875rem;">Pemetaan Pilkades Karangsatria</p>
+                </div>
+                
+                <form wire:submit.prevent="loginPilkades">
+                    @if($loginError)
+                        <div style="background:#fee2e2; border-left:4px solid #ef4444; color:#991b1b; padding:12px; border-radius:4px; font-size:0.85rem; margin-bottom:16px;">
+                            {{ $loginError }}
+                        </div>
+                    @endif
+                    
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block; font-size:0.875rem; font-weight:600; color:#334155; margin-bottom:6px;">Username</label>
+                        <input type="text" wire:model="loginUsername" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.95rem; outline:none; box-sizing:border-box; transition:border-color 0.2s;" onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#cbd5e1'" required>
+                    </div>
+                    
+                    <div style="margin-bottom:24px;">
+                        <label style="display:block; font-size:0.875rem; font-weight:600; color:#334155; margin-bottom:6px;">Password</label>
+                        <input type="password" wire:model="loginPassword" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.95rem; outline:none; box-sizing:border-box; transition:border-color 0.2s;" onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='#cbd5e1'" required>
+                    </div>
+                    
+                    <button type="submit" style="width:100%; background:#059669; color:#fff; border:none; padding:12px; border-radius:6px; font-size:1rem; font-weight:600; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
+                        Masuk
+                    </button>
+                    <div wire:loading wire:target="loginPilkades" style="text-align:center; width:100%; margin-top:12px; font-size:0.85rem; color:#059669; font-weight:600;">
+                        Memeriksa kredensial...
+                    </div>
+                </form>
             </div>
         </div>
     @endif

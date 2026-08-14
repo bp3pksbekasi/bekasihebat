@@ -21,6 +21,12 @@ class PilkadesKarangsatria extends Component
     public int $desaPanVotes = 0;
     public string $electionLabel = '';
 
+    // Auth State
+    public bool $isAuthenticated = false;
+    public string $loginUsername = '';
+    public string $loginPassword = '';
+    public string $loginError = '';
+
     // Modal State
     public bool $showAfiliasiModal = false;
     public bool $showKorweModal = false;
@@ -42,12 +48,27 @@ class PilkadesKarangsatria extends Component
 
     public function mount()
     {
+        if (session()->get('pilkades_auth_karangsatria') === true) {
+            $this->isAuthenticated = true;
+        }
+
         $this->targetWilayah = TargetWilayah::where('desa', 'KARANGSATRIA')
             ->where('kecamatan', 'TAMBUN UTARA')
             ->first();
 
         if ($this->targetWilayah) {
             $this->loadData();
+        }
+    }
+
+    public function loginPilkades()
+    {
+        if ($this->loginUsername === 'admin' && $this->loginPassword === 'karangsatria') {
+            session()->put('pilkades_auth_karangsatria', true);
+            $this->isAuthenticated = true;
+            $this->loginError = '';
+        } else {
+            $this->loginError = 'Username atau password salah.';
         }
     }
 
