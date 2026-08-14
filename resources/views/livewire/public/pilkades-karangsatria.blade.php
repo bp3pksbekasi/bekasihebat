@@ -118,7 +118,7 @@
                                     </button>
                                 </div>
                             {{-- Afiliasi RW --}}
-                            <td style="position:relative; background:{{ match($row['afiliasi']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="position:relative; background:{{ match($row['afiliasi']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => $bg } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 @if($row['afiliasi'] === 'UNO')
                                     <div style="display:inline-flex; align-items:center; gap:4px;">
                                         <span style="color:#166534; font-weight:800; font-size:0.85rem;">UNO</span>
@@ -143,7 +143,7 @@
                             </td>
 
                             {{-- Afiliasi RT --}}
-                            <td style="position:relative; background:{{ $row['jumlah_rt'] > 0 && $row['afiliasi_rt_terisi'] === $row['jumlah_rt'] ? '#dcfce7' : ($row['afiliasi_rt_terisi'] > 0 ? '#fef9c3' : $bg) }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="position:relative; background:{{ $row['jumlah_rt'] > 0 && $row['afiliasi_rt_terisi'] === $row['jumlah_rt'] ? '#dcfce7' : ($row['afiliasi_rt_terisi'] > 0 ? $bg : $bg) }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 @if($row['jumlah_rt'] > 0)
                                     <span style="font-size:0.85rem; font-weight:600; color:{{ $row['afiliasi_rt_terisi'] === $row['jumlah_rt'] ? '#166534' : '#64748b' }};">{{ $row['afiliasi_rt_terisi'] }} / {{ $row['jumlah_rt'] }}</span>
                                     <button wire:click="openRtModal({{ $row['nomor_rw'] }}, {{ $row['jumlah_rt'] }})" style="position:absolute; top:2px; right:2px; background:transparent; border:none; padding:2px; cursor:pointer; color:#475569; outline:none; transition:color 0.2s;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Ubah Afiliasi RT">
@@ -155,7 +155,7 @@
                             </td>
 
                             {{-- Afiliasi PKK --}}
-                            <td style="position:relative; background:{{ match($row['afiliasi_pkk']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="position:relative; background:{{ match($row['afiliasi_pkk']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => $bg } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 @if($row['afiliasi_pkk'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_pkk_calon_lain'] }}">{{ $row['afiliasi_pkk_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_pkk'] === 'UNO')
@@ -178,7 +178,7 @@
                             </td>
 
                             {{-- Afiliasi Karang Taruna --}}
-                            <td style="position:relative; background:{{ match($row['afiliasi_karang_taruna']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="position:relative; background:{{ match($row['afiliasi_karang_taruna']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => $bg } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 @if($row['afiliasi_karang_taruna'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70px;" title="{{ $row['afiliasi_karang_taruna_calon_lain'] }}">{{ $row['afiliasi_karang_taruna_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_karang_taruna'] === 'UNO')
@@ -201,7 +201,7 @@
                             </td>
 
                             {{-- Afiliasi DKM --}}
-                            <td style="position:relative; background:{{ match($row['afiliasi_dkm']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
+                            <td style="position:relative; background:{{ match($row['afiliasi_dkm']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => $bg } }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 8px; text-align:center;">
                                 @if($row['afiliasi_dkm'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_dkm_calon_lain'] }}">{{ $row['afiliasi_dkm_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_dkm'] === 'UNO')
@@ -224,7 +224,7 @@
                             </td>
 
                             {{-- Afiliasi Tokoh --}}
-                            <td style="position:relative; background:{{ match($row['afiliasi_tokoh']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => '#fef9c3' } }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
+                            <td style="position:relative; background:{{ match($row['afiliasi_tokoh']) { 'UNO' => '#dcfce7', 'CALON LAIN' => '#fee2e2', 'NETRAL' => '#f1f5f9', default => $bg } }}; border-bottom:1px solid #e2e8f0; border-right:2px solid #cbd5e1; padding:7px 8px; text-align:center;">
                                 @if($row['afiliasi_tokoh'] === 'CALON LAIN')
                                     <span style="display:inline-block; color:#b91c1c; font-weight:700; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px;" title="{{ $row['afiliasi_tokoh_calon_lain'] }}">{{ $row['afiliasi_tokoh_calon_lain'] ?: 'LAINNYA' }}</span>
                                 @elseif($row['afiliasi_tokoh'] === 'UNO')
@@ -247,17 +247,17 @@
                             </td>
 
                             {{-- Suara PKS --}}
-                            <td style="background:{{ $row['suara_pks'] > 0 ? '#fefce8' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; font-weight:700; color:{{ $row['suara_pks'] > 0 ? '#92400e' : '#94a3b8' }}; font-size:0.95rem;">
+                            <td style="background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; font-weight:700; color:{{ $row['suara_pks'] > 0 ? '#92400e' : '#94a3b8' }}; font-size:0.95rem;">
                                 {{ $row['suara_pks'] > 0 ? number_format($row['suara_pks'], 0, ',', '.') : '—' }}
                             </td>
 
                             {{-- Suara PAN --}}
-                            <td style="background:{{ $row['suara_pan'] > 0 ? '#eff6ff' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; font-weight:700; color:{{ $row['suara_pan'] > 0 ? '#1e40af' : '#94a3b8' }}; font-size:0.95rem;">
+                            <td style="background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; font-weight:700; color:{{ $row['suara_pan'] > 0 ? '#1e40af' : '#94a3b8' }}; font-size:0.95rem;">
                                 {{ $row['suara_pan'] > 0 ? number_format($row['suara_pan'], 0, ',', '.') : '—' }}
                             </td>
 
                             {{-- PKS + PAN --}}
-                            <td style="background:{{ $pksSum > 0 ? '#f0fdf4' : $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; font-weight:800; color:{{ $pksSum > 0 ? '#122B5A' : '#94a3b8' }}; font-size:0.82rem;">
+                            <td style="background:{{ $bg }}; border-bottom:1px solid #e2e8f0; border-right:1px solid #e2e8f0; padding:7px 10px; text-align:right; font-weight:800; color:{{ $pksSum > 0 ? '#122B5A' : '#94a3b8' }}; font-size:0.82rem;">
                                 {{ $pksSum > 0 ? number_format($pksSum, 0, ',', '.') : '—' }}
                             </td>
 
