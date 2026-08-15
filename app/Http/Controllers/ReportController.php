@@ -108,4 +108,47 @@ class ReportController extends Controller
         
         return $pdf->download('laporan-peringkat-korwe-dpc.pdf');
     }
+
+    public function downloadSisirRwPdf(Request $request)
+    {
+        $scope = $this->accessScope();
+        
+        if (($scope['mode'] ?? 'global') !== 'dapil' && auth()->user()?->role !== 'admin_dpd' && ($scope['mode'] ?? 'global') !== 'dpd') {
+            abort(403, 'Akses ditolak. Fitur ini khusus untuk DPD.');
+        }
+
+        $tahun = $request->query('tahun', date('Y'));
+
+        $desas = TargetWilayah::select('id', 'kecamatan', 'desa')
+            ->orderBy('kecamatan')
+            ->orderBy('desa')
+            ->get();
+
+        $desaIds = $desas->pluck('id');
+        
+        $kegiatanCounts = \App\Models\KegiatanRw::whereIn('target_wilayah_id', $desaIds)
+            ->selectRaw('target_wilayah_id, count(*) as count')
+            ->groupBy('target_wilayah_id')
+            ->pluck('count', 'target_wilayah_id');
+
+        $data = [];
+        foreach ($desas as $desa) {
+            $kecamatan = $desa->kecamatan;
+            if (!isset($data[$kecamatan])) {
+                $data[$kecamatan] = [
+                    'kecamatan' => $kecamatan,
+                    'total_kegiatan' => 0,
+                ];
+            }
+            $terisi = $kegiatanCounts[$desa->id] ?? 0;
+            $data[$kecamatan]['total_kegiatan'] += $terisi;
+        }
+
+        $pdf = Pdf::loadView('pdf.monitoring-sisir-rw', [
+            'data' => $data,
+            'tahun' => $tahun,
+        ]);
+        
+        return $pdf->download('laporan-peringkat-sisir-rw-dpc.pdf');
+    }
 }

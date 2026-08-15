@@ -430,6 +430,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', \App\Livewire\BukuIndukRw\Index::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.index');
         Route::get('/download-pdf', [\App\Http\Controllers\ReportController::class, 'downloadKorwePdf'])->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.download-pdf');
         Route::get('/download-pdf-dpc', [\App\Http\Controllers\ReportController::class, 'downloadKorweDpcPdf'])->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.download-pdf-dpc');
+        Route::get('/download-pdf-sisir-rw', [\App\Http\Controllers\ReportController::class, 'downloadSisirRwPdf'])->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.download-pdf-sisir-rw');
         Route::get('/{dataRw}', \App\Livewire\BukuIndukRw\Detail::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.detail');
     });
 
