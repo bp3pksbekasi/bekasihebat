@@ -243,8 +243,37 @@ class ReportController extends Controller
             });
         }
 
+        $summary = [];
+        foreach ($rings as $ringIndex => $ringData) {
+            foreach ($ringData as $row) {
+                $afiliasi = $row['afiliasi'];
+                $calonLain = $row['calon_lain'];
+                
+                $namaCalon = $afiliasi;
+                if ($afiliasi === 'CALON LAIN') {
+                    $namaCalon = $calonLain ?: 'CALON LAIN (Belum Spesifik)';
+                }
+
+                if (!isset($summary[$namaCalon])) {
+                    $summary[$namaCalon] = [
+                        'nama_calon' => $namaCalon,
+                        'total_rw' => 0,
+                        'total_dpt' => 0
+                    ];
+                }
+                
+                $summary[$namaCalon]['total_rw'] += 1;
+                $summary[$namaCalon]['total_dpt'] += $row['dpt'];
+            }
+        }
+        
+        usort($summary, function($a, $b) {
+            return $b['total_dpt'] <=> $a['total_dpt'];
+        });
+
         $pdf = Pdf::loadView('pdf.pilkades-karangsatria-prioritas', [
             'rings' => $rings,
+            'summary' => $summary,
         ]);
         
         return $pdf->download('peta-prioritas-pilkades-karangsatria.pdf');

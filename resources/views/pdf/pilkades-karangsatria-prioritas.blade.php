@@ -116,5 +116,46 @@
         </div>
     @endforeach
 
+    <div style="page-break-inside: avoid; margin-top: 30px;">
+        <div class="ring-header" style="padding: 8px; margin-bottom: 10px; border: 1px solid #cbd5e1;">
+            RINGKASAN ESTIMASI DUKUNGAN BERDASARKAN AFILIASI RW
+        </div>
+        <table style="width: 70%; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th style="width:40%">Nama Calon / Afiliasi</th>
+                    <th style="width:30%">Total RW</th>
+                    <th style="width:30%">Total Estimasi DPT</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php 
+                    $grandTotalRw = 0;
+                    $grandTotalDpt = 0;
+                @endphp
+                @foreach($summary as $s)
+                    @php 
+                        $grandTotalRw += $s['total_rw'];
+                        $grandTotalDpt += $s['total_dpt'];
+                    @endphp
+                    <tr>
+                        <td style="font-weight:bold; color:{{ $s['nama_calon'] == 'UNO' ? '#166534' : ($s['nama_calon'] == 'NETRAL' || $s['nama_calon'] == 'BELUM DIKETAHUI' ? '#475569' : '#991b1b') }}">
+                            {{ $s['nama_calon'] }}
+                        </td>
+                        <td class="text-center" style="font-weight:bold;">{{ $s['total_rw'] }} RW</td>
+                        <td class="text-center" style="font-weight:bold;">{{ number_format($s['total_dpt'], 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr style="background:#f1f5f9; font-weight:bold;">
+                    <td class="text-right" style="padding-right: 15px; color:#475569;">TOTAL KESELURUHAN</td>
+                    <td class="text-center" style="color:#0D1B3D;">{{ $grandTotalRw }} RW</td>
+                    <td class="text-center" style="color:#0D1B3D;">{{ number_format($grandTotalDpt, 0, ',', '.') }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
 </body>
 </html>
