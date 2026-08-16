@@ -350,6 +350,7 @@
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
+                        <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:2px solid #94a3b8; padding:8px;"></td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#92400e; font-size:1rem;">{{ number_format($totalPks, 0, ',', '.') }}</td>
                         <td style="border-top:2px solid #94a3b8; border-right:1px solid #cbd5e1; padding:8px; text-align:right; color:#1e40af; font-size:1rem;">{{ number_format($totalPan, 0, ',', '.') }}</td>
