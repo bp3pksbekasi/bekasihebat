@@ -73,18 +73,24 @@
             <thead>
                 <tr>
                     <th style="width:10%">RW</th>
-                    <th style="width:25%">Afiliasi Saat Ini</th>
-                    <th style="width:20%">Est. DPT</th>
-                    <th style="width:20%">Suara PKS+PAN (2024)</th>
-                    <th style="width:25%">Catatan Tindakan</th>
+                    <th style="width:20%">Wilayah</th>
+                    <th style="width:20%">Afiliasi Saat Ini</th>
+                    <th style="width:15%">Est. DPT</th>
+                    <th style="width:15%">Suara PKS+PAN (2024)</th>
+                    <th style="width:20%">Catatan Tindakan</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($ringData as $row)
                     <tr>
                         <td class="text-center" style="font-weight:bold; font-size:12px;">{{ ltrim($row['rw'], '0') }}</td>
+                        <td class="text-center" style="font-size:11px;">{{ $row['wilayah'] }}</td>
                         <td class="text-center" style="font-weight:bold; color:{{ $row['afiliasi'] == 'UNO' ? '#166534' : ($row['afiliasi'] == 'CALON LAIN' ? '#991b1b' : '#475569') }}">
-                            {{ $row['afiliasi'] }}
+                            @if($row['afiliasi'] === 'CALON LAIN')
+                                {{ $row['calon_lain'] ?: 'CALON LAIN' }}
+                            @else
+                                {{ $row['afiliasi'] }}
+                            @endif
                         </td>
                         <td class="text-center" style="font-weight:bold;">{{ number_format($row['dpt'], 0, ',', '.') }}</td>
                         <td class="text-center">{{ number_format($row['pks_pan'], 0, ',', '.') }}</td>

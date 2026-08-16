@@ -211,6 +211,8 @@ class ReportController extends Controller
             $rwKey = (string) $i;
             $profilRw = $profilRws->get($rwKey);
             $afiliasi = $profilRw?->afiliasi_pilkades ?? '';
+            $calonLain = $profilRw?->afiliasi_calon_lain ?? '';
+            $namaWilayah = $profilRw?->nama_wilayah ?? '-';
 
             if ($afiliasi === 'UNO') {
                 $ring = 2;
@@ -226,9 +228,11 @@ class ReportController extends Controller
             
             $rings[$ring][] = [
                 'rw' => str_pad($i, 3, '0', STR_PAD_LEFT),
+                'wilayah' => $namaWilayah,
                 'dpt' => $dpt,
                 'pks_pan' => $pksPan,
-                'afiliasi' => $afiliasi ?: 'BELUM DIKETAHUI'
+                'afiliasi' => $afiliasi ?: 'BELUM DIKETAHUI',
+                'calon_lain' => $calonLain
             ];
         }
 
