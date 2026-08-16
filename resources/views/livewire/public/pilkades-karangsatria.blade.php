@@ -431,6 +431,7 @@
                                 <option value="RAHMAT">RAHMAT</option>
                                 <option value="EKO">EKO</option>
                                 <option value="MASPRI">MASPRI</option>
+                                <option value="TEGUH">TEGUH</option>
                             </select>
                         </div>
                     @elseif($formAfiliasi === 'UNO')
@@ -480,6 +481,7 @@
                                         <option value="RAHMAT">RAHMAT</option>
                                         <option value="EKO">EKO</option>
                                         <option value="MASPRI">MASPRI</option>
+                                        <option value="TEGUH">TEGUH</option>
                                     </select>
                                 </div>
                             @elseif($formFieldValue === 'UNO')
@@ -541,6 +543,7 @@
                                                         <option value="RAHMAT">RAHMAT</option>
                                                         <option value="EKO">EKO</option>
                                                         <option value="MASPRI">MASPRI</option>
+                                                        <option value="TEGUH">TEGUH</option>
                                                     </select>
                                                 </div>
                                             @endif
