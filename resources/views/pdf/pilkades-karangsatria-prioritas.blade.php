@@ -42,6 +42,9 @@
             $ringData = $rings[$ringIndex] ?? [];
             if (count($ringData) == 0) continue;
             
+            $totalDpt = array_sum(array_column($ringData, 'dpt'));
+            $totalPksPan = array_sum(array_column($ringData, 'pks_pan'));
+            
             $title = '';
             $desc = '';
             $titleClass = '';
@@ -62,49 +65,55 @@
                 $desc = "DPT Kecil (< 1.500) & Afiliasi Netral. Datangi hanya jika ada momentum (efisiensi).";
                 $titleClass = 'ring-4-title';
             }
+            
+            $desc .= " | Total Estimasi DPT: " . number_format($totalDpt, 0, ',', '.') . " | Total Suara PKS+PAN: " . number_format($totalPksPan, 0, ',', '.');
         @endphp
 
-        <div class="{{ $titleClass }}">
-            {{ $title }}
-            <span class="desc">{{ $desc }}</span>
-        </div>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th style="width:10%">RW</th>
-                    <th style="width:20%">Wilayah</th>
-                    <th style="width:20%">Afiliasi Saat Ini</th>
-                    <th style="width:15%">Est. DPT</th>
-                    <th style="width:15%">Suara PKS+PAN (2024)</th>
-                    <th style="width:20%">Catatan Tindakan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($ringData as $row)
+        <div style="page-break-inside: avoid; margin-bottom: 20px;">
+            <div class="{{ $titleClass }}">
+                {{ $title }}
+                <span class="desc">{{ $desc }}</span>
+            </div>
+            
+            <table style="margin-bottom: 0;">
+                <thead>
                     <tr>
-                        <td class="text-center" style="font-weight:bold; font-size:12px;">{{ ltrim($row['rw'], '0') }}</td>
-                        <td class="text-center" style="font-size:11px;">{{ $row['wilayah'] }}</td>
-                        <td class="text-center" style="font-weight:bold; color:{{ $row['afiliasi'] == 'UNO' ? '#166534' : ($row['afiliasi'] == 'CALON LAIN' ? '#991b1b' : '#475569') }}">
-                            @if($row['afiliasi'] === 'CALON LAIN')
-                                {{ $row['calon_lain'] ?: 'CALON LAIN' }}
-                            @else
-                                {{ $row['afiliasi'] }}
-                            @endif
-                        </td>
-                        <td class="text-center" style="font-weight:bold;">{{ number_format($row['dpt'], 0, ',', '.') }}</td>
-                        <td class="text-center">{{ number_format($row['pks_pan'], 0, ',', '.') }}</td>
-                        <td style="font-size:10px; color:#555;">
-                            @if($ringIndex == 1) Segera jadwalkan lobi kandidat.
-                            @elseif($ringIndex == 2) Bentuk Korte/Penggalang.
-                            @elseif($ringIndex == 3) Cari tokoh alternatif.
-                            @elseif($ringIndex == 4) Pantau via relawan lokal.
-                            @endif
-                        </td>
+                        <th style="width:10%">RW</th>
+                        <th style="width:20%">Wilayah</th>
+                        <th style="width:20%">Afiliasi Saat Ini</th>
+                        <th style="width:15%">Est. DPT</th>
+                        <th style="width:15%">Suara PKS+PAN (2024)</th>
+                        <th style="width:20%">Catatan</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($ringData as $row)
+                        <tr>
+                            <td class="text-center" style="font-weight:bold; font-size:12px;">{{ ltrim($row['rw'], '0') }}</td>
+                            <td class="text-center" style="font-size:11px;">{{ $row['wilayah'] }}</td>
+                            <td class="text-center" style="font-weight:bold; color:{{ $row['afiliasi'] == 'UNO' ? '#166534' : ($row['afiliasi'] == 'CALON LAIN' ? '#991b1b' : '#475569') }}">
+                                @if($row['afiliasi'] === 'CALON LAIN')
+                                    {{ $row['calon_lain'] ?: 'CALON LAIN' }}
+                                @else
+                                    {{ $row['afiliasi'] }}
+                                @endif
+                            </td>
+                            <td class="text-center" style="font-weight:bold;">{{ number_format($row['dpt'], 0, ',', '.') }}</td>
+                            <td class="text-center">{{ number_format($row['pks_pan'], 0, ',', '.') }}</td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr style="background:#f1f5f9; font-weight:bold;">
+                        <td colspan="3" class="text-right" style="padding-right: 15px; color:#475569;">TOTAL RING {{ $ringIndex }}</td>
+                        <td class="text-center" style="color:#0D1B3D;">{{ number_format($totalDpt, 0, ',', '.') }}</td>
+                        <td class="text-center" style="color:#0D1B3D;">{{ number_format($totalPksPan, 0, ',', '.') }}</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     @endforeach
 
 </body>
