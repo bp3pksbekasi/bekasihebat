@@ -50,6 +50,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'kader',
             'community_member',
             'dapil',
+            'kesekretariatan',
+            'sekum',
+            'bendum',
+            'ketua_dpd',
         ];
 
         // Create roles
