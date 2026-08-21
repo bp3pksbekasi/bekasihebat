@@ -190,7 +190,7 @@
                             <tbody>
                                 @forelse ($events as $event)
                                     @php $cfg = $event->status_config; @endphp
-                                    <tr style="border-bottom:0.5px solid #f1f5f9;">
+                                    <tr style="border-bottom:0.5px solid #f1f5f9;" wire:key="event-row-{{ $event->uuid }}">
                                         <td style="padding:12px;">
                                             <div style="font-weight:600;color:#1a1a1a;">{{ $event->judul }}</div>
                                             <div style="font-size:10px;color:#888;margin-top:4px;">PIC: {{ $event->pic_nama ?: '-' }}</div>
@@ -260,17 +260,19 @@
         </div>
     </div>
 
-    @if ($showDeleteConfirm)
-        <div style="position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:40;" wire:click="cancelDelete"></div>
-        <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;max-width:calc(100vw - 32px);background:white;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,0.16);z-index:50;padding:18px;">
-            <div style="font-size:15px;font-weight:600;color:#1a1a1a;">Hapus program?</div>
-            <div style="font-size:12px;color:#666;margin-top:6px;">Data program, approval, RAB, dan laporan terkait akan ikut terhapus.</div>
-            <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:8px;">
-                <button wire:click="cancelDelete" type="button" style="height:38px;padding:0 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;cursor:pointer;">Batal</button>
-                <button wire:click="deleteEvent" type="button" style="height:38px;padding:0 12px;border-radius:8px;border:none;background:#dc2626;color:white;cursor:pointer;">Hapus</button>
+    <div wire:key="delete-modal-container">
+        @if ($showDeleteConfirm)
+            <div style="position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:40;" wire:click="cancelDelete"></div>
+            <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;max-width:calc(100vw - 32px);background:white;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,0.16);z-index:50;padding:18px;">
+                <div style="font-size:15px;font-weight:600;color:#1a1a1a;">Hapus program?</div>
+                <div style="font-size:12px;color:#666;margin-top:6px;">Data program, approval, RAB, dan laporan terkait akan ikut terhapus.</div>
+                <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:8px;">
+                    <button wire:click="cancelDelete" type="button" style="height:38px;padding:0 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;cursor:pointer;">Batal</button>
+                    <button wire:click="deleteEvent" type="button" style="height:38px;padding:0 12px;border-radius:8px;border:none;background:#dc2626;color:white;cursor:pointer;">Hapus</button>
+                </div>
             </div>
-        </div>
-    @endif
+        @endif
+    </div>
 
     <style>
         .event-summary-grid-new {
