@@ -60,7 +60,8 @@ class MasterBidangTerbaruSeeder extends Seeder
                     'periode' => '2025-2030',
                     'is_active' => true,
                     'urutan' => $index + 1,
-                    // Keep existing color/icon if they exist, or set default empty.
+                    'icon' => '',
+                    'color' => '',
                 ]
             );
         }
