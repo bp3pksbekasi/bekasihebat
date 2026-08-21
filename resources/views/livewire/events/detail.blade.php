@@ -500,7 +500,30 @@
                                 </div>
                                 <div>
                                     <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Realisasi Anggaran (Rp)</label>
-                                    <input wire:model="reportRealisasiAnggaran" type="number" min="0" step="0.01" placeholder="Realisasi anggaran" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
+                                    <div x-data="{
+                                        raw: @entangle('reportRealisasiAnggaran'),
+                                        formatted: '',
+                                        init() {
+                                            this.format();
+                                            $watch('raw', val => this.format());
+                                        },
+                                        format() {
+                                            if (!this.raw && this.raw !== 0) { this.formatted = ''; return; }
+                                            let val = this.raw.toString().replace(/\D/g, '');
+                                            this.formatted = val ? 'Rp' + new Intl.NumberFormat('id-ID').format(val) : '';
+                                        },
+                                        update(e) {
+                                            let val = e.target.value.replace(/\D/g, '');
+                                            this.raw = val ? parseInt(val) : null;
+                                            this.format();
+                                            
+                                            // Set cursor position back correctly after format
+                                            let cursor = e.target.selectionStart;
+                                            this.$nextTick(() => { e.target.setSelectionRange(cursor, cursor); });
+                                        }
+                                    }">
+                                        <input type="text" x-model="formatted" @input="update" placeholder="Rp0" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
+                                    </div>
                                 </div>
                                 <div>
                                     <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Foto Dokumentasi</label>

@@ -344,7 +344,30 @@
                             
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Total Anggaran Biaya (Rp)</label>
-                                <input wire:model="totalAnggaran" type="number" placeholder="0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
+                                <div x-data="{
+                                    raw: @entangle('totalAnggaran'),
+                                    formatted: '',
+                                    init() {
+                                        this.format();
+                                        $watch('raw', val => this.format());
+                                    },
+                                    format() {
+                                        if (!this.raw && this.raw !== 0) { this.formatted = ''; return; }
+                                        let val = this.raw.toString().replace(/\D/g, '');
+                                        this.formatted = val ? 'Rp' + new Intl.NumberFormat('id-ID').format(val) : '';
+                                    },
+                                    update(e) {
+                                        let val = e.target.value.replace(/\D/g, '');
+                                        this.raw = val ? parseInt(val) : null;
+                                        this.format();
+                                        
+                                        // Set cursor position back correctly after format
+                                        let cursor = e.target.selectionStart;
+                                        this.$nextTick(() => { e.target.setSelectionRange(cursor, cursor); });
+                                    }
+                                }">
+                                    <input type="text" x-model="formatted" @input="update" placeholder="Rp0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
+                                </div>
                             </div>
 
                             <div>
@@ -547,7 +570,26 @@
                             </div>
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Realisasi anggaran (Rp)</label>
-                                <input wire:model="evaluasiRealisasiAnggaran" type="number" min="0" placeholder="0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
+                                <div x-data="{
+                                    raw: @entangle('evaluasiRealisasiAnggaran'),
+                                    formatted: '',
+                                    init() {
+                                        this.format();
+                                        $watch('raw', val => this.format());
+                                    },
+                                    format() {
+                                        if (!this.raw && this.raw !== 0) { this.formatted = ''; return; }
+                                        let val = this.raw.toString().replace(/\D/g, '');
+                                        this.formatted = val ? 'Rp' + new Intl.NumberFormat('id-ID').format(val) : '';
+                                    },
+                                    update(e) {
+                                        let val = e.target.value.replace(/\D/g, '');
+                                        this.raw = val ? parseInt(val) : null;
+                                        this.format();
+                                    }
+                                }">
+                                    <input type="text" x-model="formatted" @input="update" placeholder="Rp0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
+                                </div>
                             </div>
                         </div>
                         <div>
