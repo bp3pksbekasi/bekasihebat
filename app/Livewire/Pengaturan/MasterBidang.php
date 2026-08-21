@@ -29,6 +29,11 @@ class MasterBidang extends Component
     public string $fColor = '';
     public string $fPicNama = '';
     public string $fPicHp = '';
+    public string $fKabid = '';
+    public string $fNohpkabid = '';
+    public string $fSekbid = '';
+    public string $fNohpsekbid = '';
+    public string $fPeriode = '';
     public int $fUrutan = 0;
 
     public function mount(): void
@@ -77,6 +82,11 @@ class MasterBidang extends Component
         $this->fColor = $bidang->color ?? '';
         $this->fPicNama = $bidang->pic_nama ?? '';
         $this->fPicHp = $bidang->pic_hp ?? '';
+        $this->fKabid = $bidang->kabid ?? '';
+        $this->fNohpkabid = $bidang->nohpkabid ?? '';
+        $this->fSekbid = $bidang->sekbid ?? '';
+        $this->fNohpsekbid = $bidang->nohpsekbid ?? '';
+        $this->fPeriode = $bidang->periode ?? '';
         $this->fUrutan = $bidang->urutan ?? 0;
 
         $this->showForm = true;
@@ -98,6 +108,11 @@ class MasterBidang extends Component
         $this->fColor = '';
         $this->fPicNama = '';
         $this->fPicHp = '';
+        $this->fKabid = '';
+        $this->fNohpkabid = '';
+        $this->fSekbid = '';
+        $this->fNohpsekbid = '';
+        $this->fPeriode = '';
         $this->fUrutan = 0;
     }
 
@@ -109,6 +124,11 @@ class MasterBidang extends Component
             'fColor' => ['nullable', 'string', 'max:50'],
             'fPicNama' => ['nullable', 'string', 'max:255'],
             'fPicHp' => ['nullable', 'string', 'max:50'],
+            'fKabid' => ['nullable', 'string', 'max:255'],
+            'fNohpkabid' => ['nullable', 'string', 'max:50'],
+            'fSekbid' => ['nullable', 'string', 'max:255'],
+            'fNohpsekbid' => ['nullable', 'string', 'max:50'],
+            'fPeriode' => ['nullable', 'string', 'max:50'],
             'fUrutan' => ['required', 'integer', 'min:0'],
         ]);
 
@@ -119,6 +139,11 @@ class MasterBidang extends Component
             'color' => $validated['fColor'],
             'pic_nama' => $validated['fPicNama'],
             'pic_hp' => $validated['fPicHp'],
+            'kabid' => $validated['fKabid'],
+            'nohpkabid' => $validated['fNohpkabid'],
+            'sekbid' => $validated['fSekbid'],
+            'nohpsekbid' => $validated['fNohpsekbid'],
+            'periode' => $validated['fPeriode'],
             'urutan' => $validated['fUrutan'],
         ];
 

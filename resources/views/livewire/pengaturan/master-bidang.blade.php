@@ -279,6 +279,103 @@
                     </div>
                 </div>
 
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Nama Kabid</label>
+                        <input
+                            wire:model="fKabid"
+                            type="text"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fKabid') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">No. HP Kabid</label>
+                        <input
+                            wire:model="fNohpkabid"
+                            type="text"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fNohpkabid') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Nama Sekbid</label>
+                        <input
+                            wire:model="fSekbid"
+                            type="text"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fSekbid') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">No. HP Sekbid</label>
+                        <input
+                            wire:model="fNohpsekbid"
+                            type="text"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fNohpsekbid') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Periode</label>
+                    <input
+                        wire:model="fPeriode"
+                        type="text"
+                        placeholder="misal: 2024-2029"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                    @error('fPeriode') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                </div>
                 <div>
                     <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Urutan Tampil <span style="color:#ef4444;">*</span></label>
                     <input
