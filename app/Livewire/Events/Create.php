@@ -64,6 +64,8 @@ class Create extends Component
     public string $totalAnggaran = '';
 
     public string $targetProgram = '';
+    
+    public string $requirements = '';
 
     public string $budgetNotes = '';
 
