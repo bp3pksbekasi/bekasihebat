@@ -93,7 +93,7 @@ class Create extends Component
             $this->prefillFromKegiatan($this->fromKegiatanRwId);
         }
 
-        $this->budgetItems = [['item' => '', 'qty' => 1, 'satuan' => 'Pcs', 'harga_satuan' => 0, 'subtotal' => 0, 'keterangan' => '']];
+        $this->budgetItems = [];
     }
 
     public function addBudgetItem(): void
