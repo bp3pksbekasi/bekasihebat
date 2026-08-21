@@ -174,7 +174,7 @@
             </div>
 
             {{-- Form Body --}}
-            <div style="padding:20px;display:grid;gap:20px;flex:1;">
+            <div style="padding:20px;display:grid;gap:16px;align-content:start;flex:1;">
                 <div>
                     <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Nama Bidang <span style="color:#ef4444;">*</span></label>
                     <input
