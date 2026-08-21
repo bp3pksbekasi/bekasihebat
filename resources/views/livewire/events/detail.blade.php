@@ -178,7 +178,7 @@
             @php
                 $isBidangDpd = $event->org_level === 'dpd' && !empty($event->bidang_dpd_id);
             @endphp
-            <div style="display:grid;gap:14px;{{ $isBidangDpd ? 'grid-template-columns:minmax(0,1.05fr) minmax(360px,0.95fr);' : 'grid-template-columns:minmax(0,1fr);' }}" class="{{ $isBidangDpd ? 'event-detail-top-grid' : '' }}">
+            <div style="display:grid;gap:14px;grid-template-columns:minmax(0,1fr);" class="{{ $isBidangDpd ? 'event-detail-top-grid' : '' }}">
                 
                 <script>
                     console.log("DEBUG EVENT", {
@@ -240,7 +240,8 @@
                 </div>
                 @endif
 
-                @if ($event->status !== \App\Models\Event::STATUS_MENUNGGU)
+                {{-- RAB section completely hidden as requested --}}
+                {{-- @if ($event->status !== \App\Models\Event::STATUS_MENUNGGU)
                 <div style="border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
                         <div>
@@ -283,7 +284,7 @@
                         </button>
                     </div>
                 </div>
-                @endif
+                @endif --}}
             </div>
 
             @if ($event->status !== \App\Models\Event::STATUS_MENUNGGU)
