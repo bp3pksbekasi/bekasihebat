@@ -479,9 +479,18 @@
                                 <textarea wire:model="reportTindakLanjut" rows="3" placeholder="Tindak lanjut" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
                             </div>
                             <div style="display:grid;gap:10px;">
-                                <input wire:model="reportPesertaHadir" type="number" min="0" placeholder="Peserta hadir" style="height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
-                                <input wire:model="reportRealisasiAnggaran" type="number" min="0" step="0.01" placeholder="Realisasi anggaran" style="height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
-                                <input wire:model="reportFoto" type="file" multiple accept="image/*" style="font-size:12px;width:100%;">
+                                <div>
+                                    <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Jumlah Peserta Hadir</label>
+                                    <input wire:model="reportPesertaHadir" type="number" min="0" placeholder="Peserta hadir" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Realisasi Anggaran (Rp)</label>
+                                    <input wire:model="reportRealisasiAnggaran" type="number" min="0" step="0.01" placeholder="Realisasi anggaran" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Foto Dokumentasi</label>
+                                    <input wire:model="reportFoto" type="file" multiple accept="image/*" style="font-size:12px;width:100%;">
+                                </div>
                                 @if ($reportExistingFoto !== [])
                                     <div style="display:flex;flex-wrap:wrap;gap:8px;">
                                         @foreach ($reportExistingFoto as $foto)
