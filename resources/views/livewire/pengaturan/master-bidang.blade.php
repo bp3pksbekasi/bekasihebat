@@ -44,11 +44,13 @@
             <table class="min-w-full divide-y divide-zinc-200">
                 <thead class="bg-zinc-50">
                     <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-zinc-900 sm:pl-6 w-16">Urutan</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold text-zinc-900">Nama Bidang</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold text-zinc-900">Icon / Warna</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold text-zinc-900">PIC / Ketua</th>
-                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 w-24">
+                        <th scope="col" class="py-3.5 pl-6 pr-3 text-left text-xs font-semibold text-zinc-900 w-16">Urutan</th>
+                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Nama Bidang</th>
+                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Kabid</th>
+                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Sekbid</th>
+                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Periode</th>
+                        <th scope="col" class="px-6 py-3.5 text-center text-xs font-semibold text-zinc-900 w-24">Status</th>
+                        <th scope="col" class="relative py-3.5 pl-3 pr-6 w-24">
                             <span class="sr-only">Aksi</span>
                         </th>
                     </tr>
@@ -56,52 +58,69 @@
                 <tbody class="divide-y divide-zinc-200 bg-white">
                     @forelse ($this->bidangList as $bidang)
                         <tr>
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-zinc-900 sm:pl-6 text-center">
+                            <td class="whitespace-nowrap py-4 pl-6 pr-3 text-sm font-medium text-zinc-900 text-center">
                                 {{ $bidang->urutan }}
                             </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-zinc-900">
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-900">
                                 <div class="font-medium">{{ $bidang->nama }}</div>
                                 <div class="text-xs text-zinc-500 mt-0.5">{{ $bidang->slug }}</div>
                             </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-zinc-500">
-                                <div class="flex items-center gap-2">
-                                    @if($bidang->icon)
-                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg" style="background:{{ $bidang->color ?: '#f3f4f6' }}; color:{{ $bidang->color ? '#fff' : '#6b7280' }}">
-                                            <i class="ti ti-{{ $bidang->icon }} text-lg"></i>
-                                        </div>
-                                    @else
-                                        -
-                                    @endif
-                                    <span class="text-xs">{{ $bidang->color ?: '-' }}</span>
-                                </div>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-zinc-500">
-                                @if($bidang->pic_nama)
-                                    <div class="font-medium text-zinc-900">{{ $bidang->pic_nama }}</div>
-                                    <div class="text-xs">{{ $bidang->pic_hp ?? '-' }}</div>
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-500">
+                                @if($bidang->kabid)
+                                    <div class="font-medium text-zinc-900">{{ $bidang->kabid }}</div>
+                                    <div class="text-xs">{{ $bidang->nohpkabid ?? '-' }}</div>
                                 @else
                                     <span class="text-zinc-400 italic">Belum diatur</span>
                                 @endif
                             </td>
-                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-500">
+                                @if($bidang->sekbid)
+                                    <div class="font-medium text-zinc-900">{{ $bidang->sekbid }}</div>
+                                    <div class="text-xs">{{ $bidang->nohpsekbid ?? '-' }}</div>
+                                @else
+                                    <span class="text-zinc-400 italic">-</span>
+                                @endif
+                            </td>
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-500">
+                                {{ $bidang->periode ?: '-' }}
+                            </td>
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-center">
+                                @if($bidang->is_active)
+                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Aktif</span>
+                                @else
+                                    <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">Inaktif</span>
+                                @endif
+                            </td>
+                            <td class="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-2">
                                     <button wire:click="openFormEdit('{{ $bidang->id }}')" class="text-indigo-600 hover:text-indigo-900 p-1 rounded-md hover:bg-indigo-50" title="Edit">
                                         <i class="ti ti-edit text-lg"></i>
                                     </button>
-                                    <button
-                                        wire:click="deactivateBidang('{{ $bidang->id }}')"
-                                        wire:confirm="Nonaktifkan bidang '{{ addslashes($bidang->nama) }}'?\n\nBidang akan disembunyikan dari daftar. Data tidak dihapus permanen."
-                                        class="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50"
-                                        title="Nonaktifkan"
-                                    >
-                                        <i class="ti ti-trash text-lg"></i>
-                                    </button>
+                                    @if($bidang->is_active)
+                                        <button
+                                            wire:click="toggleActive('{{ $bidang->id }}')"
+                                            wire:confirm="Nonaktifkan bidang '{{ addslashes($bidang->nama) }}'?\n\nBidang akan dinonaktifkan."
+                                            class="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50"
+                                            title="Nonaktifkan"
+                                        >
+                                            <i class="ti ti-trash text-lg"></i>
+                                        </button>
+                                    @else
+                                        <button
+                                            wire:click="toggleActive('{{ $bidang->id }}')"
+                                            wire:confirm="Aktifkan kembali bidang '{{ addslashes($bidang->nama) }}'?"
+                                            class="text-green-600 hover:text-green-900 p-1 rounded-md hover:bg-green-50"
+                                            title="Aktifkan"
+                                        >
+                                            <i class="ti ti-refresh text-lg"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-10 text-center text-sm text-zinc-500">
+                            <td colspan="7" class="py-10 text-center text-sm text-zinc-500">
                                 Belum ada data bidang.
                             </td>
                         </tr>

@@ -44,10 +44,10 @@ class MasterBidang extends Component
     public function getBidangListProperty(): LengthAwarePaginator
     {
         return BidangDpd::query()
-            ->where('is_active', true)
             ->when($this->search !== '', function (Builder $query): void {
                 $query->where('nama', 'like', '%' . $this->search . '%')
-                    ->orWhere('pic_nama', 'like', '%' . $this->search . '%');
+                    ->orWhere('kabid', 'like', '%' . $this->search . '%')
+                    ->orWhere('sekbid', 'like', '%' . $this->search . '%');
             })
             ->orderBy('urutan')
             ->orderBy('nama')
@@ -158,14 +158,14 @@ class MasterBidang extends Component
         $this->closeForm();
     }
 
-    public function deactivateBidang(string $id): void
+    public function toggleActive(string $id): void
     {
         $bidang = BidangDpd::query()->find($id);
         if ($bidang) {
-            $bidang->update(['is_active' => false]);
+            $bidang->update(['is_active' => !$bidang->is_active]);
+            $status = $bidang->is_active ? 'diaktifkan' : 'dinonaktifkan';
+            session()->flash('message', "Bidang berhasil $status.");
         }
-
-        session()->flash('message', 'Bidang berhasil dinonaktifkan.');
     }
 
     public function render()
