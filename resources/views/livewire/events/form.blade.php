@@ -101,22 +101,22 @@
                 <div x-show="infoStep === 1">
                     <div style="display:grid;gap:14px;">
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Nama Program *</label>
-                            <input wire:model="judul" type="text" placeholder="Contoh: Pengajian RW 08" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Nama Program *</label>
+                            <input wire:model="judul" type="text" placeholder="Contoh: Pengajian RW 08" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                             @error('judul') <div style="font-size:10px;color:#dc2626;margin-top:3px;">{{ $message }}</div> @enderror
                         </div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Jenis program *</label>
-                                <select wire:model="jenis" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Jenis program *</label>
+                                <select wire:model="jenis" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                                     @foreach(\App\Models\Event::JENIS_EVENT as $key => $label)
                                         <option value="{{ $key }}">{{ $label }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Target program</label>
-                                <select wire:model="targetProgram" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Target program</label>
+                                <select wire:model="targetProgram" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                                     <option value="">- Pilih -</option>
                                     <option value="penambahan_anggota">Penambahan Anggota</option>
                                     <option value="pembinaan_internal">Pembinaan Internal</option>
@@ -125,12 +125,12 @@
                             </div>
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Deskripsi</label>
-                            <textarea wire:model="deskripsi" rows="5" placeholder="Agenda, tujuan, target peserta..." style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Deskripsi</label>
+                            <textarea wire:model="deskripsi" rows="5" placeholder="Agenda, tujuan, target peserta..." style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:14px;color:#0f172a;resize:vertical;"></textarea>
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Persyaratan peserta (opsional)</label>
-                            <textarea wire:model="requirements" rows="3" placeholder="Contoh: Warga RW 08, membawa KTP, dll" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Persyaratan peserta (opsional)</label>
+                            <textarea wire:model="requirements" rows="3" placeholder="Contoh: Warga RW 08, membawa KTP, dll" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:14px;color:#0f172a;resize:vertical;"></textarea>
                         </div>
                     </div>
                     <div style="display:flex;justify-content:flex-end;margin-top:24px;padding-top:16px;border-top:0.5px solid #e5e5e5;">
@@ -142,8 +142,8 @@
                 <div x-show="infoStep === 2" style="display:none;">
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
                         <div style="grid-column: span 2;">
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Level penyelenggara *</label>
-                            <select wire:model="orgLevel" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Level penyelenggara *</label>
+                            <select wire:model="orgLevel" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                                 @foreach($this->orgLevelOptions as $k => $v)
                                     <option value="{{ $k }}">{{ $v }}</option>
                                 @endforeach
@@ -151,8 +151,8 @@
                         </div>
                         @if(isset($orgLevel) && $orgLevel === 'dpd')
                         <div style="grid-column: span 2;">
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Bidang DPD (opsional)</label>
-                            <select wire:model="bidangDpdId" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Bidang DPD (opsional)</label>
+                            <select wire:model="bidangDpdId" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                                 <option value="">- Pilih Bidang -</option>
                                 @foreach($this->bidangOptions as $b)
                                     <option value="{{ $b->id }}">{{ $b->nama }}</option>
@@ -161,20 +161,20 @@
                         </div>
                         @endif
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Penyelenggara</label>
-                            <input wire:model="penyelenggara" type="text" placeholder="DPRa / Tim Lapangan" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Penyelenggara</label>
+                            <input wire:model="penyelenggara" type="text" placeholder="DPRa / Tim Lapangan" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">PIC nama</label>
-                            <input wire:model="picNama" type="text" placeholder="Nama PIC" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">PIC nama</label>
+                            <input wire:model="picNama" type="text" placeholder="Nama PIC" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">PIC HP</label>
-                            <input wire:model="picHp" type="text" placeholder="08xxxxxxxxxx" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">PIC HP</label>
+                            <input wire:model="picHp" type="text" placeholder="08xxxxxxxxxx" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Pembicara (opsional)</label>
-                            <input wire:model="speakers" type="text" placeholder="Nama ustadz / narasumber" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Pembicara (opsional)</label>
+                            <input wire:model="speakers" type="text" placeholder="Nama ustadz / narasumber" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                         </div>
                     </div>
                     <div style="display:flex;justify-content:space-between;margin-top:24px;padding-top:16px;border-top:0.5px solid #e5e5e5;">
@@ -188,36 +188,36 @@
                     <div style="display:grid;gap:14px;">
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Tanggal mulai *</label>
-                                <input wire:model="tanggalMulai" type="datetime-local" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Tanggal mulai *</label>
+                                <input wire:model="tanggalMulai" type="datetime-local" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                             </div>
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Tanggal selesai</label>
-                                <input wire:model="tanggalSelesai" type="datetime-local" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Tanggal selesai</label>
+                                <input wire:model="tanggalSelesai" type="datetime-local" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                             </div>
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Alamat lengkap *</label>
-                            <input wire:model="lokasi" type="text" placeholder="Nama tempat / alamat" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Alamat lengkap *</label>
+                            <input wire:model="lokasi" type="text" placeholder="Nama tempat / alamat" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                         </div>
                         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Dapil</label>
-                                <select wire:model.live="lokasiDapil" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:12px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Dapil</label>
+                                <select wire:model.live="lokasiDapil" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:14px;color:#0f172a;">
                                     <option value="">- Dapil -</option>
                                     @foreach($this->dapilOptions as $d) <option value="{{ $d }}">{{ $d }}</option> @endforeach
                                 </select>
                             </div>
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Kecamatan</label>
-                                <select wire:model.live="lokasiKecamatan" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:12px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Kecamatan</label>
+                                <select wire:model.live="lokasiKecamatan" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:14px;color:#0f172a;">
                                     <option value="">- Kecamatan -</option>
                                     @foreach($this->kecamatanOptions as $k) <option value="{{ $k }}">{{ $k }}</option> @endforeach
                                 </select>
                             </div>
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Desa</label>
-                                <select wire:model="lokasiDesa" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:12px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Desa</label>
+                                <select wire:model="lokasiDesa" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:14px;color:#0f172a;">
                                     <option value="">- Desa -</option>
                                     @foreach($this->desaOptions as $d) <option value="{{ $d }}">{{ $d }}</option> @endforeach
                                 </select>
@@ -225,12 +225,12 @@
                         </div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Kapasitas</label>
-                                <input wire:model="kapasitas" type="number" min="0" placeholder="0 = unlimited" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Kapasitas</label>
+                                <input wire:model="kapasitas" type="number" min="0" placeholder="0 = unlimited" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                             </div>
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Cover image</label>
-                                <input wire:model="coverImage" type="file" accept="image/*" style="font-size:12px;width:100%;padding-top:8px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Cover image</label>
+                                <input wire:model="coverImage" type="file" accept="image/*" style="font-size:14px;width:100%;color:#0f172a;padding-top:8px;">
                             </div>
                         </div>
                         @if(!empty($existingCover))
@@ -260,7 +260,7 @@
                 {{-- RAB --}}
                 <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                        <div style="font-size:10px;color:#fe5000;font-weight:500;letter-spacing:.8px;text-transform:uppercase;">Rencana Anggaran Biaya (RAB)</div>
+                        <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;">Rencana Anggaran Biaya (RAB)</div>
                         <button type="button" wire:click="addBudgetItem" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;background:#fe5000;color:white;font-size:11px;border:none;cursor:pointer;">
                             <i class="ti ti-plus" style="font-size:12px;"></i> Tambah item
                         </button>
@@ -289,19 +289,19 @@
                                 @foreach($budgetItems as $i => $bi)
                                 <tr style="border-bottom:0.5px solid #f0f0f0;">
                                     <td style="padding:6px 8px;">
-                                        <input wire:model="budgetItems.{{ $i }}.item" type="text" placeholder="Nama item" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:12px;">
+                                        <input wire:model="budgetItems.{{ $i }}.item" type="text" placeholder="Nama item" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:13px;color:#0f172a;">
                                     </td>
                                     <td style="padding:6px 8px;">
-                                        <input wire:model="budgetItems.{{ $i }}.kategori" type="text" placeholder="ATK / Konsumsi / dll" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:12px;">
+                                        <input wire:model="budgetItems.{{ $i }}.kategori" type="text" placeholder="ATK / Konsumsi / dll" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:13px;color:#0f172a;">
                                     </td>
                                     <td style="padding:6px 8px;">
-                                        <input wire:model="budgetItems.{{ $i }}.qty" type="number" min="1" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:12px;text-align:center;">
+                                        <input wire:model="budgetItems.{{ $i }}.qty" type="number" min="1" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:13px;color:#0f172a;text-align:center;">
                                     </td>
                                     <td style="padding:6px 8px;">
-                                        <input wire:model="budgetItems.{{ $i }}.satuan" type="text" placeholder="pcs" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 6px;font-size:12px;">
+                                        <input wire:model="budgetItems.{{ $i }}.satuan" type="text" placeholder="pcs" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 6px;font-size:13px;color:#0f172a;">
                                     </td>
                                     <td style="padding:6px 8px;">
-                                        <input wire:model="budgetItems.{{ $i }}.harga_satuan" type="number" min="0" placeholder="0" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:12px;text-align:right;">
+                                        <input wire:model="budgetItems.{{ $i }}.harga_satuan" type="number" min="0" placeholder="0" style="width:100%;height:32px;border-radius:6px;border:0.5px solid #d4d4d8;padding:0 8px;font-size:13px;color:#0f172a;text-align:right;">
                                     </td>
                                     <td style="padding:6px 8px;text-align:right;color:#666;">
                                         Rp {{ number_format(($bi['qty'] ?? 1) * ($bi['harga_satuan'] ?? 0), 0, ',', '.') }}
@@ -331,15 +331,15 @@
                 {{-- Kanan: Info persiapan --}}
                 <div style="display:grid;gap:12px;align-content:start;">
                     <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
-                        <div style="font-size:10px;color:#fe5000;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;">Info persiapan</div>
+                        <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Info persiapan</div>
                         <div style="display:grid;gap:10px;">
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Sumber dana</label>
-                                <input wire:model="fundingSource" type="text" placeholder="Iuran / Sponsor / DPD / Hibah" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Sumber dana</label>
+                                <input wire:model="fundingSource" type="text" placeholder="Iuran / Sponsor / DPD / Hibah" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                             </div>
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Catatan anggaran</label>
-                                <textarea wire:model="budgetNotes" rows="3" placeholder="Catatan tambahan terkait anggaran" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Catatan anggaran</label>
+                                <textarea wire:model="budgetNotes" rows="3" placeholder="Catatan tambahan terkait anggaran" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:14px;color:#0f172a;resize:vertical;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -353,17 +353,17 @@
                 
                 {{-- Data Pelaksanaan --}}
                 <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
-                    <div style="font-size:10px;color:#fe5000;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;">Data pelaksanaan</div>
+                    <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Data pelaksanaan</div>
                     <div style="display:grid;gap:12px;">
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Jumlah peserta hadir</label>
-                            <input wire:model="pesertaHadir" type="number" min="0" placeholder="0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
-                            <p style="font-size:11px;color:#aaa;margin-top:4px;">Isi setelah event selesai dilaksanakan.</p>
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Jumlah peserta hadir</label>
+                            <input wire:model="pesertaHadir" type="number" min="0" placeholder="0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
+                            <p style="font-size:12px;color:#52525b;margin-top:4px;">Isi setelah event selesai dilaksanakan.</p>
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Foto dokumentasi (opsional)</label>
-                            <input wire:model="dokFoto" type="file" accept="image/*,video/*" multiple style="font-size:12px;width:100%;">
-                            <p style="font-size:11px;color:#aaa;margin-top:4px;">Format: JPG, PNG, MP4. Bisa pilih beberapa file.</p>
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Foto dokumentasi (opsional)</label>
+                            <input wire:model="dokFoto" type="file" accept="image/*,video/*" multiple style="font-size:14px;width:100%;color:#0f172a;">
+                            <p style="font-size:12px;color:#52525b;margin-top:4px;">Format: JPG, PNG, MP4. Bisa pilih beberapa file.</p>
                         </div>
                         <div style="padding:12px;border-radius:8px;background:#fff7ed;border:0.5px solid #fed7aa;">
                             <p style="font-size:12px;color:#92400e;">
@@ -376,29 +376,29 @@
 
                 {{-- Evaluasi & Laporan --}}
                 <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
-                    <div style="font-size:10px;color:#fe5000;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;">Evaluasi & laporan</div>
+                    <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Evaluasi & laporan</div>
                     <div style="display:grid;gap:12px;">
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Penilaian acara</label>
-                                <select wire:model="evaluasiRating" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Penilaian acara</label>
+                                <select wire:model="evaluasiRating" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                                     <option value="">- Pilih -</option>
                                     <option value="sesuai_target">✅ Sesuai target</option>
                                     <option value="kurang">⚠ Kurang / perlu perbaikan</option>
                                 </select>
                             </div>
                             <div>
-                                <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Realisasi anggaran (Rp)</label>
-                                <input wire:model="evaluasiRealisasiAnggaran" type="number" min="0" placeholder="0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:13px;">
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Realisasi anggaran (Rp)</label>
+                                <input wire:model="evaluasiRealisasiAnggaran" type="number" min="0" placeholder="0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                             </div>
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Ringkasan hasil kegiatan</label>
-                            <textarea wire:model="evaluasiRingkasan" rows="4" placeholder="Ceritakan jalannya acara, pencapaian, dan hal-hal menonjol..." style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Ringkasan hasil kegiatan</label>
+                            <textarea wire:model="evaluasiRingkasan" rows="4" placeholder="Ceritakan jalannya acara, pencapaian, dan hal-hal menonjol..." style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:14px;color:#0f172a;resize:vertical;"></textarea>
                         </div>
                         <div>
-                            <label style="font-size:11px;color:#666;display:block;margin-bottom:5px;">Evaluasi & perbaikan ke depan</label>
-                            <textarea wire:model="evaluasiCatatan" rows="3" placeholder="Apa yang perlu diperbaiki untuk event berikutnya?" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Evaluasi & perbaikan ke depan</label>
+                            <textarea wire:model="evaluasiCatatan" rows="3" placeholder="Apa yang perlu diperbaiki untuk event berikutnya?" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:14px;color:#0f172a;resize:vertical;"></textarea>
                         </div>
                         <div style="padding:12px;border-radius:8px;background:#f0f9ff;border:0.5px solid #bae6fd;">
                             <p style="font-size:12px;color:#0369a1;">
