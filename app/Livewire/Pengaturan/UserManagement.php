@@ -192,7 +192,7 @@ class UserManagement extends Component
 
     public function ubahRole(int $userId, string $newRole): void
     {
-        abort_unless(in_array($newRole, [User::ROLE_ADMIN, User::ROLE_BIDANG, User::ROLE_KADER, User::ROLE_DPC, User::ROLE_DPRA, User::ROLE_DAPIL], true), 422);
+        abort_unless(in_array($newRole, [User::ROLE_ADMIN, User::ROLE_BIDANG, User::ROLE_KADER, User::ROLE_DPC, User::ROLE_DPRA, User::ROLE_DAPIL, User::ROLE_KESEKRETARIATAN, User::ROLE_SEKUM, User::ROLE_BENDUM, User::ROLE_KETUA_DPD], true), 422);
 
         $user = User::query()->findOrFail($userId);
         $before = $user->role;
@@ -375,7 +375,7 @@ class UserManagement extends Component
             'fNia' => ['nullable', 'regex:/^\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{4}$/', Rule::unique('users', 'nia')],
             'fPassword' => ['required', 'string', 'min:6'],
             'fPasswordConfirmation' => ['required', 'same:fPassword'],
-            'fRole' => ['required', Rule::in([User::ROLE_ADMIN, User::ROLE_BIDANG, User::ROLE_KADER, User::ROLE_DPC, User::ROLE_DPRA, User::ROLE_DAPIL])],
+            'fRole' => ['required', Rule::in([User::ROLE_ADMIN, User::ROLE_BIDANG, User::ROLE_KADER, User::ROLE_DPC, User::ROLE_DPRA, User::ROLE_DAPIL, User::ROLE_KESEKRETARIATAN, User::ROLE_SEKUM, User::ROLE_BENDUM, User::ROLE_KETUA_DPD])],
             'fBidangSlug' => ['nullable', Rule::in(array_keys(User::BIDANG_OPTIONS))],
             'fStatus' => ['required', Rule::in(['aktif', 'nonaktif'])],
         ], [
