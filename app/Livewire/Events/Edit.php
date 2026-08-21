@@ -57,6 +57,7 @@ class Edit extends Component
 
     public string $speakers = '';
     public string $fundingSource = '';
+    public string $totalAnggaran = '';
     public string $targetProgram = '';
     public string $requirements = '';
     public string $budgetNotes = '';
@@ -98,6 +99,7 @@ class Edit extends Component
 
         $this->speakers = (string)($event->speakers ?? '');
         $this->fundingSource = (string)($event->funding_source ?? '');
+        $this->totalAnggaran = (string)($event->total_anggaran ?? 0);
         $this->targetProgram = (string)($event->target_program ?? '');
         $this->requirements = (string)($event->requirements ?? '');
         $this->budgetNotes = (string)($event->budget_notes ?? '');
@@ -280,6 +282,10 @@ class Edit extends Component
             'picNama' => ['nullable', 'string', 'max:255'],
             'picHp' => ['nullable', 'string', 'max:255'],
             'coverImage' => ['nullable', 'image', 'max:4096'],
+            'speakers' => ['nullable', 'string'],
+            'fundingSource' => ['nullable', 'string'],
+            'totalAnggaran' => ['nullable', 'numeric'],
+            'targetProgram' => ['nullable', 'string', 'max:255'],
             'dokumenPermohonanPencairan' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
             'dokumenProposal' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
             'dokumenDpa' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
@@ -361,6 +367,7 @@ class Edit extends Component
             'max_participants' => (int) ($validated['kapasitas'] ?? 0),
             'speakers' => $this->speakers !== '' ? $this->speakers : null,
             'funding_source' => $this->fundingSource !== '' ? $this->fundingSource : null,
+            'total_anggaran' => $this->totalAnggaran ?: 0,
             'target_program' => $this->targetProgram !== '' ? $this->targetProgram : null,
             'requirements' => $this->requirements !== '' ? $this->requirements : null,
             'budget_notes' => $this->budgetNotes !== '' ? $this->budgetNotes : null,

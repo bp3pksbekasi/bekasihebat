@@ -96,6 +96,7 @@ class Event extends Model
         'target_program',
         'requirements',
         'budget_notes',
+        'total_anggaran',
         'is_active',
         'dokumen_permohonan_pencairan',
         'dokumen_proposal',

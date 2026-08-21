@@ -261,8 +261,8 @@
         <div x-show="tab==='persiapan'" style="display:none;">
             <div style="display:grid;grid-template-columns:1fr;gap:14px;" class="event-form-grid">
 
-                {{-- RAB --}}
-                <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
+                {{-- RAB YANG LAMA DI-HIDE --}}
+                <div style="display:none;background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
                         <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;">Rencana Anggaran Biaya (RAB)</div>
                         <button type="button" wire:click="addBudgetItem" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;background:#fe5000;color:white;font-size:11px;border:none;cursor:pointer;">
@@ -335,12 +335,18 @@
                 {{-- Kanan: Info persiapan --}}
                 <div style="display:grid;gap:12px;align-content:start;">
                     <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
-                        <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Info persiapan</div>
+                        <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Rencana Anggaran Biaya (RAB)</div>
                         <div style="display:grid;gap:10px;">
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Sumber dana</label>
                                 <input wire:model="fundingSource" type="text" placeholder="Iuran / Sponsor / DPD / Hibah" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                             </div>
+                            
+                            <div>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Total Anggaran Biaya (Rp)</label>
+                                <input wire:model="totalAnggaran" type="number" placeholder="0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
+                            </div>
+
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Catatan anggaran</label>
                                 <textarea wire:model="budgetNotes" rows="3" placeholder="Catatan tambahan terkait anggaran" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:14px;color:#0f172a;resize:vertical;"></textarea>

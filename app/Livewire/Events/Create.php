@@ -60,6 +60,8 @@ class Create extends Component
     public string $speakers = '';
 
     public string $fundingSource = '';
+    
+    public string $totalAnggaran = '';
 
     public string $targetProgram = '';
 
@@ -246,6 +248,7 @@ class Create extends Component
             'coverImage' => ['nullable', 'image', 'max:4096'],
             'speakers' => ['nullable', 'string'],
             'fundingSource' => ['nullable', 'string'],
+            'totalAnggaran' => ['nullable', 'numeric'],
             'targetProgram' => ['nullable', 'string'],
             'requirements' => ['nullable', 'string'],
             'budgetNotes' => ['nullable', 'string'],
@@ -314,7 +317,12 @@ class Create extends Component
             'penyelenggara' => $penyelenggara,
             'pic_nama' => $picNama,
             'pic_hp' => $picHp,
-            'kegiatan_rw_id' => $this->fromKegiatanRwId,
+            'kegiatan_rw_id'  => $this->fromKegiatanRwId,
+            'speakers'        => $this->speakers,
+            'funding_source'  => $this->fundingSource,
+            'total_anggaran'  => $this->totalAnggaran ?: 0,
+            'target_program'  => $this->targetProgram,
+            'requirements'    => $validated['requirements'],
             'created_by' => auth()->id(),
             'title' => $judul,
             'slug' => $slugBase . '-' . Str::lower(Str::random(6)),
