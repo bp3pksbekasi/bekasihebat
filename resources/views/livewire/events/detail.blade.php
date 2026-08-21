@@ -16,38 +16,6 @@
                 <div style="font-size:11px;color:#a3a3a3;">Event &gt; {{ $event->judul }}</div>
                 <div style="font-size:18px;font-weight:600;margin-top:4px;">{{ $event->judul }}</div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                @if (in_array($event->status, ['draft', 'ditolak'], true))
-                    <button wire:click="submitForApproval" type="button" style="height:38px;padding:0 14px;border-radius:10px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">
-                        Ajukan Approval
-                    </button>
-                @endif
-                @if ($event->status === \App\Models\Event::STATUS_DISETUJUI || $event->status === \App\Models\Event::STATUS_BERLANGSUNG)
-                    @if ($event->status === \App\Models\Event::STATUS_DISETUJUI)
-                        <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_BERLANGSUNG }}')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #dbeafe;background:#eff6ff;color:#2563eb;font-size:12px;cursor:pointer;">
-                            Tandai Berlangsung
-                        </button>
-                    @endif
-                    <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_SELESAI }}')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #bbf7d0;background:#ecfdf3;color:#166534;font-size:12px;cursor:pointer;">
-                        Tandai Selesai
-                    </button>
-                @endif
-                @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI], true))
-                    <a href="{{ route('events.print-lpj', $event) }}" target="_blank" style="display:inline-flex;align-items:center;height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;font-weight:600;">
-                        Cetak LPJ
-                    </a>
-                @endif
-                @if ($event->status !== \App\Models\Event::STATUS_DIBATALKAN && $event->status !== \App\Models\Event::STATUS_SELESAI)
-                    <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_DIBATALKAN }}')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:12px;cursor:pointer;">
-                        Batalkan
-                    </button>
-                @endif
-                @if (in_array($event->status, ['draft', 'ditolak'], true))
-                    <a href="{{ route('events.edit', $event) }}" wire:navigate style="display:inline-flex;align-items:center;height:38px;padding:0 14px;border-radius:10px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;">
-                        Edit
-                    </a>
-                @endif
-            </div>
         </div>
 
         <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;padding:16px 20px 20px;border-radius:0 0 14px 14px;overflow:hidden;">
@@ -57,11 +25,45 @@
                 </div>
             @endif
 
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
-                <span style="padding:5px 10px;border-radius:999px;background:{{ $statusCfg['bg'] }};color:{{ $statusCfg['color'] }};font-size:11px;font-weight:600;">{{ $statusCfg['label'] }}</span>
-                <span style="padding:5px 10px;border-radius:999px;background:#fff7ed;color:#c2410c;font-size:11px;font-weight:600;">{{ $event->jenis_label }}</span>
-                <span style="font-size:11px;color:#666;">{{ $event->tanggal_mulai?->format('d M Y, H:i') ?? '-' }}</span>
-                <span style="font-size:11px;color:#666;">{{ $event->lokasi }}</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:14px;">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <span style="padding:5px 10px;border-radius:999px;background:{{ $statusCfg['bg'] }};color:{{ $statusCfg['color'] }};font-size:11px;font-weight:600;">{{ $statusCfg['label'] }}</span>
+                    <span style="padding:5px 10px;border-radius:999px;background:#fff7ed;color:#c2410c;font-size:11px;font-weight:600;">{{ $event->jenis_label }}</span>
+                    <span style="font-size:11px;color:#666;">{{ $event->tanggal_mulai?->format('d M Y, H:i') ?? '-' }}</span>
+                    <span style="font-size:11px;color:#666;">{{ $event->lokasi }}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    @if (in_array($event->status, ['draft', 'ditolak'], true))
+                        <button wire:click="submitForApproval" type="button" style="height:32px;padding:0 14px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">
+                            Ajukan Approval
+                        </button>
+                    @endif
+                    @if ($event->status === \App\Models\Event::STATUS_DISETUJUI || $event->status === \App\Models\Event::STATUS_BERLANGSUNG)
+                        @if ($event->status === \App\Models\Event::STATUS_DISETUJUI)
+                            <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_BERLANGSUNG }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #dbeafe;background:#eff6ff;color:#2563eb;font-size:12px;cursor:pointer;">
+                                Tandai Berlangsung
+                            </button>
+                        @endif
+                        <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_SELESAI }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #bbf7d0;background:#ecfdf3;color:#166534;font-size:12px;cursor:pointer;">
+                            Tandai Selesai
+                        </button>
+                    @endif
+                    @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI], true))
+                        <a href="{{ route('events.print-lpj', $event) }}" target="_blank" style="display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;font-weight:600;">
+                            Cetak LPJ
+                        </a>
+                    @endif
+                    @if ($event->status !== \App\Models\Event::STATUS_DIBATALKAN && $event->status !== \App\Models\Event::STATUS_SELESAI)
+                        <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_DIBATALKAN }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:12px;cursor:pointer;">
+                            Batalkan
+                        </button>
+                    @endif
+                    @if (in_array($event->status, ['draft', 'ditolak'], true))
+                        <a href="{{ route('events.edit', $event) }}" wire:navigate style="display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;">
+                            Edit
+                        </a>
+                    @endif
+                </div>
             </div>
 
             <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px;" class="event-detail-summary-grid">
