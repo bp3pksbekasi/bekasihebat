@@ -360,7 +360,7 @@
                             {{-- Dokumen 1 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
-                                    <span>Surat Permohonan Pencairan</span>
+                                    <span>Surat Permohonan Pencairan *</span>
                                     <a href="{{ route('download.template', 'TEMPLATE_FORMAT_SURAT_PERMOHONAN_PENCAIRAN.docx') }}" target="_blank" style="color:#2563eb;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;font-weight:500;">
                                         <i class="ti ti-download"></i> Template
                                     </a>
@@ -397,7 +397,7 @@
                             {{-- Dokumen 2 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
-                                    <span>Proposal Kegiatan</span>
+                                    <span>Proposal Kegiatan *</span>
                                     <a href="{{ route('download.template', 'TEMPLATE_FORMAT_PROPOSAL.docx') }}" target="_blank" style="color:#2563eb;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;font-weight:500;">
                                         <i class="ti ti-download"></i> Template
                                     </a>
@@ -434,7 +434,7 @@
                             {{-- Dokumen 3 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
-                                    <span>DPA (Dokumen Pelaksanaan Anggaran)</span>
+                                    <span>DPA (Dokumen Pelaksanaan Anggaran) *</span>
                                     <a href="{{ route('download.template', 'TEMPLATE_DPA.xlsx') }}" target="_blank" style="color:#2563eb;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;font-weight:500;">
                                         <i class="ti ti-download"></i> Template
                                     </a>
