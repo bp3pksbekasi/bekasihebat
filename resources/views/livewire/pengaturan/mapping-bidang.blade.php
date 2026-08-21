@@ -11,7 +11,7 @@
             <table class="min-w-full divide-y divide-zinc-200">
                 <thead class="bg-zinc-50">
                     <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-zinc-900 sm:pl-6 w-1/3">Nama Bidang</th>
+                        <th scope="col" class="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-zinc-900 sm:pl-8 w-1/3">Nama Bidang</th>
                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-zinc-900">Tersedia di DPD</th>
                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-zinc-900">Tersedia di DPC</th>
                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-zinc-900">Tersedia di DPRa</th>
@@ -20,7 +20,7 @@
                 <tbody class="divide-y divide-zinc-200 bg-white">
                     @forelse ($bidangs as $bidang)
                         <tr class="hover:bg-zinc-50 transition-colors">
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-zinc-900 sm:pl-6">
+                            <td class="whitespace-nowrap py-4 pl-6 pr-3 text-sm font-medium text-zinc-900 sm:pl-8">
                                 <div class="flex items-center gap-3">
                                     @if($bidang->icon)
                                         <div class="flex items-center justify-center w-8 h-8 rounded-lg" style="background:{{ $bidang->color ?: '#f3f4f6' }}; color:{{ $bidang->color ? '#fff' : '#6b7280' }}">
