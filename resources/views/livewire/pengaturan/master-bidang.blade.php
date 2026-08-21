@@ -1,4 +1,4 @@
-<div>
+<div data-flux-main style="min-height:100vh;padding:20px;background:#f5f5f5;position:relative;">
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-zinc-900 tracking-tight">Master Bidang</h1>
