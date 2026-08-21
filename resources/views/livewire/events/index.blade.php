@@ -229,7 +229,7 @@
                                             </div>
                                         </td>
                                         <td style="padding:12px;text-align:center;">
-                                            <button wire:click="togglePublic('{{ $event->uuid }}')" type="button" style="width:40px;height:22px;border-radius:999px;border:none;padding:2px;background:{{ $event->status === 'disetujui' ? ($event->is_public ? '#16a34a' : '#d4d4d8') : '#e5e7eb' }};cursor:pointer;{{ $event->status !== 'disetujui' ? 'opacity:.7;' : '' }}">
+                                            <button wire:click="togglePublic('{{ $event->uuid }}')" type="button" style="width:40px;height:22px;border-radius:999px;border:none;padding:2px;background:{{ $event->status === \App\Models\Event::STATUS_DISETUJUI ? ($event->is_public ? '#16a34a' : '#d4d4d8') : '#e5e7eb' }};cursor:pointer;{{ $event->status !== \App\Models\Event::STATUS_DISETUJUI ? 'opacity:.7;' : '' }}">
                                                 <span style="display:block;width:18px;height:18px;border-radius:50%;background:white;transform:translateX({{ $event->is_public ? '18px' : '0' }});transition:transform .2s;"></span>
                                             </button>
                                         </td>

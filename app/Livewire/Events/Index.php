@@ -137,10 +137,18 @@ class Index extends Component
             return;
         }
 
-        Event::query()->where('uuid', $this->deleteId)->delete();
+        $event = Event::query()->where('uuid', $this->deleteId)->first();
+        if ($event) {
+            $event->approvals()->delete();
+            $event->budgetItems()->delete();
+            $event->report()->delete();
+            $event->registrations()->delete();
+            $event->pesertas()->delete();
+            $event->delete();
+        }
 
         $this->cancelDelete();
-        session()->flash('message', 'Event berhasil dihapus.');
+        session()->flash('message', 'Program berhasil dihapus.');
     }
 
     public function togglePublic(string $eventUuid): void
