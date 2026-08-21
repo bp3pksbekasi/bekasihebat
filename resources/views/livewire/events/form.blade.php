@@ -346,7 +346,7 @@
 
                     <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
                         <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Dokumen & Lampiran</div>
-                        <div style="display:grid;gap:12px;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;">
                             {{-- Dokumen 1 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Surat Permohonan Pencairan</label>
