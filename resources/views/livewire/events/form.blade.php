@@ -347,22 +347,132 @@
                     <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
                         <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Dokumen & Lampiran</div>
                         <div style="display:grid;gap:12px;">
+                            {{-- Dokumen 1 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Surat Permohonan Pencairan</label>
-                                <input wire:model="dokumenPermohonanPencairan" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
-                                <p style="font-size:12px;color:#52525b;margin-top:4px;">Format: PDF, JPG, PNG.</p>
+                                <div style="position:relative;border:1.5px dashed #cbd5e1;border-radius:10px;padding:12px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;">
+                                    @if($dokumenPermohonanPencairan)
+                                        <i class="ti ti-circle-check-filled" style="font-size:24px;color:#10b981;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">File berhasil dipilih</div>
+                                            <div style="font-size:11px;color:#10b981;margin-top:2px;">Siap disimpan</div>
+                                        </div>
+                                        <button type="button" wire:click="$set('dokumenPermohonanPencairan', null)" style="background:none;border:none;color:#ef4444;cursor:pointer;padding:4px;position:relative;z-index:2;"><i class="ti ti-trash" style="font-size:18px;"></i></button>
+                                    @elseif(isset($event) && $event->dokumen_permohonan_pencairan)
+                                        <i class="ti ti-file-check" style="font-size:24px;color:#3b82f6;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">Sudah terlampir</div>
+                                            <div style="font-size:11px;color:#3b82f6;margin-top:2px;">Tersimpan di sistem</div>
+                                        </div>
+                                        <label style="background:white;border:1px solid #cbd5e1;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;color:#334155;position:relative;z-index:2;">
+                                            Ganti File
+                                            <input wire:model="dokumenPermohonanPencairan" type="file" accept="image/*,.pdf" style="display:none;">
+                                        </label>
+                                    @else
+                                        <i class="ti ti-cloud-upload" style="font-size:24px;color:#94a3b8;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#334155;">Pilih file lampiran</div>
+                                            <div style="font-size:11px;color:#64748b;margin-top:2px;">Format PDF/JPG/PNG (Max 4MB)</div>
+                                        </div>
+                                        <input wire:model="dokumenPermohonanPencairan" type="file" accept="image/*,.pdf" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;">
+                                    @endif
+                                </div>
                             </div>
+
+                            {{-- Dokumen 2 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Proposal Kegiatan</label>
-                                <input wire:model="dokumenProposal" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
+                                <div style="position:relative;border:1.5px dashed #cbd5e1;border-radius:10px;padding:12px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;">
+                                    @if($dokumenProposal)
+                                        <i class="ti ti-circle-check-filled" style="font-size:24px;color:#10b981;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">File berhasil dipilih</div>
+                                            <div style="font-size:11px;color:#10b981;margin-top:2px;">Siap disimpan</div>
+                                        </div>
+                                        <button type="button" wire:click="$set('dokumenProposal', null)" style="background:none;border:none;color:#ef4444;cursor:pointer;padding:4px;position:relative;z-index:2;"><i class="ti ti-trash" style="font-size:18px;"></i></button>
+                                    @elseif(isset($event) && $event->dokumen_proposal)
+                                        <i class="ti ti-file-check" style="font-size:24px;color:#3b82f6;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">Sudah terlampir</div>
+                                            <div style="font-size:11px;color:#3b82f6;margin-top:2px;">Tersimpan di sistem</div>
+                                        </div>
+                                        <label style="background:white;border:1px solid #cbd5e1;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;color:#334155;position:relative;z-index:2;">
+                                            Ganti File
+                                            <input wire:model="dokumenProposal" type="file" accept="image/*,.pdf" style="display:none;">
+                                        </label>
+                                    @else
+                                        <i class="ti ti-cloud-upload" style="font-size:24px;color:#94a3b8;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#334155;">Pilih file lampiran</div>
+                                            <div style="font-size:11px;color:#64748b;margin-top:2px;">Format PDF/JPG/PNG (Max 4MB)</div>
+                                        </div>
+                                        <input wire:model="dokumenProposal" type="file" accept="image/*,.pdf" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;">
+                                    @endif
+                                </div>
                             </div>
+
+                            {{-- Dokumen 3 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">DPA (Dokumen Pelaksanaan Anggaran)</label>
-                                <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
+                                <div style="position:relative;border:1.5px dashed #cbd5e1;border-radius:10px;padding:12px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;">
+                                    @if($dokumenDpa)
+                                        <i class="ti ti-circle-check-filled" style="font-size:24px;color:#10b981;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">File berhasil dipilih</div>
+                                            <div style="font-size:11px;color:#10b981;margin-top:2px;">Siap disimpan</div>
+                                        </div>
+                                        <button type="button" wire:click="$set('dokumenDpa', null)" style="background:none;border:none;color:#ef4444;cursor:pointer;padding:4px;position:relative;z-index:2;"><i class="ti ti-trash" style="font-size:18px;"></i></button>
+                                    @elseif(isset($event) && $event->dokumen_dpa)
+                                        <i class="ti ti-file-check" style="font-size:24px;color:#3b82f6;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">Sudah terlampir</div>
+                                            <div style="font-size:11px;color:#3b82f6;margin-top:2px;">Tersimpan di sistem</div>
+                                        </div>
+                                        <label style="background:white;border:1px solid #cbd5e1;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;color:#334155;position:relative;z-index:2;">
+                                            Ganti File
+                                            <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf" style="display:none;">
+                                        </label>
+                                    @else
+                                        <i class="ti ti-cloud-upload" style="font-size:24px;color:#94a3b8;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#334155;">Pilih file lampiran</div>
+                                            <div style="font-size:11px;color:#64748b;margin-top:2px;">Format PDF/JPG/PNG (Max 4MB)</div>
+                                        </div>
+                                        <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;">
+                                    @endif
+                                </div>
                             </div>
+
+                            {{-- Dokumen 4 --}}
                             <div>
                                 <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">LPJ Kegiatan Sebelumnya (Opsional)</label>
-                                <input wire:model="dokumenLpjSebelumnya" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
+                                <div style="position:relative;border:1.5px dashed #cbd5e1;border-radius:10px;padding:12px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;">
+                                    @if($dokumenLpjSebelumnya)
+                                        <i class="ti ti-circle-check-filled" style="font-size:24px;color:#10b981;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">File berhasil dipilih</div>
+                                            <div style="font-size:11px;color:#10b981;margin-top:2px;">Siap disimpan</div>
+                                        </div>
+                                        <button type="button" wire:click="$set('dokumenLpjSebelumnya', null)" style="background:none;border:none;color:#ef4444;cursor:pointer;padding:4px;position:relative;z-index:2;"><i class="ti ti-trash" style="font-size:18px;"></i></button>
+                                    @elseif(isset($event) && $event->dokumen_lpj_sebelumnya)
+                                        <i class="ti ti-file-check" style="font-size:24px;color:#3b82f6;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#0f172a;">Sudah terlampir</div>
+                                            <div style="font-size:11px;color:#3b82f6;margin-top:2px;">Tersimpan di sistem</div>
+                                        </div>
+                                        <label style="background:white;border:1px solid #cbd5e1;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;color:#334155;position:relative;z-index:2;">
+                                            Ganti File
+                                            <input wire:model="dokumenLpjSebelumnya" type="file" accept="image/*,.pdf" style="display:none;">
+                                        </label>
+                                    @else
+                                        <i class="ti ti-cloud-upload" style="font-size:24px;color:#94a3b8;"></i>
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;color:#334155;">Pilih file lampiran</div>
+                                            <div style="font-size:11px;color:#64748b;margin-top:2px;">Format PDF/JPG/PNG (Max 4MB)</div>
+                                        </div>
+                                        <input wire:model="dokumenLpjSebelumnya" type="file" accept="image/*,.pdf" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;">
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
