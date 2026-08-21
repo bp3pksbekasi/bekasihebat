@@ -55,9 +55,14 @@ class Index extends Component
 
     public function getBidangListProperty(): Collection
     {
-        return BidangDpd::query()
-            ->where('is_active', true)
-            ->orderBy('urutan')
+        $query = BidangDpd::query()
+            ->where('is_active', true);
+
+        if (auth()->check() && auth()->user()->isBidang()) {
+            $query->where('slug', auth()->user()->bidang_slug);
+        }
+
+        return $query->orderBy('urutan')
             ->withCount(['programKerjas as program_count' => fn ($query) => $query->where('tahun', $this->selectedTahun)])
             ->get()
             ->map(function (BidangDpd $bidang) {
@@ -146,7 +151,13 @@ class Index extends Component
 
     public function getBidangOptionsProperty(): Collection
     {
-        return BidangDpd::query()->where('is_active', true)->orderBy('urutan')->get();
+        $query = BidangDpd::query()->where('is_active', true);
+
+        if (auth()->check() && auth()->user()->isBidang()) {
+            $query->where('slug', auth()->user()->bidang_slug);
+        }
+
+        return $query->orderBy('urutan')->get();
     }
 
     public function getProgramOptionsProperty(): Collection
