@@ -10,7 +10,7 @@
     ];
 @endphp
 
-<div class="min-h-screen p-5 bg-gray-50" x-data="{ showDeleteModal: false, deleteUuid: '' }">
+<div class="min-h-screen p-5 bg-gray-50">
     <!-- Header Title -->
     <div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
@@ -241,9 +241,10 @@
                                                 @endif
                                                 <button
                                                     type="button"
-                                                    x-on:click="deleteUuid = '{{ $event->uuid }}'; showDeleteModal = true"
+                                                    wire:click="deactivateEvent('{{ $event->uuid }}')"
+                                                    wire:confirm="Nonaktifkan program '{{ addslashes($event->judul) }}'?\n\nProgram akan disembunyikan dari daftar. Data tidak akan dihapus permanen."
                                                     style="padding:5px 9px;border-radius:7px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:11px;cursor:pointer;"
-                                                >Delete</button>
+                                                >Hapus</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -260,50 +261,6 @@
 
             <div class="mt-4">
                 {{ $events->links() }}
-            </div>
-        </div>
-    </div>
-
-    {{-- Alpine-controlled delete modal (tidak bergantung pada Livewire re-render untuk muncul) --}}
-    <div
-        x-show="showDeleteModal"
-        x-cloak
-        style="position:fixed;inset:0;z-index:40;"
-    >
-        {{-- Backdrop --}}
-        <div
-            style="position:absolute;inset:0;background:rgba(0,0,0,0.4);"
-            x-on:click="showDeleteModal = false"
-        ></div>
-
-        {{-- Modal box --}}
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:380px;max-width:calc(100vw - 32px);background:white;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,0.2);z-index:50;padding:22px;">
-            {{-- Icon --}}
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-                <div style="width:40px;height:40px;border-radius:10px;background:#fef2f2;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <svg style="width:20px;height:20px;color:#dc2626;" fill="none" viewBox="0 0 24 24" stroke="#dc2626" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-                </div>
-                <div>
-                    <div style="font-size:15px;font-weight:700;color:#1a1a1a;">Nonaktifkan program?</div>
-                    <div style="font-size:12px;color:#666;margin-top:2px;">Program akan disembunyikan dari daftar, data tetap aman.</div>
-                </div>
-            </div>
-
-            <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:12px;color:#9a3412;">
-                ⚠️ Tindakan ini dapat diaktifkan kembali melalui database jika diperlukan.
-            </div>
-
-            <div style="display:flex;justify-content:flex-end;gap:8px;">
-                <button
-                    type="button"
-                    x-on:click="showDeleteModal = false"
-                    style="height:38px;padding:0 16px;border-radius:8px;border:1px solid #d4d4d8;background:white;color:#444;cursor:pointer;font-size:13px;"
-                >Batal</button>
-                <button
-                    type="button"
-                    x-on:click="$wire.deactivateEvent(deleteUuid); showDeleteModal = false"
-                    style="height:38px;padding:0 16px;border-radius:8px;border:none;background:#dc2626;color:white;cursor:pointer;font-size:13px;font-weight:600;"
-                >Ya, Nonaktifkan</button>
             </div>
         </div>
     </div>
