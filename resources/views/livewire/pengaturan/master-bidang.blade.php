@@ -46,6 +46,7 @@
                     <tr>
                         <th scope="col" class="py-3.5 pl-6 pr-3 text-left text-xs font-semibold text-zinc-900 w-16">Urutan</th>
                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Nama Bidang</th>
+                        <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Singkatan</th>
                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Kabid</th>
                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Sekbid</th>
                         <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-zinc-900">Periode</th>
@@ -64,11 +65,15 @@
                             <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-900">
                                 <div class="font-medium">
                                     {{ $bidang->nama }}
-                                    @if($bidang->singkatan)
-                                        <span class="ml-1 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{{ $bidang->singkatan }}</span>
-                                    @endif
                                 </div>
                                 <div class="text-xs text-zinc-500 mt-0.5">{{ $bidang->slug }}</div>
+                            </td>
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-500">
+                                @if($bidang->singkatan)
+                                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{{ $bidang->singkatan }}</span>
+                                @else
+                                    <span class="text-zinc-400 italic">-</span>
+                                @endif
                             </td>
                             <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-500">
                                 @if($bidang->kabid)
@@ -125,7 +130,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-10 text-center text-sm text-zinc-500">
+                            <td colspan="8" class="py-10 text-center text-sm text-zinc-500">
                                 Belum ada data bidang.
                             </td>
                         </tr>
