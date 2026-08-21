@@ -8,6 +8,7 @@ use App\Livewire\Events\Create as EventsCreate;
 use App\Livewire\Events\Detail as EventsDetail;
 use App\Livewire\Events\Edit as EventsEdit;
 use App\Livewire\Events\Index as EventsIndex;
+use App\Http\Controllers\EventPrintController;
 use App\Livewire\InfraRtRw\Detail as InfraRtRwDetail;
 use App\Livewire\InfraRtRw\Index as InfraRtRwIndex;
 use App\Livewire\KartuAnggota\Register as KartuAnggotaRegister;
@@ -436,6 +437,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', EventsCreate::class)->middleware('menu:event')->name('events.create');
         Route::get('/{event}', EventsDetail::class)->middleware('menu:event,event-view')->name('events.detail');
         Route::get('/{event}/edit', EventsEdit::class)->middleware('menu:event')->name('events.edit');
+        Route::get('/{event}/print-lpj', [EventPrintController::class, 'printLpj'])->middleware('menu:event,event-view')->name('events.print-lpj');
     });
 
     Route::prefix('infra-rtrw')->middleware(['auth'])->group(function () {

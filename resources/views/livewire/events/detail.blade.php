@@ -30,6 +30,11 @@
                         Tandai Selesai
                     </button>
                 @endif
+                @if (in_array($event->status, ['disetujui', 'selesai'], true))
+                    <a href="{{ route('events.print-lpj', $event) }}" target="_blank" style="display:inline-flex;align-items:center;height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;font-weight:600;">
+                        Cetak LPJ
+                    </a>
+                @endif
                 @if ($event->status !== 'dibatalkan')
                     <button wire:click="setEventStatus('dibatalkan')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:12px;cursor:pointer;">
                         Batalkan
