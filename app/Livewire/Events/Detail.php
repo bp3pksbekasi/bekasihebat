@@ -628,10 +628,10 @@ class Detail extends Component
             'dpd' => $user->hasRole('admin_dpd') || $user->isAdmin(),
             'dpc' => $user->hasRole('dapil') || $user->isDapil(),
             'dpra' => $user->hasRole('dapil') || $user->isDapil() || $user->hasRole('kecamatan'),
-            'kesekretariatan' => $user->hasRole('kesekretariatan'),
-            'sekum' => $user->hasRole('sekum'),
-            'bendum' => $user->hasRole('bendum'),
-            'ketua_dpd' => $user->hasRole('ketua_dpd'),
+            'kesekretariatan' => $user->role === \App\Models\User::ROLE_KESEKRETARIATAN,
+            'sekum' => $user->role === \App\Models\User::ROLE_SEKUM,
+            'bendum' => $user->role === \App\Models\User::ROLE_BENDUM,
+            'ketua_dpd' => $user->role === \App\Models\User::ROLE_KETUA_DPD,
             default => false,
         };
     }
