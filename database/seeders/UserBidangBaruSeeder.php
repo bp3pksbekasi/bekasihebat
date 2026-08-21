@@ -34,7 +34,7 @@ class UserBidangBaruSeeder extends Seeder
                     'bidang_slug' => $bidang->slug,
                     'org_level' => User::ORG_LEVEL_DPD,
                     'status' => 'aktif',
-                    'phone' => '-',
+                    'phone' => fake()->unique()->numerify('08##########'),
                     'password' => $password,
                     'email_verified_at' => now(),
                 ]
