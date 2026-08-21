@@ -24,11 +24,17 @@
                     <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:10px;">Kelengkapan Data</div>
                     <div style="overflow-x:auto;">
                         <div style="display:inline-flex;gap:6px;padding:4px;border-radius:10px;background:#f4f4f5;border:0.5px solid #e4e4e7;max-width:100%;">
-                        @foreach ([
-                            ['key' => 'info',        'label' => 'Informasi'],
-                            ['key' => 'persiapan',   'label' => 'Persiapan'],
-                            ['key' => 'evaluasi',    'label' => 'Pelaksanaan & Evaluasi'],
-                        ] as $t)
+                        @php
+                            $showEvaluasi = isset($event) && in_array($event->status, ['completed', 'approved']);
+                            $tabs = [
+                                ['key' => 'info',        'label' => 'Informasi'],
+                                ['key' => 'persiapan',   'label' => 'Persiapan'],
+                            ];
+                            if ($showEvaluasi) {
+                                $tabs[] = ['key' => 'evaluasi', 'label' => 'Pelaksanaan & Evaluasi'];
+                            }
+                        @endphp
+                        @foreach ($tabs as $t)
                         <button type="button"
                             @click="tab='{{ $t['key'] }}'"
                             :style="'padding:10px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;' + (tab==='{{ $t['key'] }}' ? 'background:#fff7ed;color:#ea580c;' : 'background:transparent;color:#3f3f46;')">{{ $t['label'] }}</button>
