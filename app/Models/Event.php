@@ -21,7 +21,7 @@ class Event extends Model
     public const STATUS_MENUNGGU = 'pending_approval';
     public const STATUS_DISETUJUI = 'approved';
     public const STATUS_DITOLAK = 'rejected';
-    public const STATUS_BERLANGSUNG = 'approved';
+    public const STATUS_BERLANGSUNG = 'ongoing';
     public const STATUS_SELESAI = 'completed';
     public const STATUS_DIBATALKAN = 'cancelled';
 
@@ -29,6 +29,7 @@ class Event extends Model
         'draft' => ['label' => 'Draft', 'color' => '#888888', 'bg' => '#f5f5f5'],
         'pending_approval' => ['label' => 'Menunggu Approval', 'color' => '#d97706', 'bg' => '#fff7f1'],
         'approved' => ['label' => 'Disetujui', 'color' => '#16a34a', 'bg' => '#dcfce7'],
+        'ongoing' => ['label' => 'Berlangsung', 'color' => '#2563eb', 'bg' => '#eff6ff'],
         'rejected' => ['label' => 'Ditolak', 'color' => '#dc2626', 'bg' => '#fee2e2'],
         'completed' => ['label' => 'Selesai', 'color' => '#16a34a', 'bg' => '#dcfce7'],
         'cancelled' => ['label' => 'Dibatalkan', 'color' => '#888888', 'bg' => '#f5f5f5'],

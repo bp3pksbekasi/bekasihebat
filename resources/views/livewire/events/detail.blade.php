@@ -22,11 +22,13 @@
                         Ajukan Approval
                     </button>
                 @endif
-                @if ($event->status === 'disetujui')
-                    <button wire:click="setEventStatus('berlangsung')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #dbeafe;background:#eff6ff;color:#2563eb;font-size:12px;cursor:pointer;">
-                        Tandai Berlangsung
-                    </button>
-                    <button wire:click="setEventStatus('selesai')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #bbf7d0;background:#ecfdf3;color:#166534;font-size:12px;cursor:pointer;">
+                @if ($event->status === \App\Models\Event::STATUS_DISETUJUI || $event->status === \App\Models\Event::STATUS_BERLANGSUNG)
+                    @if ($event->status === \App\Models\Event::STATUS_DISETUJUI)
+                        <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_BERLANGSUNG }}')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #dbeafe;background:#eff6ff;color:#2563eb;font-size:12px;cursor:pointer;">
+                            Tandai Berlangsung
+                        </button>
+                    @endif
+                    <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_SELESAI }}')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #bbf7d0;background:#ecfdf3;color:#166534;font-size:12px;cursor:pointer;">
                         Tandai Selesai
                     </button>
                 @endif
@@ -35,8 +37,8 @@
                         Cetak LPJ
                     </a>
                 @endif
-                @if ($event->status !== 'dibatalkan')
-                    <button wire:click="setEventStatus('dibatalkan')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:12px;cursor:pointer;">
+                @if ($event->status !== \App\Models\Event::STATUS_DIBATALKAN && $event->status !== \App\Models\Event::STATUS_SELESAI)
+                    <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_DIBATALKAN }}')" type="button" style="height:38px;padding:0 12px;border-radius:10px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:12px;cursor:pointer;">
                         Batalkan
                     </button>
                 @endif
