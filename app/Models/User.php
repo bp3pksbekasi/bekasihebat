@@ -190,7 +190,9 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
 
     public function isDpd(): bool
     {
-        return $this->org_level === self::ORG_LEVEL_DPD || $this->isAdmin();
+        return $this->org_level === self::ORG_LEVEL_DPD || 
+               $this->isAdmin() ||
+               in_array($this->role, [self::ROLE_KESEKRETARIATAN, self::ROLE_SEKUM, self::ROLE_BENDUM, self::ROLE_KETUA_DPD], true);
     }
 
     public function isDpc(): bool
