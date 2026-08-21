@@ -73,7 +73,7 @@
     @endif
 
     <!-- Cards (Event Summary Grid) -->
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+    <div class="grid gap-4 mb-6 event-summary-grid-new">
         @foreach ($counts as $status => $cfg)
             <button wire:click="setStatus('{{ $status }}')" type="button" class="bg-white border rounded-xl p-5 shadow-sm text-left transition-all hover:border-orange-300 {{ $filterStatus === $status ? 'ring-2 ring-orange-500 border-orange-500' : 'border-gray-200' }}">
                 <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{{ $cfg['label'] }}</div>
@@ -269,17 +269,30 @@
     @endif
 
     <style>
+        .event-summary-grid-new {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
         @media (max-width: 1100px) {
-            .event-summary-grid,
             .event-cards-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+            .event-summary-grid-new {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
 
         @media (max-width: 760px) {
-            .event-summary-grid,
             .event-cards-grid {
                 grid-template-columns: minmax(0, 1fr) !important;
+            }
+            .event-summary-grid-new {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .event-summary-grid-new {
+                grid-template-columns: minmax(0, 1fr);
             }
         }
     </style>
