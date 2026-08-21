@@ -59,6 +59,14 @@ class Event extends Model
         'selesai' => ['label' => 'Selesai', 'order' => 4],
     ];
 
+    public const LEVEL_APPROVAL_BIDANG = [
+        'kesekretariatan' => ['label' => 'Kesekretariatan', 'order' => 1],
+        'sekum' => ['label' => 'Sekum', 'order' => 2],
+        'bendum' => ['label' => 'Bendum', 'order' => 3],
+        'ketua_dpd' => ['label' => 'Ketua DPD', 'order' => 4],
+        'selesai' => ['label' => 'Selesai', 'order' => 5],
+    ];
+
     public const ORG_LEVEL_OPTIONS = [
         'dpra' => 'DPRa (Desa/Kelurahan)',
         'dpc'  => 'DPC (Kecamatan)',

@@ -35,6 +35,10 @@ class User extends Authenticatable implements \Filament\Models\Contracts\Filamen
     public const ROLE_DAPIL = 'dapil';
     public const ROLE_DPC = 'pengurus_dpc';
     public const ROLE_DPRA = 'pengurus_dpra';
+    public const ROLE_KESEKRETARIATAN = 'kesekretariatan';
+    public const ROLE_SEKUM = 'sekum';
+    public const ROLE_BENDUM = 'bendum';
+    public const ROLE_KETUA_DPD = 'ketua_dpd';
 
     public const ORG_LEVEL_DPD  = 'dpd';
     public const ORG_LEVEL_DPC  = 'dpc';

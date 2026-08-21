@@ -184,7 +184,12 @@
                 <div style="border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                     <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Approval Tracker</div>
                     <div style="margin-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                        @foreach (['dpra' => 'DPRa', 'dpc' => 'DPC', 'dpd' => 'DPD'] as $level => $label)
+                        @php
+                            $approvalLevels = $isBidangDpd
+                                ? ['kesekretariatan' => 'Kesekretariatan', 'sekum' => 'Sekum', 'bendum' => 'Bendum', 'ketua_dpd' => 'Ketua DPD']
+                                : ['dpra' => 'DPRa', 'dpc' => 'DPC', 'dpd' => 'DPD'];
+                        @endphp
+                        @foreach ($approvalLevels as $level => $label)
                             @php
                                 $approval = $event->approvals->firstWhere('level', $level);
                                 $isCurrent = $event->level_approval === $level && $event->status === 'menunggu_approval';

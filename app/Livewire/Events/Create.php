@@ -212,7 +212,8 @@ class Create extends Component
 
     public function saveAndSubmit()
     {
-        $event = $this->persist(Event::STATUS_MENUNGGU, 'dpra');
+        $initialLevel = ($this->orgLevel === 'dpd' && !empty($this->bidangDpdId)) ? 'kesekretariatan' : 'dpra';
+        $event = $this->persist(Event::STATUS_MENUNGGU, $initialLevel);
         session()->flash('message', 'Event berhasil dibuat dan diajukan untuk approval.');
 
         return redirect()->route('events.detail', $event);

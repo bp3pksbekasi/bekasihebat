@@ -118,9 +118,11 @@ class Detail extends Component
             'decided_at' => null,
         ]);
 
+        $initialLevel = ($this->event->org_level === 'dpd' && !empty($this->event->bidang_dpd_id)) ? 'kesekretariatan' : 'dpra';
+
         $this->event->update([
             'status' => Event::STATUS_MENUNGGU,
-            'level_approval' => 'dpra',
+            'level_approval' => $initialLevel,
             'is_public' => false,
         ]);
 
@@ -151,11 +153,22 @@ class Detail extends Component
             'decided_at' => now(),
         ]);
 
-        $nextLevel = match ($level) {
-            'dpra' => 'dpc',
-            'dpc' => 'dpd',
-            default => 'selesai',
-        };
+        $isBidang = $this->event->org_level === 'dpd' && !empty($this->event->bidang_dpd_id);
+        
+        if ($isBidang) {
+            $nextLevel = match ($level) {
+                'kesekretariatan' => 'sekum',
+                'sekum' => 'bendum',
+                'bendum' => 'ketua_dpd',
+                default => 'selesai',
+            };
+        } else {
+            $nextLevel = match ($level) {
+                'dpra' => 'dpc',
+                'dpc' => 'dpd',
+                default => 'selesai',
+            };
+        }
 
         $this->event->update([
             'status' => $nextLevel === 'selesai' ? Event::STATUS_DISETUJUI : Event::STATUS_MENUNGGU,
@@ -615,6 +628,10 @@ class Detail extends Component
             'dpd' => $user->hasRole('admin_dpd') || $user->isAdmin(),
             'dpc' => $user->hasRole('dapil') || $user->isDapil(),
             'dpra' => $user->hasRole('dapil') || $user->isDapil() || $user->hasRole('kecamatan'),
+            'kesekretariatan' => $user->hasRole('kesekretariatan'),
+            'sekum' => $user->hasRole('sekum'),
+            'bendum' => $user->hasRole('bendum'),
+            'ketua_dpd' => $user->hasRole('ketua_dpd'),
             default => false,
         };
     }
@@ -632,7 +649,11 @@ class Detail extends Component
 
     private function ensureApprovalRows(): void
     {
-        foreach (['dpra', 'dpc', 'dpd'] as $level) {
+        $levels = ($this->event->org_level === 'dpd' && !empty($this->event->bidang_dpd_id))
+            ? ['kesekretariatan', 'sekum', 'bendum', 'ketua_dpd']
+            : ['dpra', 'dpc', 'dpd'];
+
+        foreach ($levels as $level) {
             EventApproval::query()->firstOrCreate(
                 ['event_id' => $this->event->id, 'level' => $level],
                 ['status' => 'pending']

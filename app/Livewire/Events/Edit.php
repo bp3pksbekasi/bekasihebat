@@ -240,7 +240,8 @@ class Edit extends Component
 
     public function saveAndSubmit()
     {
-        $event = $this->persist(Event::STATUS_MENUNGGU, 'dpra');
+        $initialLevel = ($this->orgLevel === 'dpd' && !empty($this->bidangDpdId)) ? 'kesekretariatan' : 'dpra';
+        $event = $this->persist(Event::STATUS_MENUNGGU, $initialLevel);
         $event->approvals()->update([
             'status' => 'pending',
             'approver_id' => null,
