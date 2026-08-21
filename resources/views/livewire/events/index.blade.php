@@ -63,6 +63,16 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="flex-1">
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Bidang</label>
+                <select wire:model.live="filterBidang" class="w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
+                    <option value="">Semua Bidang</option>
+                    @foreach($this->bidangOptions as $b)
+                        <option value="{{ $b->id }}">{{ $b->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
 
@@ -105,13 +115,6 @@
                     <option value="dpra">DPRa</option>
                     <option value="dpc">DPC</option>
                     <option value="dpd">DPD</option>
-                </select>
-                <select wire:model.live="filterBidang" class="rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
-                    <option value="">Semua bidang</option>
-                    @foreach($this->bidangOptions as $b)
-                        <option value="{{ $b->id }}">{{ $b->nama }}</option>
-                    @endforeach
-                </select>
             </div>
 
             @if ($viewMode === 'cards')
