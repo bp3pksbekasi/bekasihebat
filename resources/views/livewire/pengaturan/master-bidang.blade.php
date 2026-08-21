@@ -62,7 +62,12 @@
                                 {{ $bidang->urutan }}
                             </td>
                             <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-900">
-                                <div class="font-medium">{{ $bidang->nama }}</div>
+                                <div class="font-medium">
+                                    {{ $bidang->nama }}
+                                    @if($bidang->singkatan)
+                                        <span class="ml-1 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{{ $bidang->singkatan }}</span>
+                                    @endif
+                                </div>
                                 <div class="text-xs text-zinc-500 mt-0.5">{{ $bidang->slug }}</div>
                             </td>
                             <td class="whitespace-nowrap px-6 py-4 text-sm text-zinc-500">
@@ -216,6 +221,26 @@
                         "
                     >
                     @error('fNama') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                </div>
+
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Singkatan Bidang</label>
+                    <input
+                        wire:model="fSingkatan"
+                        type="text"
+                        placeholder="misal: BPKK"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                    @error('fSingkatan') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
                 </div>
 
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">

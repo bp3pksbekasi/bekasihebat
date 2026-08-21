@@ -16,6 +16,7 @@ class BidangDpd extends Model
 
     protected $fillable = [
         'nama',
+        'singkatan',
         'slug',
         'icon',
         'color',

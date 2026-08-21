@@ -25,6 +25,7 @@ class MasterBidang extends Component
     public ?string $editId = null;
 
     public string $fNama = '';
+    public string $fSingkatan = '';
     public string $fIcon = '';
     public string $fColor = '';
     public string $fPicNama = '';
@@ -78,6 +79,7 @@ class MasterBidang extends Component
 
         $bidang = BidangDpd::query()->findOrFail($id);
         $this->fNama = $bidang->nama ?? '';
+        $this->fSingkatan = $bidang->singkatan ?? '';
         $this->fIcon = $bidang->icon ?? '';
         $this->fColor = $bidang->color ?? '';
         $this->fPicNama = $bidang->pic_nama ?? '';
@@ -104,6 +106,7 @@ class MasterBidang extends Component
         $this->editId = null;
         $this->isEdit = false;
         $this->fNama = '';
+        $this->fSingkatan = '';
         $this->fIcon = '';
         $this->fColor = '';
         $this->fPicNama = '';
@@ -120,6 +123,7 @@ class MasterBidang extends Component
     {
         $validated = $this->validate([
             'fNama' => ['required', 'string', 'max:255', Rule::unique('bidang_dpds', 'nama')->ignore($this->editId)],
+            'fSingkatan' => ['nullable', 'string', 'max:50'],
             'fIcon' => ['nullable', 'string', 'max:50'],
             'fColor' => ['nullable', 'string', 'max:50'],
             'fPicNama' => ['nullable', 'string', 'max:255'],
@@ -134,6 +138,7 @@ class MasterBidang extends Component
 
         $payload = [
             'nama' => $validated['fNama'],
+            'singkatan' => $validated['fSingkatan'],
             'slug' => Str::slug($validated['fNama']),
             'icon' => $validated['fIcon'],
             'color' => $validated['fColor'],
