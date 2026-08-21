@@ -14,7 +14,7 @@ class MappingBidang extends Component
     #[Layout('components.layouts.app.sidebar')]
     public function render(): View
     {
-        $bidangs = BidangDpd::orderBy('urutan')->get();
+        $bidangs = BidangDpd::where('is_active', true)->orderBy('urutan')->get();
 
         return view('livewire.pengaturan.mapping-bidang', [
             'bidangs' => $bidangs,
