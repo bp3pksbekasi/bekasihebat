@@ -32,10 +32,6 @@ class Index extends Component
 
     public string $search = '';
 
-    public bool $showDeleteConfirm = false;
-
-    public ?string $deleteId = null;
-
     public string $viewMode = 'table';
 
     protected $queryString = [
@@ -119,31 +115,15 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function confirmDelete(string $eventUuid): void
+    public function deactivateEvent(string $uuid): void
     {
-        $this->deleteId = $eventUuid;
-        $this->showDeleteConfirm = true;
-    }
-
-    public function cancelDelete(): void
-    {
-        $this->deleteId = null;
-        $this->showDeleteConfirm = false;
-    }
-
-    public function deleteEvent(): void
-    {
-        if ($this->deleteId === null) {
-            return;
-        }
-
-        $event = Event::query()->where('uuid', $this->deleteId)->first();
+        $event = Event::query()->where('uuid', $uuid)->first();
         if ($event) {
             $event->update(['is_active' => false]);
         }
 
-        $this->cancelDelete();
         session()->flash('message', 'Program berhasil dinonaktifkan.');
+        $this->dispatch('$refresh');
     }
 
     public function togglePublic(string $eventUuid): void
