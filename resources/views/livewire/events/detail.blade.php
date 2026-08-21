@@ -468,7 +468,13 @@
                             <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Laporan Kegiatan</div>
                             <div style="font-size:13px;color:#1a1a1a;font-weight:600;margin-top:2px;">Ringkasan pelaksanaan dan evaluasi</div>
                         </div>
-                        <div style="font-size:11px;color:#888;">Tersedia setelah event disetujui</div>
+                        <div style="display:flex;align-items:center;">
+                            @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
+                                <button wire:click="saveReport" type="button" style="height:36px;padding:0 16px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">Simpan Laporan</button>
+                            @else
+                                <div style="font-size:11px;color:#888;">Tersedia setelah event disetujui</div>
+                            @endif
+                        </div>
                     </div>
 
                     @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
@@ -500,7 +506,6 @@
                                         @endforeach
                                     </div>
                                 @endif
-                                <button wire:click="saveReport" type="button" style="height:38px;padding:0 14px;border-radius:10px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;width:max-content;">Simpan Laporan</button>
                             </div>
                         </div>
                     @else
