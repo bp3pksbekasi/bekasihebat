@@ -180,6 +180,20 @@
             @endphp
             <div style="display:grid;gap:14px;{{ $isBidangDpd ? 'grid-template-columns:minmax(0,1.05fr) minmax(360px,0.95fr);' : 'grid-template-columns:minmax(0,1fr);' }}" class="{{ $isBidangDpd ? 'event-detail-top-grid' : '' }}">
                 
+                <script>
+                    console.log("DEBUG EVENT", {
+                        id: {{ $event->id }},
+                        judul: "{{ $event->judul }}",
+                        level_approval: "{{ $event->level_approval }}",
+                        org_level: "{{ $event->org_level }}",
+                        bidang_dpd_id: "{{ $event->bidang_dpd_id }}",
+                        status: "{{ $event->status }}",
+                        is_bidang_dpd: {{ $isBidangDpd ? 'true' : 'false' }},
+                        approvals: @json($event->approvals->pluck('level')),
+                        auth_role: "{{ auth()->user()->role }}"
+                    });
+                </script>
+
                 @if($isBidangDpd)
                 <div style="border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                     <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Approval Tracker</div>
@@ -192,7 +206,7 @@
                         @foreach ($approvalLevels as $level => $label)
                             @php
                                 $approval = $event->approvals->firstWhere('level', $level);
-                                $isCurrent = $event->level_approval === $level && $event->status === 'menunggu_approval';
+                                $isCurrent = $event->level_approval === $level && $event->status === \App\Models\Event::STATUS_MENUNGGU;
                             @endphp
                             <div style="flex:1;min-width:110px;text-align:center;">
                                 <div style="width:42px;height:42px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;background:{{ $approval?->status === 'approved' ? '#22c55e' : ($approval?->status === 'rejected' ? '#ef4444' : ($isCurrent ? '#f97316' : '#e5e7eb')) }};color:white;font-size:16px;font-weight:700;">
@@ -213,7 +227,7 @@
                         @endforeach
                     </div>
 
-                    @if ($event->status === 'menunggu_approval' && $this->canApproveLevel($currentApprovalLevel))
+                    @if ($event->status === \App\Models\Event::STATUS_MENUNGGU && $this->canApproveLevel($currentApprovalLevel))
                         <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #e5e7eb;">
                             <div style="font-size:12px;font-weight:600;color:#1a1a1a;">Approval level {{ strtoupper($currentApprovalLevel) }}</div>
                             <textarea wire:model="approvalNotes.{{ $currentApprovalLevel }}" rows="3" placeholder="Catatan approve / reject" style="width:100%;margin-top:8px;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
