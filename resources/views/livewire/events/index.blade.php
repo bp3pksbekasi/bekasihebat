@@ -71,20 +71,7 @@
                 @endforeach
             </div>
 
-            {{-- Peta Sebaran --}}
-            <div style="margin-bottom:24px;margin-top:20px;">
-                <div style="font-size:12px;color:#fe5000;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">Peta Sebaran Program</div>
-                <div style="height:300px;background:#f8fafc;border:0.5px solid #e2e8f0;border-radius:12px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-                    <img src="{{ $this->mapImage }}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;" alt="Peta Sebaran">
-                    @foreach ($this->mapMarkers as $marker)
-                        <div title="{{ $marker['label'] }}"
-                            style="position:absolute;left:{{ $marker['x'] }}%;top:{{ $marker['y'] }}%;transform:translate(-50%,-50%);width:{{ $marker['size'] }}px;height:{{ $marker['size'] }}px;border-radius:50%;border:1.5px solid white;background:{{ $marker['color'] }};box-shadow:0 3px 8px rgba(0,0,0,0.25);cursor:pointer;transition:transform 0.15s ease-in-out;z-index:10;"
-                            onmouseover="this.style.transform='translate(-50%,-50%) scale(1.25)'"
-                            onmouseout="this.style.transform='translate(-50%,-50%) scale(1)'">
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+
 
             {{-- Filters on Top Right of Table --}}
             <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
