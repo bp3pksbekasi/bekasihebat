@@ -157,6 +157,14 @@ class Edit extends Component
     {
         $query = \App\Models\BidangDpd::query()->where('is_active', true);
 
+        if ($this->orgLevel === 'dpd') {
+            $query->where('is_dpd', true);
+        } elseif ($this->orgLevel === 'dpc') {
+            $query->where('is_dpc', true);
+        } elseif ($this->orgLevel === 'dpra') {
+            $query->where('is_dpra', true);
+        }
+
         if (auth()->check() && auth()->user()->isBidang()) {
             $query->where('slug', auth()->user()->bidang_slug);
         }

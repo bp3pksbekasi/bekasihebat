@@ -149,15 +149,14 @@
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
                         <div style="grid-column: span 2;">
                             <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Level penyelenggara *</label>
-                            <select wire:model="orgLevel" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
+                            <select wire:model.live="orgLevel" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                                 @foreach($this->orgLevelOptions as $k => $v)
                                     <option value="{{ $k }}">{{ $v }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        @if(isset($orgLevel) && $orgLevel === 'dpd')
                         <div style="grid-column: span 2;">
-                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Bidang DPD (opsional)</label>
+                            <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Bidang Terkait (opsional)</label>
                             <select wire:model="bidangDpdId" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
                                 <option value="">- Pilih Bidang -</option>
                                 @foreach($this->bidangOptions as $b)
@@ -165,7 +164,6 @@
                                 @endforeach
                             </select>
                         </div>
-                        @endif
                         <div>
                             <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Penyelenggara</label>
                             <input wire:model="penyelenggara" type="text" placeholder="DPRa / Tim Lapangan" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">
