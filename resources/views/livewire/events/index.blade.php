@@ -243,7 +243,7 @@
                                                     type="button"
                                                     x-on:click="deleteUuid = '{{ $event->uuid }}'; showDeleteModal = true"
                                                     style="padding:5px 9px;border-radius:7px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:11px;cursor:pointer;"
-                                                >Hapus</button>
+                                                >Delete</button>
                                             </div>
                                         </td>
                                     </tr>
