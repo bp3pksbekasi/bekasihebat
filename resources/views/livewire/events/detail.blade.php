@@ -467,10 +467,10 @@
                             <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;">Laporan Kegiatan</div>
                             <div style="font-size:13px;color:#1a1a1a;font-weight:600;margin-top:2px;">Ringkasan pelaksanaan dan evaluasi</div>
                         </div>
-                        <div style="font-size:11px;color:#888;">Tersedia setelah event berstatus selesai</div>
+                        <div style="font-size:11px;color:#888;">Tersedia setelah event disetujui</div>
                     </div>
 
-                    @if ($event->status === 'selesai' || $event->report)
+                    @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
                         <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,0.9fr);gap:12px;margin-top:12px;" class="event-report-grid">
                             <div style="display:grid;gap:10px;">
                                 <textarea wire:model="reportRingkasan" rows="4" placeholder="Ringkasan kegiatan" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
@@ -495,7 +495,7 @@
                         </div>
                     @else
                         <div style="margin-top:12px;padding:18px;border-radius:10px;border:0.5px dashed #d4d4d8;background:#fafafa;text-align:center;font-size:12px;color:#888;">
-                            Tandai event sebagai selesai untuk mulai mengisi laporan.
+                            Event harus disetujui terlebih dahulu untuk mulai mengisi laporan.
                         </div>
                     @endif
                 </div>

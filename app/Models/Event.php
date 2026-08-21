@@ -201,6 +201,14 @@ class Event extends Model
 
     public function scopeForUser(Builder $query, \App\Models\User $user): Builder
     {
+        // Role Bidang DPD hanya melihat yang menunggu approval atau yang mereka buat sendiri
+        if (in_array($user->role, [\App\Models\User::ROLE_KESEKRETARIATAN, \App\Models\User::ROLE_SEKUM, \App\Models\User::ROLE_BENDUM, \App\Models\User::ROLE_KETUA_DPD], true)) {
+            return $query->where(function (Builder $q) use ($user) {
+                $q->where('status', self::STATUS_MENUNGGU)
+                  ->orWhere('created_by', $user->id);
+            });
+        }
+
         // DPD bisa lihat semua
         if ($user->isDpd()) {
             return $query;
