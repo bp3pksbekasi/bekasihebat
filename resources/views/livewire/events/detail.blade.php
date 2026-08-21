@@ -147,6 +147,7 @@
                 </div>
                 @endif
 
+                @if ($event->status !== \App\Models\Event::STATUS_MENUNGGU)
                 <div style="border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
                         <div>
@@ -189,6 +190,7 @@
                         </button>
                     </div>
                 </div>
+                @endif
             </div>
 
             @if ($event->dokumen_permohonan_pencairan || $event->dokumen_proposal || $event->dokumen_dpa || $event->dokumen_lpj_sebelumnya)
@@ -219,6 +221,7 @@
             </div>
             @endif
 
+            @if ($event->status !== \App\Models\Event::STATUS_MENUNGGU)
             @php $pSum = $this->pesertaSummary; @endphp
             <div style="margin-top:14px;border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                 <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;">
@@ -474,6 +477,7 @@
                     </div>
                 @endif
             </div>
+            @endif
         </div>
     </div>
 
