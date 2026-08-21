@@ -307,7 +307,7 @@ class Detail extends Component
 
     public function saveReport(): void
     {
-        if ($this->event->status !== Event::STATUS_SELESAI) {
+        if (! in_array($this->event->status, [Event::STATUS_DISETUJUI, Event::STATUS_SELESAI], true)) {
             return;
         }
 
