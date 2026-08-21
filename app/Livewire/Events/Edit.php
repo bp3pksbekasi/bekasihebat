@@ -287,10 +287,10 @@ class Edit extends Component
             'fundingSource' => ['nullable', 'string'],
             'totalAnggaran' => ['nullable', 'numeric'],
             'targetProgram' => ['nullable', 'string', 'max:255'],
-            'dokumenPermohonanPencairan' => [$this->event->dokumen_permohonan_pencairan ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
-            'dokumenProposal' => [$this->event->dokumen_proposal ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
-            'dokumenDpa' => [$this->event->dokumen_dpa ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
-            'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenPermohonanPencairan' => [$this->event->dokumen_permohonan_pencairan ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenProposal' => [$this->event->dokumen_proposal ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenDpa' => [$this->event->dokumen_dpa ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
         ]);
 
         $coverPath = $this->existingCover;

@@ -255,10 +255,10 @@ class Create extends Component
             'targetProgram' => ['nullable', 'string'],
             'requirements' => ['nullable', 'string'],
             'budgetNotes' => ['nullable', 'string'],
-            'dokumenPermohonanPencairan' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
-            'dokumenProposal' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
-            'dokumenDpa' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
-            'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenPermohonanPencairan' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenProposal' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenDpa' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
         ]);
         $coverPath = $this->coverImage ? $this->coverImage->store('events', 'public') : null;
         $dokPencairanPath = $this->dokumenPermohonanPencairan ? $this->dokumenPermohonanPencairan->store('events_docs', 'public') : null;
