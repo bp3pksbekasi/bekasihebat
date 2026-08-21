@@ -10,90 +10,103 @@
     ];
 @endphp
 
-<div style="min-height:100vh;padding:20px;background:#f5f5f5;position:relative;box-sizing:border-box;">
-    <div style="width:100%;margin:0;box-sizing:border-box;">
-        <div style="background:#1a1a1a;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-radius:14px 14px 0 0;">
-            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex:1 1 auto;">
-                <div style="font-size:15px;font-weight:500;">Program</div>
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1 1 auto;">
-                    <div style="font-size:12px;color:#d4d4d8;font-weight:500;">Filter :</div>
-                    <select wire:model.live="filterDapil" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#fff7f1;color:#993c1d;font-weight:500;">
-                        <option value="">Semua dapil</option>
-                        @foreach ($this->dapilOptions as $dapil)
-                            <option value="{{ $dapil }}">{{ $dapil }}</option>
-                        @endforeach
-                    </select>
-                    <select wire:model.live="filterKecamatan" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
-                        <option value="">Semua kecamatan</option>
-                        @foreach ($this->kecamatanOptions as $kec)
-                            <option value="{{ $kec }}">{{ $kec }}</option>
-                        @endforeach
-                    </select>
-                    <select wire:model.live="filterDesa" style="padding:5px 28px 5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;background:#27272a;color:#f4f4f5;">
-                        <option value="">Semua desa</option>
-                        @foreach ($this->desaOptions as $desa)
-                            <option value="{{ $desa }}">{{ $desa }}</option>
-                        @endforeach
-                    </select>
-                    <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari judul, lokasi, PIC..." style="padding:5px 10px;border:0.5px solid #3f3f46;border-radius:6px;font-size:12px;width:180px;background:#27272a;color:#f4f4f5;">
-                </div>
-            </div>
-            <div style="width:26px;height:26px;background:#fe5000;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 auto;">EV</div>
+<div class="min-h-screen p-5 bg-gray-50">
+    <!-- Header Title -->
+    <div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Program</h1>
+            <p class="text-sm text-gray-500 mt-1">Manajemen agenda, approval, dan publikasi kegiatan lintas wilayah.</p>
         </div>
+        <div class="flex items-center gap-4">
+            <div class="text-xs text-gray-500">Mode tampilan {{ $viewMode === 'table' ? 'tabel' : 'cards' }} · {{ number_format($events->total()) }} program</div>
+            <a href="{{ route('events.create') }}" wire:navigate class="inline-flex items-center px-4 py-2 bg-orange-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 shadow-sm transition">
+                <i class="ti ti-plus mr-2 text-base"></i>
+                Buat Program
+            </a>
+        </div>
+    </div>
 
-        <div style="background:white;border:0.5px solid #e5e5e5;border-top:none;border-radius:0 0 14px 14px;padding:16px 20px 20px;">
-            @if (session('message'))
-                <div style="margin-bottom:14px;padding:10px 12px;border-radius:8px;background:#ecfdf3;border:0.5px solid #bbf7d0;color:#166534;font-size:12px;">
-                    {{ session('message') }}
-                </div>
-            @endif
-
-            <div style="padding-top:2px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <h1 style="font-size:20px;font-weight:500;color:#1a1a1a;margin:0;">Program</h1>
-                    <div style="font-size:12px;color:#666;">Manajemen agenda, approval, dan publikasi kegiatan lintas wilayah.</div>
-                </div>
-                <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
-                    <div style="font-size:11px;color:#888;">Mode tampilan {{ $viewMode === 'table' ? 'tabel' : 'cards' }} · {{ number_format($events->total()) }} program</div>
-                    <a href="{{ route('events.create') }}" wire:navigate style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;background:#fe5000;color:white;text-decoration:none;font-size:12px;font-weight:600;">
-                        <i class="ti ti-plus" aria-hidden="true"></i>
-                        <span>Buat Program</span>
-                    </a>
-                </div>
+    <!-- Main Filters -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6 p-5">
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-[1.5]">
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Cari Program</label>
+                <input type="text" wire:model.live.debounce.300ms="search" class="w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm" placeholder="Cari judul, lokasi, PIC...">
+            </div>
+            
+            <div class="flex-1">
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Dapil</label>
+                <select wire:model.live="filterDapil" class="w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
+                    <option value="">Semua Dapil</option>
+                    @foreach($this->dapilOptions as $dapil)
+                        <option value="{{ $dapil }}">{{ $dapil }}</option>
+                    @endforeach
+                </select>
             </div>
 
-            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:16px 0;" class="event-summary-grid">
-                @foreach ($counts as $status => $cfg)
-                    <button wire:click="setStatus('{{ $status }}')" type="button" style="text-align:center;border-radius:10px;padding:14px 10px;border:0.5px solid {{ $filterStatus === $status ? '#fb923c' : '#e5e7eb' }};background:{{ $filterStatus === $status ? '#fff7ed' : 'white' }};cursor:pointer;">
-                        <div style="font-size:24px;font-weight:600;color:{{ $cfg['color'] }};">{{ number_format($cfg['count']) }}</div>
-                        <div style="font-size:11px;color:#666;margin-top:4px;">{{ $cfg['label'] }}</div>
-                    </button>
-                @endforeach
+            <div class="flex-1">
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Kecamatan</label>
+                <select wire:model.live="filterKecamatan" class="w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
+                    <option value="">Semua Kecamatan</option>
+                    @foreach($this->kecamatanOptions as $kec)
+                        <option value="{{ $kec }}">{{ $kec }}</option>
+                    @endforeach
+                </select>
             </div>
+
+            <div class="flex-1">
+                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Desa/Kelurahan</label>
+                <select wire:model.live="filterDesa" class="w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
+                    <option value="">Semua Desa</option>
+                    @foreach($this->desaOptions as $desa)
+                        <option value="{{ $desa }}">{{ $desa }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+
+    @if (session('message'))
+        <div class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm">
+            {{ session('message') }}
+        </div>
+    @endif
+
+    <!-- Cards (Event Summary Grid) -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        @foreach ($counts as $status => $cfg)
+            <button wire:click="setStatus('{{ $status }}')" type="button" class="bg-white border rounded-xl p-5 shadow-sm text-left transition-all hover:border-orange-300 {{ $filterStatus === $status ? 'ring-2 ring-orange-500 border-orange-500' : 'border-gray-200' }}">
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{{ $cfg['label'] }}</div>
+                <div class="text-3xl font-bold" style="color:{{ $cfg['color'] }};">{{ number_format($cfg['count']) }}</div>
+            </button>
+        @endforeach
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
 
 
 
             {{-- Filters on Top Right of Table --}}
-            <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
-                <select wire:model.live="filterStatus" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+            <div class="flex items-center justify-end gap-3 flex-wrap mb-4">
+                <select wire:model.live="filterStatus" class="rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
                     <option value="">Semua status</option>
                     @foreach (\App\Models\Event::STATUS_CONFIG as $key => $cfg)
                         <option value="{{ $key }}">{{ $cfg['label'] }}</option>
                     @endforeach
                 </select>
-                <select wire:model.live="filterJenis" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+                <select wire:model.live="filterJenis" class="rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
                     <option value="">Semua jenis</option>
                     @foreach (\App\Models\Event::JENIS_EVENT as $key => $label)
                         <option value="{{ $key }}">{{ $label }}</option>
                     @endforeach
                 </select>
-                <select wire:model.live="filterLevel" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+                <select wire:model.live="filterLevel" class="rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
                     <option value="">Semua level</option>
                     <option value="dpra">DPRa</option>
                     <option value="dpc">DPC</option>
                     <option value="dpd">DPD</option>
                 </select>
-                <select wire:model.live="filterBidang" style="height:36px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 10px;font-size:11px;background:white;color:#1a1a1a;">
+                <select wire:model.live="filterBidang" class="rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 py-2 px-3 text-sm">
                     <option value="">Semua bidang</option>
                     @foreach($this->bidangOptions as $b)
                         <option value="{{ $b->id }}">{{ $b->nama }}</option>
@@ -237,7 +250,7 @@
                 </div>
             @endif
 
-            <div style="margin-top:14px;">
+            <div class="mt-4">
                 {{ $events->links() }}
             </div>
         </div>
