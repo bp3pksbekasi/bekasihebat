@@ -139,16 +139,11 @@ class Index extends Component
 
         $event = Event::query()->where('uuid', $this->deleteId)->first();
         if ($event) {
-            $event->approvals()->delete();
-            $event->budgetItems()->delete();
-            $event->report()->delete();
-            $event->registrations()->delete();
-            $event->pesertas()->delete();
-            $event->delete();
+            $event->update(['is_active' => false]);
         }
 
         $this->cancelDelete();
-        session()->flash('message', 'Program berhasil dihapus.');
+        session()->flash('message', 'Program berhasil dinonaktifkan.');
     }
 
     public function togglePublic(string $eventUuid): void
@@ -323,6 +318,7 @@ class Index extends Component
         $user = auth()->user();
 
         return Event::query()
+            ->where('is_active', true)
             ->forUser($user)
             ->when($this->filterStatus !== '', fn(Builder $q) => $q->where('status', $this->filterStatus))
             ->when($this->filterJenis !== '', fn(Builder $q) => $q->where('jenis', $this->filterJenis))

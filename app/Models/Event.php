@@ -96,6 +96,7 @@ class Event extends Model
         'target_program',
         'requirements',
         'budget_notes',
+        'is_active',
     ];
 
     protected function casts(): array
@@ -104,6 +105,7 @@ class Event extends Model
             'tanggal_mulai' => 'datetime',
             'tanggal_selesai' => 'datetime',
             'is_public' => 'boolean',
+            'is_active' => 'boolean',
             'kapasitas' => 'integer',
             'created_by' => 'integer',
         ];
