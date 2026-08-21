@@ -182,8 +182,8 @@
                                     <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Tanggal</th>
                                     <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Lokasi</th>
                                     <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Status</th>
-                                    <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Approval</th>
-                                    <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Publik</th>
+                                    {{-- <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Approval</th>
+                                    <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Publik</th> --}}
                                     <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Aksi</th>
                                 </tr>
                             </thead>
@@ -220,7 +220,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style="padding:12px;text-align:center;">
+                                        {{-- <td style="padding:12px;text-align:center;">
                                             <div style="display:flex;align-items:center;justify-content:center;gap:5px;">
                                                 @foreach (['dpra', 'dpc', 'dpd'] as $level)
                                                     @php $approval = $event->approvals->firstWhere('level', $level); @endphp
@@ -232,7 +232,7 @@
                                             <button wire:click="togglePublic('{{ $event->uuid }}')" type="button" style="width:40px;height:22px;border-radius:999px;border:none;padding:2px;background:{{ $event->status === \App\Models\Event::STATUS_DISETUJUI ? ($event->is_public ? '#16a34a' : '#d4d4d8') : '#e5e7eb' }};cursor:pointer;{{ $event->status !== \App\Models\Event::STATUS_DISETUJUI ? 'opacity:.7;' : '' }}">
                                                 <span style="display:block;width:18px;height:18px;border-radius:50%;background:white;transform:translateX({{ $event->is_public ? '18px' : '0' }});transition:transform .2s;"></span>
                                             </button>
-                                        </td>
+                                        </td> --}}
                                         <td style="padding:12px;text-align:center;">
                                             <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;">
                                                 <a href="{{ route('events.detail', $event) }}" wire:navigate style="padding:5px 9px;border-radius:7px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:11px;">Lihat</a>
@@ -250,7 +250,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" style="padding:34px 16px;text-align:center;font-size:12px;color:#888;background:#fafafa;">Belum ada program pada filter ini.</td>
+                                        <td colspan="6" style="padding:34px 16px;text-align:center;font-size:12px;color:#888;background:#fafafa;">Belum ada program pada filter ini.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
