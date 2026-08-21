@@ -151,7 +151,13 @@ class Create extends Component
     #[Computed]
     public function bidangOptions(): \Illuminate\Support\Collection
     {
-        return \App\Models\BidangDpd::query()->orderBy('urutan')->get();
+        $query = \App\Models\BidangDpd::query()->where('is_active', true);
+
+        if (auth()->check() && auth()->user()->isBidang()) {
+            $query->where('slug', auth()->user()->bidang_slug);
+        }
+
+        return $query->orderBy('urutan')->get();
     }
 
     #[Computed]
