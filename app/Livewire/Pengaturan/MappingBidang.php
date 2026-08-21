@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class MappingBidang extends Component
 {
-    #[Layout('components.layouts.app')]
+    #[Layout('components.layouts.app.sidebar')]
     public function render(): View
     {
         $bidangs = BidangDpd::orderBy('urutan')->get();
