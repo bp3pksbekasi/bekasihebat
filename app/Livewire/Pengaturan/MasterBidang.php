@@ -45,6 +45,7 @@ class MasterBidang extends Component
     public function getBidangListProperty(): LengthAwarePaginator
     {
         return BidangDpd::query()
+            ->where('is_active', true)
             ->when($this->search !== '', function (Builder $query): void {
                 $query->where('nama', 'like', '%' . $this->search . '%')
                     ->orWhere('kabid', 'like', '%' . $this->search . '%')
