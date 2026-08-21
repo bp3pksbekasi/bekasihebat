@@ -370,7 +370,11 @@ class Create extends Component
             ]);
         }
 
-        collect(['dpra', 'dpc', 'dpd'])->each(function (string $level) use ($event): void {
+        $levels = ($this->orgLevel === 'dpd' && !empty($this->bidangDpdId))
+            ? ['kesekretariatan', 'sekum', 'bendum', 'ketua_dpd']
+            : ['dpra', 'dpc', 'dpd'];
+
+        collect($levels)->each(function (string $level) use ($event): void {
             EventApproval::query()->create([
                 'event_id' => $event->id,
                 'level' => $level,
