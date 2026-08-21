@@ -76,8 +76,11 @@ class UserManagement extends Component
 
     public function getBidangOptionsProperty(): Collection
     {
-        return collect(User::BIDANG_OPTIONS)
-            ->map(fn (string $label, string $slug) => ['slug' => $slug, 'label' => $label])
+        return \App\Models\BidangDpd::query()
+            ->where('is_active', true)
+            ->orderBy('urutan')
+            ->get()
+            ->map(fn ($bidang) => ['slug' => $bidang->slug, 'label' => $bidang->nama])
             ->values();
     }
 
