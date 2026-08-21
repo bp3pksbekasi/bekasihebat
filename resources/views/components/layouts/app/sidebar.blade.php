@@ -97,6 +97,7 @@
                 ['route' => 'pengaturan.whatsapp', 'slug' => 'pengaturan-whatsapp', 'label' => 'Setting WhatsApp', 'icon' => 'brand-whatsapp', 'active' => ['pengaturan.whatsapp']],
                 ['route' => 'pengaturan.rule', 'slug' => 'pengaturan-rule', 'label' => 'Pengaturan Rule', 'icon' => 'shield-lock', 'active' => ['pengaturan.rule']],
                 ['route' => 'pengaturan.bidang', 'slug' => 'pengaturan-bidang', 'label' => 'Master Bidang', 'icon' => 'category-2', 'active' => ['pengaturan.bidang']],
+                ['route' => 'pengaturan.mapping-bidang', 'slug' => 'pengaturan-mapping-bidang', 'label' => 'Mapping Level Bidang', 'icon' => 'hierarchy-2', 'active' => ['pengaturan.mapping-bidang']],
                 ['route' => 'pengaturan.api', 'slug' => 'pengaturan-api', 'label' => 'Pengaturan API', 'icon' => 'api-app', 'active' => ['pengaturan.api']],
                 ['route' => 'kartu-anggota.admin', 'slug' => 'kartu-anggota', 'label' => 'Kartu Anggota', 'icon' => 'id-badge-2', 'active' => ['kartu-anggota.*']],
             ];

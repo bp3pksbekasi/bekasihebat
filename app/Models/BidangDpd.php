@@ -22,6 +22,15 @@ class BidangDpd extends Model
         'pic_nama',
         'pic_hp',
         'urutan',
+        'is_dpd',
+        'is_dpc',
+        'is_dpra',
+    ];
+
+    protected $casts = [
+        'is_dpd' => 'boolean',
+        'is_dpc' => 'boolean',
+        'is_dpra' => 'boolean',
     ];
 
     public function programKerjas(): HasMany
