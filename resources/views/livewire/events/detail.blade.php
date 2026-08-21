@@ -509,7 +509,9 @@
                                         },
                                         format() {
                                             if (!this.raw && this.raw !== 0) { this.formatted = ''; return; }
-                                            let val = this.raw.toString().replace(/\D/g, '');
+                                            let val = parseFloat(this.raw);
+                                            if (isNaN(val)) val = 0;
+                                            val = Math.floor(val).toString();
                                             this.formatted = val ? 'Rp' + new Intl.NumberFormat('id-ID').format(val) : '';
                                         },
                                         update(e) {
