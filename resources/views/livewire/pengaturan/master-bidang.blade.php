@@ -88,7 +88,12 @@
                                     <button wire:click="openFormEdit('{{ $bidang->id }}')" class="text-indigo-600 hover:text-indigo-900 p-1 rounded-md hover:bg-indigo-50" title="Edit">
                                         <i class="ti ti-edit text-lg"></i>
                                     </button>
-                                    <button wire:click="confirmDelete('{{ $bidang->id }}')" class="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50" title="Hapus">
+                                    <button
+                                        wire:click="deactivateBidang('{{ $bidang->id }}')"
+                                        wire:confirm="Nonaktifkan bidang '{{ addslashes($bidang->nama) }}'?\n\nBidang akan disembunyikan dari daftar. Data tidak dihapus permanen."
+                                        class="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50"
+                                        title="Nonaktifkan"
+                                    >
                                         <i class="ti ti-trash text-lg"></i>
                                     </button>
                                 </div>
@@ -344,37 +349,4 @@
         </div>
     @endif
 
-    {{-- Modal Konfirmasi Hapus --}}
-    @if ($showDeleteConfirm)
-        <div class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-zinc-900/50 backdrop-blur-sm transition-opacity" wire:click="cancelDelete"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                    <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                            <div class="sm:flex sm:items-start">
-                                <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                    <i class="ti ti-alert-triangle text-xl text-red-600"></i>
-                                </div>
-                                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                    <h3 class="text-base font-semibold leading-6 text-zinc-900" id="modal-title">Hapus Data Bidang?</h3>
-                                    <div class="mt-2">
-                                        <p class="text-sm text-zinc-500">Apakah Anda yakin ingin menghapus bidang ini? Tindakan ini tidak dapat dibatalkan.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-zinc-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                            <button wire:click="deleteBidang" type="button" class="inline-flex w-full justify-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto transition">
-                                Hapus
-                            </button>
-                            <button wire:click="cancelDelete" type="button" class="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-3 py-2 text-sm font-semibold text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 sm:mt-0 sm:w-auto transition">
-                                Batal
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
 </div>

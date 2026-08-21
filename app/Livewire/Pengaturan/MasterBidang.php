@@ -31,9 +31,6 @@ class MasterBidang extends Component
     public string $fPicHp = '';
     public int $fUrutan = 0;
 
-    public bool $showDeleteConfirm = false;
-    public ?string $deleteId = null;
-
     public function mount(): void
     {
         abort_unless(auth()->user()?->isAdmin(), 403);
@@ -42,6 +39,7 @@ class MasterBidang extends Component
     public function getBidangListProperty(): LengthAwarePaginator
     {
         return BidangDpd::query()
+            ->where('is_active', true)
             ->when($this->search !== '', function (Builder $query): void {
                 $query->where('nama', 'like', '%' . $this->search . '%')
                     ->orWhere('pic_nama', 'like', '%' . $this->search . '%');
@@ -135,36 +133,14 @@ class MasterBidang extends Component
         $this->closeForm();
     }
 
-    public function confirmDelete(string $id): void
+    public function deactivateBidang(string $id): void
     {
-        $this->deleteId = $id;
-        $this->showDeleteConfirm = true;
-    }
-
-    public function cancelDelete(): void
-    {
-        $this->deleteId = null;
-        $this->showDeleteConfirm = false;
-    }
-
-    public function deleteBidang(): void
-    {
-        if (! $this->deleteId) {
-            return;
+        $bidang = BidangDpd::query()->find($id);
+        if ($bidang) {
+            $bidang->update(['is_active' => false]);
         }
 
-        $bidang = BidangDpd::query()->findOrFail($this->deleteId);
-        
-        // Pengecekan relasi (jika ada) - misal program kerja
-        if ($bidang->programKerjas()->exists() || $bidang->agendas()->exists()) {
-            $this->addError('deleteError', 'Gagal menghapus! Bidang ini sudah memiliki program kerja atau agenda.');
-            return;
-        }
-
-        $bidang->delete();
-
-        $this->cancelDelete();
-        session()->flash('message', 'Data bidang berhasil dihapus.');
+        session()->flash('message', 'Bidang berhasil dinonaktifkan.');
     }
 
     public function render()

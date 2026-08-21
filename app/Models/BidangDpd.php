@@ -25,12 +25,14 @@ class BidangDpd extends Model
         'is_dpd',
         'is_dpc',
         'is_dpra',
+        'is_active',
     ];
 
     protected $casts = [
         'is_dpd' => 'boolean',
         'is_dpc' => 'boolean',
         'is_dpra' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function programKerjas(): HasMany
