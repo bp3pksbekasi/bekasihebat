@@ -284,7 +284,7 @@ class Index extends Component
     #[Computed]
     public function bidangOptions(): \Illuminate\Support\Collection
     {
-        return \App\Models\BidangDpd::query()->orderBy('urutan')->get();
+        return \App\Models\BidangDpd::query()->where('is_active', true)->orderBy('urutan')->get();
     }
 
     public function render()
