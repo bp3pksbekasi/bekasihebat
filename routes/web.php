@@ -461,6 +461,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/api', \App\Livewire\Pengaturan\Api::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.api');
+
+    Route::get('/pengaturan/bidang', \App\Livewire\Pengaturan\MasterBidang::class)
+        ->middleware('role:admin_dpd')
+        ->name('pengaturan.bidang');
 });
 
 Route::middleware(['auth'])->group(function () {
