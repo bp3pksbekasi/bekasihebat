@@ -115,6 +115,7 @@
                     <option value="dpra">DPRa</option>
                     <option value="dpc">DPC</option>
                     <option value="dpd">DPD</option>
+                </select>
             </div>
 
             @if ($viewMode === 'cards')
