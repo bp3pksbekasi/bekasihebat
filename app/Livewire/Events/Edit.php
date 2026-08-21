@@ -233,9 +233,9 @@ class Edit extends Component
     public function simpanDraft()
     {
         $event = $this->persist(Event::STATUS_DRAFT, $this->event->level_approval);
-        session()->flash('message', 'Draft event berhasil diperbarui.');
+        session()->flash('message', 'Program berhasil diperbarui dan disimpan sebagai DRAFT.');
 
-        return redirect()->route('events.detail', $event);
+        return redirect()->route('events.index');
     }
 
     public function saveAndSubmit()

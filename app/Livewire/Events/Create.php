@@ -205,9 +205,9 @@ class Create extends Component
     public function simpanDraft()
     {
         $event = $this->persist(Event::STATUS_DRAFT, 'dpra');
-        session()->flash('message', 'Draft event berhasil disimpan.');
+        session()->flash('message', 'Program berhasil disimpan sebagai DRAFT.');
 
-        return redirect()->route('events.detail', $event);
+        return redirect()->route('events.index');
     }
 
     public function saveAndSubmit()
