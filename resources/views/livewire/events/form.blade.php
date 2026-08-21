@@ -353,7 +353,12 @@
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;">
                             {{-- Dokumen 1 --}}
                             <div>
-                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Surat Permohonan Pencairan</label>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                                    <span>Surat Permohonan Pencairan</span>
+                                    <a href="{{ route('download.template', 'TEMPLATE_FORMAT_SURAT_PERMOHONAN_PENCAIRAN.docx') }}" target="_blank" style="color:#2563eb;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;font-weight:500;">
+                                        <i class="ti ti-download"></i> Template
+                                    </a>
+                                </label>
                                 <div style="position:relative;border:1.5px dashed #cbd5e1;border-radius:10px;padding:12px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;">
                                     @if($dokumenPermohonanPencairan)
                                         <i class="ti ti-circle-check-filled" style="font-size:24px;color:#10b981;"></i>
@@ -385,7 +390,12 @@
 
                             {{-- Dokumen 2 --}}
                             <div>
-                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Proposal Kegiatan</label>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                                    <span>Proposal Kegiatan</span>
+                                    <a href="{{ route('download.template', 'TEMPLATE_FORMAT_PROPOSAL.docx') }}" target="_blank" style="color:#2563eb;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;font-weight:500;">
+                                        <i class="ti ti-download"></i> Template
+                                    </a>
+                                </label>
                                 <div style="position:relative;border:1.5px dashed #cbd5e1;border-radius:10px;padding:12px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;">
                                     @if($dokumenProposal)
                                         <i class="ti ti-circle-check-filled" style="font-size:24px;color:#10b981;"></i>
@@ -417,7 +427,12 @@
 
                             {{-- Dokumen 3 --}}
                             <div>
-                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">DPA (Dokumen Pelaksanaan Anggaran)</label>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                                    <span>DPA (Dokumen Pelaksanaan Anggaran)</span>
+                                    <a href="{{ route('download.template', 'TEMPLATE_DPA.xlsx') }}" target="_blank" style="color:#2563eb;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;font-weight:500;">
+                                        <i class="ti ti-download"></i> Template
+                                    </a>
+                                </label>
                                 <div style="position:relative;border:1.5px dashed #cbd5e1;border-radius:10px;padding:12px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;">
                                     @if($dokumenDpa)
                                         <i class="ti ti-circle-check-filled" style="font-size:24px;color:#10b981;"></i>

@@ -110,6 +110,22 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile/complete', Complete::class)->name('profile.complete');
 
+    Route::get('/download-template/{filename}', function ($filename) {
+        $allowedFiles = [
+            'TEMPLATE_DPA.xlsx',
+            'TEMPLATE_FORMAT_PROPOSAL.docx',
+            'TEMPLATE_FORMAT_SURAT_PERMOHONAN_PENCAIRAN.docx'
+        ];
+        if (!in_array($filename, $allowedFiles)) {
+            abort(404);
+        }
+        $path = app_path('Support/SupportingDocument/' . $filename);
+        if (!file_exists($path)) {
+            abort(404);
+        }
+        return response()->download($path);
+    })->name('download.template');
+
     Route::get('/dashboard', AdminDashboard::class)
         ->name('dashboard');
 
