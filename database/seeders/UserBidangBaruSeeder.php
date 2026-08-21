@@ -26,7 +26,7 @@ class UserBidangBaruSeeder extends Seeder
             // Nama user, misal: Pengurus BPKK
             $name = 'Pengurus ' . strtoupper($singkatan);
 
-            User::updateOrCreate(
+            $user = User::updateOrCreate(
                 ['email' => $email],
                 [
                     'name' => $name,
@@ -38,6 +38,8 @@ class UserBidangBaruSeeder extends Seeder
                     'email_verified_at' => now(),
                 ]
             );
+
+            $user->syncRoles([User::ROLE_BIDANG]);
         }
     }
 }
