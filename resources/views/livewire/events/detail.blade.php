@@ -94,6 +94,78 @@
                 </div>
             @endif
 
+            @if ($event->target_program || $event->speakers || $event->funding_source || $event->total_anggaran || $event->budget_notes || $event->requirements)
+                <div style="margin-bottom:14px;padding:14px;border-radius:12px;border:0.5px solid #e5e7eb;background:white;">
+                    <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:12px;">Informasi Detail Program</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;">
+                        @if ($event->target_program)
+                            <div>
+                                <div style="font-size:11px;color:#666;">Target / Sasaran Program</div>
+                                <div style="font-size:13px;color:#1a1a1a;font-weight:500;margin-top:2px;">{{ $event->target_program }}</div>
+                            </div>
+                        @endif
+                        @if ($event->speakers)
+                            <div>
+                                <div style="font-size:11px;color:#666;">Narasumber / Pihak Terlibat</div>
+                                <div style="font-size:13px;color:#1a1a1a;font-weight:500;margin-top:2px;">{{ $event->speakers }}</div>
+                            </div>
+                        @endif
+                        @if ($event->funding_source)
+                            <div>
+                                <div style="font-size:11px;color:#666;">Sumber Pendanaan</div>
+                                <div style="font-size:13px;color:#1a1a1a;font-weight:500;margin-top:2px;">{{ $event->funding_source }}</div>
+                            </div>
+                        @endif
+                        @if ($event->total_anggaran)
+                            <div>
+                                <div style="font-size:11px;color:#666;">Total Anggaran Biaya</div>
+                                <div style="font-size:13px;color:#1a1a1a;font-weight:500;margin-top:2px;">Rp {{ number_format($event->total_anggaran, 0, ',', '.') }}</div>
+                            </div>
+                        @endif
+                        @if ($event->budget_notes)
+                            <div>
+                                <div style="font-size:11px;color:#666;">Catatan Anggaran</div>
+                                <div style="font-size:13px;color:#1a1a1a;font-weight:500;margin-top:2px;">{{ $event->budget_notes }}</div>
+                            </div>
+                        @endif
+                        @if ($event->requirements)
+                            <div>
+                                <div style="font-size:11px;color:#666;">Keterangan Lain / Syarat</div>
+                                <div style="font-size:13px;color:#1a1a1a;font-weight:500;margin-top:2px;">{{ $event->requirements }}</div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
+            @if ($event->dokumen_permohonan_pencairan || $event->dokumen_proposal || $event->dokumen_dpa || $event->dokumen_lpj_sebelumnya)
+            <div style="margin-bottom:14px;border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
+                <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;">Dokumen & Lampiran Persiapan</div>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                    @if ($event->dokumen_permohonan_pencairan)
+                        <a href="{{ asset('storage/'.$event->dokumen_permohonan_pencairan) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> Surat Pencairan
+                        </a>
+                    @endif
+                    @if ($event->dokumen_proposal)
+                        <a href="{{ asset('storage/'.$event->dokumen_proposal) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> Proposal
+                        </a>
+                    @endif
+                    @if ($event->dokumen_dpa)
+                        <a href="{{ asset('storage/'.$event->dokumen_dpa) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> DPA
+                        </a>
+                    @endif
+                    @if ($event->dokumen_lpj_sebelumnya)
+                        <a href="{{ asset('storage/'.$event->dokumen_lpj_sebelumnya) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> LPJ Sebelumnya
+                        </a>
+                    @endif
+                </div>
+            </div>
+            @endif
+
             @if ($event->kegiatanRw)
                 <div style="margin-bottom:14px;padding:11px 12px;border-radius:10px;background:#eff6ff;border:0.5px solid #bfdbfe;color:#1d4ed8;font-size:12px;">
                     Dibuat dari kegiatan Sisir RW di {{ $event->kegiatanRw->desa }} RW {{ $event->kegiatanRw->nomor_rw }}.
@@ -192,34 +264,6 @@
                 </div>
                 @endif
             </div>
-
-            @if ($event->dokumen_permohonan_pencairan || $event->dokumen_proposal || $event->dokumen_dpa || $event->dokumen_lpj_sebelumnya)
-            <div style="margin-top:14px;border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
-                <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;">Dokumen & Lampiran Persiapan</div>
-                <div style="display:flex;flex-wrap:wrap;gap:10px;">
-                    @if ($event->dokumen_permohonan_pencairan)
-                        <a href="{{ asset('storage/'.$event->dokumen_permohonan_pencairan) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-                            <i class="ti ti-file-text"></i> Surat Pencairan
-                        </a>
-                    @endif
-                    @if ($event->dokumen_proposal)
-                        <a href="{{ asset('storage/'.$event->dokumen_proposal) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-                            <i class="ti ti-file-text"></i> Proposal
-                        </a>
-                    @endif
-                    @if ($event->dokumen_dpa)
-                        <a href="{{ asset('storage/'.$event->dokumen_dpa) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-                            <i class="ti ti-file-text"></i> DPA
-                        </a>
-                    @endif
-                    @if ($event->dokumen_lpj_sebelumnya)
-                        <a href="{{ asset('storage/'.$event->dokumen_lpj_sebelumnya) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-                            <i class="ti ti-file-text"></i> LPJ Sebelumnya
-                        </a>
-                    @endif
-                </div>
-            </div>
-            @endif
 
             @if ($event->status !== \App\Models\Event::STATUS_MENUNGGU)
             @php $pSum = $this->pesertaSummary; @endphp
