@@ -5,6 +5,7 @@
     </head>
     <body class="min-h-screen bg-[#0f0f10] text-zinc-100">
         <style>
+            [x-cloak] { display: none !important; }
             [data-flux-sidebar] {
                 background: #111113 !important;
                 border-color: #27272a !important;
