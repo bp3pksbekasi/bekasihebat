@@ -31,7 +31,7 @@
                         ] as $t)
                         <button type="button"
                             @click="tab='{{ $t['key'] }}'"
-                            :style="'padding:8px 14px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;' + (tab==='{{ $t['key'] }}' ? 'background:#fed7aa;color:#c2410c;' : 'background:transparent;color:#71717a;')">{{ $t['label'] }}</button>
+                            :style="'padding:10px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;' + (tab==='{{ $t['key'] }}' ? 'background:#fff7ed;color:#ea580c;' : 'background:transparent;color:#3f3f46;')">{{ $t['label'] }}</button>
                         @endforeach
                         </div>
                     </div>
@@ -81,19 +81,19 @@
 
                     {{-- Progress Indicator --}}
                     <div style="display:flex;align-items:center;margin-bottom:24px;border-bottom:0.5px solid #e5e5e5;padding-bottom:16px;overflow-x:auto;">
-                        <div @click="infoStep = 1" :style="'display:flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;' + (infoStep >= 1 ? 'color:#fe5000;font-weight:600;' : 'color:#a1a1aa;')">
-                            <div :style="'width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;' + (infoStep >= 1 ? 'background:#fe5000;color:white;' : 'background:#f4f4f5;color:#a1a1aa;')">1</div>
-                            <span style="font-size:13px;">Informasi Utama</span>
+                        <div @click="infoStep = 1" :style="'display:flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;' + (infoStep >= 1 ? 'color:#fe5000;font-weight:700;' : 'color:#52525b;font-weight:500;')">
+                            <div :style="'width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;' + (infoStep >= 1 ? 'background:#fe5000;color:white;' : 'background:#e4e4e7;color:#52525b;')">1</div>
+                            <span style="font-size:14px;">Informasi Utama</span>
                         </div>
                         <div style="flex:1;min-width:30px;height:1px;background:#e5e5e5;margin:0 16px;"></div>
-                        <div @click="infoStep = 2" :style="'display:flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;' + (infoStep >= 2 ? 'color:#fe5000;font-weight:600;' : 'color:#a1a1aa;')">
-                            <div :style="'width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;' + (infoStep >= 2 ? 'background:#fe5000;color:white;' : 'background:#f4f4f5;color:#a1a1aa;')">2</div>
-                            <span style="font-size:13px;">Pihak Terkait</span>
+                        <div @click="infoStep = 2" :style="'display:flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;' + (infoStep >= 2 ? 'color:#fe5000;font-weight:700;' : 'color:#52525b;font-weight:500;')">
+                            <div :style="'width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;' + (infoStep >= 2 ? 'background:#fe5000;color:white;' : 'background:#e4e4e7;color:#52525b;')">2</div>
+                            <span style="font-size:14px;">Pihak Terkait</span>
                         </div>
                         <div style="flex:1;min-width:30px;height:1px;background:#e5e5e5;margin:0 16px;"></div>
-                        <div @click="infoStep = 3" :style="'display:flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;' + (infoStep >= 3 ? 'color:#fe5000;font-weight:600;' : 'color:#a1a1aa;')">
-                            <div :style="'width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;' + (infoStep >= 3 ? 'background:#fe5000;color:white;' : 'background:#f4f4f5;color:#a1a1aa;')">3</div>
-                            <span style="font-size:13px;">Waktu & Lokasi</span>
+                        <div @click="infoStep = 3" :style="'display:flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;' + (infoStep >= 3 ? 'color:#fe5000;font-weight:700;' : 'color:#52525b;font-weight:500;')">
+                            <div :style="'width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;' + (infoStep >= 3 ? 'background:#fe5000;color:white;' : 'background:#e4e4e7;color:#52525b;')">3</div>
+                            <span style="font-size:14px;">Waktu & Lokasi</span>
                         </div>
                     </div>
 
