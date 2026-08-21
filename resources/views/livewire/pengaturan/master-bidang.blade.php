@@ -112,84 +112,234 @@
         @endif
     </div>
 
-    {{-- Modal Form --}}
+    {{-- Modal Form (Drawer Model) --}}
     @if ($showForm)
-        <div class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-zinc-900/50 backdrop-blur-sm transition-opacity"></div>
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                    <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                            <div class="sm:flex sm:items-start">
-                                <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 sm:mx-0 sm:h-10 sm:w-10">
-                                    <i class="ti ti-{{ $isEdit ? 'edit' : 'plus' }} text-xl text-orange-600"></i>
-                                </div>
-                                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
-                                    <h3 class="text-base font-semibold leading-6 text-zinc-900" id="modal-title">{{ $isEdit ? 'Edit Bidang' : 'Tambah Bidang Baru' }}</h3>
-                                    <div class="mt-4 space-y-4">
-                                        <div>
-                                            <label class="block text-sm font-medium leading-6 text-zinc-900">Nama Bidang <span class="text-red-500">*</span></label>
-                                            <div class="mt-1">
-                                                <input wire:model="fNama" type="text" class="block w-full rounded-lg border-0 py-2 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
-                                            </div>
-                                            @error('fNama') <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span> @enderror
-                                        </div>
+        {{-- Backdrop --}}
+        <div
+            wire:click="closeForm"
+            style="position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:40;backdrop-filter:blur(2px);"
+        ></div>
 
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <label class="block text-sm font-medium leading-6 text-zinc-900">Ikon (Tabler Icons)</label>
-                                                <div class="mt-1">
-                                                    <input wire:model="fIcon" type="text" placeholder="misal: users" class="block w-full rounded-lg border-0 py-2 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
-                                                </div>
-                                                @error('fIcon') <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span> @enderror
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium leading-6 text-zinc-900">Warna (Hex)</label>
-                                                <div class="mt-1">
-                                                    <input wire:model="fColor" type="text" placeholder="misal: #fe5000" class="block w-full rounded-lg border-0 py-2 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
-                                                </div>
-                                                @error('fColor') <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span> @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <label class="block text-sm font-medium leading-6 text-zinc-900">Nama PIC</label>
-                                                <div class="mt-1">
-                                                    <input wire:model="fPicNama" type="text" class="block w-full rounded-lg border-0 py-2 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
-                                                </div>
-                                                @error('fPicNama') <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span> @enderror
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium leading-6 text-zinc-900">No. HP PIC</label>
-                                                <div class="mt-1">
-                                                    <input wire:model="fPicHp" type="text" class="block w-full rounded-lg border-0 py-2 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
-                                                </div>
-                                                @error('fPicHp') <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span> @enderror
-                                            </div>
-                                        </div>
-                                        
-                                        <div>
-                                            <label class="block text-sm font-medium leading-6 text-zinc-900">Urutan Tampil <span class="text-red-500">*</span></label>
-                                            <div class="mt-1">
-                                                <input wire:model="fUrutan" type="number" min="0" class="block w-full rounded-lg border-0 py-2 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
-                                            </div>
-                                            @error('fUrutan') <span class="text-xs text-red-600 mt-1 block">{{ $message }}</span> @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        {{-- Drawer Panel --}}
+        <div style="
+            position:fixed;
+            top:0;right:0;
+            width:100%;
+            max-width:520px;
+            height:100%;
+            background:#fff;
+            box-shadow:-8px 0 32px rgba(0,0,0,0.18);
+            z-index:50;
+            overflow-y:auto;
+            display:flex;
+            flex-direction:column;
+        ">
+            {{-- Header --}}
+            <div style="
+                position:sticky;top:0;
+                background:#fff;
+                border-bottom:1px solid #e5e7eb;
+                padding:18px 20px;
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:12px;
+                z-index:51;
+            ">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:#ffedd5;display:flex;align-items:center;justify-content:center;color:#ea580c;">
+                        <i class="ti ti-{{ $isEdit ? 'edit' : 'plus' }} text-xl"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:17px;font-weight:700;color:#111827;letter-spacing:-0.2px;">
+                            {{ $isEdit ? 'Edit Bidang' : 'Tambah Bidang Baru' }}
                         </div>
-                        <div class="bg-zinc-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                            <button wire:click="simpanBidang" type="button" class="inline-flex w-full justify-center rounded-lg bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 sm:ml-3 sm:w-auto transition">
-                                Simpan
-                            </button>
-                            <button wire:click="closeForm" type="button" class="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-3 py-2 text-sm font-semibold text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 sm:mt-0 sm:w-auto transition">
-                                Batal
-                            </button>
-                        </div>
+                        <div style="font-size:12px;color:#6b7280;margin-top:3px;">Lengkapi data form berikut</div>
                     </div>
                 </div>
+                <button
+                    wire:click="closeForm"
+                    type="button"
+                    style="
+                        width:36px;height:36px;
+                        border-radius:8px;
+                        border:1px solid #e5e7eb;
+                        background:#f9fafb;
+                        cursor:pointer;
+                        display:flex;align-items:center;justify-content:center;
+                        font-size:16px;color:#6b7280;
+                        flex-shrink:0;
+                    "
+                >✕</button>
+            </div>
+
+            {{-- Form Body --}}
+            <div style="padding:20px;display:grid;gap:20px;flex:1;">
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Nama Bidang <span style="color:#ef4444;">*</span></label>
+                    <input
+                        wire:model="fNama"
+                        type="text"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                    @error('fNama') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Ikon (Tabler Icons)</label>
+                        <input
+                            wire:model="fIcon"
+                            type="text"
+                            placeholder="misal: users"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fIcon') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Warna (Hex)</label>
+                        <input
+                            wire:model="fColor"
+                            type="text"
+                            placeholder="misal: #fe5000"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fColor') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Nama PIC</label>
+                        <input
+                            wire:model="fPicNama"
+                            type="text"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fPicNama') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">No. HP PIC</label>
+                        <input
+                            wire:model="fPicHp"
+                            type="text"
+                            style="
+                                width:100%;height:48px;
+                                border-radius:10px;
+                                border:1.5px solid #d1d5db;
+                                background:#fff;
+                                padding:0 14px;
+                                font-size:15px;
+                                color:#111827;
+                                box-sizing:border-box;
+                            "
+                        >
+                        @error('fPicHp') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Urutan Tampil <span style="color:#ef4444;">*</span></label>
+                    <input
+                        wire:model="fUrutan"
+                        type="number"
+                        min="0"
+                        style="
+                            width:100%;height:48px;
+                            border-radius:10px;
+                            border:1.5px solid #d1d5db;
+                            background:#fff;
+                            padding:0 14px;
+                            font-size:15px;
+                            color:#111827;
+                            box-sizing:border-box;
+                        "
+                    >
+                    @error('fUrutan') <span style="color:#dc2626;font-size:12px;margin-top:5px;display:block;">{{ $message }}</span> @enderror
+                </div>
+            </div>
+
+            {{-- Footer Buttons --}}
+            <div style="
+                position:sticky;bottom:0;
+                background:#fff;
+                border-top:1px solid #e5e7eb;
+                padding:16px 20px;
+                display:flex;
+                gap:10px;
+                z-index:51;
+            ">
+                <button
+                    wire:click="simpanBidang"
+                    type="button"
+                    style="
+                        flex:1;
+                        height:50px;
+                        border:none;
+                        border-radius:12px;
+                        background:#ea580c;
+                        color:#fff;
+                        font-size:15px;
+                        font-weight:700;
+                        cursor:pointer;
+                        letter-spacing:0.2px;
+                    "
+                >
+                    {{ $isEdit ? '💾 Update' : '✓ Simpan' }} Bidang
+                </button>
+                <button
+                    wire:click="closeForm"
+                    type="button"
+                    style="
+                        height:50px;
+                        padding:0 20px;
+                        border-radius:12px;
+                        border:1.5px solid #e5e7eb;
+                        background:#fff;
+                        color:#6b7280;
+                        font-size:15px;
+                        font-weight:600;
+                        cursor:pointer;
+                    "
+                >
+                    Batal
+                </button>
             </div>
         </div>
     @endif
