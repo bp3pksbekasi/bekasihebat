@@ -191,6 +191,34 @@
                 </div>
             </div>
 
+            @if ($event->dokumen_permohonan_pencairan || $event->dokumen_proposal || $event->dokumen_dpa || $event->dokumen_lpj_sebelumnya)
+            <div style="margin-top:14px;border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
+                <div style="font-size:11px;color:#fe5000;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;">Dokumen & Lampiran Persiapan</div>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                    @if ($event->dokumen_permohonan_pencairan)
+                        <a href="{{ asset('storage/'.$event->dokumen_permohonan_pencairan) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> Surat Pencairan
+                        </a>
+                    @endif
+                    @if ($event->dokumen_proposal)
+                        <a href="{{ asset('storage/'.$event->dokumen_proposal) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> Proposal
+                        </a>
+                    @endif
+                    @if ($event->dokumen_dpa)
+                        <a href="{{ asset('storage/'.$event->dokumen_dpa) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> DPA
+                        </a>
+                    @endif
+                    @if ($event->dokumen_lpj_sebelumnya)
+                        <a href="{{ asset('storage/'.$event->dokumen_lpj_sebelumnya) }}" target="_blank" style="padding:8px 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:#fafafa;color:#444;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                            <i class="ti ti-file-text"></i> LPJ Sebelumnya
+                        </a>
+                    @endif
+                </div>
+            </div>
+            @endif
+
             @php $pSum = $this->pesertaSummary; @endphp
             <div style="margin-top:14px;border:0.5px solid #e5e7eb;border-radius:12px;background:white;padding:14px;">
                 <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;">

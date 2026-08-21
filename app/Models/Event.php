@@ -97,6 +97,10 @@ class Event extends Model
         'requirements',
         'budget_notes',
         'is_active',
+        'dokumen_permohonan_pencairan',
+        'dokumen_proposal',
+        'dokumen_dpa',
+        'dokumen_lpj_sebelumnya',
     ];
 
     protected function casts(): array

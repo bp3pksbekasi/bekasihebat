@@ -343,6 +343,29 @@
                             </div>
                         </div>
                     </div>
+
+                    <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;padding:16px;">
+                        <div style="font-size:12px;color:#ea580c;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Dokumen & Lampiran</div>
+                        <div style="display:grid;gap:12px;">
+                            <div>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Surat Permohonan Pencairan</label>
+                                <input wire:model="dokumenPermohonanPencairan" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
+                                <p style="font-size:12px;color:#52525b;margin-top:4px;">Format: PDF, JPG, PNG.</p>
+                            </div>
+                            <div>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">Proposal Kegiatan</label>
+                                <input wire:model="dokumenProposal" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
+                            </div>
+                            <div>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">DPA (Dokumen Pelaksanaan Anggaran)</label>
+                                <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
+                            </div>
+                            <div>
+                                <label style="font-size:13px;color:#334155;font-weight:600;display:block;margin-bottom:5px;">LPJ Kegiatan Sebelumnya (Opsional)</label>
+                                <input wire:model="dokumenLpjSebelumnya" type="file" accept="image/*,.pdf" style="font-size:14px;width:100%;color:#0f172a;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

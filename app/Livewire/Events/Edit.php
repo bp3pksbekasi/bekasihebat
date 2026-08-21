@@ -60,6 +60,11 @@ class Edit extends Component
     public string $targetProgram = '';
     public string $requirements = '';
     public string $budgetNotes = '';
+    public $dokumenPermohonanPencairan;
+    public $dokumenProposal;
+    public $dokumenDpa;
+    public $dokumenLpjSebelumnya;
+
     public array $budgetItems = [];
     public int $pesertaHadir = 0;
     public array $dokFoto = [];
@@ -261,6 +266,10 @@ class Edit extends Component
             'picNama' => ['nullable', 'string', 'max:255'],
             'picHp' => ['nullable', 'string', 'max:255'],
             'coverImage' => ['nullable', 'image', 'max:4096'],
+            'dokumenPermohonanPencairan' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenProposal' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenDpa' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
         ]);
 
         $coverPath = $this->existingCover;
@@ -271,6 +280,27 @@ class Edit extends Component
             }
 
             $coverPath = $this->coverImage->store('events', 'public');
+        }
+
+        $dokPencairanPath = $this->event->dokumen_permohonan_pencairan;
+        if ($this->dokumenPermohonanPencairan) {
+            if ($dokPencairanPath) Storage::disk('public')->delete($dokPencairanPath);
+            $dokPencairanPath = $this->dokumenPermohonanPencairan->store('events_docs', 'public');
+        }
+        $dokProposalPath = $this->event->dokumen_proposal;
+        if ($this->dokumenProposal) {
+            if ($dokProposalPath) Storage::disk('public')->delete($dokProposalPath);
+            $dokProposalPath = $this->dokumenProposal->store('events_docs', 'public');
+        }
+        $dokDpaPath = $this->event->dokumen_dpa;
+        if ($this->dokumenDpa) {
+            if ($dokDpaPath) Storage::disk('public')->delete($dokDpaPath);
+            $dokDpaPath = $this->dokumenDpa->store('events_docs', 'public');
+        }
+        $dokLpjPath = $this->event->dokumen_lpj_sebelumnya;
+        if ($this->dokumenLpjSebelumnya) {
+            if ($dokLpjPath) Storage::disk('public')->delete($dokLpjPath);
+            $dokLpjPath = $this->dokumenLpjSebelumnya->store('events_docs', 'public');
         }
 
         $judul = $validated['judul'];
@@ -320,6 +350,10 @@ class Edit extends Component
             'target_program' => $this->targetProgram !== '' ? $this->targetProgram : null,
             'requirements' => $this->requirements !== '' ? $this->requirements : null,
             'budget_notes' => $this->budgetNotes !== '' ? $this->budgetNotes : null,
+            'dokumen_permohonan_pencairan' => $dokPencairanPath,
+            'dokumen_proposal' => $dokProposalPath,
+            'dokumen_dpa' => $dokDpaPath,
+            'dokumen_lpj_sebelumnya' => $dokLpjPath,
         ]);
         $this->event->save();
 

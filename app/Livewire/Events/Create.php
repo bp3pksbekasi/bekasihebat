@@ -63,9 +63,12 @@ class Create extends Component
 
     public string $targetProgram = '';
 
-    public string $requirements = '';
-
     public string $budgetNotes = '';
+
+    public $dokumenPermohonanPencairan;
+    public $dokumenProposal;
+    public $dokumenDpa;
+    public $dokumenLpjSebelumnya;
 
     public array $budgetItems = [];
 
@@ -232,9 +235,16 @@ class Create extends Component
             'targetProgram' => ['nullable', 'string'],
             'requirements' => ['nullable', 'string'],
             'budgetNotes' => ['nullable', 'string'],
+            'dokumenPermohonanPencairan' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenProposal' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenDpa' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
+            'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:4096'],
         ]);
-
         $coverPath = $this->coverImage ? $this->coverImage->store('events', 'public') : null;
+        $dokPencairanPath = $this->dokumenPermohonanPencairan ? $this->dokumenPermohonanPencairan->store('events_docs', 'public') : null;
+        $dokProposalPath = $this->dokumenProposal ? $this->dokumenProposal->store('events_docs', 'public') : null;
+        $dokDpaPath = $this->dokumenDpa ? $this->dokumenDpa->store('events_docs', 'public') : null;
+        $dokLpjPath = $this->dokumenLpjSebelumnya ? $this->dokumenLpjSebelumnya->store('events_docs', 'public') : null;
 
         $judul = $validated['judul'];
         $deskripsi = $validated['deskripsi'] !== '' ? $validated['deskripsi'] : null;
@@ -307,6 +317,10 @@ class Create extends Component
             'target_program' => $this->targetProgram !== '' ? $this->targetProgram : null,
             'requirements' => $this->requirements !== '' ? $this->requirements : null,
             'budget_notes' => $this->budgetNotes !== '' ? $this->budgetNotes : null,
+            'dokumen_permohonan_pencairan' => $dokPencairanPath,
+            'dokumen_proposal' => $dokProposalPath,
+            'dokumen_dpa' => $dokDpaPath,
+            'dokumen_lpj_sebelumnya' => $dokLpjPath,
         ]);
         $event->save();
 
