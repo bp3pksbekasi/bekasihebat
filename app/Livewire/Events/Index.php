@@ -46,6 +46,17 @@ class Index extends Component
         'viewMode' => ['as' => 'view', 'except' => 'table'],
     ];
 
+    public function mount(): void
+    {
+        $user = auth()->user();
+        if ($user && $user->isBidang() && $user->bidang_slug && empty($this->filterBidang)) {
+            $bidang = \App\Models\BidangDpd::where('slug', $user->bidang_slug)->first();
+            if ($bidang) {
+                $this->filterBidang = (string) $bidang->id;
+            }
+        }
+    }
+
     public function updatedFilterStatus(): void
     {
         $this->resetPage();
