@@ -597,6 +597,29 @@ class Detail extends Component
             ->get(['id', 'desa', 'dapil', 'kecamatan']);
     }
 
+    #[Computed]
+    public function canManage(): bool
+    {
+        $user = auth()->user();
+        
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($this->event->created_by === $user->id) {
+            return true;
+        }
+
+        if ($user->isBidang() && $this->event->bidang_dpd_id) {
+            $userBidang = \App\Models\BidangDpd::where('slug', $user->bidang_slug)->first();
+            if ($userBidang && $userBidang->id === $this->event->bidang_dpd_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getSingleDesaOptionsProperty(): Collection
     {
         return TargetWilayah::query()

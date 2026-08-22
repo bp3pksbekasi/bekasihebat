@@ -309,9 +309,11 @@
                                 Sync {{ number_format($pSum['unsynced']) }} ke Sapa Warga
                             </button>
                         @endif
+                        @if ($this->canManage)
                         <button wire:click="$set('showPesertaForm', true)" type="button" style="padding:7px 12px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:11px;font-weight:600;cursor:pointer;">
                             + Input Peserta
                         </button>
+                        @endif
                     </div>
                 </div>
 
@@ -474,10 +476,14 @@
                             <div style="font-size:13px;color:#1a1a1a;font-weight:600;margin-top:2px;">Ringkasan pelaksanaan dan evaluasi</div>
                         </div>
                         <div style="display:flex;align-items:center;">
-                            @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
-                                <button wire:click="saveReport" type="button" style="height:36px;padding:0 16px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">Simpan Laporan</button>
+                            @if ($this->canManage)
+                                @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
+                                    <button wire:click="saveReport" type="button" style="height:36px;padding:0 16px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">Simpan Laporan</button>
+                                @else
+                                    <div style="font-size:11px;color:#888;">Tersedia setelah event disetujui</div>
+                                @endif
                             @else
-                                <div style="font-size:11px;color:#888;">Tersedia setelah event disetujui</div>
+                                <div style="font-size:11px;color:#888;">Mode lihat (Read-only)</div>
                             @endif
                         </div>
                     </div>
@@ -485,17 +491,17 @@
                     @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
                         <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,0.9fr);gap:12px;margin-top:12px;" class="event-report-grid">
                             <div style="display:grid;gap:10px;">
-                                <textarea wire:model="reportRingkasan" rows="4" placeholder="Ringkasan kegiatan" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                                <textarea wire:model="reportRingkasan" rows="4" placeholder="Ringkasan kegiatan" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;{{ !$this->canManage ? 'background-color:#f3f4f6;' : '' }}" {{ !$this->canManage ? 'disabled' : '' }}></textarea>
                                 @error('reportRingkasan') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
-                                <textarea wire:model="reportEvaluasi" rows="3" placeholder="Evaluasi" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                                <textarea wire:model="reportEvaluasi" rows="3" placeholder="Evaluasi" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;{{ !$this->canManage ? 'background-color:#f3f4f6;' : '' }}" {{ !$this->canManage ? 'disabled' : '' }}></textarea>
                                 @error('reportEvaluasi') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
-                                <textarea wire:model="reportTindakLanjut" rows="3" placeholder="Tindak lanjut" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                                <textarea wire:model="reportTindakLanjut" rows="3" placeholder="Tindak lanjut" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;{{ !$this->canManage ? 'background-color:#f3f4f6;' : '' }}" {{ !$this->canManage ? 'disabled' : '' }}></textarea>
                                 @error('reportTindakLanjut') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
                             </div>
                             <div style="display:grid;gap:10px;">
                                 <div>
                                     <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Jumlah Peserta Hadir</label>
-                                    <input wire:model="reportPesertaHadir" type="number" min="0" placeholder="Peserta hadir" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
+                                    <input wire:model="reportPesertaHadir" type="number" min="0" placeholder="Peserta hadir" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;{{ !$this->canManage ? 'background-color:#f3f4f6;' : '' }}" {{ !$this->canManage ? 'disabled' : '' }}>
                                     @error('reportPesertaHadir') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
@@ -528,13 +534,15 @@
                                             }
                                         }
                                     }">
-                                        <input type="text" x-model="formatted" @input="update" placeholder="Rp0" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
+                                        <input type="text" x-model="formatted" @input="update" placeholder="Rp0" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;{{ !$this->canManage ? 'background-color:#f3f4f6;' : '' }}" {{ !$this->canManage ? 'disabled' : '' }}>
                                     </div>
                                     @error('reportRealisasiAnggaran') <span style="color:#ef4444;font-size:11px;display:block;margin-top:2px;">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Foto Dokumentasi (Max 8)</label>
-                                    <input wire:model="reportFoto" type="file" multiple accept="image/*" style="width:100%;font-size:12px;padding:4px 0;">
+                                    @if ($this->canManage)
+                                        <input wire:model="reportFoto" type="file" multiple accept="image/*" style="width:100%;font-size:12px;padding:4px 0;">
+                                    @endif
                                     @error('reportFoto.*') <span style="color:#ef4444;font-size:11px;display:block;margin-top:2px;">{{ $message }}</span> @enderror
                                     @error('reportFoto') <span style="color:#ef4444;font-size:11px;display:block;margin-top:2px;">{{ $message }}</span> @enderror
                                 </div>
