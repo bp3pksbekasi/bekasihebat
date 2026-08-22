@@ -29,6 +29,7 @@ class Event extends Model
         'draft' => ['label' => 'Draft', 'color' => '#888888', 'bg' => '#f5f5f5'],
         'pending_approval' => ['label' => 'Menunggu Approval', 'color' => '#d97706', 'bg' => '#fff7f1'],
         'approved' => ['label' => 'Disetujui', 'color' => '#16a34a', 'bg' => '#dcfce7'],
+        'ongoing' => ['label' => 'Berlangsung', 'color' => '#2563eb', 'bg' => '#eff6ff'],
         'rejected' => ['label' => 'Ditolak', 'color' => '#dc2626', 'bg' => '#fee2e2'],
         'completed' => ['label' => 'Selesai', 'color' => '#16a34a', 'bg' => '#dcfce7'],
         'cancelled' => ['label' => 'Dibatalkan', 'color' => '#888888', 'bg' => '#f5f5f5'],
@@ -225,7 +226,14 @@ class Event extends Model
 
     public function getStatusConfigAttribute(): array
     {
-        return self::STATUS_CONFIG[$this->status] ?? self::STATUS_CONFIG[self::STATUS_DRAFT];
+        $status = $this->status;
+        
+        // Dynamically show 'Berlangsung' if approved and start time has passed
+        if ($status === self::STATUS_DISETUJUI && $this->tanggal_mulai && $this->tanggal_mulai->isPast()) {
+            $status = 'ongoing';
+        }
+        
+        return self::STATUS_CONFIG[$status] ?? self::STATUS_CONFIG[self::STATUS_DRAFT];
     }
 
     public function getTotalBudgetAttribute(): float

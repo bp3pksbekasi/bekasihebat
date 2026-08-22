@@ -39,11 +39,7 @@
                         </button>
                     @endif
                     @if ($event->status === \App\Models\Event::STATUS_DISETUJUI || $event->status === \App\Models\Event::STATUS_BERLANGSUNG)
-                        @if ($event->status === \App\Models\Event::STATUS_DISETUJUI)
-                            <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_BERLANGSUNG }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #dbeafe;background:#eff6ff;color:#2563eb;font-size:12px;cursor:pointer;">
-                                Tandai Berlangsung
-                            </button>
-                        @endif
+
                         <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_SELESAI }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #bbf7d0;background:#ecfdf3;color:#166534;font-size:12px;cursor:pointer;">
                             Tandai Selesai
                         </button>
