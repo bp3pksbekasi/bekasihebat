@@ -365,6 +365,11 @@
                                     update(e) {
                                         let val = e.target.value.replace(/\D/g, '');
                                         this.raw = val ? parseInt(val) : null;
+                                        
+                                        let prevFormat = this.formatted;
+                                        this.format();
+                                        
+                                        if (this.formatted !== prevFormat) {
                                             e.target.value = this.formatted;
                                         }
                                     }
