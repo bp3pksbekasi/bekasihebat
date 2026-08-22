@@ -276,5 +276,6 @@
         {{ $slot }}
 
         @fluxScripts
+        @stack('scripts')
     </body>
 </html>

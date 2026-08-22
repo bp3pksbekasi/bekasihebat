@@ -135,9 +135,9 @@
 
     {{-- Chart.js Initialization --}}
     @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('livewire:initialized', () => {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" data-navigate-once></script>
+    <script data-navigate-track>
+        document.addEventListener('livewire:navigated', () => {
             let chartInstance = null;
 
             const renderChart = () => {
@@ -221,7 +221,9 @@
 
             // Re-render chart when livewire updates
             Livewire.hook('morph.updated', ({ component, el }) => {
-                renderChart();
+                if (component.name === 'reports.kinerja-dpd' || document.getElementById('bidangChart')) {
+                    renderChart();
+                }
             });
         });
     </script>
