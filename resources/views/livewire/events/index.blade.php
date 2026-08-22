@@ -177,27 +177,27 @@
                         <table style="width:100%;border-collapse:collapse;font-size:12px;">
                             <thead style="background:#fafafa;">
                                 <tr style="border-bottom:0.5px solid #e5e7eb;">
-                                    <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Judul Program</th>
-                                    <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Jenis</th>
-                                    <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Tanggal</th>
-                                    <th style="padding:10px 12px;text-align:left;font-size:10px;color:#666;text-transform:uppercase;">Lokasi</th>
-                                    <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Status</th>
-                                    {{-- <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Approval</th>
-                                    <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Publik</th> --}}
-                                    <th style="padding:10px 12px;text-align:center;font-size:10px;color:#666;text-transform:uppercase;">Aksi</th>
+                                    <th style="padding:14px;text-align:left;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Judul Program</th>
+                                    <th style="padding:14px;text-align:left;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Jenis</th>
+                                    <th style="padding:14px;text-align:left;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Tanggal</th>
+                                    <th style="padding:14px;text-align:left;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Lokasi</th>
+                                    <th style="padding:14px;text-align:center;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Status</th>
+                                    {{-- <th style="padding:14px;text-align:center;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Approval</th>
+                                    <th style="padding:14px;text-align:center;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Publik</th> --}}
+                                    <th style="padding:14px;text-align:center;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.5px;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($events as $event)
                                     @php $cfg = $event->status_config; @endphp
                                     <tr style="border-bottom:0.5px solid #f1f5f9;" wire:key="event-row-{{ $event->uuid }}">
-                                        <td style="padding:12px;">
-                                            <div style="font-weight:600;color:#1a1a1a;">{{ $event->judul }}</div>
-                                            <div style="font-size:10px;color:#888;margin-top:4px;">PIC: {{ $event->pic_nama ?: '-' }}</div>
+                                        <td style="padding:14px 12px;">
+                                            <div style="font-weight:600;color:#0f172a;font-size:14px;">{{ $event->judul }}</div>
+                                            <div style="font-size:12px;color:#64748b;margin-top:4px;">PIC: {{ $event->pic_nama ?: '-' }}</div>
                                         </td>
-                                        <td style="padding:12px;color:#525252;">{{ $event->jenis_label }}</td>
-                                        <td style="padding:12px;color:#525252;">{{ $event->tanggal_mulai?->format('d M Y, H:i') ?? '-' }}</td>
-                                        <td style="padding:12px;color:#525252;">{{ $event->lokasi_desa ?? $event->lokasi }}</td>
+                                        <td style="padding:14px 12px;color:#1e293b;font-size:13px;font-weight:500;">{{ $event->jenis_label }}</td>
+                                        <td style="padding:14px 12px;color:#1e293b;font-size:13px;font-weight:500;">{{ $event->tanggal_mulai?->format('d M Y, H:i') ?? '-' }}</td>
+                                        <td style="padding:14px 12px;color:#1e293b;font-size:13px;font-weight:500;">{{ $event->lokasi_desa ?? $event->lokasi }}</td>
                                         <td style="padding:12px;text-align:center;">
                                             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
                                                 <span style="display:inline-flex;padding:4px 8px;border-radius:999px;background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};font-size:10px;font-weight:600;">{{ $cfg['label'] }}</span>
