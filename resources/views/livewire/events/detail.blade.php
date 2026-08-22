@@ -33,31 +33,36 @@
                     <span style="font-size:11px;color:#666;">{{ $event->lokasi }}</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                    @if (in_array($event->status, ['draft', 'ditolak'], true))
-                        <button wire:click="submitForApproval" type="button" style="height:32px;padding:0 14px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">
-                            Ajukan Approval
-                        </button>
+                    @if ($this->canManage)
+                        @if (in_array($event->status, ['draft', 'ditolak'], true))
+                            <button wire:click="submitForApproval" type="button" style="height:32px;padding:0 14px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">
+                                Ajukan Approval
+                            </button>
+                        @endif
+                        @if ($event->status === \App\Models\Event::STATUS_DISETUJUI || $event->status === \App\Models\Event::STATUS_BERLANGSUNG)
+                            <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_SELESAI }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #bbf7d0;background:#ecfdf3;color:#166534;font-size:12px;cursor:pointer;">
+                                Tandai Selesai
+                            </button>
+                        @endif
                     @endif
-                    @if ($event->status === \App\Models\Event::STATUS_DISETUJUI || $event->status === \App\Models\Event::STATUS_BERLANGSUNG)
-
-                        <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_SELESAI }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #bbf7d0;background:#ecfdf3;color:#166534;font-size:12px;cursor:pointer;">
-                            Tandai Selesai
-                        </button>
-                    @endif
+                    
                     @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI], true))
                         <a href="{{ route('events.print-lpj', $event) }}" target="_blank" style="display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;font-weight:600;">
                             Cetak LPJ
                         </a>
                     @endif
-                    @if ($event->status !== \App\Models\Event::STATUS_DIBATALKAN && $event->status !== \App\Models\Event::STATUS_SELESAI)
-                        <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_DIBATALKAN }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:12px;cursor:pointer;">
-                            Batalkan
-                        </button>
-                    @endif
-                    @if (in_array($event->status, ['draft', 'ditolak'], true))
-                        <a href="{{ route('events.edit', $event) }}" wire:navigate style="display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;">
-                            Edit
-                        </a>
+
+                    @if ($this->canManage)
+                        @if ($event->status !== \App\Models\Event::STATUS_DIBATALKAN && $event->status !== \App\Models\Event::STATUS_SELESAI)
+                            <button wire:click="setEventStatus('{{ \App\Models\Event::STATUS_DIBATALKAN }}')" type="button" style="height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:12px;cursor:pointer;">
+                                Batalkan
+                            </button>
+                        @endif
+                        @if (in_array($event->status, ['draft', 'ditolak'], true))
+                            <a href="{{ route('events.edit', $event) }}" wire:navigate style="display:inline-flex;align-items:center;height:32px;padding:0 14px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;">
+                                Edit
+                            </a>
+                        @endif
                     @endif
                 </div>
             </div>
