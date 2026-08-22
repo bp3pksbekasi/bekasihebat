@@ -25,7 +25,7 @@ class KinerjaDpd extends Component
         $bidangs = BidangDpd::where('is_dpd', true)->where('is_active', true)->orderBy('urutan')->get();
 
         // 2. Query Events
-        $query = Event::where('org_level', 'dpd')->whereNotNull('bidang_dpd_id');
+        $query = Event::where('is_active', true)->where('org_level', 'dpd')->whereNotNull('bidang_dpd_id');
 
         if ($this->year) {
             $query->whereYear('tanggal_mulai', $this->year);

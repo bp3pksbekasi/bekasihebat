@@ -18,7 +18,7 @@ class ReportPrintController extends Controller
         $bidangs = BidangDpd::where('is_dpd', true)->where('is_active', true)->orderBy('urutan')->get();
 
         // 2. Query Events
-        $query = Event::where('org_level', 'dpd')->whereNotNull('bidang_dpd_id');
+        $query = Event::where('is_active', true)->where('org_level', 'dpd')->whereNotNull('bidang_dpd_id');
 
         if ($year) {
             $query->whereYear('tanggal_mulai', $year);
