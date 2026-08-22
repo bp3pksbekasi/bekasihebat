@@ -40,7 +40,8 @@ class RuleManagement extends Component
             'pengaturan-users' => 'Kelola User',
             'pengaturan-whatsapp' => 'Setting WhatsApp',
             'kartu-anggota' => 'Kartu Anggota',
-            'pengaturan-rule' => 'Pengaturan Rule'
+            'pengaturan-rule' => 'Pengaturan Rule',
+            'laporan-kinerja-dpd' => 'Laporan Kinerja DPD'
         ];
 
         $this->rolePermissions = [];
