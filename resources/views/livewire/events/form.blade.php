@@ -243,10 +243,12 @@
                             <img src="{{ asset('storage/'.$existingCover) }}" style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:0.5px solid #e5e5e5;">
                         </div>
                         @endif
-                        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#666;cursor:pointer;">
-                            <input wire:model="isPublic" type="checkbox">
-                            <span>Tampilkan di website publik</span>
-                        </label>
+                        <div style="display:none;">
+                            <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#666;cursor:pointer;">
+                                <input wire:model="isPublic" type="checkbox">
+                                <span>Tampilkan di website publik</span>
+                            </label>
+                        </div>
                     </div>
                         <div style="display:flex;justify-content:space-between;margin-top:24px;padding-top:16px;border-top:0.5px solid #e5e5e5;">
                             <button type="button" @click="infoStep = 2" style="padding:8px 18px;border-radius:8px;background:#f4f4f5;color:#444;border:0.5px solid #d4d4d8;font-size:13px;font-weight:600;cursor:pointer;"><i class="ti ti-arrow-left"></i> Sebelumnya</button>
@@ -349,23 +351,22 @@
                                     formatted: '',
                                     init() {
                                         this.format();
-                                        $watch('raw', val => this.format());
+                                        $watch('raw', val => {
+                                            if (val != this.parse(this.formatted)) this.format();
+                                        });
+                                    },
+                                    parse(val) {
+                                        return val ? parseInt(val.replace(/\D/g, '')) : null;
                                     },
                                     format() {
                                         if (!this.raw && this.raw !== 0) { this.formatted = ''; return; }
-                                        let val = parseFloat(this.raw);
-                                        if (isNaN(val)) val = 0;
-                                        val = Math.floor(val).toString();
-                                        this.formatted = val ? 'Rp' + new Intl.NumberFormat('id-ID').format(val) : '';
+                                        this.formatted = 'Rp' + new Intl.NumberFormat('id-ID').format(this.raw);
                                     },
                                     update(e) {
                                         let val = e.target.value.replace(/\D/g, '');
                                         this.raw = val ? parseInt(val) : null;
-                                        this.format();
-                                        
-                                        // Set cursor position back correctly after format
-                                        let cursor = e.target.selectionStart;
-                                        this.$nextTick(() => { e.target.setSelectionRange(cursor, cursor); });
+                                            e.target.value = this.formatted;
+                                        }
                                     }
                                 }">
                                     <input type="text" x-model="formatted" @input="update" placeholder="Rp0" style="width:100%;height:40px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:14px;color:#0f172a;">

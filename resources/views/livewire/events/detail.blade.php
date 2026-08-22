@@ -82,7 +82,7 @@
                     <div style="font-size:15px;font-weight:600;color:#1a1a1a;margin-top:6px;">{{ $event->kapasitas > 0 ? number_format($event->kapasitas) . ' peserta' : 'Unlimited' }}</div>
                     <div style="font-size:11px;color:#888;margin-top:4px;">{{ $event->lokasi_desa ?: '-' }} · {{ $event->lokasi_kecamatan ?: '-' }}</div>
                 </div>
-                <div style="border:0.5px solid #e5e7eb;border-radius:12px;padding:14px;background:white;">
+                <div style="display:none;border:0.5px solid #e5e7eb;border-radius:12px;padding:14px;background:white;">
                     <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.8px;">Publikasi</div>
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
                         <div>
@@ -490,13 +490,17 @@
                         <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,0.9fr);gap:12px;margin-top:12px;" class="event-report-grid">
                             <div style="display:grid;gap:10px;">
                                 <textarea wire:model="reportRingkasan" rows="4" placeholder="Ringkasan kegiatan" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                                @error('reportRingkasan') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
                                 <textarea wire:model="reportEvaluasi" rows="3" placeholder="Evaluasi" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                                @error('reportEvaluasi') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
                                 <textarea wire:model="reportTindakLanjut" rows="3" placeholder="Tindak lanjut" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                                @error('reportTindakLanjut') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
                             </div>
                             <div style="display:grid;gap:10px;">
                                 <div>
                                     <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Jumlah Peserta Hadir</label>
                                     <input wire:model="reportPesertaHadir" type="number" min="0" placeholder="Peserta hadir" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
+                                    @error('reportPesertaHadir') <span style="color:#ef4444;font-size:11px;">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Realisasi Anggaran (Rp)</label>
@@ -505,31 +509,38 @@
                                         formatted: '',
                                         init() {
                                             this.format();
-                                            $watch('raw', val => this.format());
+                                            $watch('raw', val => {
+                                                if (val != this.parse(this.formatted)) this.format();
+                                            });
+                                        },
+                                        parse(val) {
+                                            return val ? parseInt(val.replace(/\D/g, '')) : null;
                                         },
                                         format() {
                                             if (!this.raw && this.raw !== 0) { this.formatted = ''; return; }
-                                            let val = parseFloat(this.raw);
-                                            if (isNaN(val)) val = 0;
-                                            val = Math.floor(val).toString();
-                                            this.formatted = val ? 'Rp' + new Intl.NumberFormat('id-ID').format(val) : '';
+                                            this.formatted = 'Rp' + new Intl.NumberFormat('id-ID').format(this.raw);
                                         },
                                         update(e) {
                                             let val = e.target.value.replace(/\D/g, '');
                                             this.raw = val ? parseInt(val) : null;
+                                            
+                                            let prevFormat = this.formatted;
                                             this.format();
                                             
-                                            // Set cursor position back correctly after format
-                                            let cursor = e.target.selectionStart;
-                                            this.$nextTick(() => { e.target.setSelectionRange(cursor, cursor); });
+                                            if (this.formatted !== prevFormat) {
+                                                e.target.value = this.formatted;
+                                            }
                                         }
                                     }">
                                         <input type="text" x-model="formatted" @input="update" placeholder="Rp0" style="width:100%;height:38px;border-radius:8px;border:0.5px solid #d4d4d8;padding:0 12px;font-size:12px;">
                                     </div>
+                                    @error('reportRealisasiAnggaran') <span style="color:#ef4444;font-size:11px;display:block;margin-top:2px;">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Foto Dokumentasi</label>
-                                    <input wire:model="reportFoto" type="file" multiple accept="image/*" style="font-size:12px;width:100%;">
+                                    <label style="font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px;">Foto Dokumentasi (Max 8)</label>
+                                    <input wire:model="reportFoto" type="file" multiple accept="image/*" style="width:100%;font-size:12px;padding:4px 0;">
+                                    @error('reportFoto.*') <span style="color:#ef4444;font-size:11px;display:block;margin-top:2px;">{{ $message }}</span> @enderror
+                                    @error('reportFoto') <span style="color:#ef4444;font-size:11px;display:block;margin-top:2px;">{{ $message }}</span> @enderror
                                 </div>
                                 @if ($reportExistingFoto !== [])
                                     <div style="display:flex;flex-wrap:wrap;gap:8px;">
