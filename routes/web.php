@@ -440,6 +440,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/{event}/print-lpj', [EventPrintController::class, 'printLpj'])->middleware('menu:event,event-view')->name('events.print-lpj');
     });
 
+    Route::prefix('admin/reports')->middleware(['auth'])->group(function () {
+        Route::get('/kinerja-dpd', \App\Livewire\Reports\KinerjaDpd::class)->middleware('menu:laporan-kinerja-dpd')->name('reports.kinerja-dpd');
+        Route::get('/kinerja-dpd/print', [\App\Http\Controllers\ReportPrintController::class, 'printKinerjaDpd'])->middleware('menu:laporan-kinerja-dpd')->name('reports.kinerja-dpd.print');
+    });
+
     Route::prefix('infra-rtrw')->middleware(['auth'])->group(function () {
         Route::get('/', InfraRtRwIndex::class)->middleware('menu:infra-rtrw')->name('infra-rtrw.index');
         Route::get('/{targetWilayah}', InfraRtRwDetail::class)->middleware('menu:infra-rtrw')->name('infra-rtrw.detail');
