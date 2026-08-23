@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'google_sheets' => [
+        'spreadsheet_id'   => env('GOOGLE_SHEETS_SPREADSHEET_ID'),
+        'credentials_path' => env('GOOGLE_SERVICE_ACCOUNT_JSON', 'storage/app/google-service-account.json'),
+        'tab_name'         => env('GOOGLE_SHEETS_TAB_NAME', 'Data Sisir RW'),
+    ],
+
 ];

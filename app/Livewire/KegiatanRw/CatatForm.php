@@ -5,6 +5,7 @@ namespace App\Livewire\KegiatanRw;
 use App\Models\DataRw;
 use App\Models\KegiatanRw;
 use App\Models\TargetWilayah;
+use App\Jobs\SyncKegiatanRwToGoogleSheets;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -243,9 +244,11 @@ class CatatForm extends Component
 
         if ($this->editId !== null) {
             KegiatanRw::query()->findOrFail($this->editId)->update($payload);
+            SyncKegiatanRwToGoogleSheets::dispatch($this->editId)->onQueue('default');
             session()->flash('message', 'Kegiatan berhasil diupdate.');
         } else {
-            KegiatanRw::query()->create($payload);
+            $kegiatan = KegiatanRw::query()->create($payload);
+            SyncKegiatanRwToGoogleSheets::dispatch((string) $kegiatan->id)->onQueue('default');
             session()->flash('message', 'Kegiatan baru berhasil dicatat.');
         }
 
