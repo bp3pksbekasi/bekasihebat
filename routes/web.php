@@ -387,6 +387,7 @@ Route::middleware('auth')->group(function () {
     })->middleware('menu:pemilu-dprd,analisa-caleg,peta-kekuatan-rw')->name('bedah-dapil.rencana-aksi');
 
     Route::get('/sisir-rw', BedahDapilSisirRw::class)->middleware('menu:sisir-rw')->name('sisir-rw.index');
+    Route::get('/laporan-sisir-rw', \App\Livewire\Reports\SisirRwReport::class)->middleware('menu:laporan-sisir-rw')->name('laporan.sisir-rw');
     Route::get('/kaderisasi', KaderisasiIndex::class)->middleware('menu:kaderisasi')->name('kaderisasi.index');
     Route::get('/sapa-warga', SapaWargaIndex::class)->middleware('menu:sapa-warga')->name('sapa-warga.index');
     Route::get('/sosial-media', SosialMediaIndex::class)->middleware('menu:sosial-media')->name('sosial-media.index');

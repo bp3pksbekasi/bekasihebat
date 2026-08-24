@@ -91,6 +91,7 @@
                 ['section' => 'ORGANISASI'],
                 ['route' => 'events.index', 'slug' => 'event', 'label' => 'Program', 'icon' => 'calendar-event', 'active' => ['events.*']],
                 ['route' => 'reports.kinerja-dpd', 'slug' => 'laporan-kinerja-dpd', 'label' => 'Laporan Kinerja DPD', 'icon' => 'chart-bar', 'active' => ['reports.kinerja-dpd*']],
+                ['route' => 'laporan.sisir-rw', 'slug' => 'laporan-sisir-rw', 'label' => 'Laporan Sisir RW', 'icon' => 'file-analytics', 'active' => ['laporan.sisir-rw*']],
 
                 ['section' => 'MANAJEMEN'],
                 ['route' => 'settings.profile', 'slug' => 'profil', 'label' => 'Profil', 'icon' => 'user-circle', 'active' => ['settings.profile', 'settings.password', 'settings.appearance']],
