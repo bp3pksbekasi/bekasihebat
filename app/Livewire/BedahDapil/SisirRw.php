@@ -32,9 +32,9 @@ class SisirRw extends Component
 
     public string $timelineTab = 'terbaru';
 
-    public int $selectedBulan;
+    public string $selectedBulan = '';
 
-    public int $selectedTahun;
+    public string $selectedTahun = '';
 
     public int $rwBelumPage = 1;
 
@@ -49,8 +49,8 @@ class SisirRw extends Component
 
     public function mount(): void
     {
-        $this->selectedBulan = (int) now()->month;
-        $this->selectedTahun = (int) now()->year;
+        $this->selectedBulan = (string) now()->month;
+        $this->selectedTahun = (string) now()->year;
         $this->formTanggal = now()->format('Y-m-d\TH:i');
 
         if ($this->selectedDapil !== '') {
