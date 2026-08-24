@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Services;
 
@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Log;
 class GoogleSheetsService
 {
     private ?Sheets $sheetsService = null;
-    private string $spreadsheetId;
-    private string $tabName;
+    private ?string $spreadsheetId;
+    private ?string $tabName;
 
     public function __construct()
     {
@@ -25,7 +25,14 @@ class GoogleSheetsService
             return $this->sheetsService;
         }
 
+        if (empty($this->spreadsheetId)) {
+            throw new \Exception("Google Sheets API: SPREADSHEET_ID belum diatur di .env");
+        }
+
         $credentialsPath = base_path(config("services.google_sheets.credentials_path"));
+        if (!file_exists($credentialsPath)) {
+            throw new \Exception("Google Sheets API: File credential JSON tidak ditemukan di " . $credentialsPath);
+        }
 
         $client = new Client();
         $client->setAuthConfig($credentialsPath);
@@ -101,4 +108,5 @@ class GoogleSheetsService
         }
     }
 }
+
 
