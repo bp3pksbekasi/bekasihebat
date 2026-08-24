@@ -143,14 +143,28 @@
                                     <tr style="border-bottom:0.5px solid #e5e5e5;">
                                         <td style="padding:10px 16px;white-space:nowrap;">
                                             <div style="color:#111827;font-weight:500;">{{ \Carbon\Carbon::parse($kg->tanggal_kegiatan)->translatedFormat('d F Y') }}</div>
-                                            <div style="color:#6b7280;font-size:11px;">{{ \Carbon\Carbon::parse($kg->tanggal_kegiatan)->format('H:i') }}</div>
                                         </td>
                                         <td style="padding:10px 16px;white-space:nowrap;">
                                             <div style="color:#111827;font-weight:500;">RW {{ $kg->nomor_rw }}</div>
                                             <div style="color:#6b7280;font-size:11px;">{{ $kg->desa ?? '-' }}, {{ $kg->kecamatan ?? '-' }}</div>
                                         </td>
-                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kg->jenis_config['label'] }}</td>
-                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kg->pelaksana }}</td>
+                                        <td style="padding:10px 16px;color:#111827;max-width:250px;">
+                                            <div style="font-weight:500;">{{ $kg->jenis_config['label'] }}</div>
+                                            @if($kg->catatan)
+                                                <div style="color:#6b7280;font-size:11px;margin-top:2px;white-space:normal;">{{ $kg->catatan }}</div>
+                                            @endif
+                                        </td>
+                                        <td style="padding:10px 16px;color:#111827;max-width:250px;">
+                                            <div style="font-weight:500;">{{ $kg->pelaksana }}</div>
+                                            @php
+                                                $dewanHadir = collect([$kg->dpr_ri_hadir, $kg->dprd_prov_hadir, $kg->dprd_kab_hadir])
+                                                    ->filter(fn($d) => !empty($d) && strtoupper(trim($d)) !== 'TIDAK ADA')
+                                                    ->implode(', ');
+                                            @endphp
+                                            @if($dewanHadir)
+                                                <div style="color:#6b7280;font-size:11px;margin-top:2px;white-space:normal;">Dewan Hadir: {{ $dewanHadir }}</div>
+                                            @endif
+                                        </td>
                                         <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ number_format($kg->jumlah_warga) }}</td>
                                         @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isDpd()))
                                             <td style="padding:10px 16px;white-space:nowrap;text-align:right;">
