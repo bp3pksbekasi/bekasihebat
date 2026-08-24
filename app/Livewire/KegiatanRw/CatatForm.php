@@ -244,11 +244,19 @@ class CatatForm extends Component
 
         if ($this->editId !== null) {
             KegiatanRw::query()->findOrFail($this->editId)->update($payload);
-            SyncKegiatanRwToGoogleSheets::dispatch($this->editId)->onQueue('default');
+            try {
+                SyncKegiatanRwToGoogleSheets::dispatch($this->editId)->onQueue('default');
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Google Sheets sync skipped: ' . $e->getMessage());
+            }
             session()->flash('message', 'Kegiatan berhasil diupdate.');
         } else {
             $kegiatan = KegiatanRw::query()->create($payload);
-            SyncKegiatanRwToGoogleSheets::dispatch((string) $kegiatan->id)->onQueue('default');
+            try {
+                SyncKegiatanRwToGoogleSheets::dispatch((string) $kegiatan->id)->onQueue('default');
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Google Sheets sync skipped: ' . $e->getMessage());
+            }
             session()->flash('message', 'Kegiatan baru berhasil dicatat.');
         }
 
