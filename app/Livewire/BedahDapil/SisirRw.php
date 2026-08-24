@@ -40,6 +40,7 @@ class SisirRw extends Component
 
     public int $rwBelumPerPage = 10;
 
+    public int $kegiatanPage = 1;
 
     public ?string $editId = null;
 
