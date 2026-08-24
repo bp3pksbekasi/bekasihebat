@@ -245,7 +245,7 @@ class CatatForm extends Component
         if ($this->editId !== null) {
             KegiatanRw::query()->findOrFail($this->editId)->update($payload);
             try {
-                SyncKegiatanRwToGoogleSheets::dispatch($this->editId)->onQueue('default');
+                SyncKegiatanRwToGoogleSheets::dispatch($this->editId)->delay(now()->addSeconds(5))->onQueue('default');
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::warning('Google Sheets sync skipped: ' . $e->getMessage());
             }
@@ -253,7 +253,7 @@ class CatatForm extends Component
         } else {
             $kegiatan = KegiatanRw::query()->create($payload);
             try {
-                SyncKegiatanRwToGoogleSheets::dispatch((string) $kegiatan->id)->onQueue('default');
+                SyncKegiatanRwToGoogleSheets::dispatch((string) $kegiatan->id)->delay(now()->addSeconds(5))->onQueue('default');
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::warning('Google Sheets sync skipped: ' . $e->getMessage());
             }
