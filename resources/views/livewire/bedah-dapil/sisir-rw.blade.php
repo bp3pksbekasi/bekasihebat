@@ -1,7 +1,7 @@
 @php
     $summary = $this->summary;
-    $monthLabel = \Carbon\Carbon::create()->month((int) $selectedBulan)->translatedFormat('F');
-    $yearLabel = $selectedTahun;
+    $monthLabel = !empty($selectedBulan) ? \Carbon\Carbon::create()->month((int) $selectedBulan)->translatedFormat('F') : 'Semua Bulan';
+    $yearLabel = !empty($selectedTahun) ? $selectedTahun : 'Semua Tahun';
     $heatmap = $this->heatmapData;
     $timeline = $this->timeline;
     $timelineTabs = $this->timelineTabs;
@@ -48,11 +48,13 @@
                         @endforeach
                     </select>
                     <select class="sisir-filter-select sisir-filter-bulan" wire:model.live="selectedBulan" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#27272a;color:#f4f4f5;min-width:94px;">
+                        <option value="">Semua Bulan</option>
                         @foreach (range(1, 12) as $bulan)
                             <option value="{{ $bulan }}">{{ \Carbon\Carbon::create()->month($bulan)->translatedFormat('F') }}</option>
                         @endforeach
                     </select>
                     <select class="sisir-filter-select sisir-filter-tahun" wire:model.live="selectedTahun" style="padding:7px 24px 7px 8px;border:0.5px solid #3f3f46;border-radius:6px;font-size:11px;background:#27272a;color:#f4f4f5;min-width:74px;">
+                        <option value="">Semua Tahun</option>
                         @foreach (range((int) now()->year - 1, (int) now()->year + 2) as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach

@@ -167,9 +167,14 @@ class KegiatanRw extends Model
             ->whereYear('tanggal_kegiatan', now()->year);
     }
 
-    public function scopePeriode(Builder $query, int|string $bulan, int|string $tahun): Builder
+    public function scopePeriode(Builder $query, int|string|null $bulan, int|string|null $tahun): Builder
     {
-        return $query->whereMonth('tanggal_kegiatan', (int) $bulan)
-            ->whereYear('tanggal_kegiatan', (int) $tahun);
+        if (!empty($bulan)) {
+            $query->whereMonth('tanggal_kegiatan', (int) $bulan);
+        }
+        if (!empty($tahun)) {
+            $query->whereYear('tanggal_kegiatan', (int) $tahun);
+        }
+        return $query;
     }
 }

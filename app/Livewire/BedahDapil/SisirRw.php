@@ -228,15 +228,20 @@ class SisirRw extends Component
         if ($this->timelineTab === 'terbaru') {
             $query->periode($this->selectedBulan, $this->selectedTahun);
         } elseif ($this->timelineTab === 'arsip') {
-            $query->where(function (Builder $builder): void {
-                $builder
-                    ->whereYear('tanggal_kegiatan', '<', $this->selectedTahun)
-                    ->orWhere(function (Builder $nested): void {
-                        $nested
-                            ->whereYear('tanggal_kegiatan', $this->selectedTahun)
-                            ->whereMonth('tanggal_kegiatan', '<', $this->selectedBulan);
-                    });
-            });
+            if ($this->selectedTahun !== '' && $this->selectedBulan !== '') {
+                $query->where(function (Builder $builder): void {
+                    $builder
+                        ->whereYear('tanggal_kegiatan', '<', $this->selectedTahun)
+                        ->orWhere(function (Builder $nested): void {
+                            $nested
+                                ->whereYear('tanggal_kegiatan', $this->selectedTahun)
+                                ->whereMonth('tanggal_kegiatan', '<', $this->selectedBulan);
+                        });
+                });
+            } else {
+                // If "Semua" is selected, arsip is empty because everything is in 'terbaru'
+                $query->whereRaw('1 = 0');
+            }
         } elseif ($this->timelineTab === 'event') {
             $query->has('event');
         }
@@ -255,13 +260,17 @@ class SisirRw extends Component
         $baseQuery = $this->filteredKegiatanQuery();
         $periodeQuery = (clone $baseQuery)->periode($this->selectedBulan, $this->selectedTahun);
         $arsipQuery = (clone $baseQuery)->where(function (Builder $builder): void {
-            $builder
-                ->whereYear('tanggal_kegiatan', '<', $this->selectedTahun)
-                ->orWhere(function (Builder $nested): void {
-                    $nested
-                        ->whereYear('tanggal_kegiatan', $this->selectedTahun)
-                        ->whereMonth('tanggal_kegiatan', '<', $this->selectedBulan);
-                });
+            if ($this->selectedTahun !== '' && $this->selectedBulan !== '') {
+                $builder
+                    ->whereYear('tanggal_kegiatan', '<', $this->selectedTahun)
+                    ->orWhere(function (Builder $nested): void {
+                        $nested
+                            ->whereYear('tanggal_kegiatan', $this->selectedTahun)
+                            ->whereMonth('tanggal_kegiatan', '<', $this->selectedBulan);
+                    });
+            } else {
+                $builder->whereRaw('1 = 0');
+            }
         });
         $eventQuery = (clone $baseQuery)->has('event');
 
@@ -687,7 +696,7 @@ class SisirRw extends Component
                 $markers[] = [
                     'id' => $w->id,
                     'key' => $w->id,
-                    'label' => "{$w->desa} · {$tersisir}/{$totalRw} RW Tersisir",
+                    'label' => "{$w->desa} Â· {$tersisir}/{$totalRw} RW Tersisir",
                     'x' => $config[$desaUpper]['x'],
                     'y' => $config[$desaUpper]['y'],
                     'size' => $size,
