@@ -100,11 +100,6 @@ class ImportSisirRwFromGoogleSheets extends Command
                 $tanggal = now();
             }
 
-            // Combine pelaksana
-            $pelaksanaList = array_filter([$row[6] ?? '', $row[7] ?? '', $row[8] ?? '']);
-            $pelaksana = empty($pelaksanaList) ? 'Tim Sisir RW' : implode(', ', $pelaksanaList);
-
-            // Jenis kegiatan mapping (if it doesn't match keys, it will fallback to 'lainnya' safely thanks to the model fix)
             $jenisRaw = strtolower(trim($row[10] ?? ''));
             $jenisKey = 'lainnya';
             foreach (KegiatanRw::JENIS_KEGIATAN as $key => $config) {
@@ -114,32 +109,31 @@ class ImportSisirRwFromGoogleSheets extends Command
                 }
             }
 
-            // Cek duplikasi (Kegiatan di RW yang sama di tanggal yang sama)
-            $exists = KegiatanRw::where('target_wilayah_id', $targetWilayah->id)
-                ->where('nomor_rw', $rw)
-                ->whereDate('tanggal_kegiatan', $tanggal->format('Y-m-d'))
-                ->exists();
+            // Tidak menggunakan "pelaksana" dari gabungan dewan, set default 'Tim Sisir RW'
+            $pelaksana = 'Tim Sisir RW';
 
-            if ($exists) {
-                $skipped++;
-                continue;
-            }
-
-            KegiatanRw::create([
-                'target_wilayah_id' => $targetWilayah->id,
-                'nomor_rw' => $rw,
-                'dapil' => $targetWilayah->dapil,
-                'kecamatan' => $targetWilayah->kecamatan,
-                'desa' => $targetWilayah->desa,
-                'jenis_kegiatan' => $jenisKey !== 'lainnya' ? $jenisKey : ($row[10] ?? 'Lainnya'),
-                'segmen' => $row[11] ?? null,
-                'tanggal_kegiatan' => $tanggal,
-                'pelaksana' => $pelaksana,
-                'tempat_kegiatan' => $row[9] ?? null,
-                'jumlah_warga' => 0, // Tidak ada di excel
-                'catatan' => $row[12] ?? null,
-                'created_by' => $adminUser->id,
-            ]);
+            KegiatanRw::updateOrCreate(
+                [
+                    'target_wilayah_id' => $targetWilayah->id,
+                    'nomor_rw' => $rw,
+                    'tanggal_kegiatan' => $tanggal->format('Y-m-d'), // Hanya samakan tanggalnya
+                ],
+                [
+                    'dapil' => $targetWilayah->dapil,
+                    'kecamatan' => $targetWilayah->kecamatan,
+                    'desa' => $targetWilayah->desa,
+                    'jenis_kegiatan' => $jenisKey !== 'lainnya' ? $jenisKey : ($row[10] ?? 'Lainnya'),
+                    'segmen' => $row[11] ?? null,
+                    'pelaksana' => $pelaksana,
+                    'dpr_ri_hadir' => $row[6] ?? 'TIDAK ADA',
+                    'dprd_prov_hadir' => $row[7] ?? 'TIDAK ADA',
+                    'dprd_kab_hadir' => $row[8] ?? 'TIDAK ADA',
+                    'tempat_kegiatan' => $row[9] ?? null,
+                    'jumlah_warga' => 0,
+                    'catatan' => $row[12] ?? null,
+                    'created_by' => $adminUser->id,
+                ]
+            );
 
             $imported++;
         }
