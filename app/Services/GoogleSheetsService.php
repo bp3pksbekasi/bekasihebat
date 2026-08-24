@@ -46,10 +46,7 @@ class GoogleSheetsService
 
             if (empty($values)) {
                 $headers = [[
-                    "ID", "Tanggal Input", "Dapil", "Kecamatan", "Desa",
-                    "Nomor RW", "Jenis Kegiatan", "Tanggal Kegiatan",
-                    "Pelaksana", "Jumlah Warga", "Tokoh Ditemui",
-                    "Catatan", "Tindak Lanjut", "Dicatat Oleh",
+                    "Timestamp", "WAKTU KEGIATAN", "KAB / KOTA", "KECAMATAN", "KEL / DESA", "RW", "ANGGOTA DPR RI YANG TERLIBAT / HADIR", "ANGGOTA DPRD PROVINSI JAWA BARAT YANG TERLIBAT / HADIR", "ANGGOTA DPRD KAB / KOTA YANG TERLIBAT / HADIR", "TEMPAT KEGIATAN", "JENIS KEGIATAN", "SEGMEN", "KETERANGAN TAMBAHAN", "UPLOAD FOTO KEGIATAN",
                 ]];
                 $body = new ValueRange(["values" => $headers]);
                 $service->spreadsheets_values->update(
@@ -104,3 +101,4 @@ class GoogleSheetsService
         }
     }
 }
+
