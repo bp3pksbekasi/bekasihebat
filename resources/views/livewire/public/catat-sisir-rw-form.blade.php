@@ -1,9 +1,10 @@
-﻿<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
     <div class="max-w-2xl mx-auto space-y-4">
         
         <!-- Header Banner (Google Form Style) -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
             <div class="h-3 w-full bg-orange-500"></div>
+            <img src="{{ asset('images/BannerSisirRW.png') }}" alt="Form Header" class="w-full h-auto object-cover max-h-48">
             <div class="p-6 sm:p-8">
                 <h1 class="text-3xl font-medium text-gray-900 mb-2">Input Kegiatan Sisir RW</h1>
                 <p class="text-gray-600 text-sm leading-relaxed">
