@@ -1,4 +1,4 @@
-﻿<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
     <div class="max-w-2xl mx-auto space-y-4">
         
         <!-- Header Banner (Google Form Style) -->
