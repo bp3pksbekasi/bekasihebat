@@ -131,6 +131,9 @@
                                     <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Jenis Kegiatan</th>
                                     <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Pelaksana</th>
                                     <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Jumlah Warga</th>
+                                    @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isDpd()))
+                                        <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;text-align:right;">Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -147,10 +150,16 @@
                                         <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kg->jenis_config['label'] }}</td>
                                         <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kg->pelaksana }}</td>
                                         <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ number_format($kg->jumlah_warga) }}</td>
+                                        @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isDpd()))
+                                            <td style="padding:10px 16px;white-space:nowrap;text-align:right;">
+                                                <button wire:click="editKegiatan('{{ $kg->id }}')" style="padding:4px 8px;font-size:11px;color:#2563eb;background:#eff6ff;border:none;border-radius:4px;cursor:pointer;margin-right:4px;">Edit</button>
+                                                <button wire:click="hapusKegiatan('{{ $kg->id }}')" wire:confirm="Yakin ingin menghapus data ini?" style="padding:4px 8px;font-size:11px;color:#dc2626;background:#fef2f2;border:none;border-radius:4px;cursor:pointer;">Hapus</button>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" style="padding:24px 16px;text-align:center;color:#6b7280;">Tidak ada data kegiatan yang sesuai filter.</td>
+                                        <td colspan="6" style="padding:24px 16px;text-align:center;color:#6b7280;">Tidak ada data kegiatan yang sesuai filter.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

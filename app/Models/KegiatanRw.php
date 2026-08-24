@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KegiatanRw extends Model
 {
     use HasFactory;
     use HasUuids;
+    use SoftDeletes;
 
     public const JENIS_KEGIATAN = [
         'upa_rw' => ['label' => 'UPA RW', 'icon' => 'users', 'color' => '#f97316'],

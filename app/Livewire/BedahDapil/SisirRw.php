@@ -501,16 +501,14 @@ class SisirRw extends Component
 
     public function editKegiatan(string $id): void
     {
+        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isDpd(), 403, 'Unauthorized action.');
         $this->dispatch('open-catat-kegiatan-form', editId: $id);
     }
 
     public function hapusKegiatan(string $id): void
     {
+        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isDpd(), 403, 'Unauthorized action.');
         $kegiatan = KegiatanRw::query()->findOrFail($id);
-
-        foreach (($kegiatan->foto ?? []) as $path) {
-            Storage::disk('public')->delete($path);
-        }
 
         $kegiatan->delete();
         session()->flash('message', 'Kegiatan dihapus.');
