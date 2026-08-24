@@ -42,9 +42,9 @@ class SyncKegiatanRwToGoogleSheets implements ShouldQueue
             echo "Header Google Sheet dipastikan ada. Mempersiapkan row...\n";
 
             $row = [
-                now()->format("Y-m-d H:i:s"),
-                $kegiatan->tanggal_kegiatan ? Carbon::parse($kegiatan->tanggal_kegiatan)->format("d/m/Y H:i") : "-",
-                "Kabupaten Bekasi",
+                now()->format("d/m/Y G:i:s"),
+                $kegiatan->tanggal_kegiatan ? Carbon::parse($kegiatan->tanggal_kegiatan)->format("d/m/Y") : "-",
+                "BEKASI",
                 $kegiatan->targetWilayah?->kecamatan ?? $kegiatan->kecamatan ?? "-",
                 $kegiatan->targetWilayah?->desa ?? $kegiatan->desa ?? "-",
                 $kegiatan->nomor_rw ?? "-",
