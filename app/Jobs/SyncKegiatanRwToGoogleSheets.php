@@ -56,7 +56,12 @@ class SyncKegiatanRwToGoogleSheets implements ShouldQueue
             Log::info("SyncKegiatanRwToGoogleSheets: Berhasil sinkron.", ["id" => $this->kegiatanRwId]);
 
         } catch (\Throwable $e) {
-            Log::error("SyncKegiatanRwToGoogleSheets: Gagal. " . $e->getMessage());
+            $msg = "SyncKegiatanRwToGoogleSheets: Gagal. " . $e->getMessage() . " di baris " . $e->getLine();
+            echo "\n============================================\n";
+            echo "ERROR GOOGLE SHEETS:\n";
+            echo $msg . "\n";
+            echo "============================================\n";
+            Log::error($msg);
         }
     }
 
