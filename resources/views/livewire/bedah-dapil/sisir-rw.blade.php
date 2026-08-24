@@ -115,6 +115,54 @@
                 </div>
             </div>
 
+            <!-- DATA TABLE SISIR RW -->
+            <div style="padding:0 20px 20px;">
+                <div style="background:white;border:0.5px solid #e5e5e5;border-radius:12px;overflow:hidden;">
+                    <div style="padding:14px 16px;border-bottom:0.5px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center;">
+                        <h2 style="font-size:14px;font-weight:600;color:#1a1a1a;margin:0;">Data Sisir RW</h2>
+                        <div style="font-size:11px;color:#888;">Menampilkan data sesuai filter</div>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%;border-collapse:collapse;text-align:left;font-size:12px;">
+                            <thead>
+                                <tr style="background:#f9fafb;border-bottom:0.5px solid #e5e5e5;">
+                                    <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Waktu Kegiatan</th>
+                                    <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Wilayah</th>
+                                    <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Jenis Kegiatan</th>
+                                    <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Pelaksana</th>
+                                    <th style="padding:10px 16px;font-weight:600;color:#4b5563;white-space:nowrap;">Jumlah Warga</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($this->tableKegiatan as $kegiatan)
+                                    <tr style="border-bottom:0.5px solid #e5e5e5;">
+                                        <td style="padding:10px 16px;white-space:nowrap;">
+                                            <div style="color:#111827;font-weight:500;">{{ \Carbon\Carbon::parse($kegiatan->tanggal_kegiatan)->translatedFormat('d F Y') }}</div>
+                                            <div style="color:#6b7280;font-size:11px;">{{ \Carbon\Carbon::parse($kegiatan->tanggal_kegiatan)->format('H:i') }}</div>
+                                        </td>
+                                        <td style="padding:10px 16px;white-space:nowrap;">
+                                            <div style="color:#111827;font-weight:500;">RW {{ $kegiatan->nomor_rw }}</div>
+                                            <div style="color:#6b7280;font-size:11px;">{{ $kegiatan->desa ?? '-' }}, {{ $kegiatan->kecamatan ?? '-' }}</div>
+                                        </td>
+                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ \App\Models\KegiatanRw::JENIS_KEGIATAN[$kegiatan->jenis_kegiatan]['label'] ?? $kegiatan->jenis_kegiatan }}</td>
+                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kegiatan->pelaksana }}</td>
+                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ number_format($kegiatan->jumlah_warga) }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" style="padding:24px 16px;text-align:center;color:#6b7280;">Tidak ada data kegiatan yang sesuai filter.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    @if($this->tableKegiatan->hasPages())
+                        <div style="padding:12px 16px;border-top:0.5px solid #e5e5e5;">
+                            {{ $this->tableKegiatan->links() }}
+                        </div>
+                    @endif
+                </div>
+            </div>
             <!-- Row 1: 3-column layout (Map, Selected Village Detail, List of Villages) -->
             <div class="kaderisasi-3col-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:0 20px 20px;box-sizing:border-box;">
                 <!-- Column 1: Map Card -->
