@@ -47,6 +47,7 @@ Route::get('/galeri', PublicGaleri::class)->name('public.galeri');
 Route::get('/tentang', PublicTentang::class)->name('public.tentang');
 Route::get('/aspirasi-warga', PublicAspirasiWarga::class)->name('public.aspirasi');
 Route::get('/profil-rw', \App\Livewire\Public\RwProfileForm::class)->name('public.rw-profile');
+Route::get('/input-sisir-rw', \App\Livewire\Public\CatatSisirRwForm::class)->name('public.input-sisir-rw');
 Route::get('/input-infrastruktur', \App\Livewire\Public\InputInfrastruktur::class)->name('public.input-infrastruktur');
 Route::get('/pilkades-karangsatria', \App\Livewire\Public\PilkadesKarangsatria::class)->name('public.pilkades-karangsatria');
 Route::get('/pilkades-karangsatria/download-prioritas', [\App\Http\Controllers\ReportController::class, 'downloadPilkadesKarangsatriaPrioritasPdf'])->name('public.pilkades-karangsatria.download-prioritas');
