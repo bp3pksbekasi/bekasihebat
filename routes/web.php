@@ -8,7 +8,6 @@ use App\Livewire\Events\Create as EventsCreate;
 use App\Livewire\Events\Detail as EventsDetail;
 use App\Livewire\Events\Edit as EventsEdit;
 use App\Livewire\Events\Index as EventsIndex;
-use App\Http\Controllers\EventPrintController;
 use App\Livewire\InfraRtRw\Detail as InfraRtRwDetail;
 use App\Livewire\InfraRtRw\Index as InfraRtRwIndex;
 use App\Livewire\KartuAnggota\Register as KartuAnggotaRegister;
@@ -111,22 +110,6 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 
     Route::get('/profile/complete', Complete::class)->name('profile.complete');
-
-    Route::get('/download-template/{filename}', function ($filename) {
-        $allowedFiles = [
-            'TEMPLATE_DPA.xlsx',
-            'TEMPLATE_FORMAT_PROPOSAL.docx',
-            'TEMPLATE_FORMAT_SURAT_PERMOHONAN_PENCAIRAN.docx'
-        ];
-        if (!in_array($filename, $allowedFiles)) {
-            abort(404);
-        }
-        $path = app_path('Support/SupportingDocument/' . $filename);
-        if (!file_exists($path)) {
-            abort(404);
-        }
-        return response()->download($path);
-    })->name('download.template');
 
     Route::get('/dashboard', AdminDashboard::class)
         ->name('dashboard');
@@ -438,12 +421,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', EventsCreate::class)->middleware('menu:event')->name('events.create');
         Route::get('/{event}', EventsDetail::class)->middleware('menu:event,event-view')->name('events.detail');
         Route::get('/{event}/edit', EventsEdit::class)->middleware('menu:event')->name('events.edit');
-        Route::get('/{event}/print-lpj', [EventPrintController::class, 'printLpj'])->middleware('menu:event,event-view')->name('events.print-lpj');
-    });
-
-    Route::prefix('admin/reports')->middleware(['auth'])->group(function () {
-        Route::get('/kinerja-dpd', \App\Livewire\Reports\KinerjaDpd::class)->middleware('menu:laporan-kinerja-dpd')->name('reports.kinerja-dpd');
-        Route::get('/kinerja-dpd/print', [\App\Http\Controllers\ReportPrintController::class, 'printKinerjaDpd'])->middleware('menu:laporan-kinerja-dpd')->name('reports.kinerja-dpd.print');
     });
 
     Route::prefix('infra-rtrw')->middleware(['auth'])->group(function () {
@@ -453,9 +430,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('buku-induk-rw')->middleware(['auth'])->group(function () {
         Route::get('/', \App\Livewire\BukuIndukRw\Index::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.index');
-        Route::get('/download-pdf', [\App\Http\Controllers\ReportController::class, 'downloadKorwePdf'])->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.download-pdf');
-        Route::get('/download-pdf-dpc', [\App\Http\Controllers\ReportController::class, 'downloadKorweDpcPdf'])->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.download-pdf-dpc');
-        Route::get('/download-pdf-sisir-rw', [\App\Http\Controllers\ReportController::class, 'downloadSisirRwPdf'])->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.download-pdf-sisir-rw');
         Route::get('/{dataRw}', \App\Livewire\BukuIndukRw\Detail::class)->middleware('menu:peta-kekuatan-rw')->name('buku-induk-rw.detail');
     });
 
@@ -485,28 +459,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/api', \App\Livewire\Pengaturan\Api::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.api');
-
-    Route::get('/pengaturan/bidang', \App\Livewire\Pengaturan\MasterBidang::class)
-        ->middleware('role:admin_dpd')
-        ->name('pengaturan.bidang');
-
-    Route::get('/pengaturan/mapping-bidang', \App\Livewire\Pengaturan\MappingBidang::class)
-        ->middleware('role:admin_dpd')
-        ->name('pengaturan.mapping-bidang');
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::prefix('monev')->group(function () {
-        Route::get('/', \App\Livewire\Monev\Dashboard::class)
-            ->middleware('menu:monev')
-            ->name('monev.dashboard');
-    });
-
     Route::redirect('settings', 'settings/profile');
 
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+    Volt::route('settings/profile', 'settings.profile')->middleware('menu:profil')->name('settings.profile');
+    Volt::route('settings/password', 'settings.password')->middleware('menu:profil')->name('settings.password');
+    Volt::route('settings/appearance', 'settings.appearance')->middleware('menu:profil')->name('settings.appearance');
 });
 
 require __DIR__.'/auth.php';

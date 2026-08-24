@@ -40,7 +40,6 @@ class SisirRw extends Component
 
     public int $rwBelumPerPage = 10;
 
-    public int $kegiatanPage = 1;
 
     public ?string $editId = null;
 
@@ -311,15 +310,15 @@ class SisirRw extends Component
     }
 
     #[Computed]
-    #[Computed]
     public function tableKegiatan()
     {
         return $this->filteredKegiatanQuery()
-            ->with(['creator', 'targetWilayah'])
+            ->with(['creator'])
             ->orderByDesc('tanggal_kegiatan')
             ->paginate(10, ['*'], 'kegiatanPage');
     }
 
+    #[Computed]
     public function rwBelumTersisirAll(): Collection
     {
         $rwDenganKegiatan = $this->filteredKegiatanQuery()
@@ -690,7 +689,7 @@ class SisirRw extends Component
                 $markers[] = [
                     'id' => $w->id,
                     'key' => $w->id,
-                    'label' => "{$w->desa} Â· {$tersisir}/{$totalRw} RW Tersisir",
+                    'label' => "{$w->desa} · {$tersisir}/{$totalRw} RW Tersisir",
                     'x' => $config[$desaUpper]['x'],
                     'y' => $config[$desaUpper]['y'],
                     'size' => $size,

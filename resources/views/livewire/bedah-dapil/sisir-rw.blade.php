@@ -77,7 +77,7 @@
                     <div style="font-size:12px;color:#666;">Monitoring intensitas kegiatan lapangan per RW dan prioritas kunjungan berikutnya</div>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
-                    <div style="font-size:11px;color:#888;">Periode aktif {{ $monthLabel }} {{ $yearLabel }} Â· fokus RW belum tersisir</div>
+                    <div style="font-size:11px;color:#888;">Periode aktif {{ $monthLabel }} {{ $yearLabel }} · fokus RW belum tersisir</div>
                     <button wire:click="openForm" type="button" style="padding:8px 14px;border:none;border-radius:8px;font-size:12px;background:#fe5000;color:white;font-weight:500;cursor:pointer;">
                         + Catat Kegiatan
                     </button>
@@ -134,19 +134,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($this->tableKegiatan as $kegiatan)
+                                @forelse($this->tableKegiatan as $kg)
                                     <tr style="border-bottom:0.5px solid #e5e5e5;">
                                         <td style="padding:10px 16px;white-space:nowrap;">
-                                            <div style="color:#111827;font-weight:500;">{{ \Carbon\Carbon::parse($kegiatan->tanggal_kegiatan)->translatedFormat('d F Y') }}</div>
-                                            <div style="color:#6b7280;font-size:11px;">{{ \Carbon\Carbon::parse($kegiatan->tanggal_kegiatan)->format('H:i') }}</div>
+                                            <div style="color:#111827;font-weight:500;">{{ \Carbon\Carbon::parse($kg->tanggal_kegiatan)->translatedFormat('d F Y') }}</div>
+                                            <div style="color:#6b7280;font-size:11px;">{{ \Carbon\Carbon::parse($kg->tanggal_kegiatan)->format('H:i') }}</div>
                                         </td>
                                         <td style="padding:10px 16px;white-space:nowrap;">
-                                            <div style="color:#111827;font-weight:500;">RW {{ $kegiatan->nomor_rw }}</div>
-                                            <div style="color:#6b7280;font-size:11px;">{{ $kegiatan->desa ?? '-' }}, {{ $kegiatan->kecamatan ?? '-' }}</div>
+                                            <div style="color:#111827;font-weight:500;">RW {{ $kg->nomor_rw }}</div>
+                                            <div style="color:#6b7280;font-size:11px;">{{ $kg->desa ?? '-' }}, {{ $kg->kecamatan ?? '-' }}</div>
                                         </td>
-                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kegiatan->jenis_config['label'] }}</td>
-                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kegiatan->pelaksana }}</td>
-                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ number_format($kegiatan->jumlah_warga) }}</td>
+                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kg->jenis_config['label'] }}</td>
+                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ $kg->pelaksana }}</td>
+                                        <td style="padding:10px 16px;white-space:nowrap;color:#111827;">{{ number_format($kg->jumlah_warga) }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -163,6 +163,7 @@
                     @endif
                 </div>
             </div>
+
             <!-- Row 1: 3-column layout (Map, Selected Village Detail, List of Villages) -->
             <div class="kaderisasi-3col-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:0 20px 20px;box-sizing:border-box;">
                 <!-- Column 1: Map Card -->
@@ -189,9 +190,9 @@
                         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px;">
                             <div>
                                 <h2 style="font-size:16px;font-weight:700;color:#111827;margin:0;">{{ $selectedVillage['desa'] }}</h2>
-                                <div style="font-size:11px;color:#6b7280;margin-top:2px;">Kec. {{ $selectedVillage['kecamatan'] }} Â· {{ $selectedVillage['dapil'] }}</div>
+                                <div style="font-size:11px;color:#6b7280;margin-top:2px;">Kec. {{ $selectedVillage['kecamatan'] }} · {{ $selectedVillage['dapil'] }}</div>
                             </div>
-                            <button wire:click="closeVillageDetail" type="button" style="width:24px;height:24px;border-radius:6px;border:0.5px solid #d4d4d8;background:white;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;">âœ•</button>
+                            <button wire:click="closeVillageDetail" type="button" style="width:24px;height:24px;border-radius:6px;border:0.5px solid #d4d4d8;background:white;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;">✕</button>
                         </div>
 
                         <!-- Progress Bar & Stats -->
@@ -222,7 +223,7 @@
                                     <button
                                         wire:click="openFormForRw('{{ $selectedVillage['id'] }}', '{{ $rw['nomor_rw'] }}')"
                                         type="button"
-                                        title="RW {{ $rw['nomor_rw'] }} Â· {{ $count }}x kegiatan Â· DPT {{ number_format($rw['dpt']) }} Â· Est. PKS ~{{ number_format($rw['estimasi_pks']) }} Â· Status: {{ $rw['status'] }}"
+                                        title="RW {{ $rw['nomor_rw'] }} · {{ $count }}x kegiatan · DPT {{ number_format($rw['dpt']) }} · Est. PKS ~{{ number_format($rw['estimasi_pks']) }} · Status: {{ $rw['status'] }}"
                                         style="width:36px;height:36px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;{{ $boxStyle }}"
                                     >
                                         {{ ltrim($rw['nomor_rw'], '0') ?: '0' }}
@@ -329,7 +330,7 @@
                                         @endif
                                     </div>
                                     <div style="font-size:11px;color:#666;margin-top:4px;line-height:1.5;">
-                                        DPT {{ number_format($rw['dpt']) }} Â· Est. PKS ~{{ number_format($rw['estimasi_pks']) }} Â·
+                                        DPT {{ number_format($rw['dpt']) }} · Est. PKS ~{{ number_format($rw['estimasi_pks']) }} ·
                                         Terakhir:
                                         <span style="font-weight:500;color:{{ $lastVisit ? '#444' : '#dc2626' }};">
                                             {{ $lastVisit ? \Carbon\Carbon::parse($lastVisit)->diffForHumans() : 'belum pernah' }}
@@ -424,7 +425,7 @@
                                                 <span style="padding:3px 7px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:10px;font-weight:600;">Sudah Jadi Event</span>
                                             @endif
                                         </div>
-                                        <div style="font-size:11px;color:#666;margin-top:4px;">{{ $kegiatan->desa }} Â· {{ $kegiatan->kecamatan }}</div>
+                                        <div style="font-size:11px;color:#666;margin-top:4px;">{{ $kegiatan->desa }} · {{ $kegiatan->kecamatan }}</div>
                                         <div style="font-size:11px;color:#444;margin-top:6px;line-height:1.45;">{{ \Illuminate\Support\Str::limit($kegiatan->catatan ?: 'Catatan belum diisi.', 110) }}</div>
                                         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:10px;color:#888;margin-top:7px;">
                                             <span style="display:flex;align-items:center;gap:4px;"><i class="ti ti-user" style="font-size:11px;" aria-hidden="true"></i>{{ $kegiatan->pelaksana }}</span>
