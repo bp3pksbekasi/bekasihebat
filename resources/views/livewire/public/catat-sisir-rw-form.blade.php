@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
+﻿<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
     <div class="max-w-2xl mx-auto space-y-4">
         
         <!-- Header Banner (Google Form Style) -->
@@ -44,7 +44,7 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Dapil</label>
-                            <select wire:model.live="dapil" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                            <select wire:model.live="dapil" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                                 <option value="">Pilih Dapil...</option>
                                 @foreach($dapilOptions as $opt)
                                     <option value="{{ $opt }}">{{ $opt }}</option>
@@ -55,7 +55,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
-                            <select wire:model.live="kecamatan" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md" {{ empty($dapil) ? 'disabled' : '' }}>
+                            <select wire:model.live="kecamatan" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg" {{ empty($dapil) ? 'disabled' : '' }}>
                                 <option value="">Pilih Kecamatan...</option>
                                 @foreach($kecamatanOptions as $opt)
                                     <option value="{{ $opt }}">{{ $opt }}</option>
@@ -66,7 +66,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Desa/Kelurahan</label>
-                            <select wire:model.live="desa" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md" {{ empty($kecamatan) ? 'disabled' : '' }}>
+                            <select wire:model.live="desa" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg" {{ empty($kecamatan) ? 'disabled' : '' }}>
                                 <option value="">Pilih Desa...</option>
                                 @foreach($desaOptions as $opt)
                                     <option value="{{ $opt }}">{{ $opt }}</option>
@@ -77,7 +77,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nomor RW</label>
-                            <select wire:model.live="data_rw_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md" {{ empty($desa) ? 'disabled' : '' }}>
+                            <select wire:model.live="data_rw_id" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg" {{ empty($desa) ? 'disabled' : '' }}>
                                 <option value="">Pilih RW...</option>
                                 @foreach($rwOptions as $opt)
                                     <option value="{{ $opt['id'] }}">{{ $opt['nomor_rw'] }}</option>
@@ -95,7 +95,7 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kegiatan <span class="text-red-500">*</span></label>
-                            <select wire:model="formJenis" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                            <select wire:model="formJenis" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                                 <option value="">Pilih...</option>
                                 @foreach(\App\Models\KegiatanRw::JENIS_KEGIATAN as $key => $config)
                                     <option value="{{ $key }}">{{ $config['label'] }}</option>
@@ -106,25 +106,25 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Waktu Kegiatan <span class="text-red-500">*</span></label>
-                            <input type="datetime-local" wire:model="formTanggal" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+                            <input type="datetime-local" wire:model="formTanggal" class="block w-full sm:w-2/3 border-0 border-b border-gray-300 bg-transparent py-2 px-0 text-gray-900 focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                             @error('formTanggal') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Pelaksana <span class="text-red-500">*</span></label>
-                            <input type="text" wire:model="formPelaksana" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+                            <input type="text" wire:model="formPelaksana" class="block w-full sm:w-2/3 border-0 border-b border-gray-300 bg-transparent py-2 px-0 text-gray-900 focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                             @error('formPelaksana') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Warga Hadir <span class="text-red-500">*</span></label>
-                            <input type="number" wire:model="formJumlahWarga" min="1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+                            <input type="number" wire:model="formJumlahWarga" min="1" class="block w-full sm:w-2/3 border-0 border-b border-gray-300 bg-transparent py-2 px-0 text-gray-900 focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                             @error('formJumlahWarga') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Segmen Peserta <span class="text-red-500">*</span></label>
-                            <select wire:model.live="formSegmen" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                            <select wire:model.live="formSegmen" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                                 <option value="">Pilih...</option>
                                 @foreach(\App\Models\KegiatanRw::SEGMEN_KEGIATAN as $seg)
                                     <option value="{{ $seg }}">{{ $seg }}</option>
@@ -135,7 +135,7 @@
                         @if($formSegmen === 'Other')
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Sebutkan Segmen Lainnya</label>
-                                <input type="text" wire:model="formSegmenOther" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+                                <input type="text" wire:model="formSegmenOther" class="block w-full sm:w-2/3 border-0 border-b border-gray-300 bg-transparent py-2 px-0 text-gray-900 focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                             </div>
                         @endif
                     </div>
@@ -147,7 +147,7 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Anggota DPR RI</label>
-                            <select wire:model="formDprRi" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                            <select wire:model="formDprRi" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                                 @foreach(\App\Models\KegiatanRw::DPR_RI_HADIR as $opt)
                                     <option value="{{ $opt }}">{{ $opt }}</option>
                                 @endforeach
@@ -155,7 +155,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Anggota DPRD Provinsi</label>
-                            <select wire:model="formDprdProv" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                            <select wire:model="formDprdProv" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                                 @foreach(\App\Models\KegiatanRw::DPRD_PROV_HADIR as $opt)
                                     <option value="{{ $opt }}">{{ $opt }}</option>
                                 @endforeach
@@ -163,7 +163,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Anggota DPRD Kabupaten</label>
-                            <select wire:model="formDprdKab" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                            <select wire:model="formDprdKab" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                                 @foreach(\App\Models\KegiatanRw::DPRD_KAB_HADIR as $opt)
                                     <option value="{{ $opt }}">{{ $opt }}</option>
                                 @endforeach
@@ -178,7 +178,7 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Kegiatan <span class="text-red-500">*</span></label>
-                            <select wire:model.live="formTempat" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                            <select wire:model.live="formTempat" class="py-2.5 px-3 block w-full sm:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                                 <option value="">Pilih...</option>
                                 @foreach(\App\Models\KegiatanRw::TEMPAT_KEGIATAN as $opt)
                                     <option value="{{ $opt }}">{{ $opt }}</option>
@@ -189,18 +189,18 @@
                         @if($formTempat === 'Other')
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Sebutkan Tempat Lainnya</label>
-                                <input type="text" wire:model="formTempatOther" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+                                <input type="text" wire:model="formTempatOther" class="block w-full sm:w-2/3 border-0 border-b border-gray-300 bg-transparent py-2 px-0 text-gray-900 focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg">
                             </div>
                         @endif
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Catatan</label>
-                            <textarea wire:model="formCatatan" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"></textarea>
+                            <textarea wire:model="formCatatan" rows="3" class="block w-full sm:w-2/3 border-0 border-b border-gray-300 bg-transparent py-2 px-0 text-gray-900 focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg"></textarea>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Tambahan</label>
-                            <textarea wire:model="formKeteranganTambahan" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"></textarea>
+                            <textarea wire:model="formKeteranganTambahan" rows="3" class="block w-full sm:w-2/3 border-0 border-b border-gray-300 bg-transparent py-2 px-0 text-gray-900 focus:border-orange-500 focus:ring-0 focus:outline-none text-base sm:text-lg"></textarea>
                         </div>
                     </div>
                 </div>
