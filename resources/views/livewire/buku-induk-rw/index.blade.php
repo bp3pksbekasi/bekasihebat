@@ -12,11 +12,11 @@
             </a>
             <a href="{{ route('buku-induk-rw.download-pdf-dpc', ['tahun' => $selectedTahun]) }}" target="_blank" style="background-color: #4f46e5; color: #fff;" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-xs uppercase tracking-widest focus:outline-none shadow-sm opacity-90 hover:opacity-100 transition-opacity">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                Klasemen Korwe
+                Klasemen Infrastruktur
             </a>
             <a href="{{ route('buku-induk-rw.download-pdf', ['tahun' => $selectedTahun]) }}" target="_blank" style="background-color: #dc2626; color: #fff;" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-xs uppercase tracking-widest focus:outline-none shadow-sm opacity-90 hover:opacity-100 transition-opacity">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                Detail Korwe
+                Detail Infrastruktur
             </a>
         </div>
         @endif

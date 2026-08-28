@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\TargetWilayah;
 use App\Models\Korwe;
+use App\Models\Korte;
+use App\Models\PenggalangSuara;
 use App\Traits\WithWilayahScope;
 
 class ReportController extends Controller
@@ -23,7 +25,7 @@ class ReportController extends Controller
 
         $tahun = $request->query('tahun', 2026);
 
-        $desas = TargetWilayah::select('id', 'dapil', 'kecamatan', 'desa', "target_korwe_{$tahun} as target_korwe")
+        $desas = TargetWilayah::select('id', 'dapil', 'kecamatan', 'desa', "target_korwe_{$tahun} as target_korwe", "target_korte_{$tahun} as target_korte", "target_penggalang_{$tahun} as target_penggalang")
             ->orderBy('kecamatan')
             ->orderBy('desa')
             ->get();
@@ -35,33 +37,59 @@ class ReportController extends Controller
             ->groupBy('target_wilayah_id')
             ->pluck('count', 'target_wilayah_id');
 
+        $korteCounts = Korte::whereIn('target_wilayah_id', $desaIds)
+            ->selectRaw('target_wilayah_id, count(*) as count')
+            ->groupBy('target_wilayah_id')
+            ->pluck('count', 'target_wilayah_id');
+
+        $penggalangCounts = PenggalangSuara::whereIn('target_wilayah_id', $desaIds)
+            ->selectRaw('target_wilayah_id, count(*) as count')
+            ->groupBy('target_wilayah_id')
+            ->pluck('count', 'target_wilayah_id');
+
         $data = [];
         foreach ($desas as $desa) {
             $kecamatan = $desa->kecamatan;
             if (!isset($data[$kecamatan])) {
                 $data[$kecamatan] = [
                     'kecamatan' => $kecamatan,
-                    'target_korwe_total' => 0,
+                    'target_total' => 0,
                     'terisi_korwe_total' => 0,
+                    'terisi_korte_total' => 0,
+                    'terisi_penggalang_total' => 0,
+                    'terisi_total' => 0,
                     'dpras' => []
                 ];
             }
-            $terisi = $korweCounts[$desa->id] ?? 0;
+            $terisiKorwe = $korweCounts[$desa->id] ?? 0;
+            $terisiKorte = $korteCounts[$desa->id] ?? 0;
+            $terisiPenggalang = $penggalangCounts[$desa->id] ?? 0;
+            
+            $targetTotal = ($desa->target_korwe ?? 0) + ($desa->target_korte ?? 0) + ($desa->target_penggalang ?? 0);
+            $terisiTotal = $terisiKorwe + $terisiKorte + $terisiPenggalang;
+
             $data[$kecamatan]['dpras'][] = [
                 'desa' => $desa->desa,
-                'target' => $desa->target_korwe,
-                'terisi' => $terisi,
+                'target' => $targetTotal,
+                'terisi_korwe' => $terisiKorwe,
+                'terisi_korte' => $terisiKorte,
+                'terisi_penggalang' => $terisiPenggalang,
+                'terisi_total' => $terisiTotal,
             ];
-            $data[$kecamatan]['target_korwe_total'] += $desa->target_korwe;
-            $data[$kecamatan]['terisi_korwe_total'] += $terisi;
+            
+            $data[$kecamatan]['target_total'] += $targetTotal;
+            $data[$kecamatan]['terisi_korwe_total'] += $terisiKorwe;
+            $data[$kecamatan]['terisi_korte_total'] += $terisiKorte;
+            $data[$kecamatan]['terisi_penggalang_total'] += $terisiPenggalang;
+            $data[$kecamatan]['terisi_total'] += $terisiTotal;
         }
 
         $pdf = Pdf::loadView('pdf.monitoring-korwe', [
             'data' => $data,
             'tahun' => $tahun,
         ]);
-        
-        return $pdf->download('laporan-progress-korwe.pdf');
+
+        return $pdf->stream('detail_infrastruktur.pdf');
     }
 
     public function downloadKorweDpcPdf(Request $request)
@@ -74,7 +102,7 @@ class ReportController extends Controller
 
         $tahun = $request->query('tahun', 2026);
 
-        $desas = TargetWilayah::select('id', 'dapil', 'kecamatan', 'desa', "target_korwe_{$tahun} as target_korwe")
+        $desas = TargetWilayah::select('id', 'dapil', 'kecamatan', 'desa', "target_korwe_{$tahun} as target_korwe", "target_korte_{$tahun} as target_korte", "target_penggalang_{$tahun} as target_penggalang")
             ->orderBy('kecamatan')
             ->orderBy('desa')
             ->get();
@@ -86,27 +114,49 @@ class ReportController extends Controller
             ->groupBy('target_wilayah_id')
             ->pluck('count', 'target_wilayah_id');
 
+        $korteCounts = Korte::whereIn('target_wilayah_id', $desaIds)
+            ->selectRaw('target_wilayah_id, count(*) as count')
+            ->groupBy('target_wilayah_id')
+            ->pluck('count', 'target_wilayah_id');
+
+        $penggalangCounts = PenggalangSuara::whereIn('target_wilayah_id', $desaIds)
+            ->selectRaw('target_wilayah_id, count(*) as count')
+            ->groupBy('target_wilayah_id')
+            ->pluck('count', 'target_wilayah_id');
+
         $data = [];
         foreach ($desas as $desa) {
             $kecamatan = $desa->kecamatan;
             if (!isset($data[$kecamatan])) {
                 $data[$kecamatan] = [
                     'kecamatan' => $kecamatan,
-                    'target_korwe_total' => 0,
+                    'target_total' => 0,
                     'terisi_korwe_total' => 0,
+                    'terisi_korte_total' => 0,
+                    'terisi_penggalang_total' => 0,
+                    'terisi_total' => 0,
                 ];
             }
-            $terisi = $korweCounts[$desa->id] ?? 0;
-            $data[$kecamatan]['target_korwe_total'] += $desa->target_korwe;
-            $data[$kecamatan]['terisi_korwe_total'] += $terisi;
+            $terisiKorwe = $korweCounts[$desa->id] ?? 0;
+            $terisiKorte = $korteCounts[$desa->id] ?? 0;
+            $terisiPenggalang = $penggalangCounts[$desa->id] ?? 0;
+            
+            $targetTotal = ($desa->target_korwe ?? 0) + ($desa->target_korte ?? 0) + ($desa->target_penggalang ?? 0);
+            $terisiTotal = $terisiKorwe + $terisiKorte + $terisiPenggalang;
+
+            $data[$kecamatan]['target_total'] += $targetTotal;
+            $data[$kecamatan]['terisi_korwe_total'] += $terisiKorwe;
+            $data[$kecamatan]['terisi_korte_total'] += $terisiKorte;
+            $data[$kecamatan]['terisi_penggalang_total'] += $terisiPenggalang;
+            $data[$kecamatan]['terisi_total'] += $terisiTotal;
         }
 
         $pdf = Pdf::loadView('pdf.monitoring-korwe-dpc', [
             'data' => $data,
             'tahun' => $tahun,
         ]);
-        
-        return $pdf->download('laporan-peringkat-korwe-dpc.pdf');
+
+        return $pdf->stream('klasemen_infrastruktur.pdf');
     }
 
     public function downloadSisirRwPdf(Request $request)
