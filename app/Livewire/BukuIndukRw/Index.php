@@ -30,6 +30,43 @@ class Index extends Component
     #[Url]
     public string $selectedStatus = '';
 
+    public $showPromptModal = false;
+    public $aiPrompt = '';
+
+    public function generatePrompt()
+    {
+        $controller = app()->make(\App\Http\Controllers\ReportController::class);
+        $data = $controller->getLeaderboardData($this->selectedTahun);
+
+        $prompt = "Tolong buatkan desain gambar Leaderboard (Papan Peringkat) 1 halaman bergaya modern dan elegan, yang dibagi menjadi 2 kolom/bagian vertikal.\n\n";
+        $prompt .= "Di bagian atas, tuliskan judul besar: 'LEADERBOARD 5 BESAR' dan periode: '" . $data['periode'] . "'.\n\n";
+        
+        $prompt .= "Kolom Kiri berjudul 'TOP 5 SISIR RW' (berdasarkan Total Kegiatan), isinya:\n";
+        $rank = 1;
+        foreach ($data['dataSisir'] as $row) {
+            $prompt .= $rank++ . ". DPC KEC. " . strtoupper($row['kecamatan']) . " - " . number_format($row['total_kegiatan']) . " GIAT\n";
+        }
+        
+        $prompt .= "\nKolom Kanan berjudul 'TOP 5 INFRASTRUKTUR' (berdasarkan Persentase Keterisian), isinya:\n";
+        $rank = 1;
+        foreach ($data['dataInfra'] as $row) {
+            $pct = $row['target_total'] > 0 ? round(($row['terisi_total'] / $row['target_total']) * 100, 1) : 0;
+            $prompt .= $rank++ . ". DPC KEC. " . strtoupper($row['kecamatan']) . " - " . $pct . "%\n";
+        }
+        
+        $prompt .= "\nDi bagian bawah poster, tuliskan ucapan selamat: 'Selamat kepada DPC dengan pencapaian tertinggi!' dan tambahkan kutipan motivasi: 'Kemenangan besar selalu dimulai dari kerja-kerja terstruktur di akar rumput. Bekasi Hebat, Menang Bermartabat!'\n\n";
+        $prompt .= "Buat desainnya menggunakan palet warna dominan Oranye, Putih, dan Biru Dongker (Dark Slate), dengan elemen dekorasi seperti lencana 1, 2, 3 berwarna emas, perak, dan perunggu.";
+
+        $this->aiPrompt = $prompt;
+        $this->showPromptModal = true;
+    }
+
+    public function closePromptModal()
+    {
+        $this->showPromptModal = false;
+        $this->aiPrompt = '';
+    }
+
     #[Url]
     public int $selectedTahun = 2026;
 
