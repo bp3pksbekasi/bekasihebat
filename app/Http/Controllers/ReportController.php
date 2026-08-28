@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Http\Controllers;
 
@@ -470,11 +470,11 @@ class ReportController extends Controller
 
         // Sort by Dapil number for Sisir RW (natural sort)
         $sisirDapil = $dapilData;
-        uksort($sisirDapil, function($a, $b) { return strnatcmp($a, $b); });
+        uksort($sisirDapil, function($a, $b) { return strnatcmp((string)$a, (string)$b); });
         
         // Sort by Dapil number for Infra
         $infraDapil = $dapilData;
-        uksort($infraDapil, function($a, $b) { return strnatcmp($a, $b); });
+        uksort($infraDapil, function($a, $b) { return strnatcmp((string)$a, (string)$b); });
 
         $bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $bulan = $bulanList[date('n') - 1];
