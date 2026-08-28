@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers;
 
@@ -328,4 +328,108 @@ class ReportController extends Controller
         
         return $pdf->download('peta-prioritas-pilkades-karangsatria.pdf');
     }
+    public function getLeaderboardData($tahun)
+    {
+        // 1. Top 5 Sisir RW
+        $desas = TargetWilayah::select('id', 'kecamatan')->get();
+        $desaIds = $desas->pluck('id');
+        $kegiatanCounts = \App\Models\KegiatanRw::whereIn('target_wilayah_id', $desaIds)
+            ->whereYear('tanggal_kegiatan', $tahun)
+            ->selectRaw('target_wilayah_id, count(*) as count')
+            ->groupBy('target_wilayah_id')
+            ->pluck('count', 'target_wilayah_id');
+
+        $sisirByKecamatan = [];
+        foreach ($desas as $desa) {
+            $kecamatan = $desa->kecamatan;
+            if (!isset($sisirByKecamatan[$kecamatan])) {
+                $sisirByKecamatan[$kecamatan] = 0;
+            }
+            $sisirByKecamatan[$kecamatan] += $kegiatanCounts[$desa->id] ?? 0;
+        }
+
+        arsort($sisirByKecamatan);
+        $topSisirData = array_slice($sisirByKecamatan, 0, 5, true);
+        
+        $dataSisir = [];
+        foreach ($topSisirData as $kecamatan => $total) {
+            $dataSisir[] = [
+                'kecamatan' => $kecamatan,
+                'total_kegiatan' => $total,
+            ];
+        }
+
+        // 2. Top 5 Infrastruktur
+        $infraDesas = TargetWilayah::select('id', 'kecamatan', "target_korwe_{$tahun}", "target_korte_{$tahun}", "target_penggalang_{$tahun}")->get();
+        
+        $korweCounts = Korwe::whereIn('target_wilayah_id', $desaIds)->selectRaw('target_wilayah_id, count(*) as count')->groupBy('target_wilayah_id')->pluck('count', 'target_wilayah_id');
+        $korteCounts = Korte::whereIn('target_wilayah_id', $desaIds)->selectRaw('target_wilayah_id, count(*) as count')->groupBy('target_wilayah_id')->pluck('count', 'target_wilayah_id');
+        $penggalangCounts = PenggalangSuara::whereIn('target_wilayah_id', $desaIds)->selectRaw('target_wilayah_id, count(*) as count')->groupBy('target_wilayah_id')->pluck('count', 'target_wilayah_id');
+
+        $infraByKecamatan = [];
+        foreach ($infraDesas as $desa) {
+            $kecamatan = $desa->kecamatan;
+            if (!isset($infraByKecamatan[$kecamatan])) {
+                $infraByKecamatan[$kecamatan] = ['target_total' => 0, 'terisi_total' => 0];
+            }
+            $target = ($desa->{"target_korwe_{$tahun}"} ?? 0) + ($desa->{"target_korte_{$tahun}"} ?? 0) + ($desa->{"target_penggalang_{$tahun}"} ?? 0);
+            $terisi = ($korweCounts[$desa->id] ?? 0) + ($korteCounts[$desa->id] ?? 0) + ($penggalangCounts[$desa->id] ?? 0);
+            
+            $infraByKecamatan[$kecamatan]['target_total'] += $target;
+            $infraByKecamatan[$kecamatan]['terisi_total'] += $terisi;
+        }
+
+        uasort($infraByKecamatan, function($a, $b) {
+            $pctA = $a['target_total'] > 0 ? ($a['terisi_total'] / $a['target_total']) : 0;
+            $pctB = $b['target_total'] > 0 ? ($b['terisi_total'] / $b['target_total']) : 0;
+            if ($pctA == $pctB) {
+                return $b['terisi_total'] <=> $a['terisi_total'];
+            }
+            return $pctB <=> $pctA;
+        });
+        
+        $topInfraData = array_slice($infraByKecamatan, 0, 5, true);
+        
+        $dataInfra = [];
+        foreach ($topInfraData as $kecamatan => $data) {
+            $data['kecamatan'] = $kecamatan;
+            $dataInfra[] = $data;
+        }
+        
+        $bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $bulan = $bulanList[date('n') - 1];
+        
+        $firstDayOfMonth = strtotime(date('Y-m-01'));
+        $currentDay = time();
+        $diffDays = ($currentDay - $firstDayOfMonth) / (60 * 60 * 24);
+        $pekan = ceil(($diffDays + date('N', $firstDayOfMonth)) / 7);
+
+        $periode = "PEKAN KE-{$pekan} | " . strtoupper($bulan) . " {$tahun}";
+
+        return compact('dataSisir', 'dataInfra', 'periode');
+    }
+
+    public function leaderboard(Request $request)
+    {
+        $scope = $this->accessScope();
+        if (($scope['mode'] ?? 'global') !== 'dapil' && auth()->user()?->role !== 'admin_dpd' && ($scope['mode'] ?? 'global') !== 'dpd') {
+            abort(403, 'Akses ditolak. Fitur ini khusus untuk DPD.');
+        }
+
+        return view('reports.leaderboard');
+    }
+
+    public function leaderboardImage(Request $request)
+    {
+        $scope = $this->accessScope();
+        if (($scope['mode'] ?? 'global') !== 'dapil' && auth()->user()?->role !== 'admin_dpd' && ($scope['mode'] ?? 'global') !== 'dpd') {
+            abort(403, 'Akses ditolak. Fitur ini khusus untuk DPD.');
+        }
+
+        $tahun = $request->query('tahun', date('Y'));
+        $data = $this->getLeaderboardData($tahun);
+
+        return view('reports.leaderboard-image', $data);
+    }
 }
+
