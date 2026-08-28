@@ -60,4 +60,19 @@ class PenggalangSuara extends Model
     {
         return $query->where('status', 'aktif');
     }
+
+    protected static function booted(): void
+    {
+        static::saved(function ($model) {
+            try {
+                \App\Jobs\SyncInfraToGoogleSheetsJob::dispatch()->delay(now()->addSeconds(5))->onQueue('default');
+            } catch (\Throwable $e) {}
+        });
+
+        static::deleted(function ($model) {
+            try {
+                \App\Jobs\SyncInfraToGoogleSheetsJob::dispatch()->delay(now()->addSeconds(5))->onQueue('default');
+            } catch (\Throwable $e) {}
+        });
+    }
 }

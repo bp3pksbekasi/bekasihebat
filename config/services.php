@@ -39,6 +39,9 @@ return [
         'spreadsheet_id'   => env('GOOGLE_SHEETS_SPREADSHEET_ID'),
         'credentials_path' => env('GOOGLE_SERVICE_ACCOUNT_JSON', 'storage/app/google-service-account.json'),
         'tab_name'         => env('GOOGLE_SHEETS_TAB_NAME', 'Data Sisir RW'),
+        'infra_spreadsheet_id' => env('GOOGLE_SHEET_INFRA_ID'),
+        'infra_tab_name' => env('GOOGLE_SHEET_INFRA_TAB', 'Form Responses 1'),
     ],
 
 ];
+

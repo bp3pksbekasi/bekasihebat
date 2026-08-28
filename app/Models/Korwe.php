@@ -41,4 +41,19 @@ class Korwe extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    protected static function booted(): void
+    {
+        static::saved(function ($model) {
+            try {
+                \App\Jobs\SyncInfraToGoogleSheetsJob::dispatch()->delay(now()->addSeconds(5))->onQueue('default');
+            } catch (\Throwable $e) {}
+        });
+
+        static::deleted(function ($model) {
+            try {
+                \App\Jobs\SyncInfraToGoogleSheetsJob::dispatch()->delay(now()->addSeconds(5))->onQueue('default');
+            } catch (\Throwable $e) {}
+        });
+    }
 }
