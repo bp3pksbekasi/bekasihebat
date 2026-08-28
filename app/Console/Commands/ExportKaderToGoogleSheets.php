@@ -36,7 +36,16 @@ class ExportKaderToGoogleSheets extends Command
             $service = new Sheets($client);
             
             $this->info("Menyiapkan data dari database...");
-            $kaders = Kader::orderBy('kecamatan')->orderBy('desa')->orderBy('nomor_rw')->get();
+            // Hanya ambil Kader yang berperan sebagai Korwe, Korte, atau Penggalang
+            $kaders = Kader::where(function ($query) {
+                    $query->where('is_korwe', true)
+                          ->orWhere('is_korte', true)
+                          ->orWhere('is_penggalang', true);
+                })
+                ->orderBy('kecamatan')
+                ->orderBy('desa')
+                ->orderBy('nomor_rw')
+                ->get();
             
             $values = [
                 ['Timestamp', 'KAB / KOTA', 'KECAMATAN', 'KEL / DESA', 'RW', 'NAMA LENGKAP SESUAI KTP', 'Nomor Whatsapp', 'PERAN', 'NOMOR KTP / NIK']
