@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers;
 
@@ -431,5 +431,65 @@ class ReportController extends Controller
 
         return view('reports.leaderboard-image', $data);
     }
-}
 
+    public function getLeaderboardDapilData($tahun)
+    {
+        $desas = TargetWilayah::select('id', 'dapil', "target_korwe_{$tahun}", "target_korte_{$tahun}", "target_penggalang_{$tahun}")->get();
+        $desaIds = $desas->pluck('id');
+        
+        $kegiatanCounts = \App\Models\KegiatanRw::whereIn('target_wilayah_id', $desaIds)
+            ->whereYear('tanggal_kegiatan', $tahun)
+            ->selectRaw('target_wilayah_id, count(*) as count')
+            ->groupBy('target_wilayah_id')
+            ->pluck('count', 'target_wilayah_id');
+
+        $korweCounts = Korwe::whereIn('target_wilayah_id', $desaIds)->selectRaw('target_wilayah_id, count(*) as count')->groupBy('target_wilayah_id')->pluck('count', 'target_wilayah_id');
+        $korteCounts = Korte::whereIn('target_wilayah_id', $desaIds)->selectRaw('target_wilayah_id, count(*) as count')->groupBy('target_wilayah_id')->pluck('count', 'target_wilayah_id');
+        $penggalangCounts = PenggalangSuara::whereIn('target_wilayah_id', $desaIds)->selectRaw('target_wilayah_id, count(*) as count')->groupBy('target_wilayah_id')->pluck('count', 'target_wilayah_id');
+
+        $dapilData = [];
+        foreach ($desas as $desa) {
+            $dapil = $desa->dapil;
+            if (!isset($dapilData[$dapil])) {
+                $dapilData[$dapil] = [
+                    'dapil' => $dapil,
+                    'total_kegiatan' => 0,
+                    'target_total' => 0,
+                    'terisi_total' => 0,
+                ];
+            }
+            
+            $dapilData[$dapil]['total_kegiatan'] += $kegiatanCounts[$desa->id] ?? 0;
+            
+            $target = ($desa->{"target_korwe_{$tahun}"} ?? 0) + ($desa->{"target_korte_{$tahun}"} ?? 0) + ($desa->{"target_penggalang_{$tahun}"} ?? 0);
+            $terisi = ($korweCounts[$desa->id] ?? 0) + ($korteCounts[$desa->id] ?? 0) + ($penggalangCounts[$desa->id] ?? 0);
+            
+            $dapilData[$dapil]['target_total'] += $target;
+            $dapilData[$dapil]['terisi_total'] += $terisi;
+        }
+
+        // Sort by Dapil number for Sisir RW (natural sort)
+        $sisirDapil = $dapilData;
+        uksort($sisirDapil, function($a, $b) { return strnatcmp($a, $b); });
+        
+        // Sort by Dapil number for Infra
+        $infraDapil = $dapilData;
+        uksort($infraDapil, function($a, $b) { return strnatcmp($a, $b); });
+
+        $bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $bulan = $bulanList[date('n') - 1];
+        
+        $firstDayOfMonth = strtotime(date('Y-m-01'));
+        $currentDay = time();
+        $diffDays = ($currentDay - $firstDayOfMonth) / (60 * 60 * 24);
+        $pekan = ceil(($diffDays + date('N', $firstDayOfMonth)) / 7);
+
+        $periode = "PEKAN KE-{$pekan} | " . strtoupper($bulan) . " {$tahun}";
+
+        return [
+            'dataSisir' => array_values($sisirDapil),
+            'dataInfra' => array_values($infraDapil),
+            'periode' => $periode
+        ];
+    }
+}
