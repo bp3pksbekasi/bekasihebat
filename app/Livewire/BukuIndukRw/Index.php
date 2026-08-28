@@ -67,21 +67,23 @@ class Index extends Component
         $data = $controller->getLeaderboardDapilData($this->selectedTahun);
 
         $prompt = "Tolong buatkan desain gambar Leaderboard (Papan Peringkat) 1 halaman bergaya modern dan elegan, yang dibagi menjadi 2 kolom/bagian vertikal.\n\n";
-        $prompt .= "Di bagian atas, tuliskan judul besar: 'REKAPITULASI DAPIL' dan periode: '" . $data['periode'] . "'.\n\n";
+        $prompt .= "Di bagian atas, tuliskan judul besar: 'LEADERBOARD DAPIL' dan periode: '" . $data['periode'] . "'.\n\n";
         
-        $prompt .= "Kolom Kiri berjudul 'SISIR RW DAPIL' (berdasarkan Total Kegiatan), isinya (urutkan sesuai ini):\n";
+        $prompt .= "Kolom Kiri berjudul 'SISIR RW DAPIL' (berdasarkan Total Kegiatan), isinya:\n";
+        $rank = 1;
         foreach ($data['dataSisir'] as $row) {
-            $prompt .= "- DAPIL " . strtoupper($row['dapil']) . " : " . number_format($row['total_kegiatan']) . " GIAT\n";
+            $prompt .= $rank++ . ". DAPIL " . strtoupper($row['dapil']) . " : " . number_format($row['total_kegiatan']) . " GIAT\n";
         }
         
-        $prompt .= "\nKolom Kanan berjudul 'INFRASTRUKTUR DAPIL' (berdasarkan Persentase Keterisian), isinya (urutkan sesuai ini):\n";
+        $prompt .= "\nKolom Kanan berjudul 'INFRASTRUKTUR DAPIL' (berdasarkan Persentase Keterisian), isinya:\n";
+        $rank = 1;
         foreach ($data['dataInfra'] as $row) {
             $pct = $row['target_total'] > 0 ? round(($row['terisi_total'] / $row['target_total']) * 100, 1) : 0;
-            $prompt .= "- DAPIL " . strtoupper($row['dapil']) . " : " . $pct . "%\n";
+            $prompt .= $rank++ . ". DAPIL " . strtoupper($row['dapil']) . " : " . $pct . "%\n";
         }
         
         $prompt .= "\nDi bagian bawah poster, tuliskan ucapan penyemangat: 'Mari terus tingkatkan pencapaian di setiap Dapil!' dan tambahkan kutipan motivasi: 'Kerja keras dan soliditas adalah kunci kemenangan bersama. Bekasi Hebat, Menang Bermartabat!'\n\n";
-        $prompt .= "Buat desainnya menggunakan palet warna dominan Oranye, Putih, dan Biru Dongker (Dark Slate), tanpa lencana peringkat (hanya list Dapil 1 sampai Dapil 7 secara berurutan).";
+        $prompt .= "Buat desainnya menggunakan palet warna dominan Oranye, Putih, dan Biru Dongker (Dark Slate), dengan elemen dekorasi seperti lencana peringkat 1, 2, 3 berwarna emas, perak, dan perunggu.";
 
         $this->aiPrompt = $prompt;
         $this->showPromptModal = true;

@@ -468,13 +468,22 @@ class ReportController extends Controller
             $dapilData[$dapil]['terisi_total'] += $terisi;
         }
 
-        // Sort by Dapil number for Sisir RW (natural sort)
+        // Sort by Total Kegiatan for Sisir RW
         $sisirDapil = $dapilData;
-        uksort($sisirDapil, function($a, $b) { return strnatcmp((string)$a, (string)$b); });
+        uasort($sisirDapil, function($a, $b) {
+            return $b['total_kegiatan'] <=> $a['total_kegiatan'];
+        });
         
-        // Sort by Dapil number for Infra
+        // Sort by Percentage for Infra
         $infraDapil = $dapilData;
-        uksort($infraDapil, function($a, $b) { return strnatcmp((string)$a, (string)$b); });
+        uasort($infraDapil, function($a, $b) {
+            $pctA = $a['target_total'] > 0 ? ($a['terisi_total'] / $a['target_total']) : 0;
+            $pctB = $b['target_total'] > 0 ? ($b['terisi_total'] / $b['target_total']) : 0;
+            if ($pctA == $pctB) {
+                return $b['terisi_total'] <=> $a['terisi_total'];
+            }
+            return $pctB <=> $pctA;
+        });
 
         $bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $bulan = $bulanList[date('n') - 1];
