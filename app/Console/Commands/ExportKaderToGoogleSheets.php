@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Kader;
+use App\Models\Korwe;
+use App\Models\Korte;
+use App\Models\PenggalangSuara;
 use Google\Client;
 use Google\Service\Sheets;
 use Google\Service\Sheets\ValueRange;
@@ -12,7 +14,7 @@ use Illuminate\Console\Command;
 class ExportKaderToGoogleSheets extends Command
 {
     protected $signature = 'export:kader {spreadsheet_id} {--tab=Form Responses 1}';
-    protected $description = 'Export data Korwe/Kortw/Penggalang ke Google Sheets';
+    protected $description = 'Export data Korwe/Kortw/Penggalang dari form Input Infrastruktur ke Google Sheets';
 
     public function handle()
     {
@@ -29,56 +31,71 @@ class ExportKaderToGoogleSheets extends Command
         try {
             $client = new Client();
             $client->setApplicationName('Bekasi Hebat Sync');
-            $client->setScopes([Sheets::SPREADSHEETS]); // Perlu akses write
+            $client->setScopes([Sheets::SPREADSHEETS]); 
             $client->setAuthConfig($credentialsPath);
             $client->setAccessType('offline');
 
             $service = new Sheets($client);
             
-            $this->info("Menyiapkan data dari database...");
-            // Hanya ambil Kader yang berperan sebagai Korwe, Korte, atau Penggalang
-            $kaders = Kader::where(function ($query) {
-                    $query->where('is_korwe', true)
-                          ->orWhere('is_korte', true)
-                          ->orWhere('is_penggalang', true);
-                })
-                ->orderBy('kecamatan')
-                ->orderBy('desa')
-                ->orderBy('nomor_rw')
-                ->get();
+            $this->info("Menyiapkan data dari database infrastruktur...");
             
             $values = [
                 ['Timestamp', 'KAB / KOTA', 'KECAMATAN', 'KEL / DESA', 'RW', 'NAMA LENGKAP SESUAI KTP', 'Nomor Whatsapp', 'PERAN', 'NOMOR KTP / NIK']
             ];
 
-            foreach ($kaders as $kader) {
-                $peranArray = [];
-                if ($kader->is_korwe) $peranArray[] = 'KORWE';
-                if ($kader->is_korte) $peranArray[] = 'KORTW';
-                if ($kader->is_penggalang) $peranArray[] = 'PENGGALANG';
-                
-                $peran = implode(', ', $peranArray);
-                
+            // 1. Ambil Korwe
+            $korwes = Korwe::with('targetWilayah')->get();
+            foreach ($korwes as $k) {
                 $values[] = [
-                    $kader->created_at ? $kader->created_at->format('d/m/Y H:i:s') : now()->format('d/m/Y H:i:s'),
+                    $k->created_at ? $k->created_at->format('d/m/Y H:i:s') : now()->format('d/m/Y H:i:s'),
                     'KAB BEKASI',
-                    $kader->kecamatan ?? '',
-                    $kader->desa ?? '',
-                    $kader->nomor_rw ?? '',
-                    $kader->nama ?? '',
-                    $kader->no_wa ?? '',
-                    $peran,
-                    $kader->nik ?? ''
+                    $k->targetWilayah->kecamatan ?? '',
+                    $k->targetWilayah->desa ?? '',
+                    $k->nomor_rw ?? '',
+                    $k->nama_koordinator ?? '',
+                    $k->no_hp ?? '',
+                    'KORWE',
+                    '' // NIK tidak ada di tabel Korwe
+                ];
+            }
+
+            // 2. Ambil Korte
+            $kortes = Korte::with('targetWilayah')->get();
+            foreach ($kortes as $k) {
+                $values[] = [
+                    $k->created_at ? $k->created_at->format('d/m/Y H:i:s') : now()->format('d/m/Y H:i:s'),
+                    'KAB BEKASI',
+                    $k->targetWilayah->kecamatan ?? '',
+                    $k->targetWilayah->desa ?? '',
+                    $k->nomor_rw ?? '',
+                    $k->nama_koordinator ?? '',
+                    $k->no_hp ?? '',
+                    'KORTW',
+                    ''
+                ];
+            }
+
+            // 3. Ambil Penggalang
+            $penggalangs = PenggalangSuara::get(); // Sudah ada dapil, kecamatan, desa di tabel
+            foreach ($penggalangs as $p) {
+                $values[] = [
+                    $p->created_at ? $p->created_at->format('d/m/Y H:i:s') : now()->format('d/m/Y H:i:s'),
+                    'KAB BEKASI',
+                    $p->kecamatan ?? '',
+                    $p->desa ?? '',
+                    $p->nomor_rw ?? '',
+                    $p->nama ?? '',
+                    $p->no_wa ?? $p->no_hp ?? '',
+                    'PENGGALANG',
+                    ''
                 ];
             }
 
             $this->info("Mengekspor " . (count($values) - 1) . " data ke Google Sheets...");
 
-            // Bersihkan data lama terlebih dahulu (opsional, tapi disarankan agar data ter-replace dengan sempurna)
             $clearRequest = new ClearValuesRequest();
             $service->spreadsheets_values->clear($spreadsheetId, "{$tabName}!A:I", $clearRequest);
 
-            // Masukkan data baru
             $body = new ValueRange([
                 'values' => $values
             ]);
