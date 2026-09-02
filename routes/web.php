@@ -424,6 +424,29 @@ Route::middleware('auth')->group(function () {
         Route::get('/{event}/edit', EventsEdit::class)->middleware('menu:event')->name('events.edit');
     });
 
+    // Template download route for event forms
+    Route::get('/download-template/{filename}', function (string $filename) {
+        // Whitelist only allowed template files for security
+        $allowed = [
+            'TEMPLATE_FORMAT_SURAT_PERMOHONAN_PENCAIRAN.docx',
+            'TEMPLATE_FORMAT_PROPOSAL.docx',
+            'TEMPLATE_DPA.xlsx',
+        ];
+
+        if (!in_array($filename, $allowed)) {
+            abort(404);
+        }
+
+        $path = public_path('templates/' . $filename);
+
+        if (!file_exists($path)) {
+            // Return a friendly message if template not yet uploaded
+            abort(404, 'Template belum tersedia. Silakan hubungi administrator.');
+        }
+
+        return response()->download($path);
+    })->middleware('auth')->name('download.template');
+
     Route::prefix('infra-rtrw')->middleware(['auth'])->group(function () {
         Route::get('/', InfraRtRwIndex::class)->middleware('menu:infra-rtrw')->name('infra-rtrw.index');
         Route::get('/{targetWilayah}', InfraRtRwDetail::class)->middleware('menu:infra-rtrw')->name('infra-rtrw.detail');
