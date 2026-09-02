@@ -440,8 +440,30 @@ Route::middleware('auth')->group(function () {
         $path = public_path('templates/' . $filename);
 
         if (!file_exists($path)) {
-            // Return a friendly message if template not yet uploaded
-            abort(404, 'Template belum tersedia. Silakan hubungi administrator.');
+            // Friendly HTML response instead of bare 404
+            return response(
+                '<html><head><meta charset="UTF-8">
+                <title>Template Belum Tersedia</title>
+                <style>
+                    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f8fafc; }
+                    .box { text-align: center; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.08); max-width: 420px; }
+                    .icon { font-size: 48px; margin-bottom: 16px; }
+                    h2 { color: #1e293b; margin: 0 0 8px; }
+                    p { color: #64748b; font-size: 14px; margin: 0 0 20px; }
+                    a { display:inline-block; background:#f1f5f9; color:#334155; text-decoration:none; padding:10px 24px; border-radius:8px; font-size:14px; font-weight:500; }
+                    a:hover { background:#e2e8f0; }
+                </style>
+                </head><body>
+                <div class="box">
+                    <div class="icon">📄</div>
+                    <h2>Template Belum Tersedia</h2>
+                    <p>File <strong>' . htmlspecialchars($filename) . '</strong> belum diunggah ke server.<br>Silakan hubungi administrator untuk mendapatkan template ini.</p>
+                    <a href="javascript:window.close()">✕ Tutup Tab Ini</a>
+                </div>
+                </body></html>',
+                200,
+                ['Content-Type' => 'text/html']
+            );
         }
 
         return response()->download($path);
