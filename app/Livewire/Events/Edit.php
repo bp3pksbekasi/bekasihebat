@@ -289,7 +289,7 @@ class Edit extends Component
             'targetProgram' => ['nullable', 'string', 'max:255'],
             'dokumenPermohonanPencairan' => [$this->event->dokumen_permohonan_pencairan ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
             'dokumenProposal' => [$this->event->dokumen_proposal ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
-            'dokumenDpa' => [$this->event->dokumen_dpa ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenDpa' => [$this->event->dokumen_dpa ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png,docx,xlsx,xls', 'max:4096'],
             'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
         ]);
 

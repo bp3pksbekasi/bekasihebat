@@ -486,15 +486,15 @@
                                         </div>
                                         <label style="background:white;border:1px solid #cbd5e1;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;color:#334155;position:relative;z-index:2;">
                                             Ganti File
-                                            <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf,.docx" style="display:none;">
+                                            <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf,.docx,.xlsx,.xls" style="display:none;">
                                         </label>
                                     @else
                                         <i class="ti ti-cloud-upload" style="font-size:24px;color:#94a3b8;"></i>
                                         <div style="flex:1;">
                                             <div style="font-size:13px;font-weight:600;color:#334155;">Pilih file lampiran</div>
-                                            <div style="font-size:11px;color:#64748b;margin-top:2px;">Format PDF/JPG/PNG (Max 4MB)</div>
+                                            <div style="font-size:11px;color:#64748b;margin-top:2px;">Format PDF/JPG/PNG/XLSX (Max 4MB)</div>
                                         </div>
-                                        <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf,.docx" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;">
+                                        <input wire:model="dokumenDpa" type="file" accept="image/*,.pdf,.docx,.xlsx,.xls" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;">
                                     @endif
                                 </div>
                             </div>

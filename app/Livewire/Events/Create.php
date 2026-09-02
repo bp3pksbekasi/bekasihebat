@@ -257,7 +257,7 @@ class Create extends Component
             'budgetNotes' => ['nullable', 'string'],
             'dokumenPermohonanPencairan' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
             'dokumenProposal' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
-            'dokumenDpa' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
+            'dokumenDpa' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx,xlsx,xls', 'max:4096'],
             'dokumenLpjSebelumnya' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:4096'],
         ]);
         $coverPath = $this->coverImage ? $this->coverImage->store('events', 'public') : null;
