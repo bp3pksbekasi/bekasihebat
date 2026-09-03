@@ -510,6 +510,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/api', \App\Livewire\Pengaturan\Api::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.api');
+
+    Route::get('/pengaturan/bidang', \App\Livewire\Pengaturan\MasterBidang::class)
+        ->middleware('role:admin_dpd')
+        ->name('pengaturan.bidang');
+
+    Route::get('/pengaturan/mapping-bidang', \App\Livewire\Pengaturan\MappingBidang::class)
+        ->middleware('role:admin_dpd')
+        ->name('pengaturan.mapping-bidang');
 });
 
 Route::middleware(['auth'])->group(function () {
