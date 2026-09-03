@@ -27,9 +27,13 @@ class Detail extends Component
     public Event $event;
 
     public array $approvalNotes = [
-        'dpra' => '',
-        'dpc' => '',
-        'dpd' => '',
+        'dpra'             => '',
+        'dpc'              => '',
+        'dpd'              => '',
+        'kesekretariatan'  => '',
+        'sekum'            => '',
+        'bendum'           => '',
+        'ketua_dpd'        => '',
     ];
 
     public ?string $budgetEditId = null;
