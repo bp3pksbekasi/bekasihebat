@@ -524,6 +524,82 @@ Route::middleware('auth')->group(function () {
         ->middleware('auth')
         ->name('reports.kinerja-dpd');
 
+    Route::get('/laporan/kinerja-dpd/print', function (\Illuminate\Http\Request $request) {
+        $year  = $request->query('year', date('Y'));
+        $month = $request->query('month', '');
+
+        $bidangs = \App\Models\BidangDpd::where('is_dpd', true)
+            ->where('is_active', true)
+            ->orderBy('urutan')
+            ->get();
+
+        $query = \App\Models\Event::where('is_active', true)
+            ->where('org_level', 'dpd')
+            ->whereNotNull('bidang_dpd_id')
+            ->whereYear('tanggal_mulai', $year);
+
+        if ($month) {
+            $query->whereMonth('tanggal_mulai', $month);
+        }
+
+        $events = $query->with(['budgetItems', 'report'])->get();
+
+        $totalProgram  = $events->count();
+        $totalSelesai  = $events->where('status', \App\Models\Event::STATUS_SELESAI)->count();
+        $persenSelesai = $totalProgram > 0 ? round(($totalSelesai / $totalProgram) * 100, 1) : 0;
+        $totalRAB = $totalRealisasi = $totalPeserta = 0;
+
+        $rekapPerBidang = [];
+        foreach ($bidangs as $bidang) {
+            $rekapPerBidang[$bidang->id] = [
+                'nama'            => $bidang->nama,
+                'singkatan'       => $bidang->singkatan,
+                'color'           => $bidang->color ?? '#fe5000',
+                'program_total'   => 0,
+                'program_selesai' => 0,
+                'rab'             => 0,
+                'realisasi'       => 0,
+                'peserta'         => 0,
+            ];
+        }
+
+        foreach ($events as $event) {
+            $bid      = $event->bidang_dpd_id;
+            $rab      = (float) $event->budgetItems->sum('subtotal');
+            $realisasi = (float) ($event->report['realisasi_anggaran'] ?? 0);
+            $peserta  = (int) ($event->report['peserta_hadir'] ?? 0);
+            $totalRAB       += $rab;
+            $totalRealisasi += $realisasi;
+            $totalPeserta   += $peserta;
+            if (isset($rekapPerBidang[$bid])) {
+                $rekapPerBidang[$bid]['program_total']++;
+                if ($event->status === \App\Models\Event::STATUS_SELESAI) {
+                    $rekapPerBidang[$bid]['program_selesai']++;
+                }
+                $rekapPerBidang[$bid]['rab']       += $rab;
+                $rekapPerBidang[$bid]['realisasi'] += $realisasi;
+                $rekapPerBidang[$bid]['peserta']   += $peserta;
+            }
+        }
+
+        $persenSerapan = $totalRAB > 0 ? round(($totalRealisasi / $totalRAB) * 100, 1) : 0;
+
+        $metrics = [
+            'total_program'  => $totalProgram,
+            'total_selesai'  => $totalSelesai,
+            'persen_selesai' => $persenSelesai,
+            'total_rab'      => $totalRAB,
+            'total_realisasi'=> $totalRealisasi,
+            'persen_serapan' => $persenSerapan,
+            'total_peserta'  => $totalPeserta,
+        ];
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.kinerja-dpd', compact('metrics', 'rekapPerBidang', 'year', 'month'))
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->stream('laporan-kinerja-dpd-' . $year . ($month ? '-' . $month : '') . '.pdf');
+    })->middleware('auth')->name('reports.kinerja-dpd.print');
+
     Route::get('/laporan/sisir-rw', \App\Livewire\Reports\SisirRwReport::class)
         ->middleware('auth')
         ->name('laporan.sisir-rw');
