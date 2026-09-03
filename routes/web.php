@@ -518,6 +518,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/mapping-bidang', \App\Livewire\Pengaturan\MappingBidang::class)
         ->middleware('role:admin_dpd')
         ->name('pengaturan.mapping-bidang');
+
+    // Reports
+    Route::get('/laporan/kinerja-dpd', \App\Livewire\Reports\KinerjaDpd::class)
+        ->middleware('auth')
+        ->name('reports.kinerja-dpd');
+
+    Route::get('/laporan/sisir-rw', \App\Livewire\Reports\SisirRwReport::class)
+        ->middleware('auth')
+        ->name('laporan.sisir-rw');
 });
 
 Route::middleware(['auth'])->group(function () {
