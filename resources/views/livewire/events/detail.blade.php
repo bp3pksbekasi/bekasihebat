@@ -237,15 +237,35 @@
                         @endforeach
                     </div>
 
-                    @if ($event->status === \App\Models\Event::STATUS_MENUNGGU && $this->canApproveLevel($currentApprovalLevel))
+                    @if ($event->status === \App\Models\Event::STATUS_MENUNGGU)
+                        @php
+                            $user = auth()->user();
+                            $isKesekretariatan = $user && $user->role === \App\Models\User::ROLE_KESEKRETARIATAN;
+                            
+                            $levelsToApprove = [];
+                            if ($isKesekretariatan && $isBidangDpd) {
+                                foreach (['kesekretariatan', 'sekum', 'bendum', 'ketua_dpd'] as $lvl) {
+                                    if ($event->approvals->firstWhere('level', $lvl)?->status === 'pending') {
+                                        $levelsToApprove[] = $lvl;
+                                    }
+                                }
+                            } else {
+                                if ($this->canApproveLevel($currentApprovalLevel)) {
+                                    $levelsToApprove[] = $currentApprovalLevel;
+                                }
+                            }
+                        @endphp
+
+                        @foreach($levelsToApprove as $lvl)
                         <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #e5e7eb;">
-                            <div style="font-size:12px;font-weight:600;color:#1a1a1a;">Approval level {{ strtoupper($currentApprovalLevel) }}</div>
-                            <textarea wire:model="approvalNotes.{{ $currentApprovalLevel }}" rows="3" placeholder="Catatan approve / reject" style="width:100%;margin-top:8px;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
+                            <div style="font-size:12px;font-weight:600;color:#1a1a1a;">Approval level {{ strtoupper($lvl) }}</div>
+                            <textarea wire:model="approvalNotes.{{ $lvl }}" rows="3" placeholder="Catatan approve / reject" style="width:100%;margin-top:8px;border-radius:10px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;"></textarea>
                             <div style="margin-top:10px;display:flex;gap:8px;">
-                                <button wire:click="approve('{{ $currentApprovalLevel }}')" type="button" style="height:38px;padding:0 14px;border-radius:10px;border:none;background:#16a34a;color:white;font-size:12px;font-weight:600;cursor:pointer;">Setujui</button>
-                                <button wire:click="reject('{{ $currentApprovalLevel }}')" type="button" style="height:38px;padding:0 14px;border-radius:10px;border:none;background:#dc2626;color:white;font-size:12px;font-weight:600;cursor:pointer;">Tolak</button>
+                                <button wire:click="approve('{{ $lvl }}')" type="button" style="height:38px;padding:0 14px;border-radius:10px;border:none;background:#16a34a;color:white;font-size:12px;font-weight:600;cursor:pointer;">Setujui</button>
+                                <button wire:click="reject('{{ $lvl }}')" type="button" style="height:38px;padding:0 14px;border-radius:10px;border:none;background:#dc2626;color:white;font-size:12px;font-weight:600;cursor:pointer;">Tolak</button>
                             </div>
                         </div>
+                        @endforeach
                     @endif
                 </div>
                 @endif

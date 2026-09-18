@@ -141,7 +141,14 @@ class Detail extends Component
             abort(403);
         }
 
-        if ($this->event->status !== Event::STATUS_MENUNGGU || $this->event->level_approval !== $level) {
+        if ($this->event->status !== Event::STATUS_MENUNGGU) {
+            return;
+        }
+
+        $user = auth()->user();
+        $isKesekretariatan = $user && $user->role === \App\Models\User::ROLE_KESEKRETARIATAN;
+
+        if (!$isKesekretariatan && $this->event->level_approval !== $level) {
             return;
         }
 
@@ -160,13 +167,19 @@ class Detail extends Component
 
         $isBidang = $this->event->org_level === 'dpd' && !empty($this->event->bidang_dpd_id);
         
+        // Refresh event approvals so we get the updated status
+        $this->event->load('approvals');
+
         if ($isBidang) {
-            $nextLevel = match ($level) {
-                'kesekretariatan' => 'sekum',
-                'sekum' => 'bendum',
-                'bendum' => 'ketua_dpd',
-                default => 'selesai',
-            };
+            $sequence = ['kesekretariatan', 'sekum', 'bendum', 'ketua_dpd'];
+            $nextLevel = 'selesai';
+            foreach ($sequence as $seqLevel) {
+                $status = $this->event->approvals->firstWhere('level', $seqLevel)?->status;
+                if ($status !== 'approved') {
+                    $nextLevel = $seqLevel;
+                    break;
+                }
+            }
         } else {
             $nextLevel = match ($level) {
                 'dpra' => 'dpc',
@@ -191,7 +204,14 @@ class Detail extends Component
             abort(403);
         }
 
-        if ($this->event->status !== Event::STATUS_MENUNGGU || $this->event->level_approval !== $level) {
+        if ($this->event->status !== Event::STATUS_MENUNGGU) {
+            return;
+        }
+
+        $user = auth()->user();
+        $isKesekretariatan = $user && $user->role === \App\Models\User::ROLE_KESEKRETARIATAN;
+
+        if (!$isKesekretariatan && $this->event->level_approval !== $level) {
             return;
         }
 
@@ -656,10 +676,12 @@ class Detail extends Component
             'dpd' => $user->hasRole('admin_dpd') || $user->isAdmin(),
             'dpc' => $user->hasRole('dapil') || $user->isDapil(),
             'dpra' => $user->hasRole('dapil') || $user->isDapil() || $user->hasRole('kecamatan'),
-            'kesekretariatan' => $user->role === \App\Models\User::ROLE_KESEKRETARIATAN,
-            'sekum' => $user->role === \App\Models\User::ROLE_SEKUM,
-            'bendum' => $user->role === \App\Models\User::ROLE_BENDUM,
-            'ketua_dpd' => $user->role === \App\Models\User::ROLE_KETUA_DPD,
+            'kesekretariatan', 'sekum', 'bendum', 'ketua_dpd' => (
+                $user->role === \App\Models\User::ROLE_KESEKRETARIATAN ||
+                ($level === 'sekum' && $user->role === \App\Models\User::ROLE_SEKUM) ||
+                ($level === 'bendum' && $user->role === \App\Models\User::ROLE_BENDUM) ||
+                ($level === 'ketua_dpd' && $user->role === \App\Models\User::ROLE_KETUA_DPD)
+            ),
             default => false,
         };
     }
