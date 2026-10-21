@@ -8,26 +8,39 @@ use Illuminate\Http\Request;
 
 class EventPrintController extends Controller
 {
-    public function printLpj(Event $event)
+    public function printLpj($event)
     {
-        // Pastikan hanya bisa dicetak jika disetujui atau selesai
-        if (!in_array($event->status, [Event::STATUS_DISETUJUI, Event::STATUS_SELESAI])) {
-            abort(403, 'LPJ hanya dapat dicetak untuk event yang sudah disetujui atau selesai.');
+        $eventModel = $event instanceof Event
+            ? $event
+            : Event::where('uuid', $event)->orWhere('id', $event)->firstOrFail();
+
+        $user = auth()->user();
+        $allowedStatuses = [
+            Event::STATUS_DISETUJUI,
+            Event::STATUS_BERLANGSUNG,
+            Event::STATUS_SELESAI,
+        ];
+
+        // Pastikan hanya bisa dicetak jika disetujui, berlangsung, atau selesai (atau admin)
+        if (!in_array($eventModel->status, $allowedStatuses, true) && !$user?->isAdmin()) {
+            abort(403, 'LPJ hanya dapat dicetak untuk event yang sudah disetujui, berlangsung, atau selesai.');
         }
 
         // Load relasi yang diperlukan
-        $event->load([
+        $eventModel->load([
             'budgetItems',
             'approvals.approver',
             'kegiatanRw',
-            'creator'
+            'creator',
+            'report.creator',
+            'bidang',
         ]);
 
-        $pdf = Pdf::loadView('pdf.events.lpj', compact('event'));
+        $pdf = Pdf::loadView('pdf.events.lpj', ['event' => $eventModel]);
 
-        // Set paper jika perlu
+        // Set paper
         $pdf->setPaper('A4', 'portrait');
 
-        return $pdf->stream('LPJ-' . \Illuminate\Support\Str::slug($event->judul) . '.pdf');
+        return $pdf->stream('LPJ-' . \Illuminate\Support\Str::slug($eventModel->judul ?: 'program') . '.pdf');
     }
 }

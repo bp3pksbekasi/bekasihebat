@@ -171,20 +171,30 @@
         </tr>
         <tr>
             <td class="label">PIC / Penanggung Jawab</td>
-            <td>: {{ $event->pic_nama ?: '-' }} ({{ $event->pic_kontak ?: '-' }})</td>
+            <td>: {{ $event->pic_nama ?: '-' }} ({{ $event->pic_hp ?: ($event->pic_kontak ?? '-') }})</td>
         </tr>
         <tr>
             <td class="label">Waktu Pelaksanaan</td>
             <td>: {{ $event->tanggal_mulai ? $event->tanggal_mulai->format('d M Y, H:i') : '-' }} s/d {{ $event->tanggal_selesai ? $event->tanggal_selesai->format('d M Y, H:i') : '-' }}</td>
         </tr>
         <tr>
+            <td class="label">Lokasi Kegiatan</td>
+            <td>: {{ $event->lokasi_desa ? $event->lokasi_desa . ', ' . $event->lokasi_kecamatan : ($event->lokasi ?: '-') }}</td>
+        </tr>
+        <tr>
             <td class="label">Target Sasaran</td>
-            <td>: {{ str_replace('_', ' ', strtoupper($event->target_sasaran)) }}</td>
+            <td>: {{ $event->target_program ?: ($event->target_sasaran ? str_replace('_', ' ', strtoupper((string) $event->target_sasaran)) : '-') }}</td>
         </tr>
         <tr>
             <td class="label">Sumber Pendanaan</td>
-            <td>: {{ $event->sumber_pendanaan ?: '-' }}</td>
+            <td>: {{ $event->funding_source ?: ($event->sumber_pendanaan ?: '-') }}</td>
         </tr>
+        @if($event->speakers)
+        <tr>
+            <td class="label">Narasumber / Terlibat</td>
+            <td>: {{ $event->speakers }}</td>
+        </tr>
+        @endif
         <tr>
             <td class="label">Deskripsi / Latar Belakang</td>
             <td>: {{ $event->deskripsi ?: '-' }}</td>
@@ -195,23 +205,23 @@
     <table class="info-table">
         <tr>
             <td class="label">Ringkasan Kegiatan</td>
-            <td>: {{ $event->report['ringkasan'] ?? '-' }}</td>
+            <td>: {{ $event->report?->ringkasan ?: '-' }}</td>
         </tr>
         <tr>
             <td class="label">Evaluasi</td>
-            <td>: {{ $event->report['evaluasi'] ?? '-' }}</td>
+            <td>: {{ $event->report?->evaluasi ?: '-' }}</td>
         </tr>
         <tr>
             <td class="label">Tindak Lanjut</td>
-            <td>: {{ $event->report['tindak_lanjut'] ?? '-' }}</td>
+            <td>: {{ $event->report?->tindak_lanjut ?: '-' }}</td>
         </tr>
         <tr>
             <td class="label">Jumlah Peserta Hadir</td>
-            <td>: {{ number_format((float) ($event->report['peserta_hadir'] ?? 0)) }} Orang</td>
+            <td>: {{ number_format((float) ($event->report?->peserta_hadir ?? ($event->peserta_count ?? 0))) }} Orang</td>
         </tr>
         <tr>
             <td class="label">Status Program</td>
-            <td>: <span class="badge">{{ strtoupper($event->status) }}</span></td>
+            <td>: <span class="badge">{{ strtoupper($event->status ?? '-') }}</span></td>
         </tr>
     </table>
 
@@ -241,16 +251,32 @@
             <tfoot>
                 <tr>
                     <th colspan="4" class="text-right">Total Anggaran Direncanakan :</th>
-                    <th class="text-right">{{ number_format((float) $event->total_budget, 0, ',', '.') }}</th>
+                    <th class="text-right">{{ number_format((float) ($event->total_budget ?: $event->total_anggaran), 0, ',', '.') }}</th>
                 </tr>
                 <tr>
                     <th colspan="4" class="text-right">Total Realisasi Anggaran :</th>
-                    <th class="text-right">{{ number_format((float) ($event->report['realisasi_anggaran'] ?? 0), 0, ',', '.') }}</th>
+                    <th class="text-right">{{ number_format((float) ($event->report?->realisasi_anggaran ?? 0), 0, ',', '.') }}</th>
                 </tr>
             </tfoot>
         </table>
     @else
-        <p><i>Tidak ada rincian RAB yang diajukan.</i></p>
+        <p><i>Tidak ada rincian item RAB.</i></p>
+        @if($event->total_anggaran || $event->report?->realisasi_anggaran)
+            <table class="info-table" style="width: auto;">
+                @if($event->total_anggaran)
+                <tr>
+                    <td class="label">Total Anggaran Direncanakan</td>
+                    <td>: Rp {{ number_format((float) $event->total_anggaran, 0, ',', '.') }}</td>
+                </tr>
+                @endif
+                @if($event->report?->realisasi_anggaran)
+                <tr>
+                    <td class="label">Total Realisasi Anggaran</td>
+                    <td>: Rp {{ number_format((float) $event->report->realisasi_anggaran, 0, ',', '.') }}</td>
+                </tr>
+                @endif
+            </table>
+        @endif
     @endif
 
     <div class="section-title">D. LEMBAR PERSETUJUAN (APPROVAL TRACKER)</div>
@@ -278,7 +304,7 @@
                             @endif
                         </div>
                         <div class="approver-name">{{ $approval?->approver?->name ?? '.......................................' }}</div>
-                        <div class="approver-date">{{ $approval?->decided_at ? $approval->decided_at->format('d M Y H:i') : '-' }}</div>
+                        <div class="approver-date">{{ $approval?->decided_at instanceof \DateTimeInterface ? $approval->decided_at->format('d M Y H:i') : ($approval?->decided_at ?: '-') }}</div>
                     </td>
                 @endforeach
             </tr>

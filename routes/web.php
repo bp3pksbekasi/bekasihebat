@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventPrintController;
 use App\Livewire\BedahDapil\SisirRw as BedahDapilSisirRw;
 use App\Livewire\Aspirasi\Index as AspirasiIndex;
 use App\Livewire\Auth\AktivasiNia;
@@ -420,6 +421,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin/events')->group(function () {
         Route::get('/', EventsIndex::class)->middleware('menu:event,event-view')->name('events.index');
         Route::get('/create', EventsCreate::class)->middleware('menu:event')->name('events.create');
+        Route::get('/{event}/print-lpj', [EventPrintController::class, 'printLpj'])->middleware('menu:event,event-view')->name('events.print-lpj');
         Route::get('/{event}', EventsDetail::class)->middleware('menu:event,event-view')->name('events.detail');
         Route::get('/{event}/edit', EventsEdit::class)->middleware('menu:event')->name('events.edit');
     });
