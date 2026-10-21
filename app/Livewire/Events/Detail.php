@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -25,6 +26,9 @@ class Detail extends Component
     use WithFileUploads;
 
     public Event $event;
+
+    #[Url]
+    public string $tab = 'ringkasan';
 
     public array $approvalNotes = [
         'dpra'             => '',
@@ -63,6 +67,12 @@ class Detail extends Component
     public array $reportExistingFoto = [];
 
     public array $reportFoto = [];
+
+    public array $reportExistingDokumen = [];
+
+    public string $reportDokumenJenis = 'kwitansi';
+
+    public array $reportDokumenFiles = [];
 
     public bool $showPesertaForm = false;
 
@@ -332,6 +342,8 @@ class Detail extends Component
 
     public function saveReport(): void
     {
+        abort_unless($this->canManage, 403);
+
         if (! in_array($this->event->status, [Event::STATUS_DISETUJUI, Event::STATUS_BERLANGSUNG, Event::STATUS_SELESAI, 'disetujui', 'selesai', 'ongoing', 'berlangsung'], true) && ! $this->event->report) {
             return;
         }
@@ -369,6 +381,92 @@ class Detail extends Component
         $this->refreshEvent();
         $this->fillReportForm();
         session()->flash('message', 'Laporan kegiatan berhasil disimpan.');
+    }
+
+    public function uploadReportDokumen(): void
+    {
+        abort_unless($this->canManage, 403);
+
+        if (! $this->canFillReport) {
+            return;
+        }
+
+        $this->validate([
+            'reportDokumenJenis' => ['required', 'in:'.implode(',', array_keys(EventReport::DOKUMEN_JENIS))],
+            'reportDokumenFiles' => ['required', 'array', 'min:1', 'max:10'],
+            'reportDokumenFiles.*' => ['file', 'mimes:pdf,jpg,jpeg,png,webp,doc,docx,xls,xlsx', 'max:10240'],
+        ], [
+            'reportDokumenFiles.required' => 'Pilih minimal satu file.',
+            'reportDokumenFiles.*.mimes' => 'Format file harus PDF, gambar, Word, atau Excel.',
+            'reportDokumenFiles.*.max' => 'Ukuran file maksimal 10 MB.',
+        ]);
+
+        $report = $this->event->report ?? EventReport::query()->create([
+            'event_id' => $this->event->id,
+            'ringkasan' => '',
+            'peserta_hadir' => $this->reportPesertaHadir,
+            'created_by' => auth()->id(),
+        ]);
+
+        $dokumen = $report->dokumen ?? [];
+
+        foreach ($this->reportDokumenFiles as $upload) {
+            $dokumen[] = [
+                'jenis' => $this->reportDokumenJenis,
+                'nama' => $upload->getClientOriginalName(),
+                'path' => $upload->store('event-reports/dokumen', 'public'),
+                'ukuran' => $upload->getSize(),
+                'uploaded_at' => now()->toDateTimeString(),
+            ];
+        }
+
+        $report->update(['dokumen' => array_values($dokumen)]);
+
+        $count = count($this->reportDokumenFiles);
+        $this->reportDokumenFiles = [];
+        $this->refreshEvent();
+        $this->reportExistingDokumen = $this->event->report?->dokumen ?? [];
+        session()->flash('message', "{$count} dokumen ".(EventReport::DOKUMEN_JENIS[$this->reportDokumenJenis] ?? '').' berhasil diunggah.');
+    }
+
+    public function removeReportDokumen(int $index): void
+    {
+        abort_unless($this->canManage, 403);
+
+        $report = $this->event->report;
+        $dokumen = $report?->dokumen ?? [];
+
+        if (! isset($dokumen[$index])) {
+            return;
+        }
+
+        Storage::disk('public')->delete($dokumen[$index]['path']);
+        unset($dokumen[$index]);
+
+        $report->update(['dokumen' => $dokumen !== [] ? array_values($dokumen) : null]);
+        $this->refreshEvent();
+        $this->reportExistingDokumen = $this->event->report?->dokumen ?? [];
+        session()->flash('message', 'Dokumen berhasil dihapus.');
+    }
+
+    public function removeReportFoto(int $index): void
+    {
+        abort_unless($this->canManage, 403);
+
+        $report = $this->event->report;
+        $foto = $report?->foto ?? [];
+
+        if (! isset($foto[$index])) {
+            return;
+        }
+
+        Storage::disk('public')->delete($foto[$index]);
+        unset($foto[$index]);
+
+        $report->update(['foto' => $foto !== [] ? array_values($foto) : null]);
+        $this->refreshEvent();
+        $this->reportExistingFoto = $this->event->report?->foto ?? [];
+        session()->flash('message', 'Foto berhasil dihapus.');
     }
 
     public function updatedBulkDefaultDapil(): void
@@ -645,6 +743,44 @@ class Detail extends Component
         return false;
     }
 
+    /**
+     * Laporan bisa diisi setelah program disetujui, atau bila laporan sudah pernah dibuat.
+     */
+    #[Computed]
+    public function canFillReport(): bool
+    {
+        return in_array($this->event->status, [Event::STATUS_DISETUJUI, Event::STATUS_BERLANGSUNG, Event::STATUS_SELESAI, 'disetujui', 'selesai', 'ongoing', 'berlangsung'], true)
+            || $this->event->report !== null;
+    }
+
+    /**
+     * Daftar periksa kelengkapan laporan kegiatan.
+     *
+     * @return array<string, array{label: string, done: bool}>
+     */
+    #[Computed]
+    public function reportChecklist(): array
+    {
+        $report = $this->event->report;
+        $jenisTerunggah = collect($report?->dokumen ?? [])->pluck('jenis')->unique();
+
+        $checklist = [
+            'ringkasan' => ['label' => 'Ringkasan kegiatan', 'done' => filled($report?->ringkasan)],
+            'peserta' => ['label' => 'Jumlah peserta hadir', 'done' => (int) ($report?->peserta_hadir ?? 0) > 0],
+            'realisasi' => ['label' => 'Realisasi anggaran', 'done' => (float) ($report?->realisasi_anggaran ?? 0) > 0],
+            'foto' => ['label' => 'Foto dokumentasi', 'done' => ($report?->foto ?? []) !== []],
+        ];
+
+        foreach (EventReport::DOKUMEN_WAJIB as $jenis) {
+            $checklist['dokumen_'.$jenis] = [
+                'label' => EventReport::DOKUMEN_JENIS[$jenis],
+                'done' => $jenisTerunggah->contains($jenis),
+            ];
+        }
+
+        return $checklist;
+    }
+
     public function getSingleDesaOptionsProperty(): Collection
     {
         return TargetWilayah::query()
@@ -737,6 +873,7 @@ class Detail extends Component
         $this->reportTindakLanjut = (string) ($report->tindak_lanjut ?? '');
         $this->reportRealisasiAnggaran = (string) $report->realisasi_anggaran;
         $this->reportExistingFoto = $report->foto ?? [];
+        $this->reportExistingDokumen = $report->dokumen ?? [];
     }
 
     private function initializePesertaDefaults(): void

@@ -35,6 +35,14 @@
             : ['dpra' => 'Ketua DPRa', 'dpc' => 'Ketua DPC', 'dpd' => 'Ketua DPD'];
         $approvalStatusLabels = ['approved' => 'Disetujui', 'rejected' => 'Ditolak', 'pending' => 'Menunggu'];
         $approvalNotes = $event->approvals->filter(fn ($approval) => filled($approval->catatan));
+
+        $fotoPaths = collect($report?->foto ?? [])
+            ->map(fn ($path) => storage_path('app/public/'.$path))
+            ->filter(fn ($fullPath) => is_file($fullPath))
+            ->take(8)
+            ->values();
+        $dokumenList = collect($report?->dokumen ?? []);
+        $dokumenJenis = \App\Models\EventReport::DOKUMEN_JENIS;
     @endphp
     <style>
         @page { margin: 28mm 18mm 22mm 18mm; }
@@ -120,6 +128,11 @@
 
         /* Lembar persetujuan: tidak boleh terpotong antar halaman */
         .approval-sheet { page-break-inside: avoid; margin-top: 18px; }
+
+        table.photos { width: 100%; border-collapse: separate; border-spacing: 4px; margin: 0 -4px; }
+        table.photos tr { page-break-inside: avoid; }
+        table.photos td { width: 25%; height: 92px; padding: 0; text-align: center; vertical-align: middle; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
+        table.photos img { max-width: 100%; max-height: 92px; }
         table.sign { width: 100%; border-collapse: collapse; table-layout: fixed; }
         table.sign td { border: 0.5px solid #d1d5db; padding: 8px 6px; text-align: center; vertical-align: top; }
         table.sign .role { font-size: 8.5px; font-weight: bold; color: #374151; text-transform: uppercase; letter-spacing: .3px; }
@@ -305,8 +318,54 @@
         @endif
     </div>
 
+    <div class="section">
+        <div class="section-title"><span class="num">D.</span>Dokumentasi &amp; Lampiran</div>
+        @if ($fotoPaths->isNotEmpty())
+            <table class="photos">
+                @foreach ($fotoPaths->chunk(4) as $row)
+                    <tr>
+                        @foreach ($row as $fotoPath)
+                            <td><img src="{{ $fotoPath }}" alt="Foto dokumentasi"></td>
+                        @endforeach
+                        @for ($i = $row->count(); $i < 4; $i++)
+                            <td></td>
+                        @endfor
+                    </tr>
+                @endforeach
+            </table>
+        @else
+            <p class="muted">Belum ada foto dokumentasi.</p>
+        @endif
+
+        @if ($dokumenList->isNotEmpty())
+            <table class="data" style="margin-top: 8px;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;" class="text-center">No</th>
+                        <th style="width: 30%;">Jenis Dokumen</th>
+                        <th style="width: 45%;">Nama File</th>
+                        <th style="width: 20%;">Diunggah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($dokumenList as $index => $doc)
+                        <tr>
+                            <td class="text-center">{{ $index + 1 }}</td>
+                            <td>{{ $dokumenJenis[$doc['jenis'] ?? ''] ?? \Illuminate\Support\Str::headline($doc['jenis'] ?? '-') }}</td>
+                            <td>{{ $doc['nama'] ?? basename($doc['path'] ?? '-') }}</td>
+                            <td>{{ ! empty($doc['uploaded_at']) ? $fmtDate(\Illuminate\Support\Carbon::parse($doc['uploaded_at']), 'd M Y') : '-' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <div style="font-size: 8px; color: #6b7280; margin-top: 4px;">File asli dokumen tersimpan di sistem dan dapat diunduh dari halaman detail program.</div>
+        @else
+            <p class="muted">Belum ada dokumen pendukung (kwitansi, absensi, dll.) yang diunggah.</p>
+        @endif
+    </div>
+
     <div class="approval-sheet">
-        <div class="section-title"><span class="num">D.</span>Lembar Persetujuan</div>
+        <div class="section-title"><span class="num">E.</span>Lembar Persetujuan</div>
         <table class="sign">
             <tr>
                 @foreach ($approvalLevels as $level => $label)
