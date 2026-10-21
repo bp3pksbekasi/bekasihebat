@@ -6,7 +6,7 @@ use Livewire\Volt\Volt;
 test('confirm password screen can be rendered', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user)->get('/confirm-password');
+    $response = $this->actingAs($user)->get('/user/confirm-password');
 
     $response->assertStatus(200);
 });
