@@ -46,7 +46,7 @@
                         @endif
                     @endif
                     
-                    @if (\Illuminate\Support\Facades\Route::has('events.print-lpj') && (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_BERLANGSUNG, \App\Models\Event::STATUS_SELESAI], true) || auth()->user()?->isAdmin()))
+                    @if (\Illuminate\Support\Facades\Route::has('events.print-lpj') && (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_BERLANGSUNG, \App\Models\Event::STATUS_SELESAI, 'disetujui', 'selesai', 'ongoing', 'berlangsung'], true) || auth()->user()?->isAdmin()))
                         <a href="{{ route('events.print-lpj', $event) }}" target="_blank" style="display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:8px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:12px;font-weight:600;">
                             Cetak LPJ
                         </a>
@@ -502,7 +502,7 @@
                         </div>
                         <div style="display:flex;align-items:center;">
                             @if ($this->canManage)
-                                @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
+                                @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_BERLANGSUNG, \App\Models\Event::STATUS_SELESAI, 'disetujui', 'selesai', 'ongoing', 'berlangsung']) || $event->report)
                                     <button wire:click="saveReport" type="button" style="height:36px;padding:0 16px;border-radius:8px;border:none;background:#fe5000;color:white;font-size:12px;font-weight:600;cursor:pointer;">Simpan Laporan</button>
                                 @else
                                     <div style="font-size:11px;color:#888;">Tersedia setelah event disetujui</div>
@@ -513,7 +513,7 @@
                         </div>
                     </div>
 
-                    @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_SELESAI]) || $event->report)
+                    @if (in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_BERLANGSUNG, \App\Models\Event::STATUS_SELESAI, 'disetujui', 'selesai', 'ongoing', 'berlangsung']) || $event->report)
                         <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,0.9fr);gap:12px;margin-top:12px;" class="event-report-grid">
                             <div style="display:grid;gap:10px;">
                                 <textarea wire:model="reportRingkasan" rows="4" placeholder="Ringkasan kegiatan" style="width:100%;border-radius:8px;border:0.5px solid #d4d4d8;padding:10px 12px;font-size:13px;resize:vertical;{{ !$this->canManage ? 'background-color:#f3f4f6;' : '' }}" {{ !$this->canManage ? 'disabled' : '' }}></textarea>

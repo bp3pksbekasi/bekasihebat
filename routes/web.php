@@ -602,9 +602,7 @@ Route::middleware('auth')->group(function () {
         return $pdf->stream('laporan-kinerja-dpd-' . $year . ($month ? '-' . $month : '') . '.pdf');
     })->middleware('auth')->name('reports.kinerja-dpd.print');
 
-    Route::get('/laporan/sisir-rw', \App\Livewire\Reports\SisirRwReport::class)
-        ->middleware('auth')
-        ->name('laporan.sisir-rw');
+    Route::redirect('/laporan/sisir-rw', '/laporan-sisir-rw');
 });
 
 Route::middleware(['auth'])->group(function () {

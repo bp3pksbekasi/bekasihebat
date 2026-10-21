@@ -19,6 +19,12 @@ class EventPrintController extends Controller
             Event::STATUS_DISETUJUI,
             Event::STATUS_BERLANGSUNG,
             Event::STATUS_SELESAI,
+            'approved',
+            'completed',
+            'ongoing',
+            'berlangsung',
+            'disetujui',
+            'selesai',
         ];
 
         // Pastikan hanya bisa dicetak jika disetujui, berlangsung, atau selesai (atau admin)
