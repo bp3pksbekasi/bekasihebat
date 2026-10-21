@@ -8,11 +8,9 @@ use Illuminate\Http\Request;
 
 class EventPrintController extends Controller
 {
-    public function printLpj($event)
+    public function printLpj(Event $event): \Illuminate\Http\Response
     {
-        $eventModel = $event instanceof Event
-            ? $event
-            : Event::where('uuid', $event)->orWhere('id', $event)->firstOrFail();
+        $eventModel = $event;
 
         $user = auth()->user();
         $allowedStatuses = [
