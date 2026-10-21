@@ -24,7 +24,7 @@
 <body>
   <h1>Laporan Kinerja DPD</h1>
   <div class="subtitle">
-    Tahun {{  }}{{  ? ' &bull; Bulan ' . date('F', mktime(0,0,0,(int),1)) : '' }}
+    Tahun {{ $year }}{{ $month ? ' &bull; Bulan ' . date('F', mktime(0,0,0,(int) $month,1)) : '' }}
     &nbsp;&bull;&nbsp; Dicetak: {{ now()->format('d/m/Y H:i') }}
   </div>
 
@@ -33,25 +33,25 @@
     <tr>
       <td style="width:25%;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
         <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;">Total Program</div>
-        <div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:4px;">{{ ['total_program'] }}</div>
-        <div style="font-size:10px;color:#94a3b8;">Selesai: {{ ['total_selesai'] }}</div>
+        <div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:4px;">{{ $metrics['total_program'] }}</div>
+        <div style="font-size:10px;color:#94a3b8;">Selesai: {{ $metrics['total_selesai'] }}</div>
       </td>
       <td style="width:5%;"></td>
       <td style="width:25%;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;">
         <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;">Penyelesaian</div>
-        <div style="font-size:22px;font-weight:700;color:#10b981;margin-top:4px;">{{ ['persen_selesai'] }}%</div>
+        <div style="font-size:22px;font-weight:700;color:#10b981;margin-top:4px;">{{ $metrics['persen_selesai'] }}%</div>
         <div style="font-size:10px;color:#94a3b8;">Dari total program</div>
       </td>
       <td style="width:5%;"></td>
       <td style="width:25%;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;">
         <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;">Total RAB</div>
-        <div style="font-size:16px;font-weight:700;color:#0f172a;margin-top:4px;">Rp {{ number_format(['total_rab'],0,',','.') }}</div>
-        <div style="font-size:10px;color:#94a3b8;">Serapan: {{ ['persen_serapan'] }}%</div>
+        <div style="font-size:16px;font-weight:700;color:#0f172a;margin-top:4px;">Rp {{ number_format($metrics['total_rab'],0,',','.') }}</div>
+        <div style="font-size:10px;color:#94a3b8;">Serapan: {{ $metrics['persen_serapan'] }}%</div>
       </td>
       <td style="width:5%;"></td>
       <td style="width:25%;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;">
         <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;">Total Peserta</div>
-        <div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:4px;">{{ number_format(['total_peserta'],0,',','.') }}</div>
+        <div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:4px;">{{ number_format($metrics['total_peserta'],0,',','.') }}</div>
         <div style="font-size:10px;color:#94a3b8;">Orang hadir</div>
       </td>
     </tr>
@@ -73,25 +73,25 @@
       </tr>
     </thead>
     <tbody>
-      @php  = 1; @endphp
-      @forelse ( as  => )
-        @if(['program_total'] > 0 || true)
+      @php $no = 1; @endphp
+      @forelse ($rekapPerBidang as $bidangId => $row)
+        @if($row['program_total'] > 0 || true)
         @php
-           = ['program_total'] > 0 ? round((['program_selesai'] / ['program_total']) * 100, 1) : 0;
+          $persen = $row['program_total'] > 0 ? round(($row['program_selesai'] / $row['program_total']) * 100, 1) : 0;
         @endphp
         <tr>
-          <td style="text-align:center;">{{ ++ }}</td>
+          <td style="text-align:center;">{{ $no++ }}</td>
           <td>
-            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{{ ['color'] }};margin-right:6px;"></span>
-            {{ ['nama'] }}
-            @if(['singkatan']) <span style="color:#94a3b8;">({{ ['singkatan'] }})</span> @endif
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{{ $row['color'] }};margin-right:6px;"></span>
+            {{ $row['nama'] }}
+            @if($row['singkatan']) <span style="color:#94a3b8;">({{ $row['singkatan'] }})</span> @endif
           </td>
-          <td style="text-align:center;">{{ ['program_total'] }}</td>
-          <td style="text-align:center;">{{ ['program_selesai'] }}</td>
-          <td style="text-align:center;">{{  }}%</td>
-          <td style="text-align:right;">{{ ['rab'] > 0 ? number_format(['rab'],0,',','.') : '-' }}</td>
-          <td style="text-align:right;">{{ ['realisasi'] > 0 ? number_format(['realisasi'],0,',','.') : '-' }}</td>
-          <td style="text-align:center;">{{ ['peserta'] > 0 ? number_format(['peserta'],0,',','.') : '-' }}</td>
+          <td style="text-align:center;">{{ $row['program_total'] }}</td>
+          <td style="text-align:center;">{{ $row['program_selesai'] }}</td>
+          <td style="text-align:center;">{{ $persen }}%</td>
+          <td style="text-align:right;">{{ $row['rab'] > 0 ? number_format($row['rab'],0,',','.') : '-' }}</td>
+          <td style="text-align:right;">{{ $row['realisasi'] > 0 ? number_format($row['realisasi'],0,',','.') : '-' }}</td>
+          <td style="text-align:center;">{{ $row['peserta'] > 0 ? number_format($row['peserta'],0,',','.') : '-' }}</td>
         </tr>
         @endif
       @empty
