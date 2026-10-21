@@ -239,7 +239,7 @@
                                                 @if(in_array($event->status, [\App\Models\Event::STATUS_DRAFT, \App\Models\Event::STATUS_DITOLAK], true))
                                                     <a href="{{ route('events.edit', $event) }}" wire:navigate style="padding:5px 9px;border-radius:7px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:11px;">Edit</a>
                                                 @endif
-                                                @if(in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_BERLANGSUNG, \App\Models\Event::STATUS_SELESAI], true))
+                                                @if(\Illuminate\Support\Facades\Route::has('events.print-lpj') && in_array($event->status, [\App\Models\Event::STATUS_DISETUJUI, \App\Models\Event::STATUS_BERLANGSUNG, \App\Models\Event::STATUS_SELESAI], true))
                                                     <a href="{{ route('events.print-lpj', $event) }}" target="_blank" style="padding:5px 9px;border-radius:7px;border:0.5px solid #d4d4d8;background:white;color:#444;text-decoration:none;font-size:11px;">LPJ</a>
                                                 @endif
                                                 <button
