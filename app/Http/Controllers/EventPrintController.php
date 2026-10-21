@@ -44,7 +44,28 @@ class EventPrintController extends Controller
 
         // Set paper
         $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        $this->addPageNumbers($pdf->getDomPDF());
 
         return $pdf->stream('LPJ-' . \Illuminate\Support\Str::slug($eventModel->judul ?: 'program') . '.pdf');
+    }
+
+    /**
+     * Cetak "Halaman X dari Y" di pojok kanan bawah setiap halaman,
+     * karena total halaman baru diketahui setelah PDF selesai dirender.
+     */
+    private function addPageNumbers(\Dompdf\Dompdf $dompdf): void
+    {
+        $canvas = $dompdf->getCanvas();
+        $font = $dompdf->getFontMetrics()->getFont('DejaVu Sans');
+
+        $canvas->page_text(
+            $canvas->get_width() - 51 - 62,
+            $canvas->get_height() - 44,
+            'Halaman {PAGE_NUM} dari {PAGE_COUNT}',
+            $font,
+            6,
+            [0.61, 0.64, 0.69],
+        );
     }
 }
